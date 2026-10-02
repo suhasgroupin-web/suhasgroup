@@ -3,6 +3,9 @@
   window.ADMIN_EMAIL = 'suhasgroup.in@gmail.com'; // fallback only; real check uses is_admin()
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY);
 
+  // Current page file name, works on GitHub Pages subpaths (/suhasgroup/login.html)
+  var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+
   window.showMsg = function(id, text, ok){
     var el = document.getElementById(id);
     if(!el) return;
@@ -40,10 +43,20 @@
     });
   }
 
-  sb.auth.getSession().then(function(r){ paintNav(r.data.session); });
-  sb.auth.onAuthStateChange(function(event){
+  // Initial load: paint nav, and send logged-in people away from login/signup
+  sb.auth.getSession().then(function(r){
+    var session = r.data && r.data.session;
+    paintNav(session);
+    if(session && (page === 'login.html' || page === 'signup.html')){
+      window.location.replace('index.html');
+    }
+  });
+
+  sb.auth.onAuthStateChange(function(event, session){
     if(event === 'PASSWORD_RECOVERY' && location.pathname.indexOf('reset') === -1){
       window.location.href = 'reset.html' + location.hash;
+      return;
     }
+    if(event === 'SIGNED_OUT'){ paintNav(null); }
   });
 })();
