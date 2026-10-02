@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile | SUHAS GROUP</title>
+<meta name="theme-color" content="#0A2A66">
+<link rel="icon" href="assets/logo.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.profile-card{max-width:560px;margin:0 auto;background:#fff;border-radius:20px;padding:28px;box-shadow:0 10px 40px rgba(10,42,102,.12)}
+.profile-card .f-group{margin-bottom:16px}
+.profile-card input{width:100%}
+.profile-card input[readonly]{opacity:.7;cursor:not-allowed}
+#pmsg{display:none;padding:12px 14px;border-radius:12px;margin-bottom:16px;font-size:15px}
+.profile-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+</style>
+</head><body>
+<header class="site-header"><div class="nav-wrap">
+<a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP logo"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a>
+<nav class="nav-links"><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="group.html">Our Companies</a><a href="about.html">About</a><a href="employers.html">For Employers</a><a href="contact.html">Contact</a><div class="nav-cta nav-cta-m"></div></nav>
+<div class="nav-cta"></div>
+<button class="menu-toggle" aria-label="Menu">&#9776;</button>
+</div></header>
+
+<section class="section"><div class="container">
+<div class="center narrow" style="margin:0 auto 30px"><h1>My Profile</h1><p>Keep your details up to date so employers can reach you.</p></div>
+<div class="profile-card">
+<div id="pmsg" role="status"></div>
+<form id="pform">
+<div class="f-group"><label for="p-name">Full name</label><input id="p-name" type="text" autocomplete="name" placeholder="Your full name"></div>
+<div class="f-group"><label for="p-phone">Phone</label><input id="p-phone" type="tel" autocomplete="tel" placeholder="+880..."></div>
+<div class="f-group"><label for="p-email">Email</label><input id="p-email" type="email" readonly></div>
+<div class="profile-actions">
+<button class="btn btn-primary" type="submit">Save changes</button>
+<a class="btn btn-outline" href="jobs.html">Find jobs</a>
+</div>
+</form>
+</div>
+</div></section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/auth.js"></script>
+<script src="assets/script.js"></script>
+<script>
+(async function(){
+  var msg = document.getElementById('pmsg');
+  function say(t, ok){
+    msg.textContent = t; msg.style.display = 'block';
+    msg.style.background = ok ? '#E7F6EC' : '#FDECEA';
+    msg.style.color = ok ? '#1B6B3A' : '#A5321F';
+  }
+  var r = await sb.auth.getSession();
+  var session = r.data && r.data.session;
+  if(!session){ window.location.replace('login.html'); return; }
+  var user = session.user, meta = user.user_metadata || {};
+  document.getElementById('p-email').value = user.email || '';
+  document.getElementById('p-name').value = meta.full_name || meta.name || '';
+  document.getElementById('p-phone').value = meta.phone || '';
+
+  document.getElementById('pform').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = e.target.querySelector('button[type=submit]');
+    btn.disabled = true;
+    var res = await sb.auth.updateUser({ data: {
+      full_name: document.getElementById('p-name').value.trim(),
+      phone: document.getElementById('p-phone').value.trim()
+    }});
+    btn.disabled = false;
+    if(res.error){ say('Could not save your details: ' + res.error.message, false); }
+    else { say('Your details were saved.', true); }
+  });
+})();
+</script>
+</body></html>
