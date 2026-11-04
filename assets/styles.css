@@ -219,3 +219,29 @@ p{color:var(--muted);margin-bottom:14px}
 .f-group input,.f-group select{height:47px}
 .search-card{align-items:end}
 .site-footer .brand img{background:#fff;border-radius:10px;padding:3px}
+
+/* O5-Intl Desk shortcut button (outside .nav-cta so login/logout repaint never removes it) */
+.desk-btn{white-space:nowrap}
+.desk-m{display:none}
+@media(max-width:980px){
+  .desk-btn{display:none}
+  .desk-m{display:flex;padding:0 24px 16px}
+  .desk-m .btn{flex:1}
+}
+
+/* narrow laptops / tablets (981-1200px): header would be too crowded with the Desk button, so use the compact menu here too */
+@media(min-width:981px) and (max-width:1200px){
+  .brand-tag{display:none}
+  .menu-toggle{display:block}
+  .nav-wrap>.nav-cta{display:flex;margin-left:auto}
+  .nav-wrap>.nav-cta a:first-child{display:none}
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;gap:0;border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .3s}
+  .nav-links.open{max-height:560px}
+  .nav-links>a{padding:15px 24px;border-top:1px solid var(--line)}
+  .nav-links>a.active::after{display:none}
+  .nav-cta-m{display:flex;padding:16px 24px;border-top:1px solid var(--line)}
+  .nav-cta-m .btn{flex:1}
+  .desk-btn{display:none}
+  .desk-m{display:flex;padding:0 24px 16px}
+  .desk-m .btn{flex:1}
+}
