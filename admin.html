@@ -46,7 +46,7 @@
 <div class="form-row"><label>Description</label><textarea id="j-desc" rows="4"></textarea></div>
 <div class="form-row"><label>Job image / banner (optional)</label><input type="file" id="j-image" accept="image/*"><div id="img-preview" style="margin-top:10px"></div></div>
 <div class="form-row"><label>Source</label><select id="j-source"><option>SUHAS GROUP</option><option>LinkedIn</option><option>BDJobs</option><option>Indeed</option><option>Other</option></select></div>
-<div class="form-row"><label>Job link (optional) &mdash; original LinkedIn / BDJobs / Indeed posting, or any reference link</label><input type="url" id="j-url" placeholder="https://..."></div>
+<div class="form-row"><label>Original job post URL</label><input type="url" id="j-url" placeholder="Paste the public LinkedIn job or company-post URL"><small style="display:block;color:var(--muted);margin-top:6px">When a public visitor clicks Apply, this original HTTPS post opens. For LinkedIn, select LinkedIn as the source and paste its public post/job URL.</small></div>
 <div style="display:flex;gap:10px">
 <button class="btn btn-primary" id="job-sub" type="submit">Post Job</button>
 <button class="btn btn-outline" id="job-cancel" type="button" style="display:none">Cancel edit</button>
@@ -189,6 +189,17 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
   var btn = document.getElementById('job-sub');
   btn.disabled = true; var oldLabel = btn.textContent; btn.textContent = 'Saving...';
   var idVal = document.getElementById('job-id').value;
+  var sourceValue = document.getElementById('j-source').value;
+  var sourceUrl = document.getElementById('j-url').value.trim();
+  if(sourceUrl){
+    try{
+      var parsedSourceUrl = new URL(sourceUrl);
+      if(parsedSourceUrl.protocol !== 'https:'){ showMsg('msg', 'Use a secure HTTPS job-post URL.', false); btn.disabled=false; btn.textContent=oldLabel; return; }
+      if(sourceValue === 'LinkedIn' && parsedSourceUrl.hostname !== 'linkedin.com' && !parsedSourceUrl.hostname.endsWith('.linkedin.com')){
+        showMsg('msg', 'For LinkedIn source, paste a URL from linkedin.com.', false); btn.disabled=false; btn.textContent=oldLabel; return;
+      }
+    }catch(e){ showMsg('msg', 'Enter a valid original job-post URL.', false); btn.disabled=false; btn.textContent=oldLabel; return; }
+  }
   var row = {
     title: document.getElementById('j-title').value.trim(),
     company: document.getElementById('j-company').value.trim() || 'SUHAS GROUP',
@@ -197,8 +208,8 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
     job_type: document.getElementById('j-type').value.trim(),
     deadline: document.getElementById('j-deadline').value || null,
     description: document.getElementById('j-desc').value.trim(),
-    source: document.getElementById('j-source').value,
-    external_url: document.getElementById('j-url').value.trim() || null
+    source: sourceValue,
+    external_url: sourceUrl || null
   };
   if(existingImageUrl){ row.image_url = existingImageUrl; }
   if(pendingImageFile){
