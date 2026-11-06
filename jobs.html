@@ -117,20 +117,32 @@ async function toggleSave(btn){
   }
 }
 async function apply(btn){
-  var s = (await sb.auth.getSession()).data.session;
-  if(!s){ window.location.href = "login.html"; return; }
   var url = btn.getAttribute("data-url");
+  // Open the public source link synchronously from the click so mobile browsers do not block it.
+  if(url){
+    try{
+      var target = new URL(url, location.href);
+      if(target.protocol !== "https:"){ showMsg("msg", "This job link is not a secure HTTPS address.", false); return; }
+      window.open(target.href, "_blank", "noopener,noreferrer");
+    }catch(e){ showMsg("msg", "The original job link is invalid.", false); return; }
+  }
+  var s = (await sb.auth.getSession()).data.session;
+  if(!s){
+    if(url){ showMsg("msg", "The original LinkedIn/job post has been opened. Sign in if you also want to track this application in your SUHAS profile.", true); }
+    else { window.location.href = "login.html"; }
+    return;
+  }
   btn.disabled = true;
   var r = await sb.from("applications").insert({ job_id: parseInt(btn.getAttribute("data-id"),10), user_id: s.user.id });
   if(r.error && r.error.code === "23505"){
-    showMsg("msg", url ? "Already tracked. Opening the original job posting again." : "You have already applied for this job.", false);
+    showMsg("msg", url ? "Already tracked. The original job post has been opened again." : "You have already applied for this job.", false);
   } else if(r.error){
     showMsg("msg", r.error.message, false); btn.disabled = false; return;
   } else {
-    showMsg("msg", url ? "Redirecting you to the original job posting to complete your application." : "Application submitted. You can track it on your profile page.", true);
+    showMsg("msg", url ? "Original job post opened. Application tracking saved to your SUHAS profile." : "Application submitted. You can track it on your profile page.", true);
     btn.textContent = "Applied";
   }
-  if(url){ window.open(url, "_blank", "noopener"); btn.disabled = false; }
+  btn.disabled = false;
   window.scrollTo({top:0,behavior:"smooth"});
 }
 (async function(){
