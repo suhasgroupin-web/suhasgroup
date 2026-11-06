@@ -1,9 +1,7 @@
 (function(){
   var cfg = window.SUHAS_CONFIG;
-  window.ADMIN_EMAIL = 'suhasgroup.in@gmail.com'; // fallback only; real check uses is_admin()
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY);
 
-  // Current page file name, works on GitHub Pages subpaths (/suhasgroup/login.html)
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
   window.showMsg = function(id, text, ok){
@@ -15,16 +13,44 @@
     el.style.color = ok ? '#1B6B3A' : '#A5321F';
   };
 
+  window.safeNext = function(value){
+    return typeof value === 'string' && value.charAt(0) === '/' &&
+      value.charAt(1) !== '/' && !value.includes('\\') ? value : 'profile.html';
+  };
+
   window.checkIsAdmin = async function(){
-    try{
-      var r = await sb.rpc('is_admin');
-      return !r.error && r.data === true;
-    }catch(e){ return false; }
+    try {
+      var userResult = await sb.auth.getUser();
+      if(userResult.error || !userResult.data.user) return false;
+      var result = await sb.rpc('is_admin');
+      return !result.error && result.data === true;
+    } catch(e) { return false; }
+  };
+
+  window.requireAuth = async function(){
+    var result = await sb.auth.getUser();
+    if(result.error || !result.data.user){
+      var next = location.pathname + location.search + location.hash;
+      location.replace('login.html?next=' + encodeURIComponent(next));
+      return null;
+    }
+    return result.data.user;
+  };
+
+  window.requireAdmin = async function(){
+    var user = await window.requireAuth();
+    if(!user) return null;
+    if(!await window.checkIsAdmin()){
+      var gate = document.getElementById('gate');
+      if(gate) gate.innerHTML = '<div class="container"><div class="form-card"><h3>Access restricted</h3><p>This page is only available to approved SUHAS GROUP administrators.</p><a class="btn btn-primary" href="index.html">Return home</a></div></div>';
+      return null;
+    }
+    return user;
   };
 
   async function paintNav(session){
     var isAdmin = false;
-    if(session){ isAdmin = await window.checkIsAdmin(); }
+    if(session) isAdmin = await window.checkIsAdmin();
     document.querySelectorAll('.nav-cta').forEach(function(box){
       if(session){
         box.innerHTML =
@@ -38,25 +64,26 @@
     document.querySelectorAll('.js-logout').forEach(function(b){
       b.addEventListener('click', function(e){
         e.preventDefault();
-        sb.auth.signOut().then(function(){ window.location.href = 'index.html'; });
+        sb.auth.signOut().then(function(){ location.replace('index.html'); });
       });
     });
   }
 
-  // Initial load: paint nav, and send logged-in people away from login/signup
   sb.auth.getSession().then(function(r){
     var session = r.data && r.data.session;
     paintNav(session);
     if(session && (page === 'login.html' || page === 'signup.html')){
-      window.location.replace('index.html');
+      location.replace(window.safeNext(new URLSearchParams(location.search).get('next')));
     }
   });
 
   sb.auth.onAuthStateChange(function(event, session){
-    if(event === 'PASSWORD_RECOVERY' && location.pathname.indexOf('reset') === -1){
-      window.location.href = 'reset.html' + location.hash;
+    if(event === 'PASSWORD_RECOVERY' && page !== 'reset.html'){
+      location.href = 'reset.html' + location.hash;
       return;
     }
-    if(event === 'SIGNED_OUT'){ paintNav(null); }
+    if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
+      paintNav(session);
+    }
   });
 })();
