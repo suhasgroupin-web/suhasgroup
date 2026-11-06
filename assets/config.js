@@ -1,5 +1,5 @@
-// SUHAS GROUP - Supabase config (publishable key is safe for browsers)
+// SUHAS GROUP - Supabase config (public anon key is safe for browsers)
 window.SUHAS_CONFIG = {
-  SUPABASE_URL: "https://ahhkwmniiagplkjsbwbx.supabase.co",
-  SUPABASE_PUBLISHABLE_KEY: "sb_publishable_8RLDDMsZzwoSQnUqkLB-IQ_Ff77L3N1"
+  SUPABASE_URL: "https://ehvgxbifqtyajeersnvq.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVodmd4YmlmcXR5YWplZXJzbnZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5ODYzMTQsImV4cCI6MjEwOTU2MjMxNH0.W_d6eHPWk0V7SNnJF5Vd9AxbG8SVqMjmHhIzmVOoaGY"
 };
