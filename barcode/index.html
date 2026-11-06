@@ -107,20 +107,6 @@ footer{margin:26px 16px 0;text-align:center;color:#5c6574;font-size:13px}
   </header>
 
   <main>
-    <section class="card" aria-label="O5 Desk applications">
-      <h2 style="margin:0 0 8px;font-size:22px">O5 Desk · Connected Apps</h2>
-      <p class="hint" style="margin:0 0 14px">Open these tools from SUHAS GROUP. If a provider blocks in-app display, use the Open separately option.</p>
-      <button class="primary" type="button" data-o5app="bill">O5 Bill Calculator</button>
-      <button type="button" data-o5app="allinone">O5 All-in-One</button>
-      <p class="hint">Your login and data remain with each app provider. SUHAS does not receive their passwords.</p>
-    </section>
-    <section id="o5AppPanel" class="card" hidden style="margin-top:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h2 id="o5AppTitle" style="margin:0;font-size:20px">O5 App</h2><button id="o5Close" type="button" style="width:auto;margin:0;padding:8px 12px">Close</button></div>
-      <p class="hint">Loading the selected O5 app inside SUHAS. If the provider prevents embedding, tap Open separately.</p>
-      <iframe id="o5AppFrame" title="O5 connected application" src="about:blank" style="display:block;width:100%;height:72vh;min-height:520px;border:1px solid var(--line);border-radius:12px;background:#fff" allow="clipboard-read; clipboard-write; fullscreen; geolocation" allowfullscreen loading="lazy"></iframe>
-      <a id="o5OpenExternal" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;margin-top:12px">Open separately</a>
-    </section>
-
     <section class="card" aria-label="Report barcode generator">
       <label class="l" for="nums">Report number(s)</label>
       <textarea id="nums" rows="3" spellcheck="false" autocomplete="off" autocapitalize="characters"></textarea>
@@ -559,8 +545,6 @@ footer{margin:26px 16px 0;text-align:center;color:#5c6574;font-size:13px}
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 
-<script>
-(()=>{const apps={bill:{title:'O5 Bill Calculator',url:'https://o5billcalculator.lovable.app/login'},allinone:{title:'O5 All-in-One',url:'https://o5-all-in-one-hxzp.glide.page/dl/d0a5f4'}};const panel=document.getElementById('o5AppPanel'),frame=document.getElementById('o5AppFrame'),title=document.getElementById('o5AppTitle'),external=document.getElementById('o5OpenExternal');document.querySelectorAll('[data-o5app]').forEach(btn=>btn.addEventListener('click',()=>{const app=apps[btn.dataset.o5app];if(!app)return;title.textContent=app.title;external.href=app.url;frame.src=app.url;panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'start'});}));document.getElementById('o5Close').addEventListener('click',()=>{frame.src='about:blank';panel.hidden=true;});})();
-</script>
+
 </body>
 </html>
