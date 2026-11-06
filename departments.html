@@ -75,4 +75,97 @@ document.querySelectorAll('.tool-link').forEach(a=>{const label=a.textContent.tr
 document.getElementById('workBack').addEventListener('click',()=>{wb.classList.remove('active');grid.style.display='';hero.style.display='';window.scrollTo({top:0,behavior:'smooth'});});
 })();
 </script>
+
+<style>
+#nested-zone{display:none;background:#fff;border:1px solid #dce6f3;border-radius:20px;padding:16px;box-shadow:0 12px 30px #10274b18}
+#nested-zone.active{display:block}.nz-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid #e8eef6;padding-bottom:12px;margin-bottom:14px}
+.nz-back{border:0;border-radius:11px;padding:10px 14px;background:#102e5c;color:#fff;font-weight:800}
+.nz-title{font-size:21px;font-weight:850;flex:1;min-width:0}.nz-sub{color:#64748b;font-size:12px;margin:0 0 14px;line-height:1.6}
+.nz-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.nz-card{display:flex;align-items:center;gap:11px;text-align:left;min-width:0;padding:14px;border:1px solid #dce6f3;border-radius:15px;background:linear-gradient(145deg,#fff,#f3f7ff);box-shadow:0 3px 0 #e0e8f3;color:#17365f;cursor:pointer;font:inherit}
+.nz-icon{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#e8f1ff,#cbdfff);font-size:21px}
+.nz-card strong{display:block;font-size:13px}.nz-card small{display:block;color:#64748b;font-size:11px;margin-top:3px;line-height:1.4}
+.nz-detail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.nz-panel{padding:14px;border-radius:14px;background:#f4f7fc;border:1px solid #dce6f3;min-width:0}.nz-panel.full{grid-column:1/-1}.nz-panel h3{font-size:14px;margin:0 0 8px}.nz-panel p,.nz-panel li{font-size:13px;line-height:1.65}.nz-panel ol,.nz-panel ul{padding-left:20px;margin:6px 0}.nz-panel label{display:block;font-size:12px;margin:7px 0}.nz-panel input{width:100%;min-width:0;padding:10px;border:1px solid #ccd8e8;border-radius:9px;margin-top:4px}.nz-action{background:#17439a;color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:800;margin-top:8px}.nz-result{margin-top:9px;padding:10px;border-radius:9px;background:white;font-weight:750;white-space:pre-wrap}
+@media(max-width:580px){.nz-grid,.nz-detail{grid-template-columns:1fr}.nz-panel.full{grid-column:auto}}
+</style>
+<section id="nested-zone" aria-live="polite"><div class="nz-head"><button class="nz-back" id="nz-back">← Back</button><div class="nz-title" id="nz-title">Department</div></div><p class="nz-sub" id="nz-sub"></p><div id="nz-body"></div></section>
+<script>
+(function(){
+var host=document.getElementById('nested-zone'), title=document.getElementById('nz-title'), sub=document.getElementById('nz-sub'), body=document.getElementById('nz-body');
+var grid=document.getElementById('zones'), hero=document.querySelector('.hero'), empty=document.getElementById('empty'), oldwb=document.getElementById('workbench');
+var stack=[];
+var data={
+'Quality Assurance & QC':[
+['📏','Quality Tools','Inspection systems, defect analysis and quality control',['Quality All Tools','7 Basic QC Tools','Defect Classification','DHU & Defect Rate','Inline Inspection','Endline Inspection']],
+['🧪','AQL & Inspection','Sampling plans, lot inspection and acceptance decisions',['AQL Sampling Plan','Incoming Inspection','Inline Audit','Final Random Inspection','Defect Severity & Classification']],
+['📐','Measurement','Measurement specification, tolerance and fit control',['Measurement Sheet','POM Measurement','Tolerance Check','Measurement Audit','Fit Comment Tracker']],
+['🛠️','Problem Solving','Root cause, corrective action and continuous improvement',['RCA / 5 Why','Fishbone Diagram','8D Problem Solving','CAPA Tracker','PDCA Cycle','Six Sigma / DPMO','7 Wastes / Lean','6S Audit']]
+],
+'Production':[
+['⚙️','Production Tools','Daily production control, manpower, WIP and line performance',['Production Tools','Hourly Production Report','Output & Efficiency','WIP Control','Downtime Tracking']],
+['⚖️','Line Balancing','Operation breakdown, capacity calculation and operator allocation',['Line Balancing','Operation Bulletin','Operator Skill Matrix','Machine Allocation','Bottleneck Analysis','Pitch & Workload']],
+['🔢','Production Counting','Hourly and shift-wise output recording and reconciliation',['Production Counting','Hourly Count Sheet','Bundle Tracking','Target vs Actual','Rework & Reject Count']],
+['⏱️','Cycle Time & Takt','Time study, cycle time, pitch and takt control',['Cycle Time Study','Takt Time','Pitch Calculation','Time Observation','Capacity Check']]
+],
+'Industrial Engineering (IE)':[
+['📐','IE Tools','Work study, method improvement and capacity',['SMV / SAM','Time Study','Method Study','Capacity Planning','Efficiency Calculator']],
+['⚖️','Line Balancing','Workload distribution and bottleneck removal',['Line Balancing','Operator Skill Matrix','Machine Requirement','Bottleneck Analysis']],
+['⏱️','Time & Motion','Cycle time, takt, pitch and motion analysis',['Cycle Time','Takt Time','Pitch','Motion Economy','Work Sampling']]
+],
+'Planning & PPC':[
+['🗓️','Production Planning','Order loading, capacity and daily plan',['Order Loading','Capacity Plan','Daily Production Plan','Line Loading']],
+['🚢','TNA & Shipment','Milestones, critical path and shipment readiness',['TNA Calendar','Critical Path','Shipment Tracker','Risk & Recovery Plan']],
+['🧮','Planning Calculators','Production days and required output',['Order Capacity Calculator','Daily Required Output','Line Capacity Calculator']]
+],
+'Merchandising':[
+['🧵','Product & Order','Buyer communication, tech pack and order handover',['Tech Pack Review','BOM Management','Order Follow-up','Sample Approval']],
+['💰','Costing & Consumption','Fabric, trims, CM and FOB estimation',['FOB Costing','Fabric Consumption','Thread Consumption','Trims Consumption']],
+['📅','TNA & Approvals','Development and approval milestones',['TNA Tracker','Lab Dip Approval','Fit & Size Set','PP Meeting']]
+],
+'Marketing & Sales':[['📣','Sales Tools','Lead generation and customer pipeline',['Lead Tracker','CRM Pipeline','Campaign Planner','Conversion Calculator']]],
+'Supply Chain & Procurement':[['🚚','Procurement','Purchase, vendor and material planning',['Purchase Request','Supplier Comparison','Reorder Point','Material Requirement Planning']],['📦','Logistics & Delivery','Inbound, outbound and delivery tracking',['Shipment Tracking','Delivery Schedule','Supplier Scorecard']]],
+'Cutting & CAD':[['✂️','Cutting Tools','Marker, spreading, lay and bundle control',['Marker Efficiency','Fabric Consumption','Lay Planning','Spreading Checklist','Cut Panel Audit']],['📏','CAD & Pattern','Pattern and marker version control',['Pattern Version','Size Ratio','Marker Review']]],
+'Sewing & Finishing':[['🪡','Sewing Tools','Operation setup and sewing control',['Operation Bulletin','Machine Setting','SPI & Thread Check','Hourly Sewing Output']],['🔍','Finishing & Quality','Finishing, rework and shipment checks',['Finishing Audit','DHU & Rework','Measurement Check','Packing Audit']]],
+'Warehouse & Inventory':[['📦','Inventory Tools','Stock movement and traceability',['GRN','FIFO / FEFO','Stock Ledger','Cycle Count','Stock Value Calculator']],['🏷️','Material Control','Lot, shade and issue management',['Bin Location','Roll & Shade Tracking','Material Issue']]],
+'HR, Admin & Compliance':[['👥','People & HR','Attendance, leave, skills and payroll inputs',['Attendance','Leave Management','Skill Matrix','Training Record','OT Estimator']],['📋','Compliance','Audit and corrective action',['Compliance Audit','CAPA','Document Control']]],
+'Maintenance & Engineering':[['🛠️','Maintenance Tools','Preventive maintenance and breakdown response',['PM Schedule','Breakdown Log','MTBF / MTTR','Spare Parts']],['⚡','Utilities & Safety','Utility performance and machine safety',['Energy Monitoring','LOTO Checklist','Machine Safety Audit']]],
+'Finance & Accounts':[['💰','Finance Tools','Cost, budget and accounting control',['Budget vs Actual','Cost Variance','Expense Tracker','Cash Flow']],['🧮','Calculators','Department financial estimates',['Unit Cost','OT Cost Estimate','Stock Valuation']]],
+'Education & Training':[['🎓','Learning Academy','Role-based learning and competency development',['SOP Library','Skill Matrix','Training Plan','Practical Assessment','Knowledge Quiz']]],
+'Sustainability, EHS & Social Compliance':[['🌱','EHS Tools','Risk, incident and environmental control',['Risk Assessment','Incident Report','Chemical Register','Waste Audit','Energy & Water']],['🦺','Safety & Compliance','Workplace safety and audit',['PPE Audit','Emergency Drill','6S Audit','Corrective Action']]],
+'Research, Development & Sample':[['🧪','Product Development','Sample, fit and technical development',['Sample Tracker','Pattern Review','Fit Comment','Measurement Sheet','Material Testing']]]
+};
+function showPage(page){
+title.textContent=page.title;sub.textContent=page.sub||'Select one item. Back always returns to the previous level.';
+if(page.type==='departments'){
+body.innerHTML='<div class="nz-grid">'+page.items.map(function(x){return '<button class="nz-card" data-dept-name="'+encodeURIComponent(x.name)+'"><span class="nz-icon">'+x.icon+'</span><span><strong>'+x.name+'</strong><small>Open department workspace</small></span></button>';}).join('')+'</div>';
+}else if(page.type==='categories'){
+body.innerHTML='<div class="nz-grid">'+page.items.map(function(x,i){return '<button class="nz-card" data-category="'+i+'"><span class="nz-icon">'+x[0]+'</span><span><strong>'+x[1]+'</strong><small>'+x[2]+'</small></span></button>';}).join('')+'</div>';
+}else if(page.type==='tools'){
+body.innerHTML='<div class="nz-grid">'+page.items.map(function(x){return '<button class="nz-card" data-tool="'+encodeURIComponent(x)+'"><span class="nz-icon">▣</span><span><strong>'+x+'</strong><small>Open dedicated work guide and tools</small></span></button>';}).join('')+'</div>';
+}else{body.innerHTML=detailHTML(page.tool,page.dept);}
+}
+function push(page){stack.push(page);host.classList.add('active');grid.style.display='none';hero.style.display='none';oldwb.classList.remove('active');empty.style.display='none';showPage(page);window.scrollTo({top:0,behavior:'smooth'});}
+function back(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1]);}else{stack=[];host.classList.remove('active');grid.style.display='';hero.style.display='';}window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('nz-back').addEventListener('click',back);
+function detailHTML(tool,dept){
+var line=tool.toLowerCase().indexOf('line balanc')>=0;
+var quality=dept.toLowerCase().indexOf('quality')>=0;
+var intro=line?'লাইন ব্যালান্সিংয়ের লক্ষ্য হলো প্রতিটি workstation-এর workload সমান করা, bottleneck কমানো এবং target output অর্জন করা।':quality?'এই Quality কাজটি approved buyer specification, inspection plan ও factory SOP অনুযায়ী সম্পন্ন করুন।':'এই কাজটি সংশ্লিষ্ট বিভাগের দায়িত্ব, approved SOP এবং বাস্তব factory data অনুযায়ী পরিচালনা করুন।';
+var inputs=line?['Style ও operation bulletin, প্রতিটি operation-এর approved SMV সংগ্রহ করুন।','Shift-এর net available minutes, target output ও planned efficiency নির্ধারণ করুন।','প্রতিটি operator-এর operation-wise skill grade (1–5), machine type ও attachment নিন।','Quality critical point, WIP limit এবং safety requirement চিহ্নিত করুন।']:quality?['Buyer specification, approved sample ও defect standard সংগ্রহ করুন।','Inspection stage, sample size, lot quantity ও acceptance criteria নিশ্চিত করুন।','Defect evidence, process/line, operator, machine ও material lot নথিভুক্ত করুন।']:['কাজের scope, order/style reference ও target date নির্ধারণ করুন।','Approved specification, SOP, input data এবং responsible owner সংগ্রহ করুন।','Baseline performance ও acceptance criteria লিখে রাখুন।'];
+var steps=line?['Operation sequence অনুযায়ী প্রতিটি কাজের SMV ও machine requirement তালিকাভুক্ত করুন।','Net available time = shift time − breaks − planned downtime; target cycle time = net minutes ÷ target pieces।','প্রতি operation-এর required operators = (SMV × target pieces) ÷ (net minutes × planned efficiency)।','Skill matrix দেখে qualified operator বসান; skill grade 1–2 হলে training/backup plan রাখুন।','Workstation workload ও actual cycle time পর্যবেক্ষণ করে bottleneck চিহ্নিত করুন।','অতিরিক্ত workload ভাগ করুন, method/attachment উন্নত করুন এবং WIP সীমা ঠিক করুন।','Hourly output, line efficiency, balance loss ও quality result যাচাই করে পুনরায় rebalance করুন।']:quality?['Inspection plan ও sample selection approved standard অনুযায়ী করুন।','Defect category ও severity অনুযায়ী finding record করুন।','Critical defect হলে affected lot contain করে escalation করুন।','Pareto/5 Why/Fishbone দিয়ে root cause যাচাই করুন।','Corrective action owner, due date ও effectiveness verification নির্ধারণ করুন।']:['Input ও approval যাচাই করুন।','নির্ধারিত SOP অনুযায়ী কাজ সম্পন্ন করুন এবং evidence record করুন।','Output supervisor/authorized person দিয়ে review করান।','Gap বা defect থাকলে root cause ও corrective action নিন।','Result, owner, due date এবং closure evidence সংরক্ষণ করুন।'];
+var formula=line?'Target cycle time = Net available minutes ÷ Target output. Line efficiency = (Total output × Garment SMV) ÷ (Total operators × Net available minutes) × 100%.':quality?'DHU = Defects found ÷ Pieces inspected × 100. AQL acceptance number অবশ্যই approved sampling standard থেকে নিতে হবে.':'Use only validated formula, approved standard and consistent units for this department task.';
+var extra=line?'<div class="nz-panel full"><h3>🧮 Line Balance Quick Check</h3><div class="nz-detail"><label>Target output / shift<input id="lb-target" type="number" min="1" value="800"></label><label>Net available minutes<input id="lb-mins" type="number" min="1" value="450"></label><label>Total operators<input id="lb-ops" type="number" min="1" value="35"></label><label>Total garment SMV<input id="lb-smv" type="number" min="0.1" step="0.1" value="18"></label></div><button class="nz-action" id="lb-calc">Calculate line requirement</button><div class="nz-result" id="lb-out">Enter approved values and calculate.</div></div>':'';
+return '<div class="nz-detail"><article class="nz-panel full"><h3>🎯 Work objective</h3><p>'+intro+'</p></article><article class="nz-panel"><h3>📥 Required inputs</h3><ul>'+inputs.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></article><article class="nz-panel"><h3>🧭 Work method</h3><ol>'+steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol></article><article class="nz-panel full"><h3>📐 Formula / technical control</h3><p>'+formula+'</p></article>'+extra+'<article class="nz-panel full"><h3>⚠️ Control note</h3><p>Buyer-approved requirements, local factory SOP, trained personnel and verified production data take priority. Do not use estimated values as final production approval.</p></article></div>';
+}
+document.addEventListener('click',function(e){
+var summary=e.target.closest('.dept summary');
+if(summary){e.preventDefault();e.stopImmediatePropagation();var dept=summary.querySelector('strong').textContent;var groups=data[dept]||[['🧰','Department Tools','Department-specific work tools',Array.from(summary.parentElement.querySelectorAll('.tool-link')).map(function(x){return x.textContent.trim();})]];push({type:'categories',title:dept,sub:'Choose a work category. Other departments remain hidden.',dept:dept,items:groups});return;}
+var cat=e.target.closest('[data-category]');
+if(cat){e.preventDefault();e.stopImmediatePropagation();var p=stack[stack.length-1],group=p.items[Number(cat.dataset.category)];push({type:'tools',title:group[1],sub:group[2],dept:p.dept,items:group[3]});return;}
+var tool=e.target.closest('[data-tool]');
+if(tool){e.preventDefault();e.stopImmediatePropagation();var p=stack[stack.length-1],name=decodeURIComponent(tool.dataset.tool);push({type:'detail',title:name,sub:p.dept+' · dedicated work mode',dept:p.dept,tool:name});return;}
+if(e.target.id==='lb-calc'){var t=Number(document.getElementById('lb-target').value),m=Number(document.getElementById('lb-mins').value),o=Number(document.getElementById('lb-ops').value),s=Number(document.getElementById('lb-smv').value);var out=document.getElementById('lb-out');if(t<=0||m<=0||o<=0||s<=0){out.textContent='Please enter positive values.';}else{var ct=m/t,eff=(t*s)/(o*m)*100,req=s*t/m;out.textContent='Target cycle time: '+ct.toFixed(2)+' min/piece\nEstimated line efficiency: '+eff.toFixed(1)+'%\nCalculated workload: '+req.toFixed(2)+' operator-equivalents.\nUse operation-wise SMV and skill matrix to allocate actual operators; this total alone is not an operation layout.';}return;}
+},true);
+})();
+</script>
 <script src="assets/script.js"></script></body></html>
