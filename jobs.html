@@ -123,7 +123,9 @@ async function apply(btn){
     try{
       var target = new URL(url, location.href);
       if(target.protocol !== "https:"){ showMsg("msg", "This job link is not a secure HTTPS address.", false); return; }
-      window.open(target.href, "_blank", "noopener,noreferrer");
+      // Navigate in the current tab: more reliable in Android/PWA than opening a popup.
+      window.location.assign(target.href);
+      return;
     }catch(e){ showMsg("msg", "The original job link is invalid.", false); return; }
   }
   var s = (await sb.auth.getSession()).data.session;
