@@ -68,10 +68,10 @@
 
 <div class="form-card" style="max-width:none" id="settings-card">
 <h3 style="margin-bottom:6px">Settings &middot; Admin access</h3>
-<p style="margin-bottom:16px">Add or remove people who can access this dashboard and post jobs.</p>
+<p style="margin-bottom:16px">Manage account roles. Paste the user UUID from Supabase Authentication → Users; never grant OWNER from this panel.</p>
 <div id="settings-msg" class="msg"></div>
 <form id="admin-add-form" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
-<input type="email" id="new-admin-email" placeholder="email@example.com" required style="flex:1;min-width:220px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit">
+<input type="text" id="new-admin-email" placeholder="User UUID (from Supabase Auth → Users)" required style="flex:1;min-width:220px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit">
 <button class="btn btn-primary btn-sm" type="submit">Add Admin</button>
 </form>
 <div id="admins-list"><p>Loading...</p></div>
@@ -262,17 +262,17 @@ async function uploadJobImage(){
 
 async function loadAdmins(){
   var box = document.getElementById('admins-list');
-  var r = await sb.from('admins').select('*').order('created_at',{ascending:true});
+  var r = await sb.from('user_roles').select('user_id,role,created_at').order('created_at',{ascending:true});
   if(r.error){ box.innerHTML = '<p>'+esc(r.error.message)+'</p>'; return; }
   box.innerHTML = r.data.map(function(a){
-    var isSelf = a.email === currentUserEmail;
+    var isSelf = a.user_id === (sb.auth.getSession && currentUserEmail === a.user_id);
     return '<div class="applied"><span>'+esc(a.email)+(isSelf?' <small>(you)</small>':'')+'</span>'+
       (isSelf ? '' : '<button class="btn btn-outline btn-sm" data-rm="'+esc(a.email)+'">Remove</button>')+'</div>';
   }).join('') || '<p>No admins found.</p>';
   box.querySelectorAll('[data-rm]').forEach(function(b){
     b.addEventListener('click', async function(){
       if(!confirm('Remove admin access for ' + b.getAttribute('data-rm') + '?')) return;
-      var r2 = await sb.from('admins').delete().eq('email', b.getAttribute('data-rm'));
+      var r2 = await sb.from('user_roles').delete().eq('user_id', b.getAttribute('data-rm'));
       if(r2.error){ showMsg('settings-msg', r2.error.message, false); return; }
       showMsg('settings-msg', 'Admin removed.', true);
       loadAdmins();
@@ -284,7 +284,7 @@ document.getElementById('admin-add-form').addEventListener('submit', async funct
   var email = document.getElementById('new-admin-email').value.trim().toLowerCase();
   var r = await sb.from('admins').insert({ email: email });
   if(r.error){ showMsg('settings-msg', r.error.message, false); return; }
-  showMsg('settings-msg', email + ' can now access the admin dashboard.', true);
+  showMsg('settings-msg', 'ADMIN role assigned to ' + userId + '.', true);
   document.getElementById('admin-add-form').reset();
   loadAdmins();
 });
