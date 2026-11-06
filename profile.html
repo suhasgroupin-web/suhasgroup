@@ -62,10 +62,17 @@
     e.preventDefault();
     var btn = e.target.querySelector('button[type=submit]');
     btn.disabled = true;
-    var res = await sb.auth.updateUser({ data: {
-      full_name: document.getElementById('p-name').value.trim(),
-      phone: document.getElementById('p-phone').value.trim()
-    }});
+    var fullName = document.getElementById('p-name').value.trim();
+    var phone = document.getElementById('p-phone').value.trim();
+    var res = await sb.auth.updateUser({ data: { full_name: fullName, phone: phone }});
+    if(!res.error){
+      var profileUpdate = await sb.from('profiles').update({
+        full_name: fullName,
+        phone: phone,
+        updated_at: new Date().toISOString()
+      }).eq('id', user.id);
+      if(profileUpdate.error) res.error = profileUpdate.error;
+    }
     btn.disabled = false;
     if(res.error){ say('Could not save your details: ' + res.error.message, false); }
     else { say('Your details were saved.', true); }
