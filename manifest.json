@@ -23,6 +23,7 @@
   "shortcuts": [
     { "name": "Find Jobs", "short_name": "Jobs", "url": "./jobs.html" },
     { "name": "For Employers", "short_name": "Employers", "url": "./employers.html" },
+    { "name": "Print Barcode (O5-Intl Desk)", "short_name": "Barcode", "url": "./barcode/" },
     { "name": "Sign Up", "short_name": "Sign Up", "url": "./signup.html" }
   ]
 }
