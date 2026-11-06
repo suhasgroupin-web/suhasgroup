@@ -54,7 +54,7 @@ sb.auth.onAuthStateChange(function(ev){ if(ev==='PASSWORD_RECOVERY'){ showNew();
 document.getElementById('req-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var btn=document.getElementById('sub'); btn.disabled=true;
-  var r = await sb.auth.resetPasswordForEmail(document.getElementById('email').value.trim(), { redirectTo: location.origin + '/reset.html' });
+  var r = await sb.auth.resetPasswordForEmail(document.getElementById('email').value.trim(), { redirectTo: new URL('reset.html', window.location.href).href });
   btn.disabled=false;
   if(r.error){ showMsg('msg', r.error.message, false); } else { showMsg('msg','If this email is registered, a reset link has been sent.', true); }
 });
