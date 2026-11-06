@@ -86,7 +86,7 @@ function render(){
     '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
     '<a class="btn btn-outline btn-sm" href="job.html?'+(j.job_code?'code='+encodeURIComponent(j.job_code):'id='+encodeURIComponent(j.id))+'">View details</a>'+
     '<button class="btn btn-outline btn-sm" data-save="'+j.id+'" title="Save job">'+(saved?"Saved":"Save")+'</button>'+
-    '<button class="btn btn-primary btn-sm" data-id="'+j.id+'" data-url="'+esc(j.external_url||"")+'">'+applyLabel+'</button>'+
+    (j.source === "LinkedIn" && /^https:\/\/(www\.)?linkedin\.com\//i.test(j.external_url||"") ? '<a class="btn btn-primary btn-sm" href="'+esc(j.external_url)+'" target="_self" rel="noopener">Apply by LinkedIn</a>' : '<button class="btn btn-primary btn-sm" data-id="'+j.id+'" data-url="'+esc(j.external_url||"")+'">'+applyLabel+'</button>')+
     '</div></div>';
   }).join("");
   box.querySelectorAll("button[data-id]").forEach(function(b){ b.addEventListener("click", function(){ apply(b); }); });
