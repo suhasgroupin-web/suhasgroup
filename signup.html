@@ -56,7 +56,8 @@ document.getElementById('signup-form').addEventListener('submit', async function
   var roleVal=document.getElementById('role').value;
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ data:{ full_name: fullName, role: roleVal } } });
+    var emailRedirectTo = new URL('profile.html', window.location.href).href;
+    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, role: roleVal } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
