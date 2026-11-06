@@ -1,9 +1,9 @@
 import { withSupabase } from "npm:@supabase/server";
 
 const AI_API_KEY = Deno.env.get("AI_API_KEY") || "";
-const AI_PROVIDER = (Deno.env.get("AI_PROVIDER") || "openai").toLowerCase();
+const AI_PROVIDER = (Deno.env.get("AI_PROVIDER") || "gemini").toLowerCase();
 const AI_BASE_URL = Deno.env.get("AI_BASE_URL") || "https://api.openai.com/v1";
-const AI_MODEL = Deno.env.get("AI_MODEL") || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5");
+const AI_MODEL = Deno.env.get("AI_MODEL") || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : AI_PROVIDER === "gemini" ? "gemini-2.5-flash-lite" : "gpt-5");
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -21,7 +21,7 @@ function cleanText(value: unknown, max = 12000) {
 const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => {
     if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
     if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
-    if (!["openai", "anthropic"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use openai or anthropic." }, 500);
+    if (!["openai", "anthropic", "gemini"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use gemini, openai or anthropic." }, 500);
 
     let body: Record<string, unknown>;
     try { body = await req.json(); } catch { return json({ error: "Invalid JSON" }, 400); }
@@ -44,7 +44,17 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     let endpoint = "";
     let headers: Record<string, string> = { "Content-Type": "application/json" };
     let payload: Record<string, unknown>;
-    if (AI_PROVIDER === "anthropic") {
+    if (AI_PROVIDER === "gemini") {
+      endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(AI_MODEL) + ":generateContent?key=" + encodeURIComponent(AI_API_KEY);
+      payload = {
+        systemInstruction: { parts: [{ text: system }] },
+        contents: [
+          ...history.map((m: any) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
+          { role: "user", parts: [{ text: prompt }] },
+        ],
+        generationConfig: { maxOutputTokens: 1200, temperature: 0.6 },
+      };
+    } else if (AI_PROVIDER === "anthropic") {
       endpoint = (Deno.env.get("AI_BASE_URL") || "https://api.anthropic.com").replace(/\/$/, "") + "/v1/messages";
       headers = { ...headers, "x-api-key": AI_API_KEY, "anthropic-version": "2023-06-01" };
       payload = { model: AI_MODEL, max_tokens: 1200, system, messages: [...history, { role: "user", content: prompt }] };
@@ -74,9 +84,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return json({ error: hint + (providerCode ? " [" + providerCode + "]" : "") + (providerMessage ? " " + providerMessage : ""), provider_status: response.status, model: AI_MODEL }, 502);
     }
 
-    const output = AI_PROVIDER === "anthropic"
-      ? (data?.content ?? []).filter((x: any) => x?.type === "text").map((x: any) => x.text).join("\n").trim()
-      : (data?.output_text ?? data?.output?.flatMap((x: any) => x?.content ?? []).map((x: any) => x?.text ?? "").join("")).trim();
+    const output = AI_PROVIDER === "gemini"
+      ? (data?.candidates?.[0]?.content?.parts ?? []).map((x: any) => x?.text ?? "").join("").trim()
+      : AI_PROVIDER === "anthropic"
+        ? (data?.content ?? []).filter((x: any) => x?.type === "text").map((x: any) => x.text).join("\n").trim()
+        : (data?.output_text ?? data?.output?.flatMap((x: any) => x?.content ?? []).map((x: any) => x?.text ?? "").join("")).trim();
     if (!output) return json({ error: "The AI provider returned an empty response. Please try again." }, 502);
 
     await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "success", usage_data: data?.usage ?? {} });
