@@ -104,6 +104,8 @@ var currentUserEmail = null;\nvar currentUserId = null;
     return;
   }
   currentUserEmail = s.user.email;\n  currentUserId = s.user.id;
+  var ownRole = await sb.from('user_roles').select('role').eq('user_id', currentUserId).maybeSingle();
+  if(!ownRole.error && ownRole.data && ownRole.data.role !== 'OWNER') document.getElementById('settings-card').style.display = 'none';
   document.getElementById('gate').style.display = 'none';
   document.getElementById('panel').style.display = 'block';
   loadJobs();
