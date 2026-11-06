@@ -67,8 +67,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return json({ error: "Could not connect to the AI provider. Check the Supabase function's network and provider settings." }, 502);
     }
     if (!response.ok) {
-      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "provider_error", usage_data: { status: response.status } });
-      return json({ error: "AI provider rejected the request. Check the provider API key, model name and billing in Supabase." }, 502);
+      const providerMessage = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
+      const providerCode = cleanText(data?.error?.code ?? data?.error?.type ?? "", 100);
+      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "provider_error", usage_data: { status: response.status, code: providerCode } });
+      const hint = response.status === 401 ? "API key is invalid or revoked." : response.status === 403 ? "API key has no permission for this model or project." : response.status === 404 ? "Model or API endpoint was not found." : response.status === 429 ? "Provider quota or billing limit reached." : "Provider rejected the request.";
+      return json({ error: hint + (providerCode ? " [" + providerCode + "]" : "") + (providerMessage ? " " + providerMessage : ""), provider_status: response.status, model: AI_MODEL }, 502);
     }
 
     const output = AI_PROVIDER === "anthropic"
