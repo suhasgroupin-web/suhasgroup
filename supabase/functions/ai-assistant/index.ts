@@ -45,7 +45,8 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     let headers: Record<string, string> = { "Content-Type": "application/json" };
     let payload: Record<string, unknown>;
     if (AI_PROVIDER === "gemini") {
-      endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(AI_MODEL) + ":generateContent?key=" + encodeURIComponent(AI_API_KEY);
+      endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(AI_MODEL) + ":generateContent";
+      headers["x-goog-api-key"] = AI_API_KEY;
       payload = {
         systemInstruction: { parts: [{ text: system }] },
         contents: [
