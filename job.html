@@ -58,7 +58,9 @@
       try{
         var target=new URL(job.external_url,location.href);
         if(target.protocol!=='https:'){msg('This job link is not a secure HTTPS address.',false);return;}
-        window.open(target.href,'_blank','noopener,noreferrer');
+        // Navigate in the current tab: more reliable in Android/PWA than opening a popup.
+        window.location.assign(target.href);
+        return;
       }catch(e){msg('The original job link is invalid.',false);return;}
       msg('Original job post opened. Sign in if you also want to track your application in your SUHAS profile.',true);
     }
