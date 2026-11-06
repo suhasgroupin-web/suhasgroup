@@ -99,8 +99,8 @@ Deno.serve(async (req) => {
       return json({ error: "AI provider error. Check API key, model and billing in Supabase." }, 502);
     }
     const output = AI_PROVIDER === "anthropic"
-      ? (data.content ?? []).filter((x: any) => x.type === "text").map((x: any) => x.text).join("\\n").trim()
-      : (data.output ?? []).flatMap((x: any) => x.content ?? []).filter((x: any) => x.type === "output_text").map((x: any) => x.text).join("\\n").trim() || (typeof data.output_text === "string" ? data.output_text.trim() : "");
+      ? (data.content ?? []).filter((x: any) => x.type === "text").map((x: any) => x.text).join("\n").trim()
+      : (data.output ?? []).flatMap((x: any) => x.content ?? []).filter((x: any) => x.type === "output_text").map((x: any) => x.text).join("\n").trim() || (typeof data.output_text === "string" ? data.output_text.trim() : "");
     if (!output) return json({ error: "AI returned an empty response. Please try again." }, 502);
     return json({ output, provider: AI_PROVIDER, model: AI_MODEL });
   } catch (error) {
