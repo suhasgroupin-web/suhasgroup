@@ -95,7 +95,7 @@
 <script>
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 var allApps = [];
-var currentUserEmail = null;
+var currentUserEmail = null;\nvar currentUserId = null;
 (async function(){
   var s = (await sb.auth.getSession()).data.session;
   var ok = s && await window.checkIsAdmin();
@@ -103,7 +103,7 @@ var currentUserEmail = null;
     document.getElementById('gate').innerHTML = '<div class="container"><div class="form-card"><h3>Access restricted</h3><p>This page is only available to SUHAS GROUP admin accounts.</p><a class="btn btn-primary" href="login.html">Login as admin</a></div></div>';
     return;
   }
-  currentUserEmail = s.user.email;
+  currentUserEmail = s.user.email;\n  currentUserId = s.user.id;
   document.getElementById('gate').style.display = 'none';
   document.getElementById('panel').style.display = 'block';
   loadJobs();
@@ -265,24 +265,27 @@ async function loadAdmins(){
   var r = await sb.from('user_roles').select('user_id,role,created_at').order('created_at',{ascending:true});
   if(r.error){ box.innerHTML = '<p>'+esc(r.error.message)+'</p>'; return; }
   box.innerHTML = r.data.map(function(a){
-    var isSelf = a.user_id === (sb.auth.getSession && currentUserEmail === a.user_id);
-    return '<div class="applied"><span>'+esc(a.email)+(isSelf?' <small>(you)</small>':'')+'</span>'+
-      (isSelf ? '' : '<button class="btn btn-outline btn-sm" data-rm="'+esc(a.email)+'">Remove</button>')+'</div>';
-  }).join('') || '<p>No admins found.</p>';
+    var isSelf = a.user_id === currentUserId;
+    return '<div class="applied"><span><strong>'+esc(a.role)+'</strong>'+(isSelf?' <small>(you)</small>':'')+'<br><small>'+esc(a.user_id)+'</small></span>'+
+      (a.role === 'OWNER' || isSelf ? '' : '<button class="btn btn-outline btn-sm" data-rm="'+esc(a.user_id)+'">Remove</button>')+'</div>';
+  }).join('') || '<p>No user roles found.</p>';
   box.querySelectorAll('[data-rm]').forEach(function(b){
     b.addEventListener('click', async function(){
-      if(!confirm('Remove admin access for ' + b.getAttribute('data-rm') + '?')) return;
+      if(!confirm('Remove elevated role for user ' + b.getAttribute('data-rm') + '?')) return;
       var r2 = await sb.from('user_roles').delete().eq('user_id', b.getAttribute('data-rm'));
       if(r2.error){ showMsg('settings-msg', r2.error.message, false); return; }
-      showMsg('settings-msg', 'Admin removed.', true);
+      showMsg('settings-msg', 'Role removed.', true);
       loadAdmins();
     });
   });
 }
 document.getElementById('admin-add-form').addEventListener('submit', async function(e){
   e.preventDefault();
-  var email = document.getElementById('new-admin-email').value.trim().toLowerCase();
-  var r = await sb.from('admins').insert({ email: email });
+  var userId = document.getElementById('new-admin-email').value.trim();
+  if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)){
+    showMsg('settings-msg', 'Enter a valid Supabase user UUID.', false); return;
+  }
+  var r = await sb.from('user_roles').upsert({ user_id: userId, role: 'ADMIN' });
   if(r.error){ showMsg('settings-msg', r.error.message, false); return; }
   showMsg('settings-msg', 'ADMIN role assigned to ' + userId + '.', true);
   document.getElementById('admin-add-form').reset();
