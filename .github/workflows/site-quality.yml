@@ -77,7 +77,7 @@ jobs:
                   parsed = urlsplit(value)
                   if parsed.scheme or parsed.netloc:
                       continue
-                  target = (page.parent / parsed.path).resolve()
+                  target = (root / parsed.path.lstrip("/")).resolve() if parsed.path.startswith("/") else (page.parent / parsed.path).resolve()
                   if not parsed.path:
                       continue
                   if target.is_dir():
