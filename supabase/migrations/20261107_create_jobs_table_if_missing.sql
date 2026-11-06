@@ -64,7 +64,15 @@ create policy "SUHAS owner/admin/editor manage jobs" on public.jobs
 
 grant select on public.jobs to anon, authenticated;
 grant insert, update, delete on public.jobs to authenticated;
-grant usage, select on all sequences in schema public to authenticated;
+do $
+declare
+  jobs_id_sequence text;
+begin
+  jobs_id_sequence := pg_get_serial_sequence('public.jobs', 'id');
+  if jobs_id_sequence is not null then
+    execute format('grant usage, select on sequence %s to authenticated', jobs_id_sequence);
+  end if;
+end $;
 
 -- Notify PostgREST to refresh its schema cache after creating the table.
 notify pgrst, 'reload schema';
