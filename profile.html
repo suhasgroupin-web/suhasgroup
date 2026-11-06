@@ -51,10 +51,9 @@
     msg.style.background = ok ? '#E7F6EC' : '#FDECEA';
     msg.style.color = ok ? '#1B6B3A' : '#A5321F';
   }
-  var r = await sb.auth.getSession();
-  var session = r.data && r.data.session;
-  if(!session){ window.location.replace('login.html'); return; }
-  var user = session.user, meta = user.user_metadata || {};
+  var user = await window.requireAuth();
+  if(!user) return;
+  var meta = user.user_metadata || {};
   document.getElementById('p-email').value = user.email || '';
   document.getElementById('p-name').value = meta.full_name || meta.name || '';
   document.getElementById('p-phone').value = meta.phone || '';
