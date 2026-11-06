@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }).join('') + '<button type="button" id="sg-menu">' + ic('<path d="M4 7h16M4 12h16M4 17h16"/>') + '<span>Menu</span></button>';
   document.body.appendChild(nav); document.body.classList.add('has-tabbar');
   document.getElementById('sg-menu').addEventListener('click', function () {
-    var l = document.querySelector('.nav-links'); if (l) l.classList.toggle('open');
+    window.location.href = 'app.html';
   });
   if (window.sb && sb.auth) {
     sb.auth.getSession().then(function (r) {
