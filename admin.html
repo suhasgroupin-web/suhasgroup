@@ -286,6 +286,10 @@ async function loadAdmins(){
 document.getElementById('admin-add-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var userId = document.getElementById('new-admin-email').value.trim();
+  if(userId === currentUserId){ showMsg('settings-msg', 'You cannot change your own OWNER access here.', false); return; }
+  var existingRole = await sb.from('user_roles').select('role').eq('user_id', userId).maybeSingle();
+  if(existingRole.error){ showMsg('settings-msg', existingRole.error.message, false); return; }
+  if(existingRole.data && existingRole.data.role === 'OWNER'){ showMsg('settings-msg', 'OWNER access cannot be changed from this panel.', false); return; }
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)){
     showMsg('settings-msg', 'Enter a valid Supabase user UUID.', false); return;
   }
