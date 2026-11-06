@@ -98,14 +98,10 @@ var allApps = [];
 var currentUserEmail = null;
 var currentUserId = null;
 (async function(){
-  var s = (await sb.auth.getSession()).data.session;
-  var ok = s && await window.checkIsAdmin();
-  if(!ok){
-    document.getElementById('gate').innerHTML = '<div class="container"><div class="form-card"><h3>Access restricted</h3><p>This page is only available to SUHAS GROUP admin accounts.</p><a class="btn btn-primary" href="login.html">Login as admin</a></div></div>';
-    return;
-  }
-  currentUserEmail = s.user.email;
-  currentUserId = s.user.id;
+  var user = await window.requireAdmin();
+  if(!user) return;
+  currentUserEmail = user.email;
+  currentUserId = user.id;
   var ownRole = await sb.from('user_roles').select('role').eq('user_id', currentUserId).maybeSingle();
   if(!ownRole.error && ownRole.data && ownRole.data.role !== 'OWNER') document.getElementById('settings-card').style.display = 'none';
   document.getElementById('gate').style.display = 'none';
