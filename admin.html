@@ -95,7 +95,8 @@
 <script>
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 var allApps = [];
-var currentUserEmail = null;\nvar currentUserId = null;
+var currentUserEmail = null;
+var currentUserId = null;
 (async function(){
   var s = (await sb.auth.getSession()).data.session;
   var ok = s && await window.checkIsAdmin();
@@ -103,7 +104,8 @@ var currentUserEmail = null;\nvar currentUserId = null;
     document.getElementById('gate').innerHTML = '<div class="container"><div class="form-card"><h3>Access restricted</h3><p>This page is only available to SUHAS GROUP admin accounts.</p><a class="btn btn-primary" href="login.html">Login as admin</a></div></div>';
     return;
   }
-  currentUserEmail = s.user.email;\n  currentUserId = s.user.id;
+  currentUserEmail = s.user.email;
+  currentUserId = s.user.id;
   var ownRole = await sb.from('user_roles').select('role').eq('user_id', currentUserId).maybeSingle();
   if(!ownRole.error && ownRole.data && ownRole.data.role !== 'OWNER') document.getElementById('settings-card').style.display = 'none';
   document.getElementById('gate').style.display = 'none';
@@ -234,7 +236,8 @@ document.getElementById('export-csv').addEventListener('click', function(){
       String(a.created_at).slice(0,10)
     ]);
   });
-  var csv = rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var csv = rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('
+');
   var blob = new Blob([csv], {type:'text/csv'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
