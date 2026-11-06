@@ -55,10 +55,10 @@
     var s=(await sb.auth.getSession()).data.session;if(!s){SG.loginThenReturn();return;}
     var b=this;b.disabled=true;
     var r=await sb.from('applications').insert({job_id:job.id,user_id:s.user.id});
-    if(r.error && r.error.code==='23505'){msg('You have already applied for this job.',false);}
+    if(r.error && r.error.code==='23505'){msg('You have already applied for this job.',false);b.disabled=false;}
     else if(r.error){msg(r.error.message,false);b.disabled=false;return;}
     else{msg('Application submitted. You can track it from your profile.',true);b.textContent='Applied';}
-    if(job.external_url)window.open(job.external_url,'_blank','noopener');
+    if(job.external_url)window.location.href=job.external_url;
   });
   document.getElementById('save').addEventListener('click',async function(){
     var s=(await sb.auth.getSession()).data.session;if(!s){SG.loginThenReturn();return;}
