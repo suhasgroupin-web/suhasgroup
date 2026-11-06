@@ -128,9 +128,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function ic(d) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>'; }
   var nav = document.createElement('nav'); nav.className = 'tabbar'; nav.setAttribute('aria-label', 'App navigation');
   var tabs = [
-    ['index.html', 'Home', page === 'index.html', ic('<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'), ''],
+    ['index.html', 'Home', page === 'index.html', '<img class="brand-icon" src="assets/icons/home-suhas-logo.svg" alt="SUHAS GROUP" />', ''],
     ['jobs.html', 'Jobs', page === 'jobs.html' || page === 'job.html', ic('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), ''],
-    ['o5-desk.html', 'O5 Desk', page === 'o5-desk.html' || page.startsWith('barcode'), ic('<path d="M4 5v14M7 5v14M11 5v14M14 5v14M18 5v14M21 5v14"/>'), 'desk'],
+    ['o5-desk.html', 'O5 Desk', page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon" src="assets/icons/o5-desk-logo.svg" alt="O5 Desk" />', 'desk'],
     ['login.html', 'Account', page === 'profile.html' || page === 'login.html' || page === 'signup.html', ic('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'), '']
   ];  nav.innerHTML = tabs.map(function (t) {
     return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[1] === 'Mail' ? ' target="_blank" rel="noopener"' : '') + (t[2] ? ' aria-current="page"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
