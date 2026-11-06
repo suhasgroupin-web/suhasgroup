@@ -18,9 +18,7 @@ function cleanText(value: unknown, max = 12000) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
-export default {
-  fetch: withSupabase({ auth: "user" }, async (req, ctx) => {
-    if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => {
     if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
     if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
     if (!["openai", "anthropic"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use openai or anthropic." }, 500);
@@ -80,5 +78,12 @@ export default {
 
     await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "success", usage_data: data?.usage ?? {} });
     return json({ output, provider: AI_PROVIDER, model: AI_MODEL });
-  }),
+});
+
+export default {
+  fetch(req: Request) {
+    // Respond to browser preflight before authentication middleware.
+    if (req.method === "OPTIONS") return new Response("ok", { status: 200, headers: cors });
+    return authenticatedHandler(req);
+  },
 };
