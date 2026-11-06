@@ -22,7 +22,10 @@
     try {
       var userResult = await sb.auth.getUser();
       if(userResult.error || !userResult.data.user) return false;
-      var result = await sb.rpc('is_admin');
+      var result = await sb.rpc('has_suhas_role', {
+        p_user_id: userResult.data.user.id,
+        p_roles: ['OWNER', 'ADMIN']
+      });
       return !result.error && result.data === true;
     } catch(e) { return false; }
   };
