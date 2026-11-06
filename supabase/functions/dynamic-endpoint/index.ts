@@ -5,12 +5,12 @@ const SUPABASE_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE
 const AI_API_KEY = Deno.env.get("AI_API_KEY") ?? "";
 const AI_PROVIDER = (Deno.env.get("AI_PROVIDER") ?? "openai").toLowerCase();
 const AI_MODEL = Deno.env.get("AI_MODEL") ?? "gpt-5";
-const AI_BASE_URL = (Deno.env.get("AI_BASE_URL") ?? "https://api.openai.com/v1").replace(/\\/$/, "");
+const AI_BASE_URL = (Deno.env.get("AI_BASE_URL") ?? "https://api.openai.com/v1").replace(/\/+$/, "");
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Content-Type": "application/json",
 };
 function json(body: unknown, status = 200) {
@@ -48,13 +48,14 @@ Never invent vacancies, prices, certifications, clients, factory capacity, reven
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+  if (req.method === "GET") return json({ ok: true, service: "SUHAS AI", message: "Send an authenticated POST request to use the assistant." });
   if (req.method !== "POST") return json({ error: "Method not allowed." }, 405);
   if (!SUPABASE_URL || !SUPABASE_KEY) return json({ error: "Supabase environment is not configured." }, 500);
   if (!AI_API_KEY) return json({ error: "AI_API_KEY secret is missing in Supabase." }, 503);
   if (!["openai", "anthropic"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI provider." }, 500);
 
   const authHeader = req.headers.get("Authorization") ?? "";
-  const token = authHeader.replace(/^Bearer\\s+/i, "");
+  const token = authHeader.replace(/^Bearer\s+/i, "");
   if (!token) return json({ error: "Please sign in to use SUHAS AI." }, 401);
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
