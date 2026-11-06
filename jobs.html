@@ -83,7 +83,8 @@ function render(){
     '<div><div class="job-title">'+esc(j.title)+sourceBadge(j.source)+'</div><div class="job-company">'+esc(j.company)+" &middot; "+esc(j.category)+'</div><div class="job-desc">'+esc(j.description)+'</div></div>'+
     '<div class="job-col"><strong>Location</strong>'+esc(j.location)+"<br>"+esc(j.job_type)+'</div>'+
     '<div class="job-col"><strong>Deadline</strong><span class="deadline">'+esc(j.deadline||"Open")+'</span></div>'+
-    '<div style="display:flex;gap:8px;align-items:center">'+
+    '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+    '<a class="btn btn-outline btn-sm" href="job.html?'+(j.job_code?'code='+encodeURIComponent(j.job_code):'id='+encodeURIComponent(j.id))+'">View details</a>'+
     '<button class="btn btn-outline btn-sm" data-save="'+j.id+'" title="Save job">'+(saved?"Saved":"Save")+'</button>'+
     '<button class="btn btn-primary btn-sm" data-id="'+j.id+'" data-url="'+esc(j.external_url||"")+'">'+applyLabel+'</button>'+
     '</div></div>';
