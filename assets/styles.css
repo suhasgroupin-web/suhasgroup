@@ -316,7 +316,7 @@ p{color:var(--muted);margin-bottom:14px}
   .tabbar a,.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;font:inherit;font-size:11px;font-weight:700;color:var(--slate);padding:7px 2px;border-radius:14px;cursor:pointer}
   .tabbar svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tabbar .on{color:var(--royal);background:#EEF3FF}
-  .tabbar .desk{color:#8A5A00}
+  .tabbar .desk{color:#8A5A00}\n  .tabbar .mail{color:#1766A8}
   .tabbar .desk.on{color:#8A5A00;background:#FFF1CC}
 }
 
