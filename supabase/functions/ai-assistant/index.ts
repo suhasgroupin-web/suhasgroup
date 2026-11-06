@@ -103,3 +103,5 @@ export default {
     return authenticatedHandler(req);
   },
 };
+
+// Deployment trigger: use non-interactive Supabase secrets configuration.
