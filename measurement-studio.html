@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="controls">
-<label for="logoUpload">Add Logo</label><input id="logoUpload" type="file" accept="image/*">
+<label for="logoUpload">Add Logo</label><input id="logoUpload" type="file" accept="image/*"><input data-bind="reportNo" placeholder="Report No."><input data-bind="inspectionDate" type="date" aria-label="Inspection Date"><input data-bind="poNo" placeholder="PO No."><input data-bind="styleNo" placeholder="Style / Item No." value="8396"><input data-bind="lotSize" placeholder="Lot Size"><input data-bind="cartons" placeholder="Cartons"><input data-bind="sampleSize" placeholder="Sample Size"><input data-bind="color" placeholder="Color">
 <input id="newSize" type="text" inputmode="numeric" placeholder="Size">
 <button id="addSize">Add Size</button>
 <button id="download">Download PDF</button>
@@ -44,7 +44,7 @@
 </main>
 <script>
 const defaultLogo='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="118" viewBox="0 0 220 118"><rect width="220" height="118" fill="white"/><text x="5" y="72" font-family="Arial,sans-serif" font-size="86" font-weight="bold" letter-spacing="-8" fill="black">C5</text><path d="M5 81H207" stroke="black" stroke-width="4"/><text x="8" y="111" font-family="Arial,sans-serif" font-size="35" font-weight="bold" letter-spacing="8" fill="black">INT'L</text></svg>');
-document.getElementById('logo').src=defaultLogo;
+document.getElementById('logo').src=defaultLogo;\ndocument.querySelectorAll('[data-bind]').forEach(el=>el.addEventListener('input',()=>{let target=document.getElementById(el.dataset.bind);if(target)target.textContent=el.value}));
 const defs=[
 ['Back Waist - Center of Button to Center of Button',.5,17.5,[17.5,18.5,19.5,20.5]],
 ['Inseam Length: 30" Inseam',1,30,[30,30,30,30]],
