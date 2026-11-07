@@ -13,6 +13,7 @@
 <table class="summary"><tr><td contenteditable="true">Total point Measured: </td></tr><tr><td contenteditable="true">No. of measurement points out of tolerance allowed / found: </td></tr><tr><td><div class="disposition-row"><span>Disposition</span><input class="status" type="text" aria-label="Disposition" placeholder="Satisfactory"><span>/</span><input class="percent" type="text" aria-label="Percentage"><span class="small">% of measurement points beyond tolerance</span></div></td></tr></table>
 <div class="foot">The above reflects our findings at time and place of inspection. This report does not relieve suppliers from their contractual responsibilities with regard to quality /<br>quantity of this delivery nor does it prejudice buyers right of claim toward suppliers for compensation for our random inspection occurring thereafter.</div>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 const logoSvg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 118"><rect width="220" height="118" fill="white"/><text x="3" y="72" font-family="Arial" font-size="86" font-weight="bold" letter-spacing="-8">C5</text><path d="M3 81H207" stroke="black" stroke-width="4"/><text x="7" y="111" font-family="Arial" font-size="35" font-weight="bold" letter-spacing="8">INT’L</text></svg>'; document.getElementById('logo').src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logoSvg);
 const sizes=['30','32','34','36'];
@@ -42,6 +43,24 @@ function draw(){
 }
 document.getElementById('addSize').onclick=()=>{let s=document.getElementById('newSize').value.trim();if(!s||sizes.includes(s))return;sizes.push(s);rows.forEach(r=>{r.spec[s]=0;r.cells[s]=[]});document.getElementById('newSize').value='';draw()};
 document.getElementById('logoUpload').onchange=e=>{let f=e.target.files[0];if(f)document.getElementById('logo').src=URL.createObjectURL(f)};
-document.getElementById('pdf').onclick=()=>window.print();
+document.getElementById('pdf').onclick=async()=>{
+ const btn=document.getElementById('pdf'), controls=document.querySelector('.controls'), paper=document.querySelector('.paper');
+ btn.disabled=true; btn.textContent='Preparing PDF...';
+ try {
+  if(!window.html2pdf) throw new Error('PDF library unavailable');
+  await html2pdf().set({
+   margin:[5,5,5,5],
+   filename:'Final-Inspection-Report.pdf',
+   image:{type:'jpeg',quality:0.98},
+   html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',windowWidth:1245,scrollX:0,scrollY:0},
+   jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true},
+   pagebreak:{mode:['avoid-all','css']}
+  }).from(paper).save();
+ } catch(err) {
+  alert('PDF তৈরি করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+ } finally {
+  btn.disabled=false; btn.textContent='Download PDF';
+ }
+};
 draw();
 </script></body></html>
