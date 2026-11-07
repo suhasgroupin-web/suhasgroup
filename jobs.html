@@ -22,15 +22,27 @@
 
 <div class="page-hero"><div class="container"><h1>Find Jobs</h1><p>Live vacancies from SUHAS GROUP, and roles we feature from BDJobs, LinkedIn and Indeed. Apply on SUHAS GROUP directly, or continue to the original posting.</p></div></div>
 <section class="section tight"><div class="container">
-<div class="toolbar">
-<div class="f-group"><label>KEYWORD</label><input type="text" id="q" placeholder="Job title or keyword"></div>
-<div class="f-group"><label>CATEGORY</label><select id="cat"><option value="">All categories</option><option>Quality Assurance / QC</option><option>Merchandising</option><option>Production &amp; Operations</option><option>HR &amp; Admin</option></select></div>
-<div class="f-group"><label>LOCATION</label><select id="loc"><option value="">All locations</option><option>Dhaka</option><option>Chattogram</option><option>Cambodia</option><option>Overseas</option></select></div>
-<button class="btn btn-primary" id="go" style="align-self:end;height:47px">Search</button>
+<style>
+.job-hub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:20px}.job-hub a{display:flex;align-items:center;gap:10px;padding:13px;border:1px solid #dce5f1;border-radius:15px;background:#fff;color:#18345c;text-decoration:none;box-shadow:0 3px 0 #e8eef7}.job-hub b{display:block;font-size:13px}.job-hub small{display:block;color:#74839a;font-size:10px;line-height:1.4;margin-top:3px}.job-hub i{font-style:normal;font-size:21px;background:#e8f0ff;padding:9px;border-radius:12px}.job-tabs{display:flex;gap:8px;overflow:auto;margin:4px 0 15px}.job-tab{border:1px solid #dce5f1;border-radius:30px;padding:10px 15px;background:#fff;color:#18345c;font-weight:750;white-space:nowrap}.job-tab.active{background:#174a9c;color:white}.job-extra{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}@media(max-width:560px){.job-extra{grid-template-columns:1fr}}
+</style>
+<div class="job-hub">
+<a href="profile.html"><i>👤</i><span><b>Career Profile / CV</b><small>Experience, skills & education</small></span></a>
+<a href="#job-workspace" data-jobview="saved"><i>🔖</i><span><b>Saved Jobs</b><small>Jobs you want to revisit</small></span></a>
+<a href="#job-workspace" data-jobview="applied"><i>📋</i><span><b>My Applications</b><small>Track your applications</small></span></a>
+<a href="employers.html"><i>🏢</i><span><b>Employer / Hiring</b><small>Recruitment & vacancy enquiries</small></span></a>
 </div>
-<div id="msg" class="msg"></div>
-<p id="count" style="font-weight:600;color:var(--ink)"></p>
-<div id="job-list"><p>Loading jobs...</p></div>
+<div class="job-tabs"><button type="button" class="job-tab active" data-jobview="all">All Jobs</button><button type="button" class="job-tab" data-jobview="saved">Saved Jobs</button><button type="button" class="job-tab" data-jobview="applied">My Applications</button></div>
+<div id="job-workspace">
+<div class="toolbar">
+<div class="f-group"><label>KEYWORD</label><input type="text" id="q" placeholder="Job title, skill or company"></div>
+<div class="f-group"><label>CATEGORY</label><select id="cat"><option value="">All categories</option><option>Quality Assurance / QC</option><option>Merchandising</option><option>Production &amp; Operations</option><option>HR &amp; Admin</option><option>Compliance &amp; Sustainability</option><option>Industrial Engineering</option><option>Supply Chain &amp; Logistics</option><option>Finance &amp; Accounts</option><option>Sales &amp; Marketing</option><option>IT &amp; Software</option><option>Design &amp; Product Development</option><option>Customer Service</option><option>Security &amp; Safety</option><option>Other</option></select></div>
+<div class="f-group"><label>LOCATION</label><select id="loc"><option value="">All locations</option><option>Dhaka</option><option>Gazipur</option><option>Narayanganj</option><option>Chattogram</option><option>Other Bangladesh</option><option>Cambodia</option><option>Overseas</option><option>Remote</option></select></div>
+<button class="btn btn-primary" id="go" style="align-self:end;height:47px">Search Jobs</button>
+</div>
+<div class="job-extra"><div class="f-group"><label>EMPLOYMENT TYPE</label><select id="jobtype"><option value="">All types</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Temporary</option><option>Internship</option><option>Freelance</option></select></div><div class="f-group"><label>WORK MODE</label><select id="workmode"><option value="">All modes</option><option>On-site</option><option>Hybrid</option><option>Remote</option><option>Overseas</option></select></div></div>
+</div>
+<div style="display:flex;gap:9px;flex-wrap:wrap;margin:14px 0"><a class="btn btn-outline btn-sm" href="profile.html">Complete Career Profile</a><a class="btn btn-outline btn-sm" href="employers.html">Post / Hire a Job</a></div>
+<div id="msg" class="msg"></div><p id="count" style="font-weight:600;color:var(--ink)"></p><div id="job-list"><p>Loading jobs...</p></div>
 </div></section>
 <script type="application/ld+json" id="jobs-jsonld">[]</script>
 <footer class="site-footer"><div class="container">
@@ -47,7 +59,7 @@
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-var all = [];
+var all = [];\nvar activeJobView = "all";\nvar appliedIds = {};
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 var qs = new URLSearchParams(location.search);
 ["q","cat","loc"].forEach(function(k){ var v = qs.get(k); if(v){ document.getElementById(k).value = v; } });
@@ -67,14 +79,14 @@ function isLinkedInJob(j){ try { var u = new URL(j.external_url || ""); return S
 function render(){
   var q = document.getElementById("q").value.toLowerCase();
   var c = document.getElementById("cat").value;
-  var l = document.getElementById("loc").value.toLowerCase();
+  var l = document.getElementById("loc").value.toLowerCase();\n  var jt = (document.getElementById("jobtype")||{}).value || ""; var wm=(document.getElementById("workmode")||{}).value || "";
   var list = all.filter(function(j){
     return (!c || j.category === c) && (!l || String(j.location||"").toLowerCase().indexOf(l) > -1) &&
       (!q || (j.title+" "+(j.description||"")).toLowerCase().indexOf(q) > -1);
   });
   document.getElementById("count").textContent = list.length + " job" + (list.length===1?"":"s") + " found";
   var box = document.getElementById("job-list");
-  if(!list.length){ box.innerHTML = "<p>No jobs match your search yet. Try different filters.</p>"; return; }
+  if(!list.length){ box.innerHTML = "<div style=\"padding:22px;background:#fff;border:1px dashed #cbd7e7;border-radius:16px;color:#65758c\">"+(activeJobView==="saved"?"No saved jobs yet. Browse All Jobs and tap Save Job.":activeJobView==="applied"?"No tracked applications yet. Apply for a SUHAS GROUP vacancy to see it here.":"No jobs match your search yet. Try different filters.")+"</div>"; return; }
   box.innerHTML = list.map(function(j){
     var isExternal = !!j.external_url;
     var applyLabel = isExternal ? ("Apply on " + (j.source || "site")) : "Apply Now";
@@ -158,6 +170,6 @@ async function apply(btn){
 document.getElementById("go").addEventListener("click", render);
 document.getElementById("q").addEventListener("input", render);
 document.getElementById("cat").addEventListener("change", render);
-document.getElementById("loc").addEventListener("change", render);
+document.getElementById("loc").addEventListener("change", render);\ndocument.querySelectorAll("[data-jobview]").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();activeJobView=b.getAttribute("data-jobview");document.querySelectorAll(".job-tab").forEach(function(t){t.classList.toggle("active",t.getAttribute("data-jobview")===activeJobView);});render();document.getElementById("job-workspace").scrollIntoView({behavior:"smooth",block:"start"});});});\n["jobtype","workmode"].forEach(function(id){document.getElementById(id).addEventListener("change",render);});
 </script>
 </body></html>
