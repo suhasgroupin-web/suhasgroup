@@ -70,9 +70,9 @@ function guideFor(label){const s=label.toLowerCase();return guides.find(g=>g.key
 function openTool(label,dept){const g=guideFor(label)||{title:label,intro:dept+' বিভাগের জন্য এই কাজের dedicated workspace।',inputs:['কাজের reference, order/style ও date সংগ্রহ করুন','Approved SOP, specification এবং required input যাচাই করুন','Responsible person ও target/standard নির্ধারণ করুন'],steps:['কাজ শুরুর আগে input ও approval verify করুন','Process অনুযায়ী কাজ সম্পন্ন করে evidence record করুন','Result supervisor দিয়ে review করান','Issue থাকলে owner ও due date দিয়ে corrective action নিন'],formula:'শুধু approved factory standard ও verified production data ব্যবহার করুন।',caution:'Buyer requirement, factory SOP ও applicable law সর্বদা অগ্রাধিকার পাবে।'};
 title.textContent=g.title;
 content.innerHTML='<div class="work-grid"><article class="work-card full"><h3>🎯 কাজের উদ্দেশ্য</h3><p>'+g.intro+'</p></article><article class="work-card"><h3>📥 শুরু করার আগে যা লাগবে</h3><ul>'+g.inputs.map(x=>'<li>'+x+'</li>').join('')+'</ul></article><article class="work-card"><h3>🧭 কাজের ধাপ</h3><ol>'+g.steps.map(x=>'<li>'+x+'</li>').join('')+'</ol></article><article class="work-card full"><h3>🧮 Technical formula / control</h3><p>'+g.formula+'</p></article><article class="work-card full"><h3>⚠️ গুরুত্বপূর্ণ সতর্কতা</h3><p>'+g.caution+'</p></article></div>';
-grid.style.display='none';hero.style.display='none';empty.style.display='none';wb.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+grid.style.display='none';hero.style.display='none';empty.style.display='none';wb.classList.add('active');window.scrollTo(0,0);requestAnimationFrame(function(){window.scrollTo(0,0);});}
 document.querySelectorAll('.tool-link').forEach(a=>{const label=a.textContent.trim(),dept=a.closest('.dept')?.querySelector('strong')?.textContent||'Department';const b=document.createElement('button');b.type='button';b.className=a.className;b.innerHTML=a.innerHTML;b.addEventListener('click',()=>openTool(label,dept));a.replaceWith(b);});
-document.getElementById('workBack').addEventListener('click',()=>{wb.classList.remove('active');grid.style.display='';hero.style.display='';window.scrollTo({top:0,behavior:'smooth'});});
+document.getElementById('workBack').addEventListener('click',()=>{wb.classList.remove('active');grid.style.display='';hero.style.display='';window.scrollTo(0,0);requestAnimationFrame(function(){window.scrollTo(0,0);});});
 })();
 </script>
 
@@ -144,8 +144,8 @@ body.innerHTML='<div class="nz-grid">'+page.items.map(function(x,i){return '<but
 body.innerHTML='<div class="nz-grid">'+page.items.map(function(x){var numeric=/(count|calculat|cost|stock|consumption|target|capacity|efficien|time|smv|takt|output|quantity|ratio|reorder|value|conversion|dh[u]|dpmo|waste|pitch|marker|balance|pay|variance|cash|expense|energy|water|mtbf|mttr)/i.test(x);return '<div class="nz-card" style="cursor:default"><button data-tool="'+encodeURIComponent(x)+'" style="display:flex;align-items:center;gap:11px;flex:1;min-width:0;border:0;background:transparent;text-align:left;color:inherit;padding:0;cursor:pointer"><span class="nz-icon">▣</span><span><strong>'+x+'</strong><small>Open dedicated work guide and tools</small></span></button>'+(numeric?'<button class="nz-action" style="margin:0;padding:9px 11px;flex:0 0 auto" data-calc="1" aria-label="Open calculator">🧮</button>':'')+'</div>';}).join('')+'</div>';
 }else{body.innerHTML=detailHTML(page.tool,page.dept);}
 }
-function push(page){stack.push(page);host.classList.add('active');if(grid)grid.style.display='none';if(hero)hero.style.display='none';if(oldwb)oldwb.classList.remove('active');if(empty)empty.style.display='none';showPage(page);window.scrollTo({top:0,behavior:'smooth'});}
-function back(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1]);}else{stack=[];host.classList.remove('active');if(grid)grid.style.display='';if(hero)hero.style.display='';}window.scrollTo({top:0,behavior:'smooth'});}
+function push(page){stack.push(page);host.classList.add('active');if(grid)grid.style.display='none';if(hero)hero.style.display='none';if(oldwb)oldwb.classList.remove('active');if(empty)empty.style.display='none';showPage(page);window.scrollTo(0,0);requestAnimationFrame(function(){window.scrollTo(0,0);});}
+function back(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1]);}else{stack=[];host.classList.remove('active');if(grid)grid.style.display='';if(hero)hero.style.display='';}window.scrollTo(0,0);requestAnimationFrame(function(){window.scrollTo(0,0);});}
 document.getElementById('nz-back').addEventListener('click',back);
 function detailHTML(tool,dept){
 var line=tool.toLowerCase().indexOf('line balanc')>=0;
@@ -182,6 +182,8 @@ if(e.target.id==='lb-calc'){var t=Number(document.getElementById('lb-target').va
 })();
 </script>
 <script>
+/* Keep department workspaces at the true top on first paint; avoid restoring a stale scroll offset. */
+if('scrollRestoration' in history) history.scrollRestoration='manual';
 /* Native Android/iOS browser Back support for nested department workspaces. */
 (function(){
   var markerKey='sgDeptNav';
