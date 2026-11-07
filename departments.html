@@ -4,6 +4,15 @@
 :root{--navy:#07172e;--blue:#17439a;--gold:#e8b84a;--ink:#14243e;--muted:#64748b}*{box-sizing:border-box}body{margin:0;background:#f2f5fb;color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif}.zone{min-height:100vh;padding:18px 14px 100px;background:radial-gradient(ellipse at 80% 0,#244b85 0,transparent 34%),linear-gradient(155deg,#07172e 0,#0c2b58 300px,#f2f5fb 301px)}.shell{max-width:1180px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff}.brand{color:white;text-decoration:none;font-weight:850;letter-spacing:.05em}.brand small{display:block;color:#c5d6ef;font-size:10px;letter-spacing:.14em}.top a.back{color:white;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:12px}.hero{padding:28px 4px 24px;color:white}.eyebrow{color:#f3cc73;font-size:11px;font-weight:850;letter-spacing:.18em}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:8px 0}.hero p{color:#d0def2;max-width:740px;line-height:1.65;margin:0}.search{display:flex;gap:8px;margin-top:18px;max-width:620px}.search input{min-width:0;flex:1;border:0;border-radius:12px;padding:13px;font:inherit}.search button{border:0;border-radius:12px;background:linear-gradient(135deg,#ffe59b,#dca52d);padding:0 16px;font-weight:800}.zone-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.dept{background:linear-gradient(145deg,#fff,#f6f9ff);border:1px solid #dce5f2;border-radius:18px;overflow:hidden;box-shadow:0 5px 0 #d8e2f0,0 12px 24px #10274b12;min-width:0}.dept summary{list-style:none;display:flex;align-items:center;gap:12px;padding:16px;cursor:pointer}.dept summary::-webkit-details-marker{display:none}.ico{width:45px;height:45px;flex:0 0 45px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#eaf2ff,#d5e4ff);font-size:22px;box-shadow:inset 0 1px #fff}.dt{flex:1;min-width:0}.dt strong{display:block;font-size:15px}.dt small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:3px}.arrow{color:#58708f;font-size:20px}.dept[open] .arrow{transform:rotate(90deg)}.inside{padding:0 14px 14px}.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.tool-link{display:flex;align-items:center;gap:8px;min-width:0;padding:10px;border:1px solid #e0e8f3;border-radius:11px;background:white;color:#17365f;text-decoration:none;font-size:12px;font-weight:750;box-shadow:0 2px 0 #e5ebf4}.tool-link span{font-size:17px}.calc{margin-top:10px;padding:13px;border-radius:13px;background:#edf4ff;border:1px solid #d4e2f8}.calc h3{margin:0 0 9px;font-size:13px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.fields label{font-size:10px;color:#53657f;display:block}.fields input{width:100%;min-width:0;margin-top:4px;padding:9px;border:1px solid #cfdaeb;border-radius:9px;font:inherit;background:white}.calc button{width:100%;margin-top:9px;padding:10px;border:0;border-radius:10px;background:#17439a;color:white;font-weight:800}.out{margin-top:8px;padding:9px;border-radius:9px;background:white;color:#18375e;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}.note{color:#d2def0;font-size:11px;padding:20px 4px}.empty{display:none;text-align:center;background:white;padding:20px;border-radius:14px}@media(max-width:850px){.zone-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:580px){.zone-grid{grid-template-columns:1fr}.hero{padding-top:22px}.links{grid-template-columns:repeat(2,minmax(0,1fr))}.dept summary{padding:14px}}@media(max-width:350px){.links{grid-template-columns:1fr}}
 
 .tool-link{border:0;text-align:left;font:inherit;cursor:pointer;width:100%}.tool-link:focus-visible{outline:3px solid #e8b84a;outline-offset:2px}.workbench{display:none;background:#fff;border:1px solid #d7e2f1;border-radius:20px;padding:18px;box-shadow:0 10px 28px #10274b18}.workbench.active{display:block}.work-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e6edf6;padding-bottom:12px;margin-bottom:14px}.work-head h2{margin:0;font-size:22px;flex:1}.work-back{border:0;border-radius:11px;padding:10px 14px;background:#102e5c;color:#fff;font-weight:800}.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.work-card{padding:14px;border-radius:14px;background:#f3f7fd;border:1px solid #dce7f5}.work-card h3{margin:0 0 8px;font-size:14px}.work-card p,.work-card li{font-size:13px;line-height:1.6}.work-card ul,.work-card ol{padding-left:19px;margin:7px 0}.work-card.full{grid-column:1/-1}.work-card label{display:block;font-size:12px;margin:7px 0}.work-card input,.work-card select{width:100%;padding:9px;border:1px solid #ccd8e8;border-radius:8px;margin-top:4px}.work-action{padding:10px 13px;border:0;border-radius:10px;background:#17439a;color:white;font-weight:800;margin-top:8px}@media(max-width:580px){.work-grid{grid-template-columns:1fr}.work-card.full{grid-column:auto}}
+
+/* Mobile first-screen layout: keep department content visible immediately and remove empty vertical space. */
+.zone{min-height:0;padding-top:12px;padding-bottom:96px;background:radial-gradient(ellipse at 80% 0,#244b85 0,transparent 34%),linear-gradient(155deg,#07172e 0,#0c2b58 300px,#f2f5fb 301px)}
+.hero{padding:16px 4px 18px}
+.hero h1{margin:6px 0}
+.zone-grid{margin-top:0}
+.workbench.active{margin-top:0}
+#nested-zone.active{margin:0 auto;max-width:1180px}
+@media(max-width:580px){.zone{padding:10px 12px 96px}.hero{padding:12px 4px 16px}.hero p{margin-top:6px}}
 </style></head><body><main class="zone"><div class="shell">
 <header class="top"><a class="brand" href="index.html">SUHAS GROUP<small>GARMENT INDUSTRY SUPER APP</small></a><a class="back" href="index.html">⌂ Home</a></header>
 <section class="hero"><div class="eyebrow">ALL DEPARTMENTS · ONE WORKSPACE</div><h1>Garments Department Zones</h1><p>প্রতিটি বিভাগের কাজ, SOP, planning tools, learning guides ও হিসাবের calculator এক জায়গায়। বিভাগ খুলে প্রয়োজনীয় টুল ব্যবহার করুন।</p><form class="search" id="deptSearch"><input id="q" type="search" placeholder="Search department or tool…"><button>Search</button></form></section>
@@ -227,4 +236,20 @@ if('scrollRestoration' in history) history.scrollRestoration='manual';
   try{history.replaceState(Object.assign({},history.state||{},{sgDepartmentPage:true}),'',location.href);}catch(e){}
 })();
 </script>
-<script src="assets/script.js"></script></body></html>
+<script src="assets/script.js"></script><script>
+(function(){
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+function resetInitialView(){
+var wb=document.getElementById('workbench'), nz=document.getElementById('nested-zone');
+if(wb) wb.classList.remove('active');
+if(nz) nz.classList.remove('active');
+var zones=document.getElementById('zones'), hero=document.querySelector('.hero'), empty=document.getElementById('empty');
+if(zones) zones.style.display='';
+if(hero) hero.style.display='';
+if(empty) empty.style.display='none';
+window.scrollTo(0,0);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',resetInitialView,{once:true});
+else resetInitialView();
+})();
+</script></body></html>
