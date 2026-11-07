@@ -1,6 +1,6 @@
 (function(){
   var cfg = window.SUHAS_CONFIG;
-  window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY);
+  window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {\n    auth: {\n      persistSession: true,\n      autoRefreshToken: true,\n      detectSessionInUrl: true,\n      storage: window.localStorage,\n      storageKey: 'suhas-group-auth-v1'\n    }\n  });
 
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
