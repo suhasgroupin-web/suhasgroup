@@ -283,7 +283,7 @@ if(summary){e.preventDefault();e.stopImmediatePropagation();var dept=summary.que
 var cat=e.target.closest('[data-category]');
 if(cat){e.preventDefault();e.stopImmediatePropagation();var p=stack[stack.length-1],group=p.items[Number(cat.dataset.category)];push({type:'tools',title:group[1],sub:group[2],dept:p.dept,items:group[3]});return;}
 var tool=e.target.closest('[data-tool]');
-if(tool){e.preventDefault();e.stopImmediatePropagation();var p=stack[stack.length-1],name=decodeURIComponent(tool.dataset.tool);push({type:'detail',title:name,sub:p.dept+' · dedicated work mode',dept:p.dept,tool:name});return;}
+if(tool){e.preventDefault();e.stopImmediatePropagation();var p=stack[stack.length-1],name=decodeURIComponent(tool.dataset.tool);if(p&&p.dept==='Quality Assurance & QC'&&name==='Measurement Sheet'){window.location.href='measurement-studio.html';return;}push({type:'detail',title:name,sub:p.dept+' · dedicated work mode',dept:p.dept,tool:name});return;}
 if(e.target.id==='lb-calc'){var t=Number(document.getElementById('lb-target').value),m=Number(document.getElementById('lb-mins').value),o=Number(document.getElementById('lb-ops').value),s=Number(document.getElementById('lb-smv').value);var out=document.getElementById('lb-out');if(t<=0||m<=0||o<=0||s<=0){out.textContent='Please enter positive values.';}else{var ct=m/t,eff=(t*s)/(o*m)*100,req=s*t/m;out.textContent='Target cycle time: '+ct.toFixed(2)+' min/piece\nEstimated line efficiency: '+eff.toFixed(1)+'%\nCalculated workload: '+req.toFixed(2)+' operator-equivalents.\nUse operation-wise SMV and skill matrix to allocate actual operators; this total alone is not an operation layout.';}return;}
 },true);
 })();
