@@ -34,7 +34,7 @@
       if(userResult.error || !userResult.data.user) return false;
       var result = await sb.rpc('has_suhas_role', {
         p_user_id: userResult.data.user.id,
-        p_roles: ['OWNER', 'ADMIN']
+        p_roles: ['OWNER']
       });
       return !result.error && result.data === true;
     } catch(e) { return false; }
@@ -64,11 +64,7 @@
   async function paintNav(session){
     var isO5 = session && isO5Account(session.user);
     var isAdmin = session ? await window.checkIsAdmin() : false;
-    if(isO5 && !['o5-desk.html','suhas-calculator.html','related-apk.html','measurement-studio.html','login.html','signup.html','reset.html'].includes(page)){
-      location.replace('o5-desk.html');
-      return;
-    }
-    document.querySelectorAll('.nav-cta').forEach(function(box){
+        document.querySelectorAll('.nav-cta').forEach(function(box){
       if(session){
         box.innerHTML =
           (isAdmin ? '<a href="admin.html#post" class="btn btn-gold btn-sm">+ Create Job Post</a><a href="admin.html" class="btn btn-outline btn-sm">Dashboard</a>' : '') +
