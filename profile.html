@@ -1,5 +1,11 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Profile | SUHAS GROUP</title><link rel="stylesheet" href="assets/styles.css"><style>
-/* Android rendering stability: avoid sticky/fixed blur compositing flicker on profile */
+/* Profile page: disable all motion/compositing effects to stop Android flicker */
+html,body{scroll-behavior:auto!important}
+body .site-header{position:relative!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}
+body .tabbar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important;transform:none!important}
+body .profile-meta-window{mask-image:none!important;-webkit-mask-image:none!important;overflow:visible!important}
+body *,body *::before,body *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;caret-color:transparent!important}
+
 body:has(.member-tools) .site-header{position:relative!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}
 body:has(.member-tools) .tabbar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important;transform:translateZ(0)}
 body:has(.member-tools){scroll-behavior:auto!important}
