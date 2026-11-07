@@ -1,6 +1,15 @@
 (function(){
   var cfg = window.SUHAS_CONFIG;
-  window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {\n    auth: {\n      persistSession: true,\n      autoRefreshToken: true,\n      detectSessionInUrl: true,\n      storage: window.localStorage,\n      storageKey: 'suhas-group-auth-v1'\n    }\n  });
+  window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce',
+      storage: window.localStorage,
+      storageKey: 'suhas-group-auth-v2'
+    }
+  });
 
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
@@ -15,7 +24,7 @@
 
   window.safeNext = function(value){
     return typeof value === 'string' && value.charAt(0) === '/' &&
-      value.charAt(1) !== '/' && !value.includes('\\') ? value : 'profile.html';
+      value.charAt(1) !== '/' && !value.includes('\\\\') ? value : 'profile.html';
   };
 
   window.checkIsAdmin = async function(){
@@ -52,8 +61,7 @@
   };
 
   async function paintNav(session){
-    var isAdmin = false;
-    if(session) isAdmin = await window.checkIsAdmin();
+    var isAdmin = session ? await window.checkIsAdmin() : false;
     document.querySelectorAll('.nav-cta').forEach(function(box){
       if(session){
         box.innerHTML =
@@ -65,9 +73,12 @@
       }
     });
     document.querySelectorAll('.js-logout').forEach(function(b){
-      b.addEventListener('click', function(e){
+      b.addEventListener('click', async function(e){
         e.preventDefault();
-        sb.auth.signOut().then(function(){ location.replace('index.html'); });
+        b.disabled = true;
+        var result = await sb.auth.signOut({scope:'global'});
+        if(result.error){ b.disabled = false; window.showMsg('msg', 'Could not sign out. Please try again.', false); return; }
+        location.replace('index.html');
       });
     });
   }
