@@ -386,3 +386,17 @@ p{color:var(--muted);margin-bottom:14px}
 .desk-tx small{font-size:13px;color:rgba(255,255,255,.75)}
 .desk-go{flex:none;font-weight:700;font-size:13.5px;color:#241A02;background:var(--gold);padding:8px 14px;border-radius:999px}
 @media(max-width:520px){.desk-go{padding:8px 11px}.desk-tx small{font-size:12.5px}}
+
+
+/* Signed-in navigation: one account area, no duplicate sign-up controls */
+.js-session-links{display:flex;align-items:center;gap:22px}
+.js-session-links a{font-weight:700;font-size:14px;color:var(--ink);padding:8px 0}
+.js-session-links a:hover{color:var(--royal)}
+@media(max-width:1200px){
+  .js-session-links{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0 24px 14px}
+  .js-session-links a{padding:13px 0;border-top:1px solid var(--line)}
+  .nav-links.open{max-height:720px}
+}
+@media(max-width:980px){
+  .nav-wrap>.nav-cta[style*="display: none"]{display:none!important}
+}
