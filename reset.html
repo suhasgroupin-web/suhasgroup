@@ -29,7 +29,7 @@
 <div id="setnew" style="display:none">
 <h1>Choose a new password</h1><p>Enter a new password for your account.</p>
 <div id="msg2" class="msg"></div>
-<form id="new-form"><div class="form-row"><label for="np">New password (min 6 characters)</label><input type="password" id="np" minlength="6" required></div>
+<form id="new-form"><div class="form-row"><label for="np">New password (min 12 characters)</label><input type="password" id="np" minlength="12" autocomplete="new-password" required></div>
 <button class="btn btn-primary" id="sub2" style="width:100%" type="submit">Update password</button></form>
 </div>
 <p class="linkline"><a href="login.html">Back to login</a></p>
@@ -61,7 +61,11 @@ document.getElementById('req-form').addEventListener('submit', async function(e)
 document.getElementById('new-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var btn=document.getElementById('sub2'); btn.disabled=true;
-  var r = await sb.auth.updateUser({ password: document.getElementById('np').value });
+  var newPassword=document.getElementById('np').value;
+  if(newPassword.length < 12 || !/[a-z]/.test(newPassword) || !/[A-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)){
+    btn.disabled=false; showMsg('msg2','Use at least 12 characters with uppercase, lowercase and a number.',false); return;
+  }
+  var r = await sb.auth.updateUser({ password: newPassword });
   btn.disabled=false;
   if(r.error){ showMsg('msg2', r.error.message, false); } else { showMsg('msg2','Password updated. Redirecting...', true); setTimeout(function(){ location.href='profile.html'; }, 1200); }
 });
