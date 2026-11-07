@@ -210,6 +210,36 @@ body.entry-locked{background:#202833!important}
 }
 .entry-card{position:relative;z-index:1}
 
+
+/* v38: make the grey cloudscape cover the entire welcome viewport */
+html:has(body.entry-locked),body.entry-locked{min-height:100%;width:100%;background:#283441!important}
+body.entry-locked{min-height:100vh;min-height:100dvh}
+.entry-gate{
+ position:fixed!important;inset:0!important;width:100%!important;
+ min-height:100vh!important;min-height:100dvh!important;
+ box-sizing:border-box!important;overflow-x:hidden!important;overflow-y:auto!important;
+ background:
+  radial-gradient(ellipse 85% 27% at 8% 4%,rgba(250,252,255,.42) 0%,rgba(214,225,239,.24) 40%,transparent 78%),
+  radial-gradient(ellipse 78% 24% at 94% 8%,rgba(255,255,255,.35) 0%,rgba(197,211,228,.20) 42%,transparent 78%),
+  radial-gradient(ellipse 100% 28% at 48% 33%,rgba(194,207,223,.22) 0%,transparent 76%),
+  radial-gradient(ellipse 90% 30% at 6% 67%,rgba(225,233,243,.16) 0%,transparent 75%),
+  radial-gradient(ellipse 88% 26% at 100% 92%,rgba(215,225,238,.20) 0%,transparent 75%),
+  linear-gradient(155deg,#8999ad 0%,#586879 35%,#354454 68%,#202c39 100%)!important;
+ background-size:cover!important;background-position:center!important;
+}
+.entry-gate:before{
+ content:"";position:fixed!important;inset:0!important;height:100%!important;width:100%!important;
+ pointer-events:none;z-index:0;
+ background:
+  radial-gradient(ellipse 26% 13% at 12% 7%,rgba(255,255,255,.28),transparent 74%),
+  radial-gradient(ellipse 30% 16% at 39% 2%,rgba(255,255,255,.18),transparent 76%),
+  radial-gradient(ellipse 28% 14% at 78% 9%,rgba(255,255,255,.22),transparent 76%),
+  radial-gradient(ellipse 35% 18% at 93% 48%,rgba(220,231,243,.12),transparent 76%),
+  radial-gradient(ellipse 32% 16% at 8% 76%,rgba(235,241,248,.12),transparent 76%);
+ filter:blur(24px);
+}
+.entry-card{position:relative;z-index:1}
+
 </style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
