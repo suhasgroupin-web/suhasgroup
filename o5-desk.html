@@ -68,6 +68,14 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 8%,#244
 <p class="footer-note">O5 INTERNATIONAL · NEW YORK</p>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="install-modal" style="display:none;position:fixed;inset:0;background:#020b1ccc;z-index:50;align-items:center;justify-content:center;padding:22px">
+ <div style="width:min(420px,100%);padding:25px;border-radius:22px;background:#fff;color:#10213d;box-shadow:0 20px 60px #0008">
+  <div style="font-size:30px">📲</div><h2 style="margin:8px 0">Install O5 Workspace</h2>
+  <p style="line-height:1.55;color:#53647d">Install the app on your phone for faster access to O5 tools. Your account remains a standard User; installation never grants Employee-admin or Admin permissions.</p>
+  <button id="install-confirm" class="btn btn-primary" style="width:100%">Install App</button>
+  <button id="install-later" class="btn btn-outline" style="width:100%;margin-top:9px">Maybe later</button>
+ </div>
+</div>
 <script>
 (()=>{const toast=document.getElementById('toast');let timer;document.querySelectorAll('[data-soon]').forEach(btn=>btn.addEventListener('click',()=>{toast.textContent=btn.dataset.soon+' — content setup will be added next.';toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),2600);}));})();
 </script>
