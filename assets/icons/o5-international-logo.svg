@@ -1,6 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" fill="#fff"/>
-<text x="256" y="292" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="278" font-weight="900" letter-spacing="-22" fill="#252a30">C5</text>
-<rect x="52" y="340" width="408" height="10" rx="5" fill="#ff914d"/>
-<text x="256" y="410" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="43" font-weight="800" letter-spacing="4" fill="#333b43">INTERNATIONAL</text>
+<defs>
+<linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".38" stop-color="#d9dee6"/><stop offset=".72" stop-color="#7f8998"/><stop offset="1" stop-color="#f7f8fa"/></linearGradient>
+<radialGradient id="face" cx=".32" cy=".22" r=".9"><stop stop-color="#fff"/><stop offset=".45" stop-color="#e8edf4"/><stop offset="1" stop-color="#aeb8c6"/></radialGradient>
+<linearGradient id="ink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#48515d"/><stop offset="1" stop-color="#171c23"/></linearGradient>
+<linearGradient id="orange" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ffb16d"/><stop offset=".5" stop-color="#ff873d"/><stop offset="1" stop-color="#ffc184"/></linearGradient>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<circle cx="256" cy="270" r="238" fill="#152033" opacity=".22" filter="url(#shadow)"/>
+<circle cx="256" cy="256" r="246" fill="url(#rim)"/>
+<circle cx="256" cy="256" r="229" fill="url(#face)" stroke="#fff" stroke-opacity=".9" stroke-width="5"/>
+<path d="M91 156a190 190 0 0 1 330-35" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="12" stroke-linecap="round"/>
+<text x="256" y="282" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="230" font-weight="900" letter-spacing="-17" fill="url(#ink)">O5</text>
+<rect x="94" y="322" width="324" height="11" rx="5.5" fill="url(#orange)"/>
+<text x="256" y="383" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="800" letter-spacing="5" fill="#303945">INTERNATIONAL</text>
+<path d="M100 414a194 194 0 0 0 312 0" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="5" stroke-linecap="round"/>
 </svg>
