@@ -82,15 +82,12 @@ create table if not exists public.member_verification_status (
   updated_at timestamptz not null default now()
 );
 alter table public.member_verification_status enable row level security;
-grant select,insert,update on public.member_verification_status to authenticated;
+grant select on public.member_verification_status to authenticated;
 drop policy if exists "Members read own verification status" on public.member_verification_status;
 create policy "Members read own verification status" on public.member_verification_status
 for select to authenticated using (auth.uid()=user_id);
 drop policy if exists "Members create own verification status" on public.member_verification_status;
-create policy "Members create own verification status" on public.member_verification_status
-for insert to authenticated with check (auth.uid()=user_id);
 drop policy if exists "Members update own verification status" on public.member_verification_status;
-create policy "Members update own verification status" on public.member_verification_status
-for update to authenticated using (auth.uid()=user_id) with check (auth.uid()=user_id);
+-- Only a trusted server-side verification provider should write KYC status.
 
 notify pgrst, 'reload schema';
