@@ -130,10 +130,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var tabs = [
     ['index.html', 'Home', page === 'index.html', '<img class="brand-icon" src="assets/icons/home-suhas-logo.svg" alt="SUHAS GROUP" />', ''],
     ['jobs.html', 'Jobs', page === 'jobs.html' || page === 'job.html', ic('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), ''],
-    ['o5-desk.html', 'O5 International', page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon o5-international-icon" src="assets/icons/o5-international-logo.svg?v=5" alt="" />', 'o5-international'],
+    ['o5-desk.html', "O5'Intl", page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon o5-international-icon" src="assets/icons/o5-international-logo.svg?v=6" alt="O5 International" />', 'o5-international'],
     ['login.html', 'Account', page === 'profile.html' || page === 'login.html' || page === 'signup.html', ic('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'), '']
   ];  nav.innerHTML = tabs.map(function (t) {
-    return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[1] === 'Mail' ? ' target="_blank" rel="noopener"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[1] === 'O5 International' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + (t[1] === 'O5 International' ? '' : '<span>' + t[1] + '</span>') + '</a>';
+    return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[1] === 'Mail' ? ' target="_blank" rel="noopener"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span>' + '</a>';
   }).join('') + '<button type="button" id="sg-menu">' + ic('<path d="M4 7h16M4 12h16M4 17h16"/>') + '<span>Menu</span></button>';
   document.body.appendChild(nav); document.body.classList.add('has-tabbar');
   document.getElementById('sg-menu').addEventListener('click', function () {
