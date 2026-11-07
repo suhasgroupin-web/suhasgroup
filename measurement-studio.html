@@ -17,7 +17,7 @@
 <script>
 const logoSvg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 118"><rect width="220" height="118" fill="white"/><text x="3" y="72" font-family="Arial" font-size="86" font-weight="bold" letter-spacing="-8">C5</text><path d="M3 81H207" stroke="black" stroke-width="4"/><text x="7" y="111" font-family="Arial" font-size="35" font-weight="bold" letter-spacing="8">INT’L</text></svg>'; const logoImg=document.getElementById('logo');
 function setLogoImage(src){return new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=im.naturalWidth||440;cv.height=im.naturalHeight||236;const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);logoImg.src=cv.toDataURL('image/png');resolve();}catch(e){logoImg.src=src;resolve();}};im.onerror=reject;im.src=src;});}
-const defaultLogoPromise=setLogoImage('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logoSvg));
+let logoPromise=setLogoImage('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logoSvg));
 const sizes=['30','32','34','36'];
 const maxSizes=5;
 const defs=[
@@ -49,13 +49,13 @@ function draw(){
  document.querySelectorAll('[data-spec]').forEach(e=>e.oninput=()=>{let [i,s]=e.dataset.spec.split('|');if(!s.startsWith('__empty'))rows[+i].spec[s]=Number(e.value)||0});
 }
 document.getElementById('addSize').onclick=()=>{let s=document.getElementById('newSize').value.trim();if(!s||sizes.includes(s))return;if(sizes.length>=maxSizes){alert('Maximum 5 sizes are allowed.');return;}sizes.push(s);rows.forEach(r=>{r.spec[s]=0;r.cells[s]=[]});document.getElementById('newSize').value='';draw()};
-document.getElementById('logoUpload').onchange=e=>{let f=e.target.files[0];if(f){const reader=new FileReader();reader.onload=()=>setLogoImage(reader.result);reader.readAsDataURL(f)}};
+document.getElementById('logoUpload').onchange=e=>{let f=e.target.files[0];if(f){const reader=new FileReader();reader.onload=()=>{logoPromise=setLogoImage(reader.result);};reader.readAsDataURL(f)}};
 document.getElementById('pdf').onclick=async()=>{
  const btn=document.getElementById('pdf'), controls=document.querySelector('.controls'), paper=document.querySelector('.paper');
  btn.disabled=true; btn.textContent='Preparing PDF...';
  try {
   if(!window.html2pdf) throw new Error('PDF library unavailable');
-  await defaultLogoPromise;
+  await logoPromise;
   if(logoImg.decode) await logoImg.decode();
   await html2pdf().set({
    margin:[5,5,5,5],
