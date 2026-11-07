@@ -215,7 +215,9 @@ if(e.target.id==='lb-calc'){var t=Number(document.getElementById('lb-target').va
   },true);
   window.addEventListener('popstate',function(e){
     if(backInside()){
-      // Keep a history entry for the parent screen, so another Back returns one more level.
+      // popstate consumes the current browser entry; restore an anchor so the next
+      // hardware Back press can move one more level instead of leaving the app.
+      addLevel();
       return;
     }
   });
