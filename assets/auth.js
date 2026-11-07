@@ -18,7 +18,7 @@
   var route = location.pathname.toLowerCase().split('/').filter(Boolean).join('/');
   var isProtectedPage = protectedPages.indexOf(route) !== -1;
   function requireWorkspaceSession(session){
-    if(isProtectedPage && !session){
+    if(isProtectedPage && !session && route !== 'app.html'){
       var next = route + location.search + location.hash;
       location.replace('login.html?next=' + encodeURIComponent(next));
       return false;
