@@ -76,16 +76,23 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/profile.html?setup=1';
+    var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/login.html?verified=1';
     var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
-      var profileResult=await sb.from('profiles').upsert({ id:r.data.user.id, full_name:fullName });
-      if(profileResult.error){console.warn('Profile will be completed after login:',profileResult.error.message)}
-      window.location.href = 'profile.html?setup=1';
+      // Signup completion is separate from login: require a fresh, explicit login.
+      await sb.auth.signOut({scope:'local'});
+      showMsg('msg','Your SUHAS GROUP account has been created successfully. Please log in to enter the app.', true);
+      var loginLink=document.createElement('a');
+      loginLink.href='login.html?created=1';
+      loginLink.className='btn btn-primary';
+      loginLink.style.cssText='display:block;width:100%;text-align:center;margin-top:14px';
+      loginLink.textContent='Continue to Login';
+      document.getElementById('signup-form').appendChild(loginLink);
+      btn.disabled=true; btn.textContent='Account Created';
     } else {
-      showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP, verify your email, then log in. Your account will be a standard User. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
+      showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP. After verification, return here and log in to enter the app. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
     }
   }catch(err){ showMsg('msg','Error: '+err.message,false); reset(); }
 });
