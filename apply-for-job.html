@@ -19,13 +19,11 @@
 <div class="career-hero"><span class="tag">SUHAS GROUP CAREERS</span><h1>Apply for Job</h1><p>Find opportunities, submit your application, follow your progress, or connect with our official career channels — all from one place.</p></div>
 <section id="create-link-job" class="career-note" style="margin:0 auto 22px;max-width:850px;display:none">
 <h2 style="margin:0 0 8px;color:#10264a;font-size:22px">Create Job by Link</h2>
-<p style="margin:0 0 14px">Paste the public SUHAS Career PLC LinkedIn job-post URL. The listing will appear in Available Jobs and Apply will open the original LinkedIn post.</p>
+<p style="margin:0 0 14px">Paste only the public SUHAS Career PLC LinkedIn post URL. Once the approved LinkedIn connection is enabled, the system will import the post details, publish the job to SUHAS Jobs and send the channel update.</p>
 <div id="link-job-msg" class="msg"></div>
 <form id="link-job-form">
 <div class="form-row"><label>LinkedIn job post URL</label><input id="link-job-url" type="url" required placeholder="https://www.linkedin.com/posts/..."></div>
-<div class="form-row"><label>Job title (if LinkedIn details cannot be read)</label><input id="link-job-title" type="text" placeholder="Enter job title"></div>
-<div class="form-row"><label>Location (optional)</label><input id="link-job-location" type="text" placeholder="e.g. Dhaka, Bangladesh"></div>
-<button class="btn btn-primary" id="link-job-submit" type="submit">Create Job</button>
+<button class="btn btn-primary" id="link-job-submit" type="submit">Create Job by Link</button>
 </form>
 </section>
 <div class="career-grid">
@@ -52,20 +50,19 @@
       if(await window.checkIsAdmin())panel.style.display='block';
     }catch(e){}
   })();
-  form.addEventListener('submit',async function(e){
+  form.addEventListener('submit',function(e){
     e.preventDefault();
-    var btn=document.getElementById('link-job-submit'),url=document.getElementById('link-job-url').value.trim();
-    var title=document.getElementById('link-job-title').value.trim()||'LinkedIn Job Opportunity';
-    var locationText=document.getElementById('link-job-location').value.trim();
+    var url=document.getElementById('link-job-url').value.trim();
+    var btn=document.getElementById('link-job-submit');
     try{
       var parsed=new URL(url);
-      if(parsed.protocol!=='https:'||!(parsed.hostname==='linkedin.com'||parsed.hostname.endsWith('.linkedin.com'))){message('Please paste a valid HTTPS LinkedIn post URL.',false);return;}
-      btn.disabled=true;btn.textContent='Creating...';
-      var result=await sb.from('jobs').insert({title:title,company:'SUHAS Career PLC',category:'Other',location:locationText,job_type:'As posted on LinkedIn',description:'For full job details and application instructions, open the original SUHAS Career PLC LinkedIn post.',source:'LinkedIn',external_url:parsed.href}).select('id').single();
-      btn.disabled=false;btn.textContent='Create Job';
-      if(result.error){message('Could not create job: '+result.error.message,false);return;}
-      form.reset();message('Job created successfully. It is now listed in Available Jobs.',true);
-    }catch(err){btn.disabled=false;btn.textContent='Create Job';message('Please enter a valid LinkedIn URL.',false);}
+      if(parsed.protocol!=='https:'||!(parsed.hostname==='linkedin.com'||parsed.hostname.endsWith('.linkedin.com'))){
+        message('Please paste a valid HTTPS LinkedIn post URL.',false);return;
+      }
+      message('LinkedIn import is not connected yet. No incomplete job has been published. Please enable the approved LinkedIn Page API access; then this button can import the full post and complete the publishing workflow.',false);
+    }catch(err){
+      message('Please enter a valid LinkedIn URL.',false);
+    }
   });
 })();
 </script></body></html>
