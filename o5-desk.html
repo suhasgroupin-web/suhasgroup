@@ -76,6 +76,25 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 8%,#244
   <button id="install-later" class="btn btn-outline" style="width:100%;margin-top:9px">Maybe later</button>
  </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+(async function(){
+ const user=await window.requireAuth();
+ if(!user)return;
+ if(!(user.email||'').toLowerCase().endsWith('@o5-intl.com')){location.replace('app.html');return;}
+ const modal=document.getElementById('install-modal');
+ let promptEvent=null;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();promptEvent=e;if(new URLSearchParams(location.search).get('welcome')==='1')modal.style.display='flex';});
+ if(new URLSearchParams(location.search).get('welcome')==='1')setTimeout(function(){modal.style.display='flex';},900);
+ document.getElementById('install-confirm').addEventListener('click',async function(){
+   if(!promptEvent){alert('To install: open your browser menu (⋮) and choose Install app or Add to Home screen.');return;}
+   promptEvent.prompt();await promptEvent.userChoice;promptEvent=null;modal.style.display='none';
+ });
+ document.getElementById('install-later').addEventListener('click',function(){modal.style.display='none';});
+})();
+</script>
 <script>
 (()=>{const toast=document.getElementById('toast');let timer;document.querySelectorAll('[data-soon]').forEach(btn=>btn.addEventListener('click',()=>{toast.textContent=btn.dataset.soon+' — content setup will be added next.';toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),2600);}));})();
 </script>
