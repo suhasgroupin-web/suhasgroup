@@ -14,7 +14,7 @@
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Public pages may be viewed without an account. Every workspace/tool requires sign-in.
-  var protectedPages = ['app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'];
+  var protectedPages = ['app.html','member-tools.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'];
   var route = location.pathname.toLowerCase().split('/').filter(Boolean).join('/');
   var isProtectedPage = protectedPages.indexOf(route) !== -1;
   function requireWorkspaceSession(session){
