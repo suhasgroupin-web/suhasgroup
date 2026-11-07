@@ -25,7 +25,7 @@
 <form id="signup-form">
 <div class="form-row"><label for="name">Full name</label><input type="text" id="name" autocomplete="name" required></div>
 <div class="form-row"><label for="email">Email</label><input type="email" id="email" autocomplete="email" required></div>
-<div class="form-row"><label for="password">Password (min 6 characters)</label><div class="pw"><input type="password" id="password" minlength="6" autocomplete="new-password" required><button type="button" id="tg">Show</button></div></div>
+<div class="form-row"><label for="password">Password (min 12 characters)</label><div class="pw"><input type="password" id="password" minlength="12" autocomplete="new-password" required><button type="button" id="tg">Show</button></div></div>
 <div class="form-row"><label for="role">I am a</label><select id="role"><option value="candidate">Job seeker</option><option value="employer">Employer</option></select></div>
 <button class="btn btn-primary" id="sub" style="width:100%" type="submit">Sign Up</button>
 </form>
@@ -54,14 +54,17 @@ document.getElementById('signup-form').addEventListener('submit', async function
   var emailVal=document.getElementById('email').value.trim();
   var passVal=document.getElementById('password').value;
   var roleVal=document.getElementById('role').value;
+  if(passVal.length < 12 || !/[a-z]/.test(passVal) || !/[A-Z]/.test(passVal) || !/[0-9]/.test(passVal)){
+    showMsg('msg','Use at least 12 characters with uppercase, lowercase and a number.',false); reset(); return;
+  }
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
     var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/profile.html';
-    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, role: roleVal } } });
+    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
-      await sb.from('profiles').upsert({ id: r.data.user.id, full_name: fullName, role: roleVal });
+      await sb.from('profiles').upsert({ id: r.data.user.id, full_name: fullName });
       window.location.href='profile.html';
     } else {
       showMsg('msg','Account created. Please check your email to confirm, then login.', true); reset();
