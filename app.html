@@ -186,6 +186,30 @@ body.entry-locked{background:#202833!important}
  border-color:rgba(220,230,241,.28)!important;
  box-shadow:0 28px 90px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.22)!important;
 }
+
+/* v37: soft drifting-looking cloud banks at the top of the grey welcome screen */
+.entry-gate{
+ position:relative!important;
+ overflow:hidden!important;
+ background:
+  radial-gradient(ellipse 58% 23% at 12% 2%,rgba(245,248,252,.34) 0%,rgba(218,226,236,.19) 32%,transparent 72%),
+  radial-gradient(ellipse 52% 20% at 88% 5%,rgba(255,255,255,.30) 0%,rgba(205,216,229,.17) 38%,transparent 74%),
+  radial-gradient(ellipse 70% 17% at 52% 13%,rgba(230,237,246,.18) 0%,transparent 74%),
+  radial-gradient(ellipse at 50% 0%,rgba(190,205,222,.30) 0%,transparent 48%),
+  radial-gradient(ellipse at 100% 100%,rgba(92,111,133,.22) 0%,transparent 42%),
+  linear-gradient(145deg,#111923 0%,#303b49 48%,#1a222d 100%)!important;
+}
+.entry-gate:before{
+ content:"";position:absolute;inset:0 0 auto;height:30%;pointer-events:none;z-index:0;
+ background:
+  radial-gradient(ellipse 22% 34% at 10% 20%,rgba(255,255,255,.16),transparent 72%),
+  radial-gradient(ellipse 28% 38% at 34% 2%,rgba(255,255,255,.12),transparent 72%),
+  radial-gradient(ellipse 24% 36% at 68% 13%,rgba(255,255,255,.13),transparent 72%),
+  radial-gradient(ellipse 22% 34% at 94% 4%,rgba(255,255,255,.15),transparent 72%);
+ filter:blur(18px);
+}
+.entry-card{position:relative;z-index:1}
+
 </style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
