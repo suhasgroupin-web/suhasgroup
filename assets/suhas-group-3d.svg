@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 25 550 500" role="img" aria-labelledby="t d">
 <title id="t">SUHAS GROUP 3D emblem</title><desc id="d">Chrome silver S over a deep blue metallic circular emblem, with SUHAS GROUP lettering and a blue sphere. Transparent outside the emblem.</desc>
 <defs>
  <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f9fdff"/><stop offset=".18" stop-color="#7d9fc9"/><stop offset=".38" stop-color="#102c61"/><stop offset=".68" stop-color="#dcecff"/><stop offset="1" stop-color="#19396b"/></linearGradient>
  <radialGradient id="blue" cx="35%" cy="25%" r="80%"><stop stop-color="#5abaff"/><stop offset=".22" stop-color="#075bd0"/><stop offset=".58" stop-color="#062d79"/><stop offset="1" stop-color="#020d2c"/></radialGradient>
- <linearGradient id="silver" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".18" stop-color="#b9c9dd"/><stop offset=".34" stop-color="#fff"/><stop offset=".56" stop-color="#788da9"/><stop offset=".75" stop-color="#f4f8ff"/><stop offset="1" stop-color="#6d829f"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff"/><stop offset=".18" stop-color="#eaf3ff"/><stop offset=".34" stop-color="#fff"/><stop offset=".56" stop-color="#a9bad2"/><stop offset=".75" stop-color="#f4f8ff"/><stop offset="1" stop-color="#6d829f"/></linearGradient>
  <linearGradient id="letters" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".42" stop-color="#dceaff"/><stop offset=".55" stop-color="#6f8eaf"/><stop offset=".8" stop-color="#fff"/><stop offset="1" stop-color="#8299b7"/></linearGradient>
  <radialGradient id="orb" cx="30%" cy="22%" r="80%"><stop stop-color="#e2f8ff"/><stop offset=".18" stop-color="#42c3ff"/><stop offset=".48" stop-color="#0757c9"/><stop offset="1" stop-color="#020c35"/></radialGradient>
  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="11"/><feOffset dy="15"/><feComponentTransfer><feFuncA type="linear" slope=".65"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -19,7 +19,7 @@
  <path d="M389 100 C354 68 284 60 225 76" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".85"/>
  <path d="M184 380 C260 415 344 403 360 353" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".65"/>
  <rect x="75" y="253" width="414" height="74" rx="10" fill="#03102c" opacity=".8"/>
- <text x="282" y="307" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="47" font-weight="900" letter-spacing="-1.5" fill="url(#letters)" stroke="#071b43" stroke-width="2" paint-order="stroke" filter="url(#extrude)">SUHAS GROUP</text>
+ <text x="282" y="307" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="49" font-weight="900" letter-spacing="-1.5" fill="url(#letters)" stroke="#071b43" stroke-width="2" paint-order="stroke" filter="url(#extrude)">SUHAS GROUP</text>
  <circle cx="500" cy="460" r="52" fill="#03102a" opacity=".75"/>
  <circle cx="500" cy="450" r="49" fill="url(#rim)"/>
  <circle cx="500" cy="446" r="40" fill="url(#orb)" stroke="#9edcff" stroke-width="2"/>
