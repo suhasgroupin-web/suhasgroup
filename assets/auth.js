@@ -13,6 +13,18 @@
 
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
+  // Public pages may be viewed without an account. Every workspace/tool requires sign-in.
+  var protectedPages = ['app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'];
+  var route = location.pathname.toLowerCase().replace(/^\\/+/, '');
+  var isProtectedPage = protectedPages.indexOf(route) !== -1;
+  function requireWorkspaceSession(session){
+    if(isProtectedPage && !session){
+      var next = location.pathname.split('/').pop() + location.search + location.hash;
+      location.replace('login.html?next=' + encodeURIComponent(next));
+      return false;
+    }
+    return true;
+  }
 
   window.showMsg = function(id, text, ok){
     var el = document.getElementById(id);
@@ -105,6 +117,7 @@
 
   sb.auth.getSession().then(function(r){
     var session = r.data && r.data.session;
+    if(!requireWorkspaceSession(session)) return;
     paintNav(session);
     enforceMemberProfile(session);
     if(session && (page === 'login.html' || page === 'signup.html')){
@@ -118,6 +131,7 @@
       return;
     }
     if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
+      if(!requireWorkspaceSession(session)) return;
       paintNav(session);
       if(event==='SIGNED_IN' || event==='TOKEN_REFRESHED') enforceMemberProfile(session);
     }
