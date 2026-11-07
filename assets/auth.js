@@ -15,11 +15,11 @@
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Public pages may be viewed without an account. Every workspace/tool requires sign-in.
   var protectedPages = ['app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'];
-  var route = location.pathname.toLowerCase().replace(/^\\/+/, '');
+  var route = location.pathname.toLowerCase().split('/').filter(Boolean).join('/');
   var isProtectedPage = protectedPages.indexOf(route) !== -1;
   function requireWorkspaceSession(session){
     if(isProtectedPage && !session){
-      var next = location.pathname.split('/').pop() + location.search + location.hash;
+      var next = route + location.search + location.hash;
       location.replace('login.html?next=' + encodeURIComponent(next));
       return false;
     }
