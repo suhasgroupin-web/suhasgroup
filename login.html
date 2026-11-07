@@ -53,7 +53,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
     var next = new URLSearchParams(location.search).get('next');
-    if(next && /^[a-z0-9_\\/-]+(?:\\.html)?(?:\\?[\\w=&%.-]*)?(?:#[\\w-]*)?$/i.test(next)){ window.location.href = next; return; }
+    if(next && ['app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'].indexOf(next.split('?')[0].split('#')[0]) !== -1){ window.location.href = next; return; }
     var pr = await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();
     if(pr.data && pr.data.profile_complete === true){ window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'app.html'; } else { window.location.href = 'profile.html'; }
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
