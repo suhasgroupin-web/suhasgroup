@@ -1,6 +1,21 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Final Inspection Report</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif}.controls{width:1245px;max-width:calc(100% - 24px);margin:14px auto 8px;display:flex;align-items:center;gap:7px;font:12px Arial}.controls button,.controls label{border:1px solid #999;background:#f7f7f7;padding:6px 11px;height:29px;cursor:pointer;color:#111}.controls input[type=file]{display:none}.controls input[type=text]{height:29px;width:85px;padding:4px;border:1px solid #aaa}.paper{width:1245px;max-width:calc(100% - 24px);margin:0 auto}.top{height:88px;border-top:1px solid #777;display:grid;grid-template-columns:185px 1fr 260px;position:relative}.brand{padding:4px 0 0 4px}.brand img{width:108px;height:62px;object-fit:contain;display:block}.reportno{font-size:14px;margin-top:0}.heading{text-align:center;font-size:36px;font-weight:400;padding-top:5px;white-space:nowrap}.date{font-size:17px;text-align:center;padding-top:48px;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:5px}.date input[type=date]{width:145px;min-width:0;height:28px;border:1px solid #777;border-radius:2px;background:#fff;color:#000;font:14px Arial;padding:2px 4px}.editable{display:inline-block;min-width:16px;outline:none}.meta{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}.meta td{height:25px;border:2px solid #000;padding:1px 4px;white-space:nowrap}.meta .po{width:31%}.meta .style{width:18%;text-align:center}.meta .style .style-entry{display:inline-block;width:calc(100% - 88px);min-width:60px;height:24px;border:1px solid #aaa;border-radius:2px;background:#fff;color:#000;font:inherit;font-size:14px;padding:2px 4px;vertical-align:middle;text-align:center;outline:none}.meta .style .style-entry:focus{border-color:#555;box-shadow:0 0 0 1px #999}.meta .lot{width:15%;text-align:center}.meta .cartons{width:20%;text-align:center}.meta .sample{width:16%;font-size:10px;text-align:center}.color{height:22px;font-size:14px}.sheet{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}.sheet th,.sheet td{border:1.5px solid #000;height:42px;padding:2px 3px;text-align:center;vertical-align:middle}.sheet th{font-size:13px;font-weight:600;height:34px}.sheet .pom{width:18%}.sheet .tol{width:4.5%}.sheet .base{width:5%}.sheet td:first-child{text-align:left}.sheet input{display:block;width:100%;height:24px;border:0;background:transparent;padding:0 2px;text-align:center;font:inherit;color:#000;outline:none;min-width:0}.sheet td:first-child input{text-align:left;font-size:12px;padding-left:3px}.sheet td:first-child textarea{display:block;width:100%;min-height:30px;height:100%;border:0;background:transparent;padding:2px 3px;text-align:left;font:inherit;font-size:12px;line-height:1.15;resize:none;overflow:hidden;white-space:normal;outline:none}.sheet .specvalue{font-weight:500}.summary{width:100%;border-collapse:collapse;font-size:13px}.summary td{border:2px solid #000;height:20px;padding:1px 4px}.summary .small{font-size:10px}.summary input{border:0;outline:none;background:transparent;font:inherit;color:#000;min-width:70px;width:110px;padding:0 3px}.summary .summary-value{display:inline-block;height:25px;min-height:25px;border:1px solid #aaa;border-radius:2px;background:#fff;padding:2px 5px;text-align:left;font-size:13px;vertical-align:middle}.summary .total-value{width:180px}.summary .tolerance-value{width:min(55vw,480px);max-width:480px}.summary .disposition-row{display:flex;align-items:center;gap:8px}.summary .disposition-row .status{width:115px}.summary .disposition-row .percent{width:75px;min-width:75px;text-align:center;border:1px solid #aaa;height:25px;border-radius:2px}.summary .editable{display:inline-block;min-width:30px;outline:none}.foot{max-width:1100px;margin:19px auto 0;text-align:center;font-size:12px;line-height:1.5;font-weight:600}
+.paper.pdf-export .top{height:76px!important}
+.paper.pdf-export .brand img{height:54px!important}
+.paper.pdf-export .heading{font-size:33px!important}
+.paper.pdf-export .date{padding-top:39px!important}
+.paper.pdf-export .meta td{height:23px!important}
+.paper.pdf-export .color{height:18px!important}
+.paper.pdf-export .sheet th,.paper.pdf-export .sheet td{height:34px!important;padding:1px 2px!important}
+.paper.pdf-export .sheet th{height:29px!important;font-size:11px!important}
+.paper.pdf-export .sheet{font-size:11px!important}
+.paper.pdf-export .sheet input{height:22px!important;font-size:11px!important}
+.paper.pdf-export .sheet td:first-child textarea{font-size:10.5px!important;line-height:1.05!important;min-height:22px!important}
+.paper.pdf-export .summary td{height:22px!important;padding:1px 3px!important}
+.paper.pdf-export .summary .summary-value{height:20px!important;min-height:20px!important}
+.paper.pdf-export .foot{margin-top:6px!important;font-size:10px!important;line-height:1.2!important;break-inside:avoid!important;page-break-inside:avoid!important}
+.paper.pdf-export{break-inside:avoid!important;page-break-inside:avoid!important}
 @page{size:A4 landscape;margin:9mm}@media print{.controls{display:none!important}.paper{width:100%;max-width:none;margin:0}.top{height:90px}.heading{font-size:36px}.sheet{font-size:13px}.sheet th{font-size:13px}.sheet th,.sheet td{height:42px}.sheet input{height:32px}.foot{margin-top:19px;font-size:12px}}
 @media(max-width:700px){.paper{width:1245px;max-width:none;margin-left:8px}.controls{width:1245px;max-width:none;margin-left:8px}.date input[type=date]{font-size:14px}.meta .style .style-entry{height:30px;font-size:15px;width:calc(100% - 88px)}.summary .summary-value{height:30px;font-size:15px}.summary .tolerance-value{width:420px}}
 </style></head><body>
@@ -52,7 +67,7 @@ document.getElementById('addSize').onclick=()=>{let s=document.getElementById('n
 document.getElementById('logoUpload').onchange=e=>{let f=e.target.files[0];if(f){const reader=new FileReader();reader.onload=()=>{logoPromise=setLogoImage(reader.result);};reader.readAsDataURL(f)}};
 document.getElementById('pdf').onclick=async()=>{
  const btn=document.getElementById('pdf'), controls=document.querySelector('.controls'), paper=document.querySelector('.paper');
- btn.disabled=true; btn.textContent='Preparing PDF...';
+ btn.disabled=true; btn.textContent='Preparing PDF...'; paper.classList.add('pdf-export');
  try {
   if(!window.html2pdf) throw new Error('PDF library unavailable');
   await logoPromise;
@@ -63,12 +78,12 @@ document.getElementById('pdf').onclick=async()=>{
    image:{type:'jpeg',quality:0.98},
    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',windowWidth:1245,scrollX:0,scrollY:0},
    jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true},
-   pagebreak:{mode:['avoid-all','css']}
+   pagebreak:{mode:['avoid-all','css'],avoid:'.foot, .summary'}
   }).from(paper).save();
  } catch(err) {
   alert('PDF তৈরি করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
  } finally {
-  btn.disabled=false; btn.textContent='Download PDF';
+  paper.classList.remove('pdf-export'); btn.disabled=false; btn.textContent='Download PDF';
  }
 };
 draw();
