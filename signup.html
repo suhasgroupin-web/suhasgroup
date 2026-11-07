@@ -71,7 +71,8 @@ document.getElementById('signup-form').addEventListener('submit', async function
   var fullName=document.getElementById('name').value.trim();
   var emailVal=document.getElementById('email').value.trim();
   var passVal=document.getElementById('password').value;
-  var isO5 = checkO5Email();\n  var roleVal = isO5 ? 'o5_employee' : document.getElementById('role').value;
+  var isO5 = checkO5Email();
+  var roleVal = isO5 ? 'o5_employee' : document.getElementById('role').value;
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
