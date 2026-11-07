@@ -44,7 +44,7 @@ body.screen-locked .calculator.locked{pointer-events:auto!important}
 (()=>{'use strict';
 const $=id=>document.getElementById(id), expr=$('expr'),result=$('result'),keys=$('keys');let input='',ans=0,mem=0,deg=true;
 let history=[];try{history=JSON.parse(localStorage.getItem('suhas_calc_history')||'[]')}catch(e){}
-function show(){expr.textContent=input||'Ready';result.textContent=displayValue(ans);$('angle').textContent=deg?'DEG':'RAD';$('angle').classList.toggle('active',deg);renderHistory()}
+function show(){expr.textContent=input||'Ready';if(input.trim()){try{const opens=(input.match(/\(/g)||[]).length,closes=(input.match(/\)/g)||[]).length;const preview=evaluate(input+')'.repeat(Math.max(0,opens-closes)));result.textContent=Number.isFinite(preview)?displayValue(preview):'Math error'}catch(e){result.textContent='…'}}else{result.textContent='0'}$('angle').textContent=deg?'DEG':'RAD';$('angle').classList.toggle('active',deg);renderHistory()}
 function displayValue(n){if(!Number.isFinite(n))return String(n);return Number(n.toPrecision(12)).toString()}
 function tokenize(s){s=String(s).replace(/×/g,'*').replace(/÷/g,'/').replace(/π/g,'pi').replace(/Ans/gi,'ans').replace(/\s+/g,'');const t=[];let i=0;while(i<s.length){let m=s.slice(i).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i);if(m){t.push({type:'num',v:Number(m[0])});i+=m[0].length;continue}m=s.slice(i).match(/^[a-z]+/i);if(m){t.push({type:'id',v:m[0].toLowerCase()});i+=m[0].length;continue}if('+-*/^()%!,'.includes(s[i])){t.push({type:s[i],v:s[i]});i++;continue}throw Error('Invalid character: '+s[i])}return t}
 function evaluate(s){const ts=tokenize(s);let p=0;const peek=()=>ts[p],eat=x=>{if(peek()&&peek().type===x){p++;return true}return false};
