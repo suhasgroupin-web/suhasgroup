@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Sitemap: https://suhasgroup.netlify.app/sitemap.xml
+Disallow: /profile.html
+Disallow: /member-tools.html
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /reset.html
+Sitemap: https://suhasgroupin-web.github.io/suhasgroup/sitemap.xml
