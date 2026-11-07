@@ -144,8 +144,8 @@ body.innerHTML='<div class="nz-grid">'+page.items.map(function(x,i){return '<but
 body.innerHTML='<div class="nz-grid">'+page.items.map(function(x){return '<button class="nz-card" data-tool="'+encodeURIComponent(x)+'"><span class="nz-icon">▣</span><span><strong>'+x+'</strong><small>Open dedicated work guide and tools</small></span></button>';}).join('')+'</div>';
 }else{body.innerHTML=detailHTML(page.tool,page.dept);}
 }
-function push(page){stack.push(page);host.classList.add('active');grid.style.display='none';hero.style.display='none';oldwb.classList.remove('active');empty.style.display='none';showPage(page);window.scrollTo({top:0,behavior:'smooth'});}
-function back(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1]);}else{stack=[];host.classList.remove('active');grid.style.display='';hero.style.display='';}window.scrollTo({top:0,behavior:'smooth'});}
+function push(page){stack.push(page);host.classList.add('active');if(grid)grid.style.display='none';if(hero)hero.style.display='none';if(oldwb)oldwb.classList.remove('active');if(empty)empty.style.display='none';showPage(page);window.scrollTo({top:0,behavior:'smooth'});}
+function back(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1]);}else{stack=[];host.classList.remove('active');if(grid)grid.style.display='';if(hero)hero.style.display='';}window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('nz-back').addEventListener('click',back);
 function detailHTML(tool,dept){
 var line=tool.toLowerCase().indexOf('line balanc')>=0;
