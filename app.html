@@ -51,4 +51,4 @@ document.querySelectorAll('.folder-edit').forEach(btn=>btn.addEventListener('cli
 document.getElementById('appSearch').addEventListener('submit',e=>e.preventDefault());
 search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;document.querySelectorAll('.app-tile').forEach(a=>{const match=a.textContent.toLowerCase().includes(q);a.style.display=match?'flex':'none';if(match)count++;});document.querySelectorAll('[data-folder]').forEach(d=>{const has=[...d.querySelectorAll('.app-tile')].some(a=>a.style.display!=='none');d.style.display=has?'block':'none';if(q&&has)d.open=true;});empty.style.display=count?'none':'block';});
 })();
-</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script src="assets/script.js"></script></body></html>
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script src="assets/script.js?v=20261107d"></script></body></html>
