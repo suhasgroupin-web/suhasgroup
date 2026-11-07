@@ -13,6 +13,13 @@ body.screen-locked .calculator.locked{pointer-events:auto!important}
 
 /* SUHAS signature plus key: black 3D button with white plus */
 .operator-pad .plus{background:linear-gradient(145deg,#30343a,#050608)!important;color:#fff!important;text-shadow:0 1px 2px #000!important;border:1px solid #555!important;box-shadow:5px 6px 12px #26303d77,-2px -2px 6px #fff!important}
+
+/* Root beside More; balanced bottom operator column */
+.toolbar .root-key{background:linear-gradient(145deg,#347ee0,#174a91)!important;color:#fff!important;border:1px solid #9fc6f6!important;box-shadow:4px 5px 10px #174a9166!important;font-size:16px!important;font-weight:900!important}
+.operator-pad{grid-template-rows:repeat(5,minmax(49px,1fr))!important;align-content:stretch}
+.operator-pad .plus{height:72px!important;min-height:72px!important;transform:translateY(-7px)!important;margin-bottom:7px!important;background:linear-gradient(145deg,#30343a,#050608)!important;color:#fff!important}
+.operator-pad .eq{height:62px!important;min-height:62px!important;align-self:end;margin-top:0!important}
+@media(max-width:720px){.toolbar .root-key{padding:10px 12px!important}.operator-pad{grid-template-rows:repeat(5,49px)!important}.operator-pad .plus{height:72px!important;min-height:72px!important;transform:translateY(-7px)!important;margin-bottom:7px!important}.operator-pad .eq{height:62px!important;min-height:62px!important}}
 </style></head><body><header class="site-header"><div class="nav-wrap"><a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS GROUP</div></div></a><a class="btn btn-outline btn-sm" href="o5-desk.html">O5'Intl</a></div></header>
 <main class="wrap"><a class="back" href="index.html" style="display:inline-flex;align-items:center;gap:9px"><img src="assets/logo.png" alt="" style="width:28px;height:28px;object-fit:contain;border-radius:50%">Home</a> <a class="back" href="o5-desk.html">← Back to O5'Intl</a><section class="head"><h1><img src="assets/logo.png" alt="Suhas Group Logo">Suhas Calculator</h1></section>
 <div class="layout"><section class="panel calculator"><div class="display"><div class="expr" id="expr">Ready</div><div class="result" id="result">0</div></div>
