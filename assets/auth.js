@@ -99,7 +99,7 @@
     paintNav(session);
     enforceMemberProfile(session);
     if(session && (page === 'login.html' || page === 'signup.html')){
-      location.replace(isO5Account(session.user) ? 'o5-desk.html' : window.safeNext(new URLSearchParams(location.search).get('next')));
+      location.replace('profile.html');
     }
   });
 
