@@ -152,6 +152,26 @@ body.entry-locked .workspace,body.entry-locked .tabbar{visibility:hidden;pointer
 @media(max-width:480px){
  .entry-logo{border-radius:0 0 28px 28px!important;clip-path:inset(0 round 0 0 28px 28px)!important}
 }
+
+/* v35: use the original square logo as a rounded app-icon plate */
+.entry-logo{
+ width:190px!important;height:190px!important;
+ object-fit:cover!important;
+ border-radius:32px!important;
+ clip-path:inset(0 round 32px)!important;
+ background:#fff!important;
+ padding:0!important;
+ box-shadow:0 12px 28px rgba(0,0,0,.28)!important;
+ margin:0 auto 16px!important;
+}
+@media(max-width:480px){
+ .entry-logo{
+  width:170px!important;height:170px!important;
+  border-radius:30px!important;
+  clip-path:inset(0 round 30px)!important;
+  margin:0 auto 14px!important;
+ }
+}
 </style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
