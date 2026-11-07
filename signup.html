@@ -26,7 +26,9 @@
 <div class="form-row"><label for="name">Full name</label><input type="text" id="name" autocomplete="name" required></div>
 <div class="form-row"><label for="email">Email</label><input type="email" id="email" autocomplete="email" required></div>
 <div class="form-row"><label for="password">Create password</label><div class="pw"><input type="password" id="password" minlength="12" autocomplete="new-password" placeholder="At least 12 characters" required><button type="button" id="tg">Show</button></div><small style="display:block;color:var(--muted);margin-top:5px">Use a memorable passphrase with at least 12 characters.</small></div>
-<div class="form-row"><label for="role">Account type</label><select id="role"><option value="candidate">Job seeker</option><option value="employer">Employer / Recruiter</option></select></div>
+<div class="form-row" id="role-wrap"><label for="role">Account type</label><select id="role"><option value="candidate">Job seeker</option><option value="employer">Employer / Recruiter</option></select></div>
+<div id="o5-note" class="msg" style="display:none;background:#eaf2ff;color:#173d75">O5 International employee account: this account will be a standard User, not Admin or Recruiter. You will be taken to the O5 workspace.</div>
+<div id="install-note" class="msg" style="display:none;background:#eaf2ff;color:#173d75"><strong>Install SUHAS GROUP app</strong><br>After creating your account, you can install the app on your phone for quicker access.<br><button type="button" id="install-app" class="btn btn-primary btn-sm" style="margin-top:10px">Install App</button></div>
 <button class="btn btn-primary" id="sub" style="width:100%" type="submit">Sign Up</button>
 </form>
 <p class="linkline">Already registered? <a href="login.html">Login</a></p>
@@ -46,6 +48,22 @@
 <script src="assets/script.js"></script>
 <script>
 (async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace('profile.html'); } })();
+var installPromptEvent = null;
+window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); installPromptEvent = ev; document.getElementById('install-note').style.display='block'; });
+function checkO5Email(){
+  var isO5 = document.getElementById('email').value.trim().toLowerCase().endsWith('@o5-intl.com');
+  document.getElementById('role-wrap').style.display = isO5 ? 'none' : '';
+  document.getElementById('o5-note').style.display = isO5 ? 'block' : 'none';
+  return isO5;
+}
+document.getElementById('email').addEventListener('input', checkO5Email);
+document.getElementById('install-app').addEventListener('click', async function(){
+  if(!installPromptEvent){ showMsg('msg','If the install prompt is not available, open your browser menu and choose “Install app” or “Add to Home screen”.',true); return; }
+  installPromptEvent.prompt();
+  await installPromptEvent.userChoice;
+  installPromptEvent=null;
+  document.getElementById('install-note').style.display='none';
+});
 document.getElementById('tg').addEventListener('click', function(){ var p=document.getElementById('password'); var h=p.type==='password'; p.type=h?'text':'password'; this.textContent=h?'Hide':'Show'; });
 document.getElementById('signup-form').addEventListener('submit', async function(e){
   e.preventDefault();
@@ -53,20 +71,20 @@ document.getElementById('signup-form').addEventListener('submit', async function
   var fullName=document.getElementById('name').value.trim();
   var emailVal=document.getElementById('email').value.trim();
   var passVal=document.getElementById('password').value;
-  var roleVal=document.getElementById('role').value;
+  var isO5 = checkO5Email();\n  var roleVal = isO5 ? 'o5_employee' : document.getElementById('role').value;
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
     var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/profile.html';
-    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal } } });
+    var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
       var profileResult=await sb.from('profiles').upsert({ id:r.data.user.id, full_name:fullName });
       if(profileResult.error){console.warn('Profile will be completed after login:',profileResult.error.message)}
-      window.location.href='profile.html';
+      window.location.href = isO5 ? 'o5-desk.html?welcome=1' : 'profile.html?welcome=1';
     } else {
-      showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP, verify your email, then log in. If it is not in your inbox, check Spam.', true); reset();
+      showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP, verify your email, then log in. Your account will be a standard User. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
     }
   }catch(err){ showMsg('msg','Error: '+err.message,false); reset(); }
 });
