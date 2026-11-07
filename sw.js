@@ -1,4 +1,4 @@
-const CACHE = 'suhas-group-v21';
+const CACHE = 'suhas-group-v22';
 const CORE = [
   'index.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
   'login.html','signup.html','profile.html','reset.html','app.html','assets/suhas-group-reference.webp',
