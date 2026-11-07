@@ -52,7 +52,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
   try{
     var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
-    window.location.href = window.safeNext(new URLSearchParams(location.search).get('next'));
+    window.location.href = (r.data.user.email || '').toLowerCase().endsWith('@o5-intl.com')
+      ? 'o5-desk.html'
+      : window.safeNext(new URLSearchParams(location.search).get('next'));
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
