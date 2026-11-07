@@ -1,7 +1,7 @@
-const CACHE = 'suhas-group-v24';
+const CACHE = 'suhas-group-v25';
 const CORE = [
   'index.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
-  'login.html','signup.html','profile.html','reset.html','app.html','assets/suhas-group-3d.svg',
+  'login.html','signup.html','profile.html','reset.html','app.html','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
   'assets/styles.css','assets/script.js','assets/auth.js','assets/config.js','assets/icons/o5-international-logo.svg',
   'barcode/','assets/logo.png','assets/icon-192.png','assets/icon-512.png','manifest.json'
 ];
