@@ -172,6 +172,20 @@ body.entry-locked .workspace,body.entry-locked .tabbar{visibility:hidden;pointer
   margin:0 auto 14px!important;
  }
 }
+
+/* v36: premium cool-grey welcome background; preserve all foreground elements */
+body.entry-locked{background:#202833!important}
+.entry-gate{
+ background:
+  radial-gradient(ellipse at 50% 0%,rgba(190,205,222,.30) 0%,transparent 48%),
+  radial-gradient(ellipse at 100% 100%,rgba(92,111,133,.22) 0%,transparent 42%),
+  linear-gradient(145deg,#111923 0%,#303b49 48%,#1a222d 100%)!important;
+}
+.entry-card{
+ background:linear-gradient(155deg,rgba(225,233,242,.17),rgba(128,145,164,.09))!important;
+ border-color:rgba(220,230,241,.28)!important;
+ box-shadow:0 28px 90px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.22)!important;
+}
 </style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
