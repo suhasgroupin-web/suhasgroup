@@ -52,7 +52,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   try{
     var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
-    window.location.href = 'profile.html';
+    var next = new URLSearchParams(location.search).get('next');\n    if(next && /^[a-z0-9_\\-]+\\.html(\\?[\\w=&%.-]*)?(#[\\w-]*)?$/i.test(next)){ window.location.href = next; return; }\n    var pr = await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();\n    if(pr.data && pr.data.profile_complete === true){ window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'app.html'; } else { window.location.href = 'profile.html'; }
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
