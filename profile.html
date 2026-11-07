@@ -27,6 +27,10 @@
 <div class="center narrow" style="margin:0 auto 30px"><h1>My Profile</h1><p>Keep your details up to date so employers can reach you.</p></div>
 <div class="profile-card">
 <div id="pmsg" role="status"></div>
+<div id="install-card" style="display:none;margin:16px 0;padding:16px;border-radius:14px;background:#eaf2ff;color:#173d75">
+<strong>📲 Install SUHAS GROUP App</strong><p style="margin:6px 0 12px">Add the app to your phone for faster access.</p>
+<button id="install-app" class="btn btn-primary btn-sm" type="button">Install App</button>
+</div>
 <div id="install-card" style="display:none;margin-bottom:18px;padding:16px;border-radius:14px;background:#eaf2ff;color:#173d75">
 <strong>📲 Install SUHAS GROUP App</strong><p style="margin:6px 0 12px">Add the app to your phone for faster access.</p>
 <button id="install-app" class="btn btn-primary btn-sm" type="button">Install App</button>
@@ -57,6 +61,16 @@
   }
   var user = await window.requireAuth();
   if(!user) return;
+  if(new URLSearchParams(location.search).get('welcome')==='1'){
+    var card=document.getElementById('install-card');
+    card.style.display='block';
+    var installEvent=null;
+    window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installEvent=e;});
+    document.getElementById('install-app').addEventListener('click',async function(){
+      if(!installEvent){say('Open your browser menu (⋮) and choose Install app or Add to Home screen.',true);return;}
+      installEvent.prompt();await installEvent.userChoice;installEvent=null;card.style.display='none';
+    });
+  }
   var meta = user.user_metadata || {};
   document.getElementById('p-email').value = user.email || '';
   document.getElementById('p-name').value = meta.full_name || meta.name || '';
