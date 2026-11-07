@@ -24,7 +24,7 @@
 
   window.safeNext = function(value){
     return typeof value === 'string' && value.charAt(0) === '/' &&
-      value.charAt(1) !== '/' && !value.includes('\\\\') ? value : 'profile.html';
+      value.charAt(1) !== '/' && value.indexOf(String.fromCharCode(92)) === -1 ? value : 'profile.html';
   };
 
   window.checkIsAdmin = async function(){
