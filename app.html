@@ -4,7 +4,25 @@
 :root{--ink:#10213d;--muted:#6b7890;--line:#dce5f2;--gold:#e8b84a;--blue:#17439a}
 body{background:#eef3fa;color:var(--ink)}.workspace{min-height:100vh;padding:28px 16px 90px;background:radial-gradient(ellipse at 85% 0,#244b85 0,transparent 34%),linear-gradient(155deg,#07172e 0,#0c2b58 320px,#eef3fa 321px)}
 .w-shell{max-width:1120px;margin:auto}.w-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;color:#fff}.w-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}.w-brand img{width:48px;height:48px;object-fit:contain;background:#fff;border-radius:14px;padding:5px}.w-brand strong{display:block;font-size:18px;letter-spacing:.04em}.w-brand small{color:#c4d6f3}.w-actions{display:flex;gap:8px;flex-wrap:wrap}.w-btn{border:1px solid #ffffff55;background:#ffffff16;color:#fff;border-radius:12px;padding:10px 14px;font-weight:750;cursor:pointer}.w-btn.primary{background:linear-gradient(135deg,#f7d77e,#d89a25);color:#17233a;border:0;box-shadow:0 4px 0 #996817}.w-hero{color:#fff;padding:12px 4px 25px}.w-hero .eyebrow{font-size:11px;letter-spacing:.2em;color:#f1c96b;font-weight:800}.w-hero h1{font-size:clamp(28px,5vw,43px);margin:8px 0}.w-hero p{color:#c8d7ed;margin:0;max-width:650px}.w-search{margin:20px 0 22px;display:flex;gap:9px;max-width:620px}.w-search input{flex:1;min-width:0;border:1px solid #d4deed;border-radius:13px;padding:13px 15px;font:inherit;background:#fff;outline:none}.w-search button{border:0;border-radius:13px;padding:0 18px;background:#f0c45e;color:#17233a;font-weight:800}.w-panel{background:#fff;border:1px solid #dfe7f2;border-radius:22px;padding:20px;box-shadow:0 22px 55px #07172e20}.w-section{margin:0 0 17px}.w-section details{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#fff,#f6f9ff);margin:12px 0;overflow:hidden;box-shadow:0 4px 0 #d7e1f0,0 10px 20px #152d5010}.w-section summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer}.w-section summary::-webkit-details-marker{display:none}.folder-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#e9f1ff,#d9e6fc);font-size:21px;box-shadow:inset 0 1px #fff}.folder-title{flex:1;min-width:0}.folder-title strong{display:block;font-size:16px}.folder-title small{color:var(--muted)}.folder-count{font-size:11px;color:#50627e;background:#edf2f9;border-radius:20px;padding:5px 9px}.chev{color:#59708f;font-size:18px;transition:transform .2s}details[open] .chev{transform:rotate(90deg)}.app-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;padding:0 14px 15px}.app-tile{position:relative;display:flex;align-items:center;gap:11px;min-height:78px;padding:12px;border:1px solid #dce5f1;border-radius:14px;background:#fff;text-decoration:none;color:var(--ink);box-shadow:0 4px 0 #e3eaf4,0 8px 14px #142b4c0c;transition:.18s}.app-tile:hover{transform:translateY(-2px);border-color:#9eb8df;box-shadow:0 6px 0 #d7e3f3,0 12px 20px #142b4c15}.app-tile:active{transform:translateY(3px);box-shadow:0 1px 0 #d7e3f3}.app-ico{flex:0 0 39px;width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#edf4ff,#dce9ff);font-size:19px}.app-copy{min-width:0}.app-copy strong{display:block;font-size:13px;line-height:1.3}.app-copy small{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:3px}.edit-app{display:none;position:absolute;right:7px;top:7px;border:0;border-radius:8px;background:#102c58;color:#fff;padding:5px 7px;font-size:10px;cursor:pointer}.editing .edit-app{display:block}.editing .app-tile{padding-top:27px}.folder-edit{display:none;border:0;background:#edf2fa;color:#23436f;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:700;cursor:pointer}.editing .folder-edit{display:block}.w-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:17px 4px;color:#718099;font-size:12px}.w-foot a{color:#234b88;text-decoration:none;font-weight:700}.empty{display:none;text-align:center;padding:24px;color:#718099}@media(max-width:760px){.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.w-panel{padding:14px}.w-top{align-items:flex-start}.w-brand small{font-size:10px}}@media(max-width:390px){.app-grid{grid-template-columns:1fr}.w-brand strong{font-size:15px}.w-btn{padding:9px 10px;font-size:12px}}
-</style></head><body>
+
+body.entry-locked{overflow:hidden;background:#07172e}
+body.entry-locked .workspace,body.entry-locked .tabbar{visibility:hidden;pointer-events:none}
+.entry-gate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto;background:radial-gradient(ellipse at 50% 0%,#244b85 0%,transparent 48%),linear-gradient(145deg,#061329 0%,#0b2b59 55%,#07172e 100%);color:#fff}
+.entry-card{width:min(100%,440px);text-align:center;padding:34px 28px 30px;border:1px solid #ffffff28;border-radius:30px;background:linear-gradient(155deg,#ffffff18,#ffffff09);box-shadow:0 28px 90px #0008,inset 0 1px #ffffff26;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.entry-logo{width:112px;height:112px;object-fit:contain;padding:9px;border-radius:28px;background:linear-gradient(145deg,#fff,#dce8f8);box-shadow:0 12px 34px #0005,0 0 0 8px #ffffff0c;margin:0 auto 22px}
+.entry-kicker{font-size:10px;font-weight:900;letter-spacing:.28em;color:#f1cb72;text-transform:uppercase}
+.entry-card h1{font-size:clamp(26px,6vw,34px);line-height:1.15;margin:10px 0 9px;color:#fff}
+.entry-card p{color:#d0def2;font-size:14px;line-height:1.65;margin:0 auto 24px;max-width:34ch}
+.entry-actions{display:grid;gap:11px}
+.entry-actions a{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:15px;text-decoration:none;font-size:15px;font-weight:850;letter-spacing:.01em;transition:transform .18s,box-shadow .18s}
+.entry-actions a:active{transform:translateY(2px)}
+.entry-signup{background:linear-gradient(135deg,#f7dc91,#e5ae3f);color:#17233a;box-shadow:0 5px 0 #9c6b1c,0 12px 24px #0003}
+.entry-login{border:1px solid #ffffff70;background:#ffffff12;color:#fff}
+.entry-secure{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:22px;color:#aebfda;font-size:11px;letter-spacing:.03em}
+.entry-secure span{width:7px;height:7px;border-radius:50%;background:#6ee0a1;box-shadow:0 0 12px #6ee0a1}
+.entry-gate[hidden]{display:none!important}
+@media(max-width:480px){.entry-card{padding:30px 22px 26px;border-radius:25px}.entry-logo{width:100px;height:100px}}
+</style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="assets/logo.png" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1>Welcome to SUHAS GROUP</h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
 <section class="w-hero"><div class="eyebrow">YOUR DIGITAL WORKSPACE</div><h1>One workspace. Every tool.</h1><p>সব অ্যাপ ও টুল এখন কাজ অনুযায়ী আলাদা ফোল্ডারে সাজানো। ফোল্ডার খুলে নির্দিষ্ট কাজটি বেছে নিন।</p>
@@ -36,7 +54,22 @@ body{background:#eef3fa;color:var(--ink)}.workspace{min-height:100vh;padding:28p
 <footer class="w-foot"><span>© SUHAS GROUP · Premium Business Super App</span><span><a href="profile.html">My Account</a> · <a href="contact.html">Support</a></span></footer>
 </div></main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261107e"></script>
+<script>
+(function(){
+  var gate=document.getElementById('entryGate'), unlocked=false;
+  function lock(){unlocked=false;document.body.classList.add('entry-locked');gate.hidden=false;}
+  function unlock(){if(unlocked)return;unlocked=true;document.body.classList.remove('entry-locked');gate.hidden=true;}
+  sb.auth.getSession().then(function(r){
+    if(r.error || !r.data || !r.data.session){lock();return;}
+    unlock();
+  }).catch(lock);
+  sb.auth.onAuthStateChange(function(event,session){
+    if(event==='SIGNED_IN' && session) unlock();
+    if(event==='SIGNED_OUT') lock();
+  });
+})();
+</script>
 <script>
 (function(){
 const panel=document.getElementById('workspacePanel'),toggle=document.getElementById('editToggle'),search=document.getElementById('searchInput'),empty=document.getElementById('emptyState');
@@ -51,4 +84,4 @@ document.querySelectorAll('.folder-edit').forEach(btn=>btn.addEventListener('cli
 document.getElementById('appSearch').addEventListener('submit',e=>e.preventDefault());
 search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;document.querySelectorAll('.app-tile').forEach(a=>{const match=a.textContent.toLowerCase().includes(q);a.style.display=match?'flex':'none';if(match)count++;});document.querySelectorAll('[data-folder]').forEach(d=>{const has=[...d.querySelectorAll('.app-tile')].some(a=>a.style.display!=='none');d.style.display=has?'block':'none';if(q&&has)d.open=true;});empty.style.display=count?'none':'block';});
 })();
-</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script src="assets/script.js?v=20261107d"></script></body></html>
+</script><script src="assets/script.js?v=20261107e"></script></body></html>
