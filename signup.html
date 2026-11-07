@@ -47,7 +47,7 @@
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace((s.user.email || '').toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'profile.html'); } })();
+(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace('profile.html?setup=1'); } })();
 var installPromptEvent = null;
 window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); installPromptEvent = ev; document.getElementById('install-note').style.display='block'; });
 function checkO5Email(){
@@ -76,14 +76,14 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var emailRedirectTo = isO5 ? 'https://suhasgroupin-web.github.io/suhasgroup/o5-desk.html' : 'https://suhasgroupin-web.github.io/suhasgroup/profile.html';
+    var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/profile.html?setup=1';
     var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
       var profileResult=await sb.from('profiles').upsert({ id:r.data.user.id, full_name:fullName });
       if(profileResult.error){console.warn('Profile will be completed after login:',profileResult.error.message)}
-      window.location.href = isO5 ? 'o5-desk.html?welcome=1' : 'profile.html?welcome=1';
+      window.location.href = 'profile.html?setup=1';
     } else {
       showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP, verify your email, then log in. Your account will be a standard User. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
     }
