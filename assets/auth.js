@@ -64,7 +64,7 @@
   async function paintNav(session){
     var isO5 = session && isO5Account(session.user);
     var isAdmin = session ? await window.checkIsAdmin() : false;
-    if(isO5 && !['o5-desk.html','login.html','signup.html','reset.html'].includes(page)){
+    if(isO5 && !['o5-desk.html','suhas-calculator.html','related-apk.html','measurement-studio.html','login.html','signup.html','reset.html'].includes(page)){
       location.replace('o5-desk.html');
       return;
     }
