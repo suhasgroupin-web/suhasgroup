@@ -61,6 +61,15 @@
     return user;
   };
 
+  async function enforceMemberProfile(session){
+    if(!session || page==='profile.html' || page==='login.html' || page==='signup.html' || page==='reset.html') return;
+    try{
+      if(await window.checkIsAdmin()) return;
+      var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
+      if(result.error || !result.data || result.data.profile_complete!==true) location.replace('profile.html?setup=1');
+    }catch(e){ location.replace('profile.html?setup=1'); }
+  }
+
   async function paintNav(session){
     var isO5 = session && isO5Account(session.user);
     var isAdmin = session ? await window.checkIsAdmin() : false;
@@ -88,6 +97,7 @@
   sb.auth.getSession().then(function(r){
     var session = r.data && r.data.session;
     paintNav(session);
+    enforceMemberProfile(session);
     if(session && (page === 'login.html' || page === 'signup.html')){
       location.replace(isO5Account(session.user) ? 'o5-desk.html' : window.safeNext(new URLSearchParams(location.search).get('next')));
     }
@@ -100,6 +110,7 @@
     }
     if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
       paintNav(session);
+      if(event==='SIGNED_IN' || event==='TOKEN_REFRESHED') enforceMemberProfile(session);
     }
   });
 })();
