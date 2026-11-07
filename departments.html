@@ -181,4 +181,46 @@ if(e.target.id==='lb-calc'){var t=Number(document.getElementById('lb-target').va
 },true);
 })();
 </script>
+<script>
+/* Native Android/iOS browser Back support for nested department workspaces. */
+(function(){
+  var markerKey='sgDeptNav';
+  function activeLayer(){
+    var nested=document.getElementById('nested-zone');
+    if(nested && nested.classList.contains('active')) return 'nested';
+    var wb=document.getElementById('workbench');
+    if(wb && wb.classList.contains('active')) return 'workbench';
+    return 'department';
+  }
+  function backInside(){
+    var layer=activeLayer();
+    if(layer==='nested'){
+      var back=document.getElementById('nz-back');
+      if(back){back.click();return true;}
+    }
+    if(layer==='workbench'){
+      var back=document.getElementById('workBack');
+      if(back){back.click();return true;}
+    }
+    return false;
+  }
+  function addLevel(){
+    try{history.pushState({[markerKey]:true},'',location.href);}
+    catch(e){}
+  }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('.dept summary') || e.target.closest('[data-category]') || e.target.closest('[data-tool]') || e.target.closest('.tool-link')){
+      addLevel();
+    }
+  },true);
+  window.addEventListener('popstate',function(e){
+    if(backInside()){
+      // Keep a history entry for the parent screen, so another Back returns one more level.
+      return;
+    }
+  });
+  // Ensure the current page has a history anchor without replacing the previous page.
+  try{history.replaceState(Object.assign({},history.state||{},{sgDepartmentPage:true}),'',location.href);}catch(e){}
+})();
+</script>
 <script src="assets/script.js"></script></body></html>
