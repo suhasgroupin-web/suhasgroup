@@ -240,6 +240,35 @@ body.entry-locked{min-height:100vh;min-height:100dvh}
 }
 .entry-card{position:relative;z-index:1}
 
+
+/* v39: stronger full-height cloud atmosphere from top edge to bottom edge */
+.entry-gate{
+ position:fixed!important;inset:0!important;width:100%!important;
+ min-height:100vh!important;min-height:100dvh!important;
+ overflow-x:hidden!important;overflow-y:auto!important;
+ background:
+  radial-gradient(ellipse 95% 24% at 5% 0%,rgba(250,252,255,.48) 0%,rgba(215,225,238,.25) 45%,transparent 80%),
+  radial-gradient(ellipse 90% 25% at 100% 7%,rgba(255,255,255,.40) 0%,rgba(205,217,232,.20) 46%,transparent 80%),
+  radial-gradient(ellipse 100% 24% at 50% 28%,rgba(218,228,240,.24) 0%,transparent 78%),
+  radial-gradient(ellipse 95% 28% at 0% 58%,rgba(241,245,250,.24) 0%,transparent 78%),
+  radial-gradient(ellipse 100% 30% at 100% 78%,rgba(222,232,243,.26) 0%,transparent 78%),
+  radial-gradient(ellipse 110% 24% at 50% 100%,rgba(245,248,252,.36) 0%,rgba(173,189,207,.16) 48%,transparent 82%),
+  linear-gradient(160deg,#8293a8 0%,#64768b 32%,#46596e 68%,#29394b 100%)!important;
+ background-size:cover!important;background-position:center!important;
+}
+.entry-gate:before{
+ position:fixed!important;inset:0!important;width:100%!important;height:100%!important;
+ background:
+  radial-gradient(ellipse 28% 12% at 12% 5%,rgba(255,255,255,.30),transparent 75%),
+  radial-gradient(ellipse 32% 14% at 52% 2%,rgba(255,255,255,.22),transparent 76%),
+  radial-gradient(ellipse 28% 13% at 90% 10%,rgba(255,255,255,.26),transparent 76%),
+  radial-gradient(ellipse 38% 17% at 7% 48%,rgba(255,255,255,.17),transparent 76%),
+  radial-gradient(ellipse 35% 16% at 94% 60%,rgba(255,255,255,.16),transparent 76%),
+  radial-gradient(ellipse 34% 15% at 18% 91%,rgba(255,255,255,.22),transparent 76%),
+  radial-gradient(ellipse 38% 17% at 80% 98%,rgba(255,255,255,.25),transparent 76%)!important;
+ filter:blur(26px)!important;
+}
+
 </style></head><body class="entry-locked">\n<section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn" href="index.html">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
