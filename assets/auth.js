@@ -12,6 +12,7 @@
   });
 
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
 
   window.showMsg = function(id, text, ok){
     var el = document.getElementById(id);
@@ -61,7 +62,12 @@
   };
 
   async function paintNav(session){
+    var isO5 = session && isO5Account(session.user);
     var isAdmin = session ? await window.checkIsAdmin() : false;
+    if(isO5 && !['o5-desk.html','login.html','signup.html','reset.html'].includes(page)){
+      location.replace('o5-desk.html');
+      return;
+    }
     document.querySelectorAll('.nav-cta').forEach(function(box){
       if(session){
         box.innerHTML =
