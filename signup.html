@@ -47,7 +47,7 @@
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace('profile.html'); } })();
+(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace((s.user.email || '').toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'profile.html'); } })();
 var installPromptEvent = null;
 window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); installPromptEvent = ev; document.getElementById('install-note').style.display='block'; });
 function checkO5Email(){
@@ -76,7 +76,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/profile.html';
+    var emailRedirectTo = isO5 ? 'https://suhasgroupin-web.github.io/suhasgroup/o5-desk.html' : 'https://suhasgroupin-web.github.io/suhasgroup/profile.html';
     var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
