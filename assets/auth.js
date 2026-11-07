@@ -71,24 +71,33 @@
   }
 
   async function paintNav(session){
-    var isO5 = session && isO5Account(session.user);
     var isAdmin = session ? await window.checkIsAdmin() : false;
-        document.querySelectorAll('.nav-cta').forEach(function(box){
+    var navs = document.querySelectorAll('.nav-links');
+    navs.forEach(function(nav){
+      var old = nav.querySelector('.js-session-links');
+      if(old) old.remove();
+      var mobileAuth = nav.querySelector('.nav-cta-m');
       if(session){
-        box.innerHTML =
-          (isAdmin ? '<a href="admin.html#post" class="btn btn-gold btn-sm">+ Create Job Post</a><a href="admin.html" class="btn btn-outline btn-sm">Dashboard</a>' : '') +
-          '<a href="profile.html" class="btn btn-outline btn-sm">My Profile</a>' +
-          '<a href="#" class="btn btn-primary btn-sm js-logout">Logout</a>';
-      } else {
-        box.innerHTML = '<a href="login.html" class="btn btn-outline btn-sm">Login</a><a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>';
+        if(mobileAuth) mobileAuth.style.display='none';
+        var box=document.createElement('div');
+        box.className='js-session-links';
+        box.innerHTML='<a href="profile.html">My Profile</a><a href="#" class="js-logout">Logout</a>';
+        if(isAdmin) box.innerHTML='<a href="admin.html">Owner Dashboard</a>'+box.innerHTML;
+        nav.appendChild(box);
+      }else if(mobileAuth){
+        mobileAuth.style.display='';
       }
+    });
+    document.querySelectorAll('.nav-wrap > .nav-cta').forEach(function(box){
+      if(session){ box.innerHTML=''; box.style.display='none'; }
+      else { box.style.display=''; box.innerHTML='<a href="login.html" class="btn btn-outline btn-sm">Login</a><a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>'; }
     });
     document.querySelectorAll('.js-logout').forEach(function(b){
       b.addEventListener('click', async function(e){
         e.preventDefault();
-        b.disabled = true;
-        var result = await sb.auth.signOut({scope:'global'});
-        if(result.error){ b.disabled = false; window.showMsg('msg', 'Could not sign out. Please try again.', false); return; }
+        b.textContent='Signing out...';
+        var result=await sb.auth.signOut({scope:'global'});
+        if(result.error){b.textContent='Logout';window.showMsg('msg','Could not sign out. Please try again.',false);return;}
         location.replace('index.html');
       });
     });
