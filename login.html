@@ -44,7 +44,7 @@
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ location.replace('profile.html'); } })();
+(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',s.user.id).maybeSingle(); location.replace(p.data && p.data.profile_complete===true ? 'app.html' : 'profile.html?setup=1'); } })();
 document.getElementById('tg').addEventListener('click', function(){ var p=document.getElementById('password'); var h=p.type==='password'; p.type=h?'text':'password'; this.textContent=h?'Hide':'Show'; });
 document.getElementById('login-form').addEventListener('submit', async function(e){
   e.preventDefault();
