@@ -16,11 +16,11 @@
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Only authentication screens are public. Every other route, including the home route, requires a real session.
-  var route = location.pathname.toLowerCase().split('/').filter(Boolean).join('/') || 'index.html';
+  var route = page;
   var publicPages = ['login.html','signup.html','reset.html'];
   function requireWorkspaceSession(session){
     if(publicPages.indexOf(route) === -1 && !session){
-      var next = route + location.search + location.hash;
+      var next = location.pathname + location.search + location.hash;
       location.replace('login.html?next=' + encodeURIComponent(next));
       return false;
     }
