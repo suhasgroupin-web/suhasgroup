@@ -89,6 +89,7 @@
     var isAdmin = session ? await window.checkIsAdmin() : false;
     var navs = document.querySelectorAll('.nav-links');
     navs.forEach(function(nav){
+      if(session){nav.querySelectorAll('a').forEach(function(link){if(link.textContent.trim().toLowerCase()==='home')link.href='social.html';});}
       var old = nav.querySelector('.js-session-links');
       if(old) old.remove();
       var mobileAuth = nav.querySelector('.nav-cta-m');
@@ -96,7 +97,7 @@
         if(mobileAuth) mobileAuth.style.display='none';
         var box=document.createElement('div');
         box.className='js-session-links';
-        box.innerHTML='<a href="profile.html">My Profile</a><a href="social.html">SUHAS Connect</a><a href="#" class="js-logout">Logout</a>';
+        box.innerHTML='<a href="social.html" class="js-home-social">Home</a><a href="profile.html">My Profile</a><a href="#" class="js-logout">Logout</a>';
         if(isAdmin) box.innerHTML='<a href="admin.html">Owner Dashboard</a>'+box.innerHTML;
         nav.appendChild(box);
       }else if(mobileAuth){
