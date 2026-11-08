@@ -125,6 +125,59 @@ body.suhas-desktop-mode .social-topnav{display:flex}
 body.suhas-desktop-mode .social-mobile-nav{display:none!important}
 body.suhas-desktop-mode .social-shell .social-right{display:block}
 @media(max-width:420px){.social-shell{padding-left:8px;padding-right:8px}.side-card{padding:11px}.member{grid-template-columns:42px minmax(0,1fr)}.member>.avatar{width:42px;height:42px}.member>.social-actions{grid-column:1/-1;padding-left:52px}.action{padding:8px 10px}}
+
+/* SUHAS-MAX Facebook-inspired responsive home layout — applied on main */
+.social-user-actions{display:flex;align-items:center;gap:9px}
+.mobile-head-action{display:none;width:38px;height:38px;border:0;border-radius:50%;background:#e4e6eb;color:#1c1e21;font-size:22px;font-weight:800;align-items:center;justify-content:center;cursor:pointer}
+.mobile-head-action:hover{background:#d8e5fb;color:#0866ff}
+.social-mobile-nav{display:none}
+@media(max-width:760px){
+ .site-header{position:sticky;top:0;z-index:100;background:#fff;box-shadow:0 1px 3px #00000016}
+ .nav-wrap{min-height:62px;padding:0 12px;gap:8px}
+ .brand{min-width:0;flex:1;gap:9px}
+ .brand img{width:40px;height:40px;object-fit:contain}
+ .brand-name{font-size:18px;letter-spacing:-.35px}
+ .brand-tag{display:none}
+ .social-topnav{display:none}
+ .social-user-actions{gap:6px}
+ .mobile-head-action{display:inline-flex;flex:0 0 36px;width:36px;height:36px;font-size:20px}
+ .social-profile-link{display:inline-flex;align-items:center;justify-content:center;padding:8px 11px;border-radius:20px;background:#e4e6eb;color:#1c1e21;font-size:12px;font-weight:700;white-space:nowrap}
+ .mobile-header-menu{display:none}
+ .social-shell{display:block;max-width:680px;padding:12px 10px 92px;margin:0 auto}
+ .social-left,.social-right{display:none}
+ .social-center{width:100%;min-width:0}
+ .book-heading{margin:3px 3px 12px;padding:0 2px}
+ .book-heading h1{font-size:24px;letter-spacing:-.6px}
+ .book-heading span{font-size:12px}
+ #feed.panel{padding:14px 13px;margin-bottom:12px;border:1px solid #e4e6eb;border-radius:12px;background:#fff;box-shadow:0 1px 2px #00000010}
+ #feed>h2{font-size:21px;margin:0 0 12px}
+ #post-form{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+ #post-form textarea{flex:1 0 100%;width:100%;min-height:82px;border:0;border-radius:22px;padding:14px 16px;background:#f0f2f5;font:16px Arial,sans-serif;resize:vertical}
+ #post-form>div{max-width:100%}
+ #post-form label{font-size:12px}
+ #post-form input[type=file]{max-width:100%;font-size:12px}
+ #post-form button[type=submit]{min-width:84px;min-height:40px;border-radius:9px;font-size:14px}
+ .post-card{padding:14px 0;margin:0;border-top:1px solid #e4e6eb;background:#fff}
+ .post-head{align-items:center;gap:10px}
+ .post-card .avatar{width:44px;height:44px}
+ .post-card p{font-size:16px;line-height:1.5}
+ .post-card img,.post-card video{max-width:100%;height:auto}
+ .social-mobile-nav{position:fixed;z-index:120;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:5px 7px calc(5px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #dadde1;box-shadow:0 -2px 10px #00000012}
+ .social-mobile-nav button,.social-mobile-nav a{min-width:0;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;border-radius:8px;background:transparent;color:#65676b;text-decoration:none;font-size:11px;font-weight:700;padding:4px 2px;cursor:pointer}
+ .social-mobile-nav button.active{color:#0866ff}
+ .social-mobile-nav button.active:before{content:"";position:absolute;top:0;width:15%;height:3px;border-radius:0 0 3px 3px;background:#0866ff}
+ .mobile-nav-icon{width:27px;height:27px;display:grid;place-items:center;font-size:23px;line-height:1}
+ .social-mobile-nav button.active .mobile-nav-icon{color:#0866ff}
+ .social-mobile-nav a{color:#65676b}
+ body{padding-bottom:env(safe-area-inset-bottom)}
+}
+@media(max-width:390px){
+ .nav-wrap{padding:0 8px}
+ .brand img{width:36px;height:36px}
+ .brand-name{font-size:16px}
+ .social-profile-link{padding:7px 9px;font-size:11px}
+ .mobile-head-action{width:33px;height:33px;flex-basis:33px}
+}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -139,7 +192,7 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <button data-tab="messages" type="button">Messages</button>
 <a class="social-main-menu-link" href="app.html">Main Menu</a>
 </nav>
-<div class="social-user-actions"><a class="social-main-menu-link mobile-header-menu" href="app.html">Main Menu</a><a class="social-profile-link" href="profile.html">My Profile</a></div>
+<div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Find people" title="Find people">⌕</button><button class="mobile-head-action" type="button" data-tab="notifications" aria-label="Notifications" title="Notifications">♧</button><button class="mobile-head-action" type="button" data-tab="messages" aria-label="Messages" title="Messages">✉</button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
 <aside class="social-left">
@@ -194,18 +247,12 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <div class="right-card"><p>Respect colleagues. Share professional updates. Keep conversations constructive.</p></div>
 </aside>
 </main>
-<nav class="social-mobile-nav" aria-label="Mobile navigation">
-<button class="active" data-tab="feed" type="button"><span class="side-icon">⌂</span>Home</button>
-<button data-tab="people" type="button"><span class="side-icon">⌕</span>People</button>
-<button data-tab="friends" type="button"><span class="side-icon">♧</span>Friends</button>
-<button data-tab="groups" type="button"><span class="side-icon">▦</span>Groups</button>
-<button data-tab="marketplace" type="button"><span class="side-icon">🛍</span>Market</button>
-<button data-tab="reels" type="button"><span class="side-icon">▶</span>Reels</button>
-<button data-tab="gaming" type="button"><span class="side-icon">🎮</span>Games</button>
-<button data-tab="requests" type="button"><span class="side-icon">✉</span>Requests</button>
-<button data-tab="notifications" type="button"><span class="side-icon">●</span>Alerts</button>
-<button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
-<a href="app.html" class="mobile-main-menu"><span class="side-icon">☷</span>Menu</a>
+<nav class="social-mobile-nav" aria-label="Main navigation">
+<button class="active" data-tab="feed" type="button"><span class="mobile-nav-icon">⌂</span><span>Home</span></button>
+<button data-tab="friends" type="button"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
+<button data-tab="groups" type="button"><span class="mobile-nav-icon">▦</span><span>Groups</span></button>
+<button data-tab="reels" type="button"><span class="mobile-nav-icon">▶</span><span>Reels</span></button>
+<a href="app.html" class="mobile-main-menu"><span class="mobile-nav-icon">☰</span><span>Menu</span></a>
 </nav>
 <section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
