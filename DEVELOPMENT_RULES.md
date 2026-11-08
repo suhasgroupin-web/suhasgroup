@@ -1,0 +1,64 @@
+# SUHAS — Permanent Development & Data Protection Rules
+
+**Status:** Mandatory for every future SUHAS development task.
+
+## 1. Non-destructive development
+- Never delete, overwrite, reset, truncate, drop, or replace existing user data, database records, tables, storage objects, designs, pages, apps, features, assets, routes, or configuration as a shortcut.
+- Preserve every existing feature and its working behavior unless the user explicitly authorizes a specific removal.
+- If something must be relocated, move it and verify the destination. Keep a recoverable copy and record the old and new locations.
+- Prefer additive changes, backward-compatible migrations, feature flags, and new versions.
+- Before changing an existing file or schema, inspect its current state and identify dependencies. Never assume it is disposable.
+- Destructive database or storage operations are prohibited by default. Require an explicit, specific user instruction and a verified backup before any such operation.
+
+## 2. Small, saved development increments
+- Split work into small, independently verifiable tasks.
+- After each completed increment: save the changed files, commit the work, record what changed, and verify the result before starting the next increment.
+- Do not keep a large unfinished batch only in temporary memory or an unsaved editor.
+- If work is interrupted by a usage limit, network loss, device shutdown, or session end, the last completed and committed increment is the recovery point.
+- On resumption, read the latest checkpoint and continue from the first unfinished item. Never restart completed work or repeat completed steps unnecessarily.
+- Never mark partial work as complete. Record exact progress (for example, 3.8/4 completed; 0.2 remaining) and list the remaining actions.
+
+## 3. Required checkpoint after every increment
+Maintain `DEVELOPMENT_CHECKPOINT.md` in the repository. Update it in the same commit as each completed increment where practical. It must record:
+- Current task and objective.
+- Completed items and their commit IDs.
+- Current in-progress item and exact next step.
+- Files, database objects, app pages, and assets changed.
+- Tests/checks actually run and their results.
+- Known issues, risks, and rollback/recovery notes.
+- Whether deployment was done and whether live behavior was actually verified.
+
+If an increment cannot be committed together with the checkpoint, commit the code first and immediately create a checkpoint commit before continuing.
+
+## 4. Backup and change safety
+- Inspect Git status/history and fetch the latest file before editing.
+- Keep changes focused; do not replace whole files when a small patch is sufficient.
+- Preserve existing content, identifiers, URLs, settings, and user-created records.
+- For database changes, use additive migrations; inspect constraints, RLS, triggers, dependencies, and existing rows first.
+- For storage changes, preserve existing objects and policies; never empty a bucket to fix an issue.
+- For app/design changes, preserve the old route or component until the replacement is verified. If relocation is required, maintain a redirect or compatibility path where possible.
+- Before risky changes, create a recoverable Git commit or export/backup. Verify the backup exists and can be accessed.
+
+## 5. Verification and release
+- Check syntax/build and relevant tests after each increment where tooling allows.
+- Test the affected flow and at least one relevant existing flow to detect regressions.
+- Deploy only saved, committed changes.
+- After deployment, verify the live URL or service. Clearly distinguish code committed, deployment completed, and live behavior verified.
+- If verification is blocked, report exactly what remains unverified; never claim 100% completion without evidence.
+
+## 6. Resume protocol
+At the start of every SUHAS development session:
+1. Read this file and the latest `DEVELOPMENT_CHECKPOINT.md`.
+2. Inspect the latest repository commit and current working state.
+3. Confirm the last completed increment and the first unfinished step.
+4. Continue from that exact point without deleting or rebuilding completed work.
+
+## 7. Mandatory completion report
+For every task, report:
+- Done and saved (with commit ID).
+- Remaining work (if any).
+- Tests and verification actually performed.
+- Live deployment status.
+- Exact resume point if unfinished.
+
+**Core command:** Develop continuously in small increments; save and checkpoint every completed increment; preserve all existing data, designs, apps, and features; move rather than delete; resume exactly where work stopped.
