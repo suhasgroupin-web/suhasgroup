@@ -52,11 +52,12 @@ document.getElementById('login-form').addEventListener('submit', async function(
   try{
     var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
+    var pr = await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();
+    if(!pr.data || pr.data.profile_complete !== true){window.location.replace('profile.html?setup=1');return;}
     var next = new URLSearchParams(location.search).get('next');
     var allowedNext = ['social.html','app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
     if(next){try{var target=new URL(next,location.href);var basePath=location.pathname.slice(0,location.pathname.lastIndexOf('/')+1);var leaf=target.pathname.slice(basePath.length);if(target.origin===location.origin&&target.pathname.indexOf(basePath)===0&&allowedNext.indexOf(leaf)!==-1){window.location.href=leaf+target.search+target.hash;return;}}catch(ignore){}}
-    var pr = await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();
-    if(pr.data && pr.data.profile_complete === true){ window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'social.html'; } else { window.location.href = 'profile.html'; }
+    window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'app.html';
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
