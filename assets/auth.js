@@ -13,8 +13,17 @@
     (document.head||document.documentElement).appendChild(gateStyle);
   }
   function revealAuthenticatedPage(){
+    document.documentElement.classList.add('suhas-authenticated');
+    document.dispatchEvent(new Event('suhas-auth-ready'));
     document.documentElement.classList.remove('suhas-auth-pending');
   }
+
+  // Keep all app navigation hidden until a verified session and completed profile exist.
+  var navGateStyle=document.createElement('style');
+  navGateStyle.id='suhas-auth-nav-gate';
+  navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}';
+  (document.head||document.documentElement).appendChild(navGateStyle);
+
   function enableWebsiteDesktopMode(){
     var standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;
     if(!standalone){
