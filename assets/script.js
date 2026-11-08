@@ -99,7 +99,7 @@ SG.loginThenReturn = function () {
   function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
   function hide(remember) { if (card) { card.remove(); card = null; } if (remember) SG.store.set('sg_install_dismissed', String(Date.now())); }
   function show(kind) {
-    if (card || dismissed() || standalone() || !document.body) return;
+    if (card || dismissed() || standalone() || !document.body || !document.documentElement.classList.contains('suhas-authenticated')) return;
     card = document.createElement('div'); card.className = 'install-card';
     card.innerHTML = '<img src="assets/icon-192.png" alt=""><div class="t"><b>Install SUHAS GROUP app</b><small>' +
       (kind === 'ios' ? 'Tap Share, then &ldquo;Add to Home Screen&rdquo;' : 'Apply faster. Works like an app.') + '</small></div>' +
@@ -116,6 +116,7 @@ SG.loginThenReturn = function () {
     });
   }
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; show('prompt'); });
+  document.addEventListener('suhas-auth-ready', function(){ if(deferred) show('prompt'); });
   window.addEventListener('appinstalled', function () { deferred = null; hide(false); SG.toast('App installed', 'ok'); });
   if (/iphone|ipad|ipod/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent)) {
     setTimeout(function () { show('ios'); }, 2500);
