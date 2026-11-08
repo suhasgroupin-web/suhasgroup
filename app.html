@@ -304,7 +304,7 @@ html body.entry-locked #entryGate .entry-card{position:relative!important;z-inde
 
 
 /* Premium SUHAS home workspace finish */
-.workspace{background:radial-gradient(ellipse at 88% 2%,rgba(83,139,226,.42),transparent 34%),radial-gradient(ellipse at 5% 24%,rgba(21,71,145,.32),transparent 38%),linear-gradient(155deg,#061329 0%,#0a2450 28%,#e8eef7 28.1%,#f5f7fb 100%)!important}
+.w-actions{display:none!important}.workspace{background:radial-gradient(ellipse at 88% 2%,rgba(83,139,226,.42),transparent 34%),radial-gradient(ellipse at 5% 24%,rgba(21,71,145,.32),transparent 38%),linear-gradient(155deg,#061329 0%,#0a2450 28%,#e8eef7 28.1%,#f5f7fb 100%)!important}
 .w-top{padding:10px 4px 18px;border-bottom:1px solid #ffffff29}
 .w-brand img{width:58px;height:58px;border-radius:18px;padding:4px;box-shadow:0 8px 24px #0004,inset 0 1px #fff}
 .w-brand strong{font-size:20px;letter-spacing:.065em;text-shadow:0 2px 12px #0003}.w-brand small{font-size:11px;letter-spacing:.12em;color:#d6e3f8}
@@ -394,6 +394,25 @@ let editing=false;const STORE='suhas_workspace_edits_v1';let saved={};try{saved=
 function applySaved(){document.querySelectorAll('.app-tile').forEach((a,i)=>{const v=saved['app'+i];if(v){if(v.title)a.querySelector('strong').textContent=v.title;if(v.desc)a.querySelector('small').textContent=v.desc;}});document.querySelectorAll('[data-folder]').forEach((d)=>{const v=saved['folder_'+d.dataset.folder];if(v)d.querySelector('[data-folder-title]').textContent=v;});}
 function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved))}catch(e){alert('এই ব্রাউজারে পরিবর্তন সংরক্ষণ করা যায়নি।')}}
 applySaved();
+
+/* Load owner-published home settings for every signed-in member */
+(async function(){
+ try{
+  const r=await sb.from('suhas_site_settings').select('settings').eq('id','global').maybeSingle();
+  if(r.error||!r.data||!r.data.settings)return;
+  const x=r.data.settings;
+  const h=document.querySelector('.w-hero h1'),p=document.querySelector('.w-hero p');
+  if(h&&x.hero_title)h.textContent=x.hero_title;
+  if(p&&x.hero_subtitle)p.textContent=x.hero_subtitle;
+  if(x.theme_primary)document.documentElement.style.setProperty('--suhas-owner-primary',x.theme_primary);
+  if(x.theme_accent)document.documentElement.style.setProperty('--suhas-owner-accent',x.theme_accent);
+  if(x.theme_primary){const w=document.querySelector('.workspace');if(w)w.style.setProperty('--owner-primary',x.theme_primary);}
+  document.querySelectorAll('[data-folder]').forEach(d=>{const v=x.folders&&x.folders[d.dataset.folder];if(v)d.querySelector('[data-folder-title]').textContent=v;});
+  const tiles=[...document.querySelectorAll('.app-tile')];
+  tiles.forEach((a,i)=>{const v=x.apps&&x.apps[i];if(!v)return;if(v.title)a.querySelector('strong').textContent=v.title;if(v.desc)a.querySelector('small').textContent=v.desc;});
+ }catch(e){console.warn('Owner home settings unavailable',e);}
+})();
+
 (async function(){try{const owner=await window.checkIsAdmin();if(owner)toggle.hidden=false;}catch(e){toggle.hidden=true;}})();
 toggle.addEventListener('click',()=>{if(toggle.hidden)return;editing=!editing;panel.classList.toggle('editing',editing);toggle.textContent=editing?'✓ Done editing':'✎ Edit layout';});
 if(new URLSearchParams(location.search).get('edit')==='1'){
