@@ -93,3 +93,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Added invitation inbox, accept/decline actions and owner/admin invite controls to the Groups panel. Public-group join behavior remains unchanged.
 - SQL migration source is committed under `supabase/migrations/20261109023000_suhas_private_group_invites.sql`; embedded JavaScript syntax check passed.
 - Supabase verification confirmed the invitation table, three RLS policies and response trigger. Full two-account UI flow test remains pending; latest GitHub Pages deployment is queued/in progress.
+
+
+## Latest Account Privacy and Settings increment
+- Applied additive migration `suhas_account_privacy_preferences` and follow-up migration `enforce_suhas_profile_privacy_on_sync`.
+- Created per-user `suhas_account_preferences` with RLS ownership policies. Members can control directory discoverability and visibility of company, location and skills. Original profile data in `suhas_member_profiles` is retained.
+- Added privacy controls to the existing `member-tools.html` Account Control Centre. Existing email verification, password update, TOTP setup and global sign-out controls remain intact.
+- Friend-request and message-permission choices are currently saved as preferences only; enforcement at all social entry points remains pending. Email notification preference delivery is not connected.
+- SQL migration sources are committed under `supabase/migrations/`; embedded JavaScript syntax check passed. Supabase verification confirmed the preference table, 3 RLS policies and 2 privacy triggers.
+- Security advisor still reports leaked-password protection disabled; this is an Auth dashboard setting and has not been changed automatically.
