@@ -5,7 +5,7 @@
   "description": "SUHAS-MAX is the social and corporate community platform powered by SUHAS GROUP.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./social.html?source=pwa",
+  "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -51,7 +51,7 @@
     {
       "name": "Home",
       "short_name": "Home",
-      "url": "./social.html"
+      "url": "./index.html"
     },
     {
       "name": "Main Menu",
