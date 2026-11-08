@@ -21,7 +21,7 @@
   // Keep all app navigation hidden until a verified session and completed profile exist.
   var navGateStyle=document.createElement('style');
   navGateStyle.id='suhas-auth-nav-gate';
-  navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}';
+  navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}html.suhas-authenticated body:has(#login-form) .tabbar,html.suhas-authenticated body:has(#signup-form) .tabbar{display:none!important}html.suhas-authenticated body:has(#login-form) .social-mobile-nav,html.suhas-authenticated body:has(#signup-form) .social-mobile-nav{display:none!important}';
   (document.head||document.documentElement).appendChild(navGateStyle);
 
   function enableWebsiteDesktopMode(){
@@ -156,7 +156,7 @@
   sb.auth.getSession().then(async function(r){
     var session = r.data && r.data.session;
     if(!requireWorkspaceSession(session)) return;
-    paintNav(session);
+    if(!isPublicAuthPage()) paintNav(session);
     if(session){
       enableWebsiteDesktopMode();
       var profileReady=await enforceMemberProfile(session);
@@ -176,8 +176,8 @@
     }
     if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
       if(!requireWorkspaceSession(session)) return;
-      paintNav(session);
-      if(event==='SIGNED_IN' || event==='TOKEN_REFRESHED'){
+      if(!isPublicAuthPage()) paintNav(session);
+      if((event==='SIGNED_IN' || event==='TOKEN_REFRESHED') && !isPublicAuthPage()){
         enableWebsiteDesktopMode();
         enforceMemberProfile(session).then(function(ok){if(ok)revealAuthenticatedPage();});
       }
