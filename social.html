@@ -225,13 +225,23 @@ async function openMemberProfile(id){
  $('profile-viewer-info').innerHTML='<div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+safe(x[2])+'</div></div></div>').join('')+'</div>';
  $('profile-viewer-actions').innerHTML=id===me?'':'<button class="action primary" data-profile-friend="'+id+'">Add Friend</button><button class="action" data-profile-message="'+id+'">Message</button>';$('profile-edit-menu-item').hidden=id!==me;
 }
+async function copyToClipboard(value){
+ const textValue=String(value);
+ if(navigator.clipboard&&window.isSecureContext){
+  try{await navigator.clipboard.writeText(textValue);return true;}catch(e){}
+ }
+ const area=document.createElement('textarea');area.value=textValue;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';area.style.left='-9999px';document.body.appendChild(area);area.focus();area.select();area.setSelectionRange(0,area.value.length);
+ let copied=false;try{copied=document.execCommand('copy');}catch(e){}area.remove();
+ if(copied)return true;
+ window.prompt('Copy this profile link:',textValue);return false;
+}
 let activeProfileId=null;
 $('profile-viewer-menu-trigger').addEventListener('click',()=>{const m=$('profile-viewer-menu');m.classList.toggle('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');});
 $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.closest('[data-profile-action]');if(!b||!activeProfileId)return;const id=activeProfileId,p=profile(id)||{},url=location.origin+location.pathname+'?profile='+encodeURIComponent(id);const kind=b.dataset.profileAction;try{
- if(kind==='copy'||kind==='qr'){await navigator.clipboard.writeText(url);notice('Profile link copied.');}
- if(kind==='share'){if(navigator.share)await navigator.share({title:(p.full_name||'SUHAS-MAX Member')+' · SUHAS-MAX',url});else{await navigator.clipboard.writeText(url);notice('Share is unavailable here. Profile link copied.');}}
+ if(kind==='copy'||kind==='qr'){const copied=await copyToClipboard(url);notice(copied?'Profile link copied. You can paste it anywhere.':'Please copy the link shown in the box.',!copied);}
+ if(kind==='share'){if(navigator.share)await navigator.share({title:(p.full_name||'SUHAS-MAX Member')+' · SUHAS-MAX',url});else{const copied=await copyToClipboard(url);notice(copied?'Share is unavailable here. Profile link copied.':'Please copy the link shown in the box.',!copied);}}
  if(kind==='save'){const a=JSON.parse(localStorage.getItem('suhas-max-saved-profiles')||'[]');if(!a.includes(id))a.unshift(id);localStorage.setItem('suhas-max-saved-profiles',JSON.stringify(a.slice(0,500)));notice('Profile saved on this device.');}
- if(kind==='report'){const reason=prompt('Tell us why you are reporting this profile:');if(reason&&reason.trim()){await navigator.clipboard.writeText('SUHAS-MAX profile report\nProfile ID: '+id+'\nName: '+(p.full_name||'')+'\nReason: '+reason);notice('Report details copied. Please send them to SUHAS GROUP support.');}}
+ if(kind==='report'){const reason=prompt('Tell us why you are reporting this profile:');if(reason&&reason.trim()){const copied=await copyToClipboard('SUHAS-MAX profile report\nProfile ID: '+id+'\nName: '+(p.full_name||'')+'\nReason: '+reason);notice(copied?'Report details copied. Please send them to SUHAS GROUP support.':'Please copy the report details shown in the box.',!copied);}}
  if(kind==='block'){if(confirm('Hide this profile on this device?')){const a=JSON.parse(localStorage.getItem('suhas-max-blocked-profiles')||'[]');if(!a.includes(id))a.push(id);localStorage.setItem('suhas-max-blocked-profiles',JSON.stringify(a));notice('Profile hidden on this device. This is not a server-wide block.');$('profile-viewer-close').click();}}
  }catch(err){if(err.name!=='AbortError')notice(err.message||'Profile action failed.',true);} $('profile-viewer-menu').classList.remove('open');
 });
