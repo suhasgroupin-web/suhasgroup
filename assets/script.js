@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sb.auth.getSession().then(async function (r) {
       var a = document.getElementById('sg-acct');
       var session = r.data && r.data.session;
-      if (a && session) { a.href = 'profile.html'; a.querySelector('span').textContent = 'Profile'; }
+      if (a && session) { a.href = 'profile.html'; a.querySelector('span').textContent = 'Account'; }
       if (!session || typeof window.checkIsAdmin !== 'function') return;
       var isOwner = await window.checkIsAdmin();
       if (!isOwner || document.getElementById('sg-edit-suhas')) return;
