@@ -13,7 +13,7 @@ Repair SUHAS Connect mobile member-directory layout and conversation creation RL
 
 ## Verification
 - Supabase policy query confirms both creator-only and participant-only SELECT policies are present.
-- GitHub Pages deployment status for the latest commit is pending verification.
+- GitHub Pages deployment for commit `e0ca5332ca462cdb157989be445c322dfc75c542` completed successfully (workflow conclusion: success). Live authenticated UI behavior still needs user-device verification.
 - End-to-end messaging still requires a signed-in user test: create a conversation, add both participants, send a message, and verify that a nonparticipant cannot read it.
 
 ## Known issues / risks
