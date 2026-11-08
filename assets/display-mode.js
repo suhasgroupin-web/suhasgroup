@@ -10,7 +10,7 @@
     if(!nav) return;
     var profileLink=nav.querySelector('a[href*="profile"]');
     var actions=document.createElement('div');actions.className='suhas-nav-actions';
-    if(profileLink){nav.insertBefore(actions,profileLink);actions.appendChild(profileLink);}
+    if(profileLink){var profileParent=profileLink.parentNode;if(profileParent){profileParent.insertBefore(actions,profileLink);actions.appendChild(profileLink);}else{nav.appendChild(actions);}}
     else nav.appendChild(actions);
     var trigger=document.createElement('button');
     trigger.id='suhas-display-trigger';trigger.className='suhas-display-trigger';
