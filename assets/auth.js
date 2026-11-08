@@ -119,8 +119,10 @@
     if(!requireWorkspaceSession(session)) return;
     paintNav(session);
     enforceMemberProfile(session);
-    if(session && (page === 'login.html' || page === 'signup.html')){
-      location.replace('profile.html');
+    if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
+      sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
+        location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
+      }).catch(function(){ location.replace('profile.html?setup=1'); });
     }
   });
 
