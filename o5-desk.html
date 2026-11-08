@@ -89,7 +89,11 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 8%,#244
 (async function(){
  const user=await window.requireAuth();
  if(!user)return;
- if(!(user.email||'').toLowerCase().endsWith('@o5-intl.com')){location.replace('app.html');return;}
+ const email=(user.email||'').toLowerCase();
+ const roleCheck=await sb.rpc('has_suhas_role',{p_roles:['OWNER','ADMIN']});
+ const hasAdminAccess=!roleCheck.error && roleCheck.data===true;
+ const hasO5CompanyAccess=email.endsWith('@o5-intl.com');
+ if(!hasAdminAccess && !hasO5CompanyAccess){location.replace('app.html?notice=o5-access');return;}
  const profile=await sb.from('suhas_member_profiles').select('full_name,company,position,university,bio,skills,profile_photo_url').eq('user_id',user.id).maybeSingle();
  if(!profile.error && profile.data){const p=profile.data;const $=id=>document.getElementById(id);$('member-name').textContent=p.full_name||user.user_metadata?.full_name||'O5 Member';$('member-position').textContent=p.position||'O5 International Member';const company=p.company||'Company not added',university=p.university||'University not added';$('member-company').textContent=company;$('member-company-copy').textContent=company;$('member-university').textContent=university;$('member-university-copy').textContent=university;$('member-bio').textContent=p.bio||p.skills||'';if(p.profile_photo_url)$('member-avatar').src=p.profile_photo_url;}
  const modal=document.getElementById('install-modal');
