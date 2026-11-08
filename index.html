@@ -18,7 +18,7 @@
 <img src="assets/logo.png" alt="SUHAS GROUP logo">
 <h1>SUHAS GROUP</h1>
 <p>Secure member access. Sign in or create your account to continue.</p>
-<div class="actions"><button class="signup" id="welcome-signup-open" type="button">Sign Up</button><a class="login" href="login.html">Login</a></div>
+<div class="actions"><button class="signup" id="welcome-signup-open" type="button">Create Account</button><a class="login" href="login.html?next=app.html">Login</a></div><button id="welcome-install" type="button" hidden style="width:100%;margin-top:12px;padding:13px;border:1px solid #ffffff80;border-radius:10px;background:#ffffff18;color:#fff;font-weight:800">Install SUHAS-MAX on this phone</button><p id="welcome-install-help" style="margin-top:10px;font-size:12px;color:#d8e6ff">You can also open the browser menu and choose “Add to Home screen” or “Install app”.</p>
 <section id="welcome-signup-panel" class="welcome-signup-panel" hidden><h2>Create your SUHAS-MAX account</h2><p>Complete signup here. You will stay on this Welcome Screen.</p><form id="welcome-signup-form"><label for="welcome-fullname">Full Name</label><input id="welcome-fullname" autocomplete="name" required><label for="welcome-email">Email / Gmail</label><input id="welcome-email" type="email" autocomplete="email" required><label for="welcome-password">Password</label><input id="welcome-password" type="password" minlength="12" autocomplete="new-password" required><button class="signup-submit" id="welcome-submit" type="submit">Create Account</button><button class="signup-cancel" id="welcome-cancel" type="button">Back to Welcome</button><div id="welcome-signup-msg" role="status" aria-live="polite"></div></form></section><div class="foot">Global Opportunities, Trusted Quality</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,6 +26,10 @@
 <script src="assets/auth.js?v=private-gate-1"></script>
 <script>
 (function(){
+ var installPrompt=null,installBtn=document.getElementById('welcome-install');
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e;installBtn.hidden=false;});
+ installBtn.addEventListener('click',async function(){if(!installPrompt){document.getElementById('welcome-install-help').textContent='Open Chrome menu ⋮ then choose Install app or Add to Home screen.';return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.hidden=true;});
+ window.addEventListener('appinstalled',function(){installBtn.hidden=true;document.getElementById('welcome-install-help').textContent='SUHAS-MAX is installed on this phone.';});
  var panel=document.getElementById('welcome-signup-panel'),gate=document.querySelector('.gate'),form=document.getElementById('welcome-signup-form'),btn=document.getElementById('welcome-submit'),msg=document.getElementById('welcome-signup-msg');
  function say(t,ok){msg.textContent=t;msg.style.display='block';msg.style.background=ok?'#e7f6ec':'#fdecea';msg.style.color=ok?'#17633a':'#9e2c20';}
  document.getElementById('welcome-signup-open').onclick=function(){panel.hidden=false;gate.classList.add('signup-open');document.getElementById('welcome-fullname').focus();};
