@@ -2,7 +2,7 @@
   var routeParts=location.pathname.split('/').filter(Boolean);
   var routeEarly=(routeParts[routeParts.length-1]||'index.html').toLowerCase();
   var isRootAuthRoute=routeParts.length<=2;
-  var publicEarly=['login.html','signup.html','reset.html'];
+  var publicEarly=['index.html','login.html','signup.html','reset.html'];
   if(!(isRootAuthRoute&&publicEarly.indexOf(routeEarly)!==-1)){
     document.documentElement.classList.add('suhas-auth-pending');
     var gateStyle=document.createElement('style');
@@ -38,7 +38,7 @@
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Only authentication screens are public. Every other route, including the home route, requires a real session.
   var route = page;
-  var publicPages = ['login.html','signup.html','reset.html'];
+  var publicPages = ['index.html','login.html','signup.html','reset.html'];
   function isPublicAuthPage(){return isRootAuthRoute && publicPages.indexOf(page)!==-1;}
   function requireWorkspaceSession(session){
     if(!isPublicAuthPage() && !session){
