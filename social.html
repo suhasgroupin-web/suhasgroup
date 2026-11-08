@@ -664,6 +664,8 @@ async function activateMaxTab(tab){const ids=['feed','maxmenu','people','friends
 document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();activateMaxTab(b.dataset.tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
+// Clear a previous section error as soon as the user retries an action.
+document.addEventListener('click',e=>{if(!e.target.closest('button,a,[role="button"]'))return;const n=document.getElementById('notice');if(n){n.textContent='';n.style.display='none';}},true);
 
 document.addEventListener('click',async e=>{
  const toggle=e.target.closest('[data-post-menu-toggle]');
