@@ -18,7 +18,7 @@
 .paper.pdf-export{break-inside:avoid!important;page-break-inside:avoid!important}
 @page{size:A4 landscape;margin:9mm}@media print{.controls{display:none!important}.paper{width:100%;max-width:none;margin:0}.top{height:90px}.heading{font-size:36px}.sheet{font-size:13px}.sheet th{font-size:13px}.sheet th,.sheet td{height:42px}.sheet input{height:32px}.foot{margin-top:19px;font-size:12px}}
 @media(max-width:700px){.paper{width:1245px;max-width:none;margin-left:8px}.controls{width:1245px;max-width:none;margin-left:8px}.date input[type=date]{font-size:14px}.meta .style .style-entry{height:30px;font-size:15px;width:calc(100% - 88px)}.summary .summary-value{height:30px;font-size:15px}.summary .tolerance-value{width:420px}}
-</style></head><body>
+</style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script></head><body>
 <div class="controls"><label for="logoUpload">Add Logo</label><input id="logoUpload" type="file" accept="image/*"><input id="newSize" type="text" placeholder="Size"><button id="addSize">Add Size</button><button id="pdf">Download PDF</button></div>
 <main class="paper">
 <div class="top"><div class="brand"><img id="logo" alt="C5 INT'L logo"><div class="reportno"><span contenteditable="true">Report No.</span> <span class="editable" contenteditable="true"></span></div></div><div class="heading" contenteditable="true">Final Inspection Report</div><div class="date"><span contenteditable="true">Inspection Date-</span> <input id="inspectionDate" type="date" aria-label="Inspection Date"></div></div>
@@ -87,4 +87,4 @@ document.getElementById('pdf').onclick=async()=>{
  }
 };
 draw();
-</script></body></html>
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=secure-entry-20261109"></script></body></html>
