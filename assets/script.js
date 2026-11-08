@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function ic(d) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>'; }
   var nav = document.createElement('nav'); nav.className = 'tabbar'; nav.setAttribute('aria-label', 'App navigation');
   var tabs = [
-    ['index.html', 'Home', page === 'index.html', '<img class="brand-icon" src="assets/icons/home-suhas-logo.svg" alt="SUHAS GROUP" />', ''],
+    ['social.html', 'Home', page === 'social.html', '<img class="brand-icon" src="assets/icons/home-suhas-logo.svg" alt="SUHAS GROUP" />', ''],
     ['jobs.html', 'Jobs', page === 'jobs.html' || page === 'job.html', ic('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), ''],
     ['o5-desk.html', "O5'Intl", page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon o5-international-icon" src="assets/icons/o5-international-logo.svg?v=6" alt="O5 International" />', 'o5-international'],
     ['login.html', 'Account', page === 'profile.html' || page === 'login.html' || page === 'signup.html', ic('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'), ''],
