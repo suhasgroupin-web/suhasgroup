@@ -8,10 +8,9 @@
     function apply(){document.body.classList.toggle('suhas-desktop-mode',mode==='desktop');}
     var nav=document.querySelector('.nav-wrap');
     if(!nav) return;
-    var profileLink=nav.querySelector('a[href*="profile"]');
+    /* Keep existing navigation links in place. Appending the display control avoids fragile DOM re-parenting and insertBefore errors. */
     var actions=document.createElement('div');actions.className='suhas-nav-actions';
-    if(profileLink){var profileParent=profileLink.parentNode;if(profileParent){profileParent.insertBefore(actions,profileLink);actions.appendChild(profileLink);}else{nav.appendChild(actions);}}
-    else nav.appendChild(actions);
+    nav.appendChild(actions);
     var trigger=document.createElement('button');
     trigger.id='suhas-display-trigger';trigger.className='suhas-display-trigger';
     trigger.type='button';trigger.textContent='⋮';trigger.setAttribute('aria-label','More options');trigger.setAttribute('title','More options');
