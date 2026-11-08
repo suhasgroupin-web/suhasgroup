@@ -1,7 +1,7 @@
-const CACHE = 'suhas-group-v60';
+const CACHE = 'suhas-group-v61';
 const CORE = [
   'index.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
-  'login.html','signup.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
+  'login.html','signup.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
   'assets/styles.css','assets/script.js','assets/auth.js','assets/config.js','assets/icons/o5-international-logo.svg',
   'barcode/','assets/logo.png','assets/icon-192.png','assets/icon-512.png','manifest.json'
 ];
