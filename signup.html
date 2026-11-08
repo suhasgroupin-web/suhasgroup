@@ -11,6 +11,31 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SUHAS GROUP">
 <link rel="stylesheet" href="assets/styles.css">
+<style>
+body{background:#f0f2f5!important;min-height:100vh}
+.auth-wrap{min-height:calc(100vh - 90px);display:flex!important;align-items:center;justify-content:center;padding:30px 16px!important;gap:0!important}
+.auth-brand{display:none!important}
+.auth-form{width:100%;max-width:460px!important;margin:0 auto!important}
+.form-card{background:#fff!important;border:1px solid #e4e6eb!important;border-radius:14px!important;padding:28px 26px!important;box-shadow:0 2px 12px rgba(0,0,0,.08)!important}
+.form-card h1{font-size:30px!important;line-height:1.2!important;font-weight:750!important;color:#17233f!important;margin:0 0 8px!important}
+.form-card>p:first-of-type{color:#65676b!important;font-size:15px!important;margin:0 0 22px!important}
+.form-row{margin-bottom:14px!important}
+.form-row label{display:block;font-size:14px!important;font-weight:650!important;color:#1c1e21!important;margin-bottom:7px!important}
+.form-row input,.form-row select{width:100%!important;min-height:50px!important;border:1px solid #ccd0d5!important;border-radius:9px!important;background:#f7f8fa!important;padding:12px 14px!important;font-size:16px!important;box-sizing:border-box!important}
+.form-row input:focus,.form-row select:focus{outline:2px solid #1877f2!important;border-color:#1877f2!important;background:#fff!important}
+.pw{display:flex!important;align-items:center!important;border:1px solid #ccd0d5!important;border-radius:9px!important;background:#f7f8fa!important}
+.pw input{border:0!important;background:transparent!important;min-width:0!important}
+.pw button{border:0!important;background:transparent!important;color:#216fce!important;font-weight:650!important;padding:10px 14px!important}
+#sub.btn{width:100%!important;min-height:50px!important;border:0!important;border-radius:9px!important;background:#1877f2!important;color:#fff!important;font-size:17px!important;font-weight:700!important;box-shadow:none!important}
+#sub.btn:disabled{opacity:.65}
+.linkline{text-align:center!important;margin:20px 0 0!important;color:#65676b!important;font-size:15px!important}
+.linkline a{color:#1877f2!important;font-weight:700!important;text-decoration:none!important}
+.site-header .nav-links{display:none!important}
+.site-header .nav-wrap{justify-content:space-between!important}
+.site-header .nav-cta{margin-left:auto!important}
+.site-footer{display:none!important}
+@media(max-width:600px){.site-header .nav-wrap{padding:10px 14px!important}.site-header .brand-tag{display:none!important}.site-header .brand-name{font-size:17px!important}.site-header .brand img{width:42px!important;height:42px!important}.site-header .nav-cta .btn{padding:9px 12px!important}.menu-toggle{display:none!important}.auth-wrap{min-height:calc(100dvh - 72px)!important;padding:22px 14px!important;align-items:center!important}.form-card{padding:25px 20px!important;border-radius:14px!important}.form-card h1{font-size:28px!important}}
+</style>
 </head><body>
 <header class="site-header"><div class="nav-wrap">
 <a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP logo"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a>
@@ -20,7 +45,7 @@
 <button class="menu-toggle" aria-label="Menu">&#9776;</button>
 </div></header>
 <div class="auth-wrap"><div class="auth-brand"><img src="assets/logo.png" alt="" style="width:110px;margin-bottom:26px"><h2>Global Opportunities, Trusted Quality</h2><p style="margin-bottom:26px">Join the SUHAS GROUP portal and connect with verified employers worldwide.</p><ul><li>Build one profile and apply in one tap</li><li>Track every application in one place</li><li>Verified employers and real vacancies only</li></ul></div><div class="auth-form"><div class="form-card">
-<h1>Create your account</h1><p>Join SUHAS GROUP in a few easy steps. Creating an account is free.</p>
+<h1>Create your account</h1><p>Create your free SUHAS-MAX account.</p>
 <div id="msg" class="msg"></div>
 <form id="signup-form">
 <div class="form-row"><label for="name">Full name</label><input type="text" id="name" autocomplete="name" required></div>
@@ -76,7 +101,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var emailRedirectTo = 'https://suhasgroupin-web.github.io/suhasgroup/login.html?verified=1';
+    var appBase = location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1);\n    var emailRedirectTo = location.origin + appBase + 'login.html?verified=1';
     var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
