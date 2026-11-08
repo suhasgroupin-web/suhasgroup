@@ -307,4 +307,14 @@ document.getElementById('admin-add-form').addEventListener('submit', async funct
   loadAdmins();
 });
 </script>
-</body></html>
+<script>
+(function(){
+const b=document.getElementById('oe-unlock');if(!b)return;
+const msg=document.getElementById('oe-msg'),panel=document.getElementById('oe-panel');
+function say(el,t,ok){el.textContent=t;el.style.display='block';el.style.background=ok?'#e8f6ed':'#fdecea';el.style.color=ok?'#17653a':'#9f2f20'}
+async function load(){const r=await sb.from('suhas_site_settings').select('settings').eq('id','global').maybeSingle();if(r.error)throw r.error;const x=r.data&&r.data.settings||{};document.getElementById('oe-title').value=x.hero_title||'One workspace. Every tool.';document.getElementById('oe-subtitle').value=x.hero_subtitle||'সব অ্যাপ ও টুল এখন কাজ অনুযায়ী আলাদা ফোল্ডারে সাজানো।';document.getElementById('oe-primary').value=x.theme_primary||'#071a36';document.getElementById('oe-accent').value=x.theme_accent||'#e8bd58'}
+b.addEventListener('click',async()=>{try{const r=await sb.auth.signInWithPassword({email:'suhasgroup.in@gmail.com',password:document.getElementById('oe-pass').value});if(r.error)throw r.error;if(!r.data.user.email_confirmed_at||!await window.checkIsAdmin())throw new Error('Owner verification failed');document.getElementById('oe-pass').value='';document.getElementById('oe-gate').style.display='none';panel.style.display='block';await load()}catch(e){say(msg,e.message||'Verification failed',false)}});
+document.getElementById('oe-save').addEventListener('click',async()=>{const r=await sb.from('suhas_site_settings').upsert({id:'global',settings:{hero_title:document.getElementById('oe-title').value,hero_subtitle:document.getElementById('oe-subtitle').value,theme_primary:document.getElementById('oe-primary').value,theme_accent:document.getElementById('oe-accent').value},updated_by:(await sb.auth.getUser()).data.user.id,updated_at:new Date().toISOString()},{onConflict:'id'});say(document.getElementById('oe-save-msg'),r.error?r.error.message:'Saved. Refresh Home page.',!r.error)});
+if(location.hash==='#suhas-editor')setTimeout(()=>document.getElementById('suhas-editor').scrollIntoView({behavior:'smooth'}),700);
+})();
+</script></body></html>
