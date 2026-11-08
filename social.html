@@ -12,6 +12,12 @@ body{line-height:1.45}
 .social-topnav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;min-width:0}
 .social-topnav button{height:52px;min-width:90px;padding:0 18px;border:0;border-bottom:3px solid transparent;background:transparent;color:#65676b;font-weight:700;font-size:14px;cursor:pointer}
 .social-topnav button.active{color:var(--fb-blue);border-bottom-color:var(--fb-blue)}
+.social-main-menu-link{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border-radius:7px;background:#e7f3ff;color:#0866ff;text-decoration:none;font-weight:700;font-size:13px;white-space:nowrap}
+.side-nav-link{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:8px 10px;border-radius:8px;text-decoration:none;color:#1c1e21;font-size:14px;font-weight:700}
+.side-nav-link:hover{background:#e7f3ff;color:#0866ff}
+.mobile-main-menu{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 1px;text-decoration:none;color:#65676b;font-size:10px;font-weight:700}
+.mobile-main-menu .side-icon{width:24px;height:24px;font-size:14px}
+
 .social-user-actions{display:flex;align-items:center;gap:10px}
 .social-profile-link{padding:9px 15px;border-radius:22px;background:#e4e6eb;color:#1c1e21;font-weight:700;font-size:14px}
 .suhas-nav-actions{display:flex;align-items:center;gap:8px;margin-left:0}
@@ -85,7 +91,7 @@ body{line-height:1.45}
 @media(max-width:1100px){.social-shell{grid-template-columns:210px minmax(0,1fr);max-width:1000px}.social-right{display:none}}
 @media(max-width:760px){
  .nav-wrap{min-height:58px;padding:0 10px;gap:8px}.brand{min-width:0;flex:1}.brand img{width:36px;height:36px}.brand-name{font-size:16px}
- .social-topnav{display:none}.social-profile-link{padding:8px 10px;font-size:12px}.suhas-display-trigger{width:36px;height:36px}
+ .social-topnav{display:none}.social-profile-link{padding:8px 10px;font-size:12px}.mobile-header-menu{display:none}.suhas-display-trigger{width:36px;height:36px}
  .social-shell{display:block;padding:12px 10px 88px}.social-left,.social-right{display:none}
  .book-heading{margin:3px 3px 12px}.book-heading h1{font-size:22px}
  .panel{padding:13px;margin-bottom:10px;border-radius:10px}
@@ -93,7 +99,7 @@ body{line-height:1.45}
  #threads{display:flex;gap:6px;overflow-x:auto}
  #threads .tab{width:auto!important;white-space:nowrap}
  .msg-list{height:48vh}
- .social-mobile-nav{position:fixed;z-index:90;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:5px 3px calc(5px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--fb-line);box-shadow:0 -2px 8px #0000000c}
+ .social-mobile-nav{position:fixed;z-index:90;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;padding:5px 3px calc(5px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--fb-line);box-shadow:0 -2px 8px #0000000c}
  .social-mobile-nav button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 1px;color:#65676b;font-size:10px;font-weight:700}
  .social-mobile-nav button.active{color:var(--fb-blue)}
  .social-mobile-nav .side-icon{width:24px;height:24px;font-size:14px}
@@ -106,8 +112,9 @@ body{line-height:1.45}
 <button data-tab="people" type="button">Find People</button>
 <button data-tab="friends" type="button">Friends</button>
 <button data-tab="messages" type="button">Messages</button>
+<a class="social-main-menu-link" href="app.html">Main Menu</a>
 </nav>
-<div class="social-user-actions"><a class="social-profile-link" href="profile.html">My Profile</a></div>
+<div class="social-user-actions"><a class="social-main-menu-link mobile-header-menu" href="app.html">Main Menu</a><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
 <aside class="social-left">
@@ -121,6 +128,7 @@ body{line-height:1.45}
 <button data-tab="requests" type="button"><span class="side-icon">✉</span>Friend Requests</button>
 <button data-tab="following" type="button"><span class="side-icon">☆</span>Following</button>
 <button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
+<a class="side-nav-link" href="app.html"><span class="side-icon">☷</span>Main Menu</a>
 </nav>
 </div>
 <div class="side-card"><div class="side-caption">SUHASBOOK</div><p style="font-size:12px;color:#65676b;margin:0">A professional community for SUHAS GROUP members to connect, share updates and communicate.</p></div>
@@ -151,6 +159,7 @@ body{line-height:1.45}
 <button data-tab="friends" type="button"><span class="side-icon">♧</span>Friends</button>
 <button data-tab="requests" type="button"><span class="side-icon">✉</span>Requests</button>
 <button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
+<a href="app.html" class="mobile-main-menu"><span class="side-icon">☷</span>Menu</a>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
