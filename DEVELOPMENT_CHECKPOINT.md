@@ -28,11 +28,12 @@ Establish the SUHAS-MAX product identity consistently while preserving the exist
 - Existing Edge Function: ai-assistant (ACTIVE).
 
 ## Known gaps and risks
-- Current social page has feed, likes, comments, friends/requests, follows, basic messaging, notification center, public/private group creation and public-group join/posts, plus a text-first member marketplace. It is not yet the full social feature set requested.
+- Current social page has feed, likes, comments, friends/requests, follows, basic messaging, notification center, public/private group creation and public-group join/posts, marketplace listings and a dedicated Reels/video feed. It is not yet the full social feature set requested.
 - Added `suhas_notifications` with RLS and trigger-generated alerts for friend requests, post likes, comments and direct messages. Added a notification center in `social.html` with read-state handling and a Realtime subscription.
 - Added `suhas_groups`, `suhas_group_members`, `suhas_group_posts` with RLS, owner auto-membership, public group joining and group posts. Private group invitations/approval are not yet implemented.
 - Added `suhas_marketplace_listings` with RLS for active listings, seller-owned updates and sold status. Listings are currently text-first; image upload, checkout/payment and delivery workflows are not implemented.
-- Dedicated backend tables for media library, reels and audio were not identified in the current public schema.
+- Added `suhas-max-media` public media bucket (25 MB limit; JPG/PNG/WebP/MP4/WebM allowlist) with owner-folder upload/update/delete policies. Added media fields to existing posts and marketplace listings; existing records preserved.
+- Dedicated audio library, paid checkout, delivery and advanced video editing are not implemented.
 - Storage policy and upload design require review before adding media.
 - Social notification SQL/JS is syntax-checked and its table/RLS policies were verified. Authenticated end-to-end notification delivery still needs a two-account device test.
 - Fixed the exposed SECURITY DEFINER event-trigger RPC risk: revoked EXECUTE on `public.rls_auto_enable()` from PUBLIC, anon and authenticated. Verified anon/authenticated cannot execute; postgres retains execute. Security advisor no longer reports this finding.
@@ -51,11 +52,18 @@ Establish the SUHAS-MAX product identity consistently while preserving the exist
 1. Complete a line-by-line audit of social.html and correct incomplete social actions; current page has feed, likes, comments, friends, follows and basic messaging only.
 2. Test notifications, groups and marketplace end-to-end using two real authenticated member accounts.
 3. Add private group invitations/moderation, marketplace image upload and safe media handling.
-4. Implement Reels/video, profile improvements, settings and member privacy controls incrementally.
+5. Improve profile, settings and member privacy controls; complete Reels moderation and media reporting.
 4. Audit login/signup/profile/auth routing and verify protected-page behavior.
 5. Inspect all existing corporate pages and identify the Dormitory legacy route/data.
 6. Review Storage policies, Auth settings and remaining database advisor warnings; remediate only with safe additive changes.
 7. Add automated checks and update this checkpoint after each verified increment.
+
+## Latest Media and Reels increment
+- Applied migration `20261108203000_suhas_max_media_storage_and_post_fields`.
+- Added dedicated `suhas-max-media` bucket with a 25 MB limit and strict MIME allowlist; each signed-in member can upload/update/delete only under their own user-id folder; public reads support media display.
+- Added optional photo/video upload to feed posts, image upload to marketplace listings, and a dedicated Reels composer/feed for MP4/WebM videos.
+- Added additive media columns to existing tables; no old posts, listings or files were deleted.
+- Matching SQL source is committed under `supabase/migrations/`; JavaScript syntax check passed.
 
 ## Latest Groups and Marketplace increment
 - Applied migrations `20261108202754_suhas_groups_and_group_posts` and `20261108202904_suhas_marketplace_listings`.
