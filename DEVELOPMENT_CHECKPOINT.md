@@ -111,3 +111,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Existing social pages, posts, media, groups and account records were not deleted or replaced.
 - Migration source: `supabase/migrations/20261109040000_suhas_max_gaming_hub.sql`. Database verification confirmed the table, RLS enabled and 3 policies.
 - Embedded JavaScript syntax check passed. Real two-account gameplay/score-save UI test remains pending; latest GitHub Pages deploy and CI checks are queued.
+
+## Latest SUHAS-MAX post permission fix
+- Root cause found: `public.suhas_posts` had authenticated SELECT/INSERT/DELETE grants and RLS policies, but no UPDATE grant or owner-only UPDATE policy. Existing post edit and media-replacement actions therefore failed with a table permission error.
+- Applied migration `20261108223813_suhas_posts_owner_update_permissions` to production Supabase project `ehvgxbifqtyajeersnvq`.
+- Granted UPDATE only to `authenticated`; added an UPDATE policy requiring `auth.uid() = user_id` and a valid audience value. Members cannot edit another member's post or transfer ownership.
+- Verification passed: authenticated SELECT/INSERT/UPDATE/DELETE privileges are present; exactly one owner-only UPDATE policy exists.
+- Transactional policy test passed under the `authenticated` role: a no-op update against the authenticated owner's own post returned the expected row and was rolled back. No user post content was changed.
+- Matching migration source committed to `supabase/migrations/20261108223813_suhas_posts_owner_update_permissions.sql`.
+- Remaining verification: test actual browser interactions with a signed-in member account, including creating a post, editing a post, replacing media, liking, commenting and deleting. No authenticated browser session is available from this GitHub/Supabase connection.
