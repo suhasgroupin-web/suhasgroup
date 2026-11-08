@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
       edit.href = 'edit-suhas.html';
       edit.setAttribute('aria-label','Edit SUHAS');
       edit.innerHTML = '<span class="sg-admin-icon" aria-hidden="true">✎</span><span>Edit Suhas</span>';
-      nav.appendChild(edit);
+      nav.insertBefore(edit, nav.firstChild);
     }).catch(function () { /* fail closed: no admin tab on auth errors */ });
   }
 });
