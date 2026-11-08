@@ -18,11 +18,11 @@
 <img src="assets/logo.png" alt="SUHAS GROUP logo">
 <h1>SUHAS GROUP</h1>
 <p>Secure member access. Sign in or create your account to continue.</p>
-<div class="actions"><a class="signup" href="signup.html">Sign Up</a><a class="login" href="login.html">Login</a></div>
-<div class="foot">Global Opportunities, Trusted Quality</div>
+<div class="actions"><button class="signup" id="welcome-signup-open" type="button">Sign Up</button><a class="login" href="login.html">Login</a></div>
+<div id="welcome-signup-panel" style="display:none;position:fixed;inset:0;z-index:9999;background:#041027eF;padding:12px;align-items:center;justify-content:center"><div style="width:min(100%,560px);height:min(92vh,780px);background:#fff;border-radius:16px;overflow:hidden;position:relative"><button id="welcome-signup-close" type="button" aria-label="Close signup" style="position:absolute;right:8px;top:8px;z-index:2;border:0;border-radius:50%;width:36px;height:36px;background:#fff;font-size:22px">×</button><iframe title="SUHAS-MAX Sign Up" src="signup.html?embedded=1" style="width:100%;height:100%;border:0"></iframe></div></div><div class="foot">Global Opportunities, Trusted Quality</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
 <script src="assets/auth.js?v=private-gate-1"></script>
-</body>
+<script>(function(){var p=document.getElementById('welcome-signup-panel');document.getElementById('welcome-signup-open').onclick=function(){p.style.display='flex';};document.getElementById('welcome-signup-close').onclick=function(){p.style.display='none';};p.addEventListener('click',function(e){if(e.target===p)p.style.display='none';});})();</script></body>
 </html>
