@@ -28,9 +28,11 @@ Establish the SUHAS-MAX product identity consistently while preserving the exist
 - Existing Edge Function: ai-assistant (ACTIVE).
 
 ## Known gaps and risks
-- Current social page is a basic community implementation, not yet the full social feature set requested.
-- Dedicated backend tables for notifications, groups, marketplace, media library, reels and audio were not identified in the current public schema.
+- Current social page has feed, likes, comments, friends/requests, follows, basic messaging and a newly added notification center. It is not yet the full social feature set requested.
+- Added `suhas_notifications` with RLS and trigger-generated alerts for friend requests, post likes, comments and direct messages. Added a notification center in `social.html` with read-state handling and a Realtime subscription.
+- Dedicated backend tables for groups, marketplace, media library, reels and audio were not identified in the current public schema.
 - Storage policy and upload design require review before adding media.
+- Social notification SQL/JS is syntax-checked and its table/RLS policies were verified. Authenticated end-to-end notification delivery still needs a two-account device test.
 - Fixed the exposed SECURITY DEFINER event-trigger RPC risk: revoked EXECUTE on `public.rls_auto_enable()` from PUBLIC, anon and authenticated. Verified anon/authenticated cannot execute; postgres retains execute. Security advisor no longer reports this finding.
 - Remaining security advisor warning: leaked-password protection is disabled; this is an Auth dashboard setting and was not changed here.
 - Performance advisor reports missing foreign-key indexes and auth RLS initplan warnings.
@@ -45,12 +47,19 @@ Establish the SUHAS-MAX product identity consistently while preserving the exist
 
 ## Next steps
 1. Complete a line-by-line audit of social.html and correct incomplete social actions; current page has feed, likes, comments, friends, follows and basic messaging only.
-2. Implement notifications for friend requests, likes, comments and messages with safe additive tables/policies and UI.
+2. Test notifications end-to-end using two real authenticated member accounts; verify friend request, like, comment and message delivery.
 3. Add groups, marketplace, media upload, reels/video and profile improvements incrementally.
 4. Audit login/signup/profile/auth routing and verify protected-page behavior.
 5. Inspect all existing corporate pages and identify the Dormitory legacy route/data.
 6. Review Storage policies, Auth settings and remaining database advisor warnings; remediate only with safe additive changes.
 7. Add automated checks and update this checkpoint after each verified increment.
+
+## Latest notifications increment
+- Applied migrations `20261108202333_suhas_social_notifications` and `20261108202419_harden_suhas_notification_updates_and_realtime`.
+- Notification rows are visible only to their recipient; authenticated users can update only `read_at`.
+- Trigger events cover friend requests, post likes, post comments and direct messages. Realtime publication is enabled when the publication exists.
+- Notification center is available in the social page navigation; JavaScript syntax check passed.
+- Matching SQL files are committed under `supabase/migrations/`.
 
 ## Latest backend security change
 - Applied Supabase migration `20261108202255_restrict_rls_auto_enable_execute`.
