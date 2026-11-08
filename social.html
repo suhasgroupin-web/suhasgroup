@@ -380,8 +380,9 @@ async function openGameRoom(id){
  const ids=membersResult.data.map(x=>x.user_id);let profiles=[];
  if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name').in('user_id',ids);if(p.error)throw p.error;profiles=p.data||[];}
  $('game-room-players').innerHTML='<b>Players:</b> '+membersResult.data.map(x=>safe((profiles.find(p=>p.user_id===x.user_id)||{}).full_name||'SUHAS Member')+(x.role==='host'?' (Host · X)':' (Guest · O)')).join(' · ');
- if(room.data.game_key==='tic_tac_toe'&&membersResult.data.length===2&&room.data.status==='open'){
-  const begun=await client.rpc('start_suhas_ttt_room',{p_room_id:id});if(begun.error)throw begun.error;
+ if(membersResult.data.length===2&&room.data.status==='open'){
+  const startRpc=room.data.game_key==='tic_tac_toe'?'start_suhas_ttt_room':'start_suhas_rps_room';
+  const begun=await client.rpc(startRpc,{p_room_id:id});if(begun.error)throw begun.error;
  }
  await refreshLiveGameRoom();
  if(gameRoomChannel)await client.removeChannel(gameRoomChannel);
