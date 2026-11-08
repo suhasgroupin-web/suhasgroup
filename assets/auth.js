@@ -1,4 +1,6 @@
 (function(){
+  var authScriptUrl=document.currentScript&&document.currentScript.src?document.currentScript.src:location.href;
+  var appRootPath=new URL('../',authScriptUrl).pathname;
   var routeParts=location.pathname.split('/').filter(Boolean);
   var routeEarly=(routeParts[routeParts.length-1]||'index.html').toLowerCase();
   var isRootAuthRoute=routeParts.length<=2;
@@ -43,7 +45,7 @@
   function requireWorkspaceSession(session){
     if(!isPublicAuthPage() && !session){
       var next = location.pathname + location.search + location.hash;
-      location.replace('login.html?next=' + encodeURIComponent(next));
+      location.replace(appRootPath+'login.html?next=' + encodeURIComponent(next));
       return false;
     }
     return true;
@@ -103,7 +105,7 @@
     try{
       // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-      if(result.error || !result.data || result.data.profile_complete!==true){location.replace('profile.html?setup=1');return false;}
+      if(result.error || !result.data || result.data.profile_complete!==true){location.replace(appRootPath+'profile.html?setup=1');return false;}
       return true;
     }catch(e){ location.replace('profile.html?setup=1');return false; }
   }
@@ -160,7 +162,7 @@
 
   sb.auth.onAuthStateChange(function(event, session){
     if(event === 'PASSWORD_RECOVERY' && page !== 'reset.html'){
-      location.href = 'reset.html' + location.hash;
+      location.href = appRootPath+'reset.html' + location.hash;
       return;
     }
     if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
