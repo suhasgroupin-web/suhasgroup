@@ -76,7 +76,7 @@
   async function enforceMemberProfile(session){
     if(!session || page==='profile.html' || page==='login.html' || page==='signup.html' || page==='reset.html') return;
     try{
-      if(await window.checkIsAdmin()) return;
+      // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
       if(result.error || !result.data || result.data.profile_complete!==true) location.replace('profile.html?setup=1');
     }catch(e){ location.replace('profile.html?setup=1'); }
