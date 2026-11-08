@@ -22,11 +22,17 @@ grant select,insert,update on public.suhas_game_rooms to authenticated;
 grant select,insert,delete on public.suhas_game_room_members to authenticated;
 create index if not exists suhas_game_rooms_status_created_idx on public.suhas_game_rooms(status,created_at desc);
 create index if not exists suhas_game_room_members_user_idx on public.suhas_game_room_members(user_id);
+drop policy if exists "game rooms visible to authenticated members" on public.suhas_game_rooms;
 create policy "game rooms visible to authenticated members" on public.suhas_game_rooms for select to authenticated using (status='open' or host_id=(select auth.uid()));
+drop policy if exists "users create own game rooms" on public.suhas_game_rooms;
 create policy "users create own game rooms" on public.suhas_game_rooms for insert to authenticated with check (host_id=(select auth.uid()));
+drop policy if exists "hosts update own game rooms" on public.suhas_game_rooms;
 create policy "hosts update own game rooms" on public.suhas_game_rooms for update to authenticated using (host_id=(select auth.uid())) with check (host_id=(select auth.uid()));
+drop policy if exists "room members visible to room participants" on public.suhas_game_room_members;
 create policy "room members visible to room participants" on public.suhas_game_room_members for select to authenticated using (user_id=(select auth.uid()) or exists(select 1 from public.suhas_game_rooms r where r.id=room_id and (r.status='open' or r.host_id=(select auth.uid()))));
+drop policy if exists "hosts add themselves to own game rooms" on public.suhas_game_room_members;
 create policy "hosts add themselves to own game rooms" on public.suhas_game_room_members for insert to authenticated with check (user_id=(select auth.uid()) and role='host' and exists(select 1 from public.suhas_game_rooms r where r.id=room_id and r.host_id=(select auth.uid())));
+drop policy if exists "users leave own game rooms" on public.suhas_game_room_members;
 create policy "users leave own game rooms" on public.suhas_game_room_members for delete to authenticated using (user_id=(select auth.uid()));
 create schema if not exists private;
 create or replace function private.join_suhas_game_room(p_room_id uuid)
