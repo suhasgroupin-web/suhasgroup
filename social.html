@@ -363,7 +363,7 @@ async function openGameRoom(id){
 }
 async function joinGameRoom(id){
  const room=await client.from('suhas_game_rooms').select('id').eq('id',id).eq('status','open').single();if(room.error)throw room.error;
- const r=await client.from('suhas_game_room_members').insert({room_id:id,user_id:me,role:'player'});if(r.error&&r.error.code!=='23505')throw r.error;
+ const r=await client.schema('private').rpc('join_suhas_game_room',{p_room_id:id});if(r.error)throw r.error;
  await loadGameRooms();await openGameRoom(id);
 }
 $('game-room-create').addEventListener('submit',async e=>{e.preventDefault();try{const r=await client.from('suhas_game_rooms').insert({game_key:$('game-room-game').value,host_id:me}).select('id').single();if(r.error)throw r.error;const m=await client.from('suhas_game_room_members').insert({room_id:r.data.id,user_id:me,role:'host'});if(m.error)throw m.error;await loadGameRooms();await openGameRoom(r.data.id);notice('Room created. Share the code with your friend.');}catch(err){notice(err.message,true);}});
