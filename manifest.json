@@ -1,29 +1,82 @@
 {
   "id": "./index.html",
-  "name": "SUHAS GROUP - Jobs & Careers",
-  "short_name": "SUHAS GROUP",
-  "description": "Global Opportunities, Trusted Quality. Find jobs, build your profile, and apply worldwide.",
+  "name": "SUHAS-MAX — Powered by SUHAS GROUP",
+  "short_name": "SUHAS-MAX",
+  "description": "SUHAS-MAX is the social and corporate community platform powered by SUHAS GROUP.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./index.html?source=pwa",
+  "start_url": "./social.html?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#050F22",
   "theme_color": "#0A2A66",
   "orientation": "portrait-primary",
-  "categories": ["business", "productivity", "jobs"],
+  "categories": [
+    "social",
+    "business",
+    "productivity"
+  ],
   "prefer_related_applications": false,
   "icons": [
-    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Find Jobs", "short_name": "Jobs", "url": "./jobs.html" },
-    { "name": "For Employers", "short_name": "Employers", "url": "./employers.html" },
-    { "name": "Print Barcode (O5-Intl Desk)", "short_name": "Barcode", "url": "./barcode/" },
-    { "name": "Sign Up", "short_name": "Sign Up", "url": "./signup.html" }
+    {
+      "name": "Home",
+      "short_name": "Home",
+      "url": "./social.html"
+    },
+    {
+      "name": "Main Menu",
+      "short_name": "Menu",
+      "url": "./app.html"
+    },
+    {
+      "name": "Find Jobs",
+      "short_name": "Jobs",
+      "url": "./jobs.html"
+    },
+    {
+      "name": "For Employers",
+      "short_name": "Employers",
+      "url": "./employers.html"
+    },
+    {
+      "name": "Print Barcode (O5-Intl Desk)",
+      "short_name": "Barcode",
+      "url": "./barcode/"
+    },
+    {
+      "name": "Sign Up",
+      "short_name": "Sign Up",
+      "url": "./signup.html"
+    }
   ]
 }
