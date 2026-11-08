@@ -1,4 +1,23 @@
 (function(){
+  var routeEarly=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  var publicEarly=['login.html','signup.html','reset.html'];
+  if(publicEarly.indexOf(routeEarly)===-1){
+    document.documentElement.classList.add('suhas-auth-pending');
+    var gateStyle=document.createElement('style');
+    gateStyle.id='suhas-auth-gate-style';
+    gateStyle.textContent='html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}';
+    (document.head||document.documentElement).appendChild(gateStyle);
+  }
+  function revealAuthenticatedPage(){
+    document.documentElement.classList.remove('suhas-auth-pending');
+  }
+  function enableWebsiteDesktopMode(){
+    var standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;
+    if(!standalone){
+      try{localStorage.setItem('suhas-display-mode','desktop');}catch(e){}
+      if(document.body)document.body.classList.add('suhas-desktop-mode');
+    }
+  }
   var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=3';displayScript.defer=true;document.head.appendChild(displayScript);
 
   var cfg = window.SUHAS_CONFIG;
@@ -77,12 +96,13 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='profile.html' || page==='login.html' || page==='signup.html' || page==='reset.html') return;
+    if(!session || page==='profile.html' || page==='login.html' || page==='signup.html' || page==='reset.html') return true;
     try{
       // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-      if(result.error || !result.data || result.data.profile_complete!==true) location.replace('profile.html?setup=1');
-    }catch(e){ location.replace('profile.html?setup=1'); }
+      if(result.error || !result.data || result.data.profile_complete!==true){location.replace('profile.html?setup=1');return false;}
+      return true;
+    }catch(e){ location.replace('profile.html?setup=1');return false; }
   }
 
   async function paintNav(session){
@@ -119,11 +139,15 @@
     });
   }
 
-  sb.auth.getSession().then(function(r){
+  sb.auth.getSession().then(async function(r){
     var session = r.data && r.data.session;
     if(!requireWorkspaceSession(session)) return;
     paintNav(session);
-    enforceMemberProfile(session);
+    if(session){
+      enableWebsiteDesktopMode();
+      var profileReady=await enforceMemberProfile(session);
+      if(profileReady) revealAuthenticatedPage();
+    }else if(publicPages.indexOf(route)!==-1){revealAuthenticatedPage();}
     if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
       sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
         location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
@@ -139,7 +163,11 @@
     if(event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED'){
       if(!requireWorkspaceSession(session)) return;
       paintNav(session);
-      if(event==='SIGNED_IN' || event==='TOKEN_REFRESHED') enforceMemberProfile(session);
+      if(event==='SIGNED_IN' || event==='TOKEN_REFRESHED'){
+        enableWebsiteDesktopMode();
+        enforceMemberProfile(session).then(function(ok){if(ok)revealAuthenticatedPage();});
+      }
+      if(event==='SIGNED_OUT' && publicPages.indexOf(route)===-1) document.documentElement.classList.add('suhas-auth-pending');
     }
   });
 })();
