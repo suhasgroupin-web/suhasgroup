@@ -1,41 +1,157 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A2A66"><title>SUHAS Connect | SUHAS GROUP</title><link rel="stylesheet" href="assets/styles.css?v=2">
-<style>
-body{background:#f2f5fa;color:#172b4d}.social-wrap{max-width:1080px;margin:28px auto 90px;padding:0 16px}.social-head{background:linear-gradient(120deg,#071b3b,#174a9c);color:white;padding:24px;border-radius:22px;box-shadow:0 12px 0 #06152d,0 18px 30px #06152d30}.social-head h1{margin:0 0 6px}.social-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:18px;margin-top:20px}.panel{background:#fff;border:1px solid #dce5f0;border-radius:20px;padding:18px;box-shadow:0 5px 0 #d9e1ed,0 10px 22px #0a2a6610;margin-bottom:16px}.panel h2{font-size:19px;margin:0 0 14px;color:#163d75}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab,.action{border:0;border-radius:8px;padding:7px 11px;font-size:13px;line-height:1.25;background:linear-gradient(#fff,#e7eef8);color:#17345e;font-weight:700;box-shadow:0 2px 0 #c7d4e5,0 3px 7px #10284b14;cursor:pointer;white-space:nowrap}.tab.active,.action.primary{background:linear-gradient(#3678e8,#1550b8);color:#fff;box-shadow:0 2px 0 #0d347c,0 4px 8px #1550b833}.action:disabled{opacity:.5;cursor:not-allowed}.social-actions{gap:6px}.compose .action{padding:8px 13px}.member{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #edf1f7}.member:last-child{border:0}.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#e5edf8}.member-info{flex:1;min-width:0}.member-info b{display:block}.member-id{font-size:11px;color:#8290a5;margin-top:3px;overflow-wrap:anywhere}.friend-state{display:inline-block;font-size:11px;font-weight:800;color:#1c5b39;background:#e5f7ec;border-radius:99px;padding:4px 8px;margin-top:5px}.friend-state.pending{color:#8a5a08;background:#fff4d9}.muted{font-size:13px;color:#687b96}.msg-list{height:340px;overflow:auto;border:1px solid #e4eaf3;border-radius:14px;padding:12px;background:#f8faff}.bubble{max-width:82%;padding:10px 13px;border-radius:14px;background:#e7eef9;margin:8px 0;overflow-wrap:anywhere}.bubble.mine{margin-left:auto;background:#d8e8ff}.compose{display:flex;gap:8px;margin-top:10px}.compose input,.search{width:100%;padding:12px;border:1px solid #ccd7e6;border-radius:12px;font:inherit}.compose input{flex:1}.post-card{border:1px solid #e4eaf3;border-radius:16px;padding:14px;margin:12px 0;background:#fff}.post-card p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.post-meta{font-size:12px;color:#72819a}.post-form textarea{width:100%;min-height:95px;padding:12px;border:1px solid #ccd7e6;border-radius:12px;font:inherit;resize:vertical}.notice{padding:12px;border-radius:12px;background:#edf4ff;color:#234a7c;margin:10px 0}.empty{padding:22px;text-align:center;color:#72819a}.social-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:760px){.social-grid{grid-template-columns:1fr}.social-wrap{margin-top:16px}.social-head{padding:19px}}
-
-/* SUHAS Connect responsive member cards */
-.member{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:start;column-gap:12px;row-gap:10px;width:100%;min-width:0}
-.member>.avatar{grid-column:1;grid-row:1;width:48px;height:48px;flex:none}
-.member-info{grid-column:2;grid-row:1;min-width:0;width:100%;max-width:100%;overflow-wrap:break-word;word-break:normal}
-.member-info b{display:block;white-space:normal;overflow-wrap:anywhere;line-height:1.45}
-.member-info .muted{white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><title>SUHASBOOK | SUHAS GROUP</title><meta name="description" content="SUHASBOOK — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-suhasbook"><style>
+:root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
+body{line-height:1.45}
+.site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--fb-line);box-shadow:0 1px 3px #00000010}
+.nav-wrap{max-width:1440px;margin:auto;min-height:62px;padding:0 18px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:9px;min-width:185px}
+.brand img{width:42px;height:42px;object-fit:contain}
+.brand-name{font-weight:800;font-size:19px;letter-spacing:-.5px;color:#12366f}
+.brand-tag{display:none}
+.social-topnav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;min-width:0}
+.social-topnav button{height:52px;min-width:90px;padding:0 18px;border:0;border-bottom:3px solid transparent;background:transparent;color:#65676b;font-weight:700;font-size:14px;cursor:pointer}
+.social-topnav button.active{color:var(--fb-blue);border-bottom-color:var(--fb-blue)}
+.social-user-actions{display:flex;align-items:center;gap:10px}
+.social-profile-link{padding:9px 15px;border-radius:22px;background:#e4e6eb;color:#1c1e21;font-weight:700;font-size:14px}
+.suhas-nav-actions{display:flex;align-items:center;gap:8px;margin-left:0}
+.suhas-display-trigger{width:40px;height:40px;border:0;border-radius:50%;background:#e4e6eb;color:#1c1e21;font:800 25px/1 Arial;box-shadow:none}
+.suhas-display-panel{position:absolute;top:calc(100% + 9px);right:0;width:min(300px,calc(100vw - 24px));padding:16px;border:1px solid var(--fb-line);border-radius:12px;background:#fff;box-shadow:0 8px 24px #0002;display:none}
+.suhas-display-panel.open{display:block}
+.suhas-display-panel h3{font-size:16px;margin:0 0 6px}.suhas-display-panel p{font-size:13px;color:var(--fb-muted);margin:0 0 12px}
+.suhas-display-options{display:grid;gap:8px}.suhas-display-options button{padding:10px;border:1px solid var(--fb-line);border-radius:8px;background:#f7f8fa;text-align:left;font-weight:700;color:#1c1e21}
+.suhas-display-options button[aria-pressed=true]{background:#e7f3ff;border-color:var(--fb-blue);color:var(--fb-blue)}
+.suhas-display-note{font-size:11px;color:var(--fb-muted);margin-top:9px}
+.social-shell{max-width:1440px;margin:0 auto;padding:18px 18px 90px;display:grid;grid-template-columns:minmax(210px,280px) minmax(0,680px) minmax(230px,300px);gap:22px;align-items:start}
+.social-left,.social-right{position:sticky;top:80px;min-width:0}
+.side-card,.panel,.right-card{background:var(--fb-card);border:1px solid var(--fb-line);border-radius:10px;box-shadow:0 1px 2px #0000000d}
+.side-card{padding:14px;margin-bottom:14px}
+.side-user{display:flex;align-items:center;gap:11px;padding:8px 5px 13px;border-bottom:1px solid var(--fb-line);margin-bottom:8px}
+.side-user img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#e4e6eb}
+.side-user strong{font-size:14px}
+.side-caption{font-size:12px;color:var(--fb-muted);padding:4px 6px 8px;font-weight:700}
+.side-nav{display:grid;gap:3px}
+.side-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:8px 10px;border:0;border-radius:8px;background:transparent;text-align:left;color:#1c1e21;font-size:14px;font-weight:700;cursor:pointer}
+.side-nav button:hover,.side-nav button.active{background:#e7f3ff;color:#0866ff}
+.side-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e7f3ff;color:#0866ff;font-size:16px}
+.social-center{min-width:0}
+.book-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 14px;padding:0 2px}
+.book-heading h1{font-size:25px;letter-spacing:-.8px;margin:0;color:#1c1e21}
+.book-heading span{font-size:12px;color:var(--fb-muted)}
+.panel{padding:16px;margin:0 0 14px;min-width:0}
+.panel h2{font-size:19px;line-height:1.3;color:#1c1e21;margin:0 0 13px}
+.post-form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.post-form textarea{flex:1 0 100%;width:100%;min-height:76px;resize:vertical;border:1px solid var(--fb-line);border-radius:9px;padding:13px 14px;background:#f0f2f5;font:15px Arial;outline:none}
+.post-form textarea:focus,.search:focus,.compose input:focus{border-color:#9bbcff;background:#fff}
+.action,.tab{border:0;border-radius:7px;padding:9px 14px;background:#e4e6eb;color:#1c1e21;font-weight:700;font-size:13px;cursor:pointer;box-shadow:none}
+.action.primary,.tab.active{background:var(--fb-blue);color:#fff}
+.action:disabled{opacity:.55;cursor:not-allowed}
+.post-card{padding:16px 0;margin:0;border:0;border-top:1px solid var(--fb-line);border-radius:0;background:#fff}
+.post-card:first-child{border-top:0}
+.post-card p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55;margin:12px 0;color:#1c1e21;font-size:15px}
+.post-meta{font-size:12px;color:var(--fb-muted);line-height:1.5}
+.post-meta b{color:#1c1e21;font-size:14px}
+.post-card .avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#e4e6eb}
+.social-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.comment-list{padding:5px 0}
+.comment-list p{font-size:13px;color:var(--fb-muted);margin:6px 0}
+.compose{display:flex;gap:8px;margin-top:10px;min-width:0}
+.compose input,.search{width:100%;min-width:0;padding:11px 13px;border:1px solid var(--fb-line);border-radius:22px;background:#f0f2f5;font:14px Arial;outline:none}
+.compose input{flex:1}
+.notice{padding:12px 14px;border-radius:8px;background:#fff4e5;color:#7a3e00;margin:0 0 12px;font-size:13px}
+.empty{padding:34px 16px;text-align:center;color:var(--fb-muted);font-size:14px}
+.member{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px 12px;align-items:start;padding:13px 0;border-bottom:1px solid var(--fb-line);min-width:0}
+.member:last-child{border-bottom:0}
+.member>.avatar{grid-column:1;grid-row:1;width:48px;height:48px;border-radius:50%;object-fit:cover;background:#e4e6eb}
+.member-info{grid-column:2;grid-row:1;min-width:0;overflow-wrap:anywhere}
+.member-info b{display:block;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.member-info .muted{font-size:12px;color:var(--fb-muted);line-height:1.45}
+.member>.social-actions{grid-column:2;grid-row:2;min-width:0}
+.member>.social-actions .action{font-size:12px;padding:7px 10px}
 .member-id{display:none!important}
-.member>.social-actions{grid-column:2;grid-row:2;min-width:0;width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:7px}
-.member>.social-actions .action{white-space:normal;max-width:100%;min-height:36px}
-.member .friend-state{white-space:normal;max-width:100%}
-@media(max-width:520px){
- .social-wrap{padding-left:12px;padding-right:12px}
- .panel{padding:15px}
- .member{grid-template-columns:44px minmax(0,1fr);column-gap:10px}
- .member>.avatar{width:44px;height:44px}
- .member>.social-actions{grid-column:1/-1;padding-left:54px}
- .member>.social-actions .action{font-size:12px;padding:8px 10px}
- .tabs{gap:7px}
- .tab{font-size:12px;padding:8px 10px}
+.friend-state{display:inline-block;padding:4px 8px;border-radius:6px;background:#e7f3ff;color:#0866ff;font-size:11px;font-weight:700}
+.friend-state.pending{background:#fff4d6;color:#946200}
+.search{border-radius:8px;margin:0 0 12px}
+.msg-list{height:420px;overflow:auto;border:1px solid var(--fb-line);border-radius:9px;padding:12px;background:#f7f8fa}
+.bubble{max-width:82%;padding:10px 13px;border-radius:16px;background:#e4e6eb;margin:8px 0;overflow-wrap:anywhere;font-size:14px}
+.bubble.mine{margin-left:auto;background:#d9eaff}
+#messages .social-grid{display:grid;grid-template-columns:minmax(130px,.7fr) minmax(0,1.4fr);gap:12px}
+#messages .tab{width:100%;margin:4px 0;text-align:left}
+.right-card{padding:15px;margin-bottom:14px}
+.right-card h3{font-size:15px;margin:0 0 10px;color:#1c1e21}
+.right-card p{font-size:13px;color:var(--fb-muted);margin:0;line-height:1.5}
+.right-link{display:block;padding:9px 0;border-top:1px solid var(--fb-line);font-size:13px;font-weight:700;color:#3b5998}
+.social-mobile-nav{display:none}
+@media(max-width:1100px){.social-shell{grid-template-columns:210px minmax(0,1fr);max-width:1000px}.social-right{display:none}}
+@media(max-width:760px){
+ .nav-wrap{min-height:58px;padding:0 10px;gap:8px}.brand{min-width:0;flex:1}.brand img{width:36px;height:36px}.brand-name{font-size:16px}
+ .social-topnav{display:none}.social-profile-link{padding:8px 10px;font-size:12px}.suhas-display-trigger{width:36px;height:36px}
+ .social-shell{display:block;padding:12px 10px 88px}.social-left,.social-right{display:none}
+ .book-heading{margin:3px 3px 12px}.book-heading h1{font-size:22px}
+ .panel{padding:13px;margin-bottom:10px;border-radius:10px}
+ #messages .social-grid{grid-template-columns:1fr}
+ #threads{display:flex;gap:6px;overflow-x:auto}
+ #threads .tab{width:auto!important;white-space:nowrap}
+ .msg-list{height:48vh}
+ .social-mobile-nav{position:fixed;z-index:90;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:5px 3px calc(5px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--fb-line);box-shadow:0 -2px 8px #0000000c}
+ .social-mobile-nav button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 1px;color:#65676b;font-size:10px;font-weight:700}
+ .social-mobile-nav button.active{color:var(--fb-blue)}
+ .social-mobile-nav .side-icon{width:24px;height:24px;font-size:14px}
 }
-
-</style></head><body>
-<header class="site-header"><div class="nav-wrap"><a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a><a class="btn btn-outline btn-sm" href="profile.html">My Profile</a></div></header>
-<main class="social-wrap"><section class="social-head"><div style="font-size:12px;letter-spacing:2px;opacity:.8">SUHAS GROUP COMMUNITY</div><h1>SUHAS Connect</h1><div>Connect professionally. Follow members. Start a conversation.</div></section>
-<div class="tabs"><button class="tab active" data-tab="feed">News Feed</button><button class="tab" data-tab="people">Find People</button><button class="tab" data-tab="friends">Friends</button><button class="tab" data-tab="requests">Friend Requests</button><button class="tab" data-tab="following">Following</button><button class="tab" data-tab="messages">Messages <span id="msg-count"></span></button></div>
+@media(max-width:420px){.social-shell{padding-left:8px;padding-right:8px}.side-card{padding:11px}.member{grid-template-columns:42px minmax(0,1fr)}.member>.avatar{width:42px;height:42px}.member>.social-actions{grid-column:1/-1;padding-left:52px}.action{padding:8px 10px}}
+</style></head><body><header class="site-header"><div class="nav-wrap">
+<a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHASBOOK</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
+<nav class="social-topnav" aria-label="Main navigation">
+<button class="active" data-tab="feed" type="button">Home</button>
+<button data-tab="people" type="button">Find People</button>
+<button data-tab="friends" type="button">Friends</button>
+<button data-tab="messages" type="button">Messages</button>
+</nav>
+<div class="social-user-actions"><a class="social-profile-link" href="profile.html">My Profile</a></div>
+</div></header>
+<main class="social-shell">
+<aside class="social-left">
+<div class="side-card">
+<div class="side-user"><img src="assets/logo.png" alt=""><strong>SUHAS GROUP Community</strong></div>
+<div class="side-caption">YOUR SHORTCUTS</div>
+<nav class="side-nav" aria-label="Community navigation">
+<button class="active" data-tab="feed" type="button"><span class="side-icon">⌂</span>Home</button>
+<button data-tab="people" type="button"><span class="side-icon">⌕</span>Find People</button>
+<button data-tab="friends" type="button"><span class="side-icon">♧</span>Friends</button>
+<button data-tab="requests" type="button"><span class="side-icon">✉</span>Friend Requests</button>
+<button data-tab="following" type="button"><span class="side-icon">☆</span>Following</button>
+<button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
+</nav>
+</div>
+<div class="side-card"><div class="side-caption">SUHASBOOK</div><p style="font-size:12px;color:#65676b;margin:0">A professional community for SUHAS GROUP members to connect, share updates and communicate.</p></div>
+</aside>
+<section class="social-center">
+<div class="book-heading"><div><h1>SUHASBOOK</h1><span>Connect with your SUHAS GROUP community</span></div></div>
 <div id="notice" class="notice" style="display:none"></div>
-<section id="feed" class="panel"><h2>SUHAS News Feed</h2><form id="post-form" class="post-form"><textarea id="post-content" maxlength="5000" placeholder="Share a professional update, idea or achievement…"></textarea><div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="action primary" type="submit">Publish Post</button></div></form><div id="feed-list"><div class="empty">Loading posts…</div></div></section>
-<section id="people" class="panel" hidden><h2>Discover SUHAS members</h2><input id="search" class="search" placeholder="Search name, company, position or location"><div id="people-list"><div class="empty">Loading members…</div></div></section>
-<section id="friends" class="panel" hidden><h2>My Friends</h2><div id="friends-list"><div class="empty">Loading friends…</div></div></section>
-<section id="requests" class="panel" hidden><h2>Friend requests</h2><h3>Received</h3><div id="incoming"></div><h3>Sent</h3><div id="outgoing"></div></section>
-<section id="following" class="panel" hidden><h2>Members you follow</h2><div id="following-list"></div></section>
-<section id="messages" class="panel" hidden><h2>Your conversations</h2><div class="social-grid" style="grid-template-columns:minmax(180px,.8fr) 1.5fr;margin:0"><div id="threads"></div><div><div id="chat-title" class="muted">Choose a conversation</div><div id="chat" class="msg-list"><div class="empty">Your private conversations appear here.</div></div><form id="compose" class="compose"><input id="message" maxlength="5000" placeholder="Write a message…" autocomplete="off"><button class="action primary" type="submit">Send</button></form></div></div></section>
+<section id="feed" class="panel">
+<h2>Home</h2>
+<form id="post-form" class="post-form"><textarea id="post-content" maxlength="5000" placeholder="What's on your mind? Share an update with the SUHASBOOK community..."></textarea><div style="display:flex;justify-content:flex-end;width:100%"><button class="action primary" type="submit">Post</button></div></form>
+<div id="feed-list"><div class="empty">Loading posts…</div></div>
+</section>
+<section id="people" class="panel" hidden><h2>Find People</h2><input id="search" class="search" placeholder="Search people, company, position or location"><div id="people-list"><div class="empty">Loading members…</div></div></section>
+<section id="friends" class="panel" hidden><h2>Friends</h2><div id="friends-list"><div class="empty">Loading friends…</div></div></section>
+<section id="requests" class="panel" hidden><h2>Friend Requests</h2><h3>Received</h3><div id="incoming"></div><h3>Sent</h3><div id="outgoing"></div></section>
+<section id="following" class="panel" hidden><h2>Following</h2><div id="following-list"></div></section>
+<section id="messages" class="panel" hidden><h2>Messages</h2><div class="social-grid"><div id="threads"></div><div><div id="chat-title" class="muted">Choose a conversation</div><div id="chat" class="msg-list"><div class="empty">Your private conversations appear here.</div></div><form id="compose" class="compose"><input id="message" maxlength="5000" placeholder="Write a message…" autocomplete="off"><button class="action primary" type="submit">Send</button></form></div></div></section>
+</section>
+<aside class="social-right">
+<div class="right-card"><h3>SUHAS GROUP</h3><p>Welcome to SUHASBOOK — your professional community for sharing achievements, discovering colleagues and staying connected.</p></div>
+<div class="right-card"><h3>Community shortcuts</h3><button class="right-link" data-tab="people" type="button">Discover members</button><button class="right-link" data-tab="friends" type="button">Your friends</button><button class="right-link" data-tab="messages" type="button">Private messages</button></div>
+<div class="right-card"><p>Respect colleagues. Share professional updates. Keep conversations constructive.</p></div>
+</aside>
 </main>
+<nav class="social-mobile-nav" aria-label="Mobile navigation">
+<button class="active" data-tab="feed" type="button"><span class="side-icon">⌂</span>Home</button>
+<button data-tab="people" type="button"><span class="side-icon">⌕</span>People</button>
+<button data-tab="friends" type="button"><span class="side-icon">♧</span>Friends</button>
+<button data-tab="requests" type="button"><span class="side-icon">✉</span>Requests</button>
+<button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
+</nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
 (async()=>{
