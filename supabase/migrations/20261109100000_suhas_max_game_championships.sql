@@ -30,7 +30,7 @@ revoke all on public.suhas_game_tournament_players from anon,authenticated;
 grant select on public.suhas_game_tournaments,public.suhas_game_tournament_players to authenticated;
 
 create or replace function public.create_suhas_game_tournament(p_title text,p_description text,p_game_key text,p_starts_at timestamptz,p_max_players integer)
-returns uuid language plpgsql security invoker set search_path=''
+returns uuid language plpgsql security definer set search_path=''
 as $$
 declare v_id uuid;
 begin
