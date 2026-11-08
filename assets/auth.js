@@ -1,7 +1,9 @@
 (function(){
-  var routeEarly=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  var routeParts=location.pathname.split('/').filter(Boolean);
+  var routeEarly=(routeParts[routeParts.length-1]||'index.html').toLowerCase();
+  var isRootAuthRoute=routeParts.length<=2;
   var publicEarly=['login.html','signup.html','reset.html'];
-  if(publicEarly.indexOf(routeEarly)===-1){
+  if(!(isRootAuthRoute&&publicEarly.indexOf(routeEarly)!==-1)){
     document.documentElement.classList.add('suhas-auth-pending');
     var gateStyle=document.createElement('style');
     gateStyle.id='suhas-auth-gate-style';
@@ -37,8 +39,9 @@
   // Only authentication screens are public. Every other route, including the home route, requires a real session.
   var route = page;
   var publicPages = ['login.html','signup.html','reset.html'];
+  function isPublicAuthPage(){return isRootAuthRoute && publicPages.indexOf(page)!==-1;}
   function requireWorkspaceSession(session){
-    if(publicPages.indexOf(route) === -1 && !session){
+    if(!isPublicAuthPage() && !session){
       var next = location.pathname + location.search + location.hash;
       location.replace('login.html?next=' + encodeURIComponent(next));
       return false;
@@ -96,7 +99,7 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='profile.html' || page==='login.html' || page==='signup.html' || page==='reset.html') return true;
+    if(!session || page==='profile.html' || isPublicAuthPage()) return true;
     try{
       // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
@@ -147,7 +150,7 @@
       enableWebsiteDesktopMode();
       var profileReady=await enforceMemberProfile(session);
       if(profileReady) revealAuthenticatedPage();
-    }else if(publicPages.indexOf(route)!==-1){revealAuthenticatedPage();}
+    }else if(isPublicAuthPage()){revealAuthenticatedPage();}
     if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
       sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
         location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
@@ -167,7 +170,7 @@
         enableWebsiteDesktopMode();
         enforceMemberProfile(session).then(function(ok){if(ok)revealAuthenticatedPage();});
       }
-      if(event==='SIGNED_OUT' && publicPages.indexOf(route)===-1) document.documentElement.classList.add('suhas-auth-pending');
+      if(event==='SIGNED_OUT' && !isPublicAuthPage()) document.documentElement.classList.add('suhas-auth-pending');
     }
   });
 })();
