@@ -22,7 +22,7 @@ self.addEventListener('activate', function(e){
 self.addEventListener('fetch', function(e){
   var url = e.request.url;
   // Never cache Supabase API/auth calls or admin page - always fresh
-  if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1) {
+  if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1 || url.indexOf('edit-suhas.html') > -1) {
     return;
   }
   if (e.request.method !== 'GET') return;
