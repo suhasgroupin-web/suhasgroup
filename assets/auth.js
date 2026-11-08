@@ -14,7 +14,7 @@
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Public pages may be viewed without an account. Every workspace/tool requires sign-in.
-  var protectedPages = ['app.html','member-tools.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html'];
+  var protectedPages = ['app.html','member-tools.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','barcode/index.html','social.html'];
   var route = location.pathname.toLowerCase().split('/').filter(Boolean).join('/');
   var isProtectedPage = protectedPages.indexOf(route) !== -1;
   function requireWorkspaceSession(session){
@@ -93,7 +93,7 @@
         if(mobileAuth) mobileAuth.style.display='none';
         var box=document.createElement('div');
         box.className='js-session-links';
-        box.innerHTML='<a href="profile.html">My Profile</a><a href="#" class="js-logout">Logout</a>';
+        box.innerHTML='<a href="profile.html">My Profile</a><a href="social.html">SUHAS Connect</a><a href="#" class="js-logout">Logout</a>';
         if(isAdmin) box.innerHTML='<a href="admin.html">Owner Dashboard</a>'+box.innerHTML;
         nav.appendChild(box);
       }else if(mobileAuth){
