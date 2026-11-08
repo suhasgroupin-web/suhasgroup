@@ -85,3 +85,11 @@ Establish the SUHAS-MAX product identity consistently while preserving the exist
 
 ## Data protection
 No destructive schema operations, record deletions, storage cleanup or existing route removals are permitted. Every migration must be additive, reviewed and recoverable.
+
+
+## Latest private group invitation increment
+- Applied additive migration `suhas_private_group_invites`; creates `suhas_group_invites` with three RLS policies and a response trigger.
+- Group owners/admins can invite existing SUHAS-MAX members; invitees can accept or decline. Acceptance adds the member to the group automatically.
+- Added invitation inbox, accept/decline actions and owner/admin invite controls to the Groups panel. Public-group join behavior remains unchanged.
+- SQL migration source is committed under `supabase/migrations/20261109023000_suhas_private_group_invites.sql`; embedded JavaScript syntax check passed.
+- Supabase verification confirmed the invitation table, three RLS policies and response trigger. Full two-account UI flow test remains pending; latest GitHub Pages deployment is queued/in progress.
