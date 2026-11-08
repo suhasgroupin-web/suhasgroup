@@ -161,7 +161,7 @@
       enableWebsiteDesktopMode();
       var profileReady=await enforceMemberProfile(session);
       if(profileReady) revealAuthenticatedPage();
-    }else if(isPublicAuthPage()){revealAuthenticatedPage();}
+    }else if(isPublicAuthPage()){document.documentElement.classList.remove('suhas-auth-pending');}
     if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
       sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
         location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
@@ -181,7 +181,7 @@
         enableWebsiteDesktopMode();
         enforceMemberProfile(session).then(function(ok){if(ok)revealAuthenticatedPage();});
       }
-      if(event==='SIGNED_OUT' && !isPublicAuthPage()) document.documentElement.classList.add('suhas-auth-pending');
+      if(event==='SIGNED_OUT') { document.documentElement.classList.remove('suhas-authenticated'); if(!isPublicAuthPage()) document.documentElement.classList.add('suhas-auth-pending'); }
     }
   });
 })();
