@@ -81,16 +81,9 @@ document.getElementById('signup-form').addEventListener('submit', async function
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
-      // Signup completion is separate from login: require a fresh, explicit login.
-      await sb.auth.signOut({scope:'local'});
-      showMsg('msg','Your SUHAS GROUP account has been created successfully. Please log in to enter the app.', true);
-      var loginLink=document.createElement('a');
-      loginLink.href='login.html?created=1';
-      loginLink.className='btn btn-primary';
-      loginLink.style.cssText='display:block;width:100%;text-align:center;margin-top:14px';
-      loginLink.textContent='Continue to Login';
-      document.getElementById('signup-form').appendChild(loginLink);
-      btn.disabled=true; btn.textContent='Account Created';
+      showMsg('msg','Account created successfully. Loading your SUHAS-MAX profile setup...', true);
+      btn.textContent='Loading...';
+      location.replace('profile.html?setup=1');
     } else {
       showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP. After verification, return here and log in to enter the app. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
     }
