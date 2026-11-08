@@ -373,6 +373,19 @@ function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved))}catch(e
 applySaved();
 (async function(){try{const owner=await window.checkIsAdmin();if(owner)toggle.hidden=false;}catch(e){toggle.hidden=true;}})();
 toggle.addEventListener('click',()=>{if(toggle.hidden)return;editing=!editing;panel.classList.toggle('editing',editing);toggle.textContent=editing?'✓ Done editing':'✎ Edit layout';});
+if(new URLSearchParams(location.search).get('edit')==='1'){
+  (async function(){
+    if(await window.checkIsAdmin()){
+      toggle.hidden=false;
+      editing=true;
+      panel.classList.add('editing');
+      toggle.textContent='✓ Done editing';
+      toggle.scrollIntoView({block:'nearest'});
+    }else{
+      location.replace('login.html?next='+encodeURIComponent('app.html'));
+    }
+  })();
+}
 document.querySelectorAll('.edit-app').forEach((btn,i)=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const a=btn.closest('.app-tile'),title=prompt('App name:',a.querySelector('strong').textContent);if(title===null)return;const desc=prompt('Short description:',a.querySelector('small').textContent);if(desc===null)return;saved['app'+i]={title:title.trim()||a.querySelector('strong').textContent,desc:desc.trim()||a.querySelector('small').textContent};applySaved();persist();}));
 document.querySelectorAll('.folder-edit').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const d=btn.closest('[data-folder]'),key='folder_'+d.dataset.folder,name=prompt('Folder name:',d.querySelector('[data-folder-title]').textContent);if(name===null)return;saved[key]=name.trim()||d.querySelector('[data-folder-title]').textContent;applySaved();persist();}));
 document.getElementById('appSearch').addEventListener('submit',e=>e.preventDefault());
