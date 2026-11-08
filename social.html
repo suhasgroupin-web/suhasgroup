@@ -105,6 +105,37 @@ body{line-height:1.45}
  .social-mobile-nav .side-icon{width:24px;height:24px;font-size:14px}
 }
 @media(max-width:420px){.social-shell{padding-left:8px;padding-right:8px}.side-card{padding:11px}.member{grid-template-columns:42px minmax(0,1fr)}.member>.avatar{width:42px;height:42px}.member>.social-actions{grid-column:1/-1;padding-left:52px}.action{padding:8px 10px}}
+
+/* SUHAS-MAX Facebook-inspired final mobile layout */
+.social-user-actions{gap:8px}
+.header-icon{width:40px;height:40px;display:inline-grid;place-items:center;border:0;border-radius:50%;background:#e4e6eb;color:#1c1e21;font-size:23px;font-weight:800;cursor:pointer}
+.header-icon:hover{background:#d8e5fb;color:#0866ff}
+.social-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr));}
+.social-mobile-nav button,.social-mobile-nav a{min-height:54px;text-decoration:none}
+.mobile-nav-icon{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;font-size:23px;line-height:1;color:currentColor}
+.social-mobile-nav button.active .mobile-nav-icon{color:#0866ff}
+.social-mobile-nav button span:last-child,.social-mobile-nav a span:last-child{font-size:10px}
+@media(max-width:760px){
+ .nav-wrap{min-height:62px;padding:0 12px;gap:9px}
+ .brand img{width:40px;height:40px}
+ .brand-name{font-size:17px}
+ .social-profile-link{font-size:12px;padding:8px 11px;white-space:nowrap}
+ .header-icon{width:36px;height:36px;font-size:21px;flex:0 0 36px}
+ .social-shell{padding:12px 10px 92px}
+ .book-heading{padding:0 3px}
+ .book-heading h1{font-size:24px}
+ .book-heading span{font-size:12px}
+ .panel{border-radius:12px;box-shadow:0 1px 2px #0000000d}
+ .post-form textarea{min-height:88px;border-radius:12px;font-size:16px}
+ .post-card{padding:15px 2px}
+ .post-card p{font-size:16px}
+ .social-mobile-nav{padding:5px 5px calc(5px + env(safe-area-inset-bottom));}
+}
+@media(max-width:390px){
+ .social-profile-link{padding:7px 9px;font-size:11px}
+ .brand-name{font-size:15px}
+ .social-user-actions{gap:5px}
+}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -114,7 +145,7 @@ body{line-height:1.45}
 <button data-tab="messages" type="button">Messages</button>
 <a class="social-main-menu-link" href="app.html">Main Menu</a>
 </nav>
-<div class="social-user-actions"><a class="social-main-menu-link mobile-header-menu" href="app.html">Main Menu</a><a class="social-profile-link" href="profile.html">My Profile</a></div>
+<div class="social-user-actions"><button class="header-icon" type="button" data-tab="people" aria-label="Search people">⌕</button><button class="header-icon" type="button" data-tab="messages" aria-label="Messages">✉</button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
 <aside class="social-left">
@@ -153,13 +184,12 @@ body{line-height:1.45}
 <div class="right-card"><p>Respect colleagues. Share professional updates. Keep conversations constructive.</p></div>
 </aside>
 </main>
-<nav class="social-mobile-nav" aria-label="Mobile navigation">
-<button class="active" data-tab="feed" type="button"><span class="side-icon">⌂</span>Home</button>
-<button data-tab="people" type="button"><span class="side-icon">⌕</span>People</button>
-<button data-tab="friends" type="button"><span class="side-icon">♧</span>Friends</button>
-<button data-tab="requests" type="button"><span class="side-icon">✉</span>Requests</button>
-<button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
-<a href="app.html" class="mobile-main-menu"><span class="side-icon">☷</span>Menu</a>
+<nav class="social-mobile-nav" aria-label="Main navigation">
+<button class="active" data-tab="feed" type="button"><span class="mobile-nav-icon">⌂</span><span>Home</span></button>
+<button data-tab="friends" type="button"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
+<button data-tab="requests" type="button"><span class="mobile-nav-icon">♙</span><span>Requests</span></button>
+<button data-tab="messages" type="button"><span class="mobile-nav-icon">▤</span><span>Messages</span></button>
+<a href="app.html" class="mobile-main-menu"><span class="mobile-nav-icon">☰</span><span>Menu</span></a>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
