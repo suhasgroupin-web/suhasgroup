@@ -147,13 +147,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!isOwner || document.getElementById('sg-edit-suhas')) return;
       var style = document.createElement('style');
       style.id = 'sg-admin-tab-style';
-      style.textContent = '@media(max-width:820px){.tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr))}.tabbar .sg-edit-suhas{color:#8a5a00;font-weight:900}.tabbar .sg-edit-suhas .sg-admin-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:8px;background:#fff1cc;font-size:18px;line-height:1}}';
+      style.textContent = '@media(max-width:820px){.tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr));direction:ltr;grid-auto-flow:row}.tabbar .sg-edit-suhas{order:-1;grid-column:1;color:#8a5a00;font-weight:900}.tabbar .sg-edit-suhas .sg-admin-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:8px;background:#fff1cc;font-size:18px;line-height:1}}';
       document.head.appendChild(style);
       nav.classList.add('sg-admin-tabbar');
       var edit = document.createElement('a');
       edit.id = 'sg-edit-suhas';
       edit.className = 'sg-edit-suhas';
-      edit.href = '/suhasgroup/admin.html#suhas-editor';
+      edit.href = 'admin.html#suhas-editor';
       edit.setAttribute('aria-label','Edit SUHAS');
       edit.innerHTML = '<span class="sg-admin-icon" aria-hidden="true">✎</span><span>Edit Suhas</span>';
       nav.insertBefore(edit, nav.firstChild);
