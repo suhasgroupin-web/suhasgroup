@@ -102,3 +102,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Friend-request and message-permission choices are currently saved as preferences only; enforcement at all social entry points remains pending. Email notification preference delivery is not connected.
 - SQL migration sources are committed under `supabase/migrations/`; embedded JavaScript syntax check passed. Supabase verification confirmed the preference table, 3 RLS policies and 2 privacy triggers.
 - Security advisor still reports leaked-password protection disabled; this is an Auth dashboard setting and has not been changed automatically.
+
+
+## SUHAS-MAX Gaming Hub increment
+- Added a mobile-accessible Gaming Hub entry to the existing social navigation without removing existing tabs.
+- Added two original browser mini-games: Tic-Tac-Toe (player vs random-move computer) and Rock Paper Scissors.
+- Added per-account personal win/loss/draw totals stored in the new `public.suhas_game_scores` table. Scores are private to the signed-in owner through three RLS policies; RLS is enabled and authenticated grants are explicit.
+- Existing social pages, posts, media, groups and account records were not deleted or replaced.
+- Migration source: `supabase/migrations/20261109040000_suhas_max_gaming_hub.sql`. Database verification confirmed the table, RLS enabled and 3 policies.
+- Embedded JavaScript syntax check passed. Real two-account gameplay/score-save UI test remains pending; latest GitHub Pages deploy and CI checks are queued.
