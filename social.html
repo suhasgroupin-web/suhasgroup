@@ -70,7 +70,38 @@
  .post-card p{font-size:15px;line-height:1.5}
  .post-card .post-card-media{max-height:65vh}
 }
-</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-suhas-max"><style>
+
+/* SUHAS-MAX unified Facebook-inspired social UI system */
+:root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
+body{background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
+.site-header{background:#fff!important;border-bottom:1px solid #e4e6eb!important;box-shadow:0 1px 2px #00000012}
+.social-shell{max-width:1440px;gap:20px}
+.social-center{min-width:0}
+.panel,.side-card,.right-card,.settings-group{background:#fff;border:1px solid #e4e6eb;border-radius:12px;box-shadow:0 1px 2px #0000000d}
+.panel{padding:16px}
+.panel h1,.panel h2,.panel h3,.side-card h2,.right-card h2{color:#1c1e21}
+.action,.tab,button{font-family:Arial,Helvetica,sans-serif}
+.action.primary,.tab.active,.composer-submit .action{background:#0866ff;color:#fff;border-color:#0866ff}
+.action:not(.primary):not(:disabled){border-color:transparent}
+input,select,textarea{font-family:Arial,Helvetica,sans-serif}
+.post-card{background:#fff!important;color:#1c1e21!important;border:0;border-top:1px solid #e4e6eb;border-radius:0;padding:16px 0}
+.post-card .post-author,.post-card .post-head,.post-card p,.post-card .post-meta,.post-card b{color:#1c1e21}
+.post-card .post-meta,.post-card .muted{color:#65676b}
+.post-card .social-actions{border-color:#e4e6eb}
+.post-card .social-actions .action{color:#65676b;background:transparent}
+.post-card .social-actions .action:hover{background:#f0f2f5}
+.post-card .post-card-media{background:#f0f2f5;border-radius:8px}
+.home-composer,.home-discovery{background:#fff}
+.home-person-card{background:#fff;border:1px solid #e4e6eb;border-radius:12px}
+#feed-list{background:#fff}
+.social-mobile-nav{background:#fff!important;border-top:1px solid #e4e6eb!important;box-shadow:0 -2px 8px #0000000a}
+.social-mobile-nav button{color:#65676b}
+.social-mobile-nav button.active,.social-mobile-nav button[aria-current=page]{color:#0866ff}
+#reels-list .post-card{background:#111!important;color:#fff!important;border:1px solid #303030;border-radius:14px;padding:12px}
+#reels-list .post-card p,#reels-list .post-card .post-meta,#reels-list .post-card .post-meta b{color:#fff!important}
+#reels-list video{background:#000!important}
+@media(max-width:760px){.social-shell{padding:8px 0 94px!important}.panel{border-radius:0!important;border-left:0!important;border-right:0!important;padding:13px!important}.social-center{width:100%}.post-card{padding:14px 0}.social-mobile-nav{padding-bottom:env(safe-area-inset-bottom)}}
+</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-suhas-max-ui2"><style>
 :root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
@@ -701,4 +732,4 @@ $('compose').addEventListener('submit',async e=>{e.preventDefault();const body=$
 notificationChannel=client.channel('suhas-notifications-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_notifications',filter:'recipient_id=eq.'+me},()=>{loadNotifications().catch(e=>notice(e.message,true));}).subscribe();
 const q=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified').eq('profile_complete',true).order('full_name').limit(500);if(q.error){notice('Could not load members: '+q.error.message,true);return;}members=q.data||[];$('post-audience').value=readMaxSettings().audience||'public';const own=profile(me);$('home-composer-avatar').style.backgroundImage=own.profile_photo_url?'url('+JSON.stringify(own.profile_photo_url)+')':'';$('home-composer-avatar').textContent=own.profile_photo_url?'':(own.full_name||'S').slice(0,1).toUpperCase();renderHomeDiscovery();await renderPeople();await loadFeed();const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile);
 })().catch(e=>{const n=document.getElementById('notice');if(n){n.textContent=e.message||'Could not connect.';n.style.display='block';}});
-</script><script src="assets/display-mode.js?v=4"></script></body></html>
+</script><script src="assets/display-mode.js?v=5"></script></body></html>
