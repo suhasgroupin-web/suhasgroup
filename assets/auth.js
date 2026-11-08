@@ -1,5 +1,5 @@
 (function(){
-  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=1';displayScript.defer=true;document.head.appendChild(displayScript);
+  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=3';displayScript.defer=true;document.head.appendChild(displayScript);
 
   var cfg = window.SUHAS_CONFIG;
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
