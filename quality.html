@@ -7,7 +7,7 @@
 </style><style>
 /* Mobile-first fit: never let controls or action buttons escape their cards */
 *,*::before,*::after{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}body{margin:0}.qwrap{width:100%;max-width:1120px;padding:0 clamp(12px,3vw,24px)}.qgrid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}.qcard{min-width:0;overflow:hidden}.qcard input:not([type=checkbox]),.qcard select,.qcard textarea,.qcard button{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box}.qcard button{white-space:normal;line-height:1.25;padding:12px 14px}.qcard h2{font-size:clamp(17px,2vw,21px);line-height:1.25}.qcard p,.hint{line-height:1.6}.qcard .out{overflow-wrap:anywhere}.qcard input[type=checkbox]{width:auto;display:inline-block}.qintro{min-width:0}.qintro>div{min-width:0}@media(max-width:700px){.qgrid{grid-template-columns:minmax(0,1fr)}.full{grid-column:auto}.qwrap{margin-top:18px}.qcard{padding:16px}}
-</style></head><body>
+</style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script></head><body>
 <header class="site-header"><div class="nav-wrap"><a href="app.html" class="brand"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Quality Department</div></div></a><a class="btn btn-outline btn-sm" href="technical.html" style="box-shadow:0 4px 0 #17439a">All Technical Tools</a></div></header>
 <div class="page-hero"><div class="container"><h1>Quality Department Tools</h1><p>Garment measurement, AQL inspection, defect analysis and quality calculations.</p></div></div>
 <main class="qwrap">
@@ -99,4 +99,4 @@ function renderComments(){$('msComments').querySelector('tbody').innerHTML=comme
 $('msAddComment').onclick=()=>{let text=$('msComment').value.trim();if(!text){alert('Enter a fit comment first.');return;}comments.push({text,owner:$('msOwner').value,priority:$('msPriority').value,due:$('msDue').value,status:'Open'});$('msComment').value='';renderComments()};
 render();
 })();
-</script></body></html>
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=secure-entry-20261109"></script></body></html>
