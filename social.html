@@ -188,4 +188,4 @@ document.addEventListener('click',async e=>{const b=e.target.closest('button');i
 $('compose').addEventListener('submit',async e=>{e.preventDefault();const body=$('message').value.trim();if(!body||!activeConversation)return;const r=await client.from('suhas_messages').insert({conversation_id:activeConversation,sender_id:me,body});if(r.error){notice(r.error.message,true);return;}$('message').value='';});
 const q=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,profile_photo_url').eq('profile_complete',true).order('full_name').limit(500);if(q.error){notice('Could not load members: '+q.error.message,true);return;}members=q.data||[];await renderPeople();await loadFeed();
 })().catch(e=>{const n=document.getElementById('notice');if(n){n.textContent=e.message||'Could not connect.';n.style.display='block';}});
-</script><script src="assets/display-mode.js?v=2"></script></body></html>
+</script><script src="assets/display-mode.js?v=3"></script></body></html>
