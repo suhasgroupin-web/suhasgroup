@@ -138,9 +138,25 @@ document.addEventListener('DOMContentLoaded', function () {
   }).join('');
   document.body.appendChild(nav); document.body.classList.add('has-tabbar');
   if (window.sb && sb.auth) {
-    sb.auth.getSession().then(function (r) {
+    sb.auth.getSession().then(async function (r) {
       var a = document.getElementById('sg-acct');
-      if (a && r.data && r.data.session) { a.href = 'profile.html'; a.querySelector('span').textContent = 'Profile'; }
-    }).catch(function () { /* offline */ });
+      var session = r.data && r.data.session;
+      if (a && session) { a.href = 'profile.html'; a.querySelector('span').textContent = 'Profile'; }
+      if (!session || typeof window.checkIsAdmin !== 'function') return;
+      var isOwner = await window.checkIsAdmin();
+      if (!isOwner || document.getElementById('sg-edit-suhas')) return;
+      var style = document.createElement('style');
+      style.id = 'sg-admin-tab-style';
+      style.textContent = '@media(max-width:820px){.tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr))}.tabbar .sg-edit-suhas{color:#8a5a00;font-weight:900}.tabbar .sg-edit-suhas .sg-admin-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:8px;background:#fff1cc;font-size:18px;line-height:1}}';
+      document.head.appendChild(style);
+      nav.classList.add('sg-admin-tabbar');
+      var edit = document.createElement('a');
+      edit.id = 'sg-edit-suhas';
+      edit.className = 'sg-edit-suhas';
+      edit.href = 'app.html?edit=1';
+      edit.setAttribute('aria-label','Edit SUHAS');
+      edit.innerHTML = '<span class="sg-admin-icon" aria-hidden="true">✎</span><span>Edit Suhas</span>';
+      nav.appendChild(edit);
+    }).catch(function () { /* fail closed: no admin tab on auth errors */ });
   }
 });
