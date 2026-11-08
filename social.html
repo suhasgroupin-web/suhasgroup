@@ -178,6 +178,19 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
  .social-profile-link{padding:7px 9px;font-size:11px}
  .mobile-head-action{width:33px;height:33px;flex-basis:33px}
 }
+
+/* SUHAS-MAX-only menu: never route community Menu to the parent SUHAS app */
+.max-menu-intro{color:#65676b;margin:-5px 0 18px;font-size:14px}
+.max-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.max-menu-grid button,.max-menu-grid a{min-width:0;display:grid;grid-template-columns:42px minmax(0,1fr);grid-template-rows:auto auto;column-gap:11px;align-items:center;text-align:left;padding:13px;border:1px solid #e4e6eb;border-radius:12px;background:#fff;color:#1c1e21;text-decoration:none;cursor:pointer}
+.max-menu-grid button:hover,.max-menu-grid a:hover{background:#f0f2f5}
+.max-menu-grid button>span,.max-menu-grid a>span{grid-row:1/3;width:42px;height:42px;display:grid;place-items:center;border-radius:10px;background:#e7f0ff;color:#0866ff;font-size:22px}
+.max-menu-grid b{font-size:14px;line-height:1.3}
+.max-menu-grid small{font-size:11px;color:#65676b;margin-top:3px;line-height:1.3}
+.max-menu-footer{display:flex;justify-content:space-between;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid #e4e6eb;color:#65676b;font-size:12px}
+.max-menu-footer strong{color:#0866ff}
+button.social-main-menu-link,button.side-nav-link{font:inherit;cursor:pointer}
+@media(max-width:560px){.max-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.max-menu-grid button,.max-menu-grid a{padding:10px;grid-template-columns:34px minmax(0,1fr);column-gap:8px}.max-menu-grid button>span,.max-menu-grid a>span{width:34px;height:34px;font-size:19px}.max-menu-grid b{font-size:12px}.max-menu-grid small{font-size:10px}.max-menu-footer{font-size:11px}}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -190,7 +203,7 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <button data-tab="gaming" type="button">Gaming Hub</button>
 <button data-tab="notifications" type="button">Notifications</button>
 <button data-tab="messages" type="button">Messages</button>
-<a class="social-main-menu-link" href="app.html">Main Menu</a>
+<button class="social-main-menu-link" data-tab="maxmenu" type="button">Menu</button>
 </nav>
 <div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Find people" title="Find people">⌕</button><button class="mobile-head-action" type="button" data-tab="notifications" aria-label="Notifications" title="Notifications">🔔</button><button class="mobile-head-action" type="button" data-tab="messages" aria-label="Messages" title="Messages">✉</button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
@@ -210,7 +223,7 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <button data-tab="requests" type="button"><span class="side-icon">✉</span>Friend Requests</button>
 <button data-tab="following" type="button"><span class="side-icon">☆</span>Following</button>
 <button data-tab="messages" type="button"><span class="side-icon">▤</span>Messages</button>
-<a class="side-nav-link" href="app.html"><span class="side-icon">☷</span>Main Menu</a>
+<button class="side-nav-link" data-tab="maxmenu" type="button"><span class="side-icon">☷</span>Menu</button>
 </nav>
 </div>
 <div class="side-card"><div class="side-caption">SUHAS-MAX</div><p style="font-size:12px;color:#65676b;margin:0">A professional community for SUHAS GROUP members to connect, share updates and communicate.</p></div>
@@ -222,6 +235,24 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <h2>Home</h2>
 <form id="post-form" class="post-form"><textarea id="post-content" maxlength="5000" placeholder="What's on your mind? Share an update with the SUHAS-MAX community..."></textarea><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><label class="post-meta">Audience <select id="post-audience" aria-label="Who can see this post"><option value="public">🌐 Public</option><option value="friends">👥 Friends</option><option value="only_me">🔒 Only me</option></select></label><label class="post-meta">Add photo/video <input id="post-media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"></label></div><div style="display:flex;justify-content:flex-end;width:100%"><button class="action primary" type="submit">Post</button></div></form>
 <div id="feed-list"><div class="empty">Loading posts…</div></div>
+</section>
+<section id="maxmenu" class="panel max-menu-panel" hidden>
+<h2>SUHAS-MAX Menu</h2>
+<p class="max-menu-intro">Everything in your SUHAS-MAX community, in one place.</p>
+<div class="max-menu-grid">
+<button type="button" data-tab="people"><span>⌕</span><b>Find People</b><small>Discover community members</small></button>
+<button type="button" data-tab="friends"><span>♧</span><b>Friends</b><small>Your friends and connections</small></button>
+<button type="button" data-tab="requests"><span>✉</span><b>Friend Requests</b><small>Manage incoming requests</small></button>
+<button type="button" data-tab="following"><span>☆</span><b>Following</b><small>People you follow</small></button>
+<button type="button" data-tab="groups"><span>▦</span><b>Groups</b><small>Communities and discussions</small></button>
+<button type="button" data-tab="marketplace"><span>🛍</span><b>Marketplace</b><small>Browse community listings</small></button>
+<button type="button" data-tab="reels"><span>▶</span><b>Reels</b><small>Watch short videos</small></button>
+<button type="button" data-tab="gaming"><span>🎮</span><b>Games</b><small>Community games and scores</small></button>
+<button type="button" data-tab="notifications"><span>🔔</span><b>Notifications</b><small>Your latest activity</small></button>
+<button type="button" data-tab="messages"><span>▤</span><b>Messages</b><small>Private conversations</small></button>
+<a href="profile.html"><span>👤</span><b>My Profile</b><small>View and edit your profile</small></a>
+</div>
+<div class="max-menu-footer"><strong>SUHAS-MAX</strong><span>Powered by SUHAS GROUP</span></div>
 </section>
 <section id="people" class="panel" hidden><h2>Find People</h2><input id="search" class="search" placeholder="Search people, company, position or location"><div id="people-list"><div class="empty">Loading members…</div></div></section>
 <section id="friends" class="panel" hidden><h2>Friends</h2><div id="friends-list"><div class="empty">Loading friends…</div></div></section>
@@ -252,7 +283,7 @@ body.suhas-desktop-mode .social-shell .social-right{display:block}
 <button data-tab="friends" type="button"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
 <button data-tab="groups" type="button"><span class="mobile-nav-icon">▦</span><span>Groups</span></button>
 <button data-tab="reels" type="button"><span class="mobile-nav-icon">▶</span><span>Reels</span></button>
-<a href="app.html" class="mobile-main-menu"><span class="mobile-nav-icon">☰</span><span>Menu</span></a>
+<button data-tab="maxmenu" class="mobile-main-menu" type="button"><span class="mobile-nav-icon">☰</span><span>Menu</span></button>
 </nav>
 <section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
@@ -519,7 +550,7 @@ $('leaderboard-game').addEventListener('change',()=>loadGamingLeaderboard().catc
 $('ttt-board').addEventListener('click',e=>{const b=e.target.closest('[data-ttt-cell]');if(b)tttMove(Number(b.dataset.tttCell)).catch(err=>notice(err.message,true));});
 $('ttt-reset').addEventListener('click',()=>{tttBoard=Array(9).fill('');tttOver=false;$('ttt-status').textContent='Your turn — choose a square.';drawTtt();});
 document.querySelectorAll('[data-rps]').forEach(b=>b.addEventListener('click',async()=>{const you=b.dataset.rps,opts=['rock','paper','scissors'],cpu=opts[Math.floor(Math.random()*3)];const result=you===cpu?'draw':(you==='rock'&&cpu==='scissors'||you==='paper'&&cpu==='rock'||you==='scissors'&&cpu==='paper')?'win':'loss';$('rps-result').textContent='You: '+you+' · Computer: '+cpu+' — '+(result==='win'?'You win!':result==='loss'?'Computer wins.':'Draw.');try{await saveGameResult('rock_paper_scissors',result);}catch(e){notice('Game played, but score could not be saved: '+e.message,true);}}));
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',async()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['feed','people','friends','groups','marketplace','reels','gaming','requests','following','notifications','messages'].forEach(id=>$(id).hidden=id!==b.dataset.tab);try{if(b.dataset.tab==='feed')await loadFeed();if(b.dataset.tab==='friends')await loadFriends();if(b.dataset.tab==='groups')await loadGroups();if(b.dataset.tab==='marketplace')await loadMarketplace();if(b.dataset.tab==='reels')await loadReels();if(b.dataset.tab==='gaming'){renderDailyChallenge();await loadGameScores();await loadGamingLeaderboard();await loadGameRooms();await loadTournaments();}if(b.dataset.tab==='requests')await loadRequests();if(b.dataset.tab==='following')await loadFollowing();if(b.dataset.tab==='notifications')await loadNotifications();if(b.dataset.tab==='messages')await loadThreads();}catch(e){notice(e.message,true);}}));
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',async()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['feed','maxmenu','people','friends','groups','marketplace','reels','gaming','requests','following','notifications','messages'].forEach(id=>$(id).hidden=id!==b.dataset.tab);try{if(b.dataset.tab==='feed')await loadFeed();if(b.dataset.tab==='friends')await loadFriends();if(b.dataset.tab==='groups')await loadGroups();if(b.dataset.tab==='marketplace')await loadMarketplace();if(b.dataset.tab==='reels')await loadReels();if(b.dataset.tab==='gaming'){renderDailyChallenge();await loadGameScores();await loadGamingLeaderboard();await loadGameRooms();await loadTournaments();}if(b.dataset.tab==='requests')await loadRequests();if(b.dataset.tab==='following')await loadFollowing();if(b.dataset.tab==='notifications')await loadNotifications();if(b.dataset.tab==='messages')await loadThreads();}catch(e){notice(e.message,true);}}));
 document.addEventListener('click',async e=>{
  const toggle=e.target.closest('[data-post-menu-toggle]');
  if(toggle){const id=toggle.dataset.postMenuToggle,menu=document.querySelector('[data-post-menu="'+id+'"]');document.querySelectorAll('.post-menu.open').forEach(m=>{if(m!==menu)m.classList.remove('open');});menu?.classList.toggle('open');toggle.setAttribute('aria-expanded',menu?.classList.contains('open')?'true':'false');return;}
