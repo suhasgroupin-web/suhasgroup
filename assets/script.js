@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var edit = document.createElement('a');
       edit.id = 'sg-edit-suhas';
       edit.className = 'sg-edit-suhas';
-      edit.href = 'edit-suhas.html';
+      edit.href = '/suhasgroup/admin.html#suhas-editor';
       edit.setAttribute('aria-label','Edit SUHAS');
       edit.innerHTML = '<span class="sg-admin-icon" aria-hidden="true">✎</span><span>Edit Suhas</span>';
       nav.insertBefore(edit, nav.firstChild);
