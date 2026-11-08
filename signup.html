@@ -101,16 +101,21 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if(passVal.length < 12){showMsg('msg','Please use at least 12 characters for a secure password.',false);reset();return;}
   function reset(){ btn.disabled=false; btn.textContent='Sign Up'; }
   try{
-    var appBase = location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1);\n    var emailRedirectTo = location.origin + appBase + 'login.html?verified=1';
+    var appBase = location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1);
+    var emailRedirectTo = location.origin + appBase + 'login.html?verified=1';
     var r = await sb.auth.signUp({ email: emailVal, password: passVal, options:{ emailRedirectTo: emailRedirectTo, data:{ full_name: fullName, account_type: roleVal, workspace: isO5 ? 'o5' : 'suhas', requested_role: isO5 ? 'USER' : 'USER' } } });
     if(r.error){ showMsg('msg', r.error.message, false); reset(); return; }
     if(r.data.user && r.data.user.identities && r.data.user.identities.length === 0){ showMsg('msg','This email is already registered. Please login.', false); reset(); return; }
     if(r.data.session){
-      showMsg('msg','Account created successfully. Loading your SUHAS-MAX profile setup...', true);
-      btn.textContent='Loading...';
-      location.replace('profile.html?setup=1');
+      var out = await sb.auth.signOut({scope:'global'});
+      if(out.error) throw out.error;
+      showMsg('msg','Account created successfully. Please log in manually with your email and password.', true);
+      btn.textContent='Account created';
+      document.getElementById('signup-form').reset();
+      setTimeout(function(){ location.href='login.html?next=social.html'; }, 1800);
     } else {
-      showMsg('msg','Almost done! Open the confirmation email from SUHAS GROUP. After verification, return here and log in to enter the app. If it is not in your inbox, check Spam.', true); document.getElementById('install-note').style.display='block'; reset();
+      showMsg('msg','Almost done! Confirm your email using the link sent by SUHAS GROUP. After confirmation, return to Login and sign in manually. Check Spam if needed.', true);
+      reset();
     }
   }catch(err){ showMsg('msg','Error: '+err.message,false); reset(); }
 });
