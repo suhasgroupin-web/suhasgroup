@@ -74,3 +74,15 @@ For every task, report:
 - Required workflow for this design task: AUDIT CURRENT APP + REFERENCES → MAP UI/FEATURES → CHECK SUPABASE/RLS/STORAGE → IMPLEMENT A SMALL INCREMENT → STATIC/SYNTAX TEST → FUNCTIONAL TEST → COMMIT + CHECKPOINT → DEPLOY → LIVE VERIFY.
 - Test mobile and desktop layouts, keyboard/accessibility states, navigation, post creation, media upload, likes, comments, share/repost, story/reel viewing, friend requests, notifications, profiles, and messaging. Mark any flow not exercised with real accounts/devices as pending.
 - Do not claim a Facebook-level visual or functional match until the relevant screen and actions have been compared and tested. Record exact completed, pending, failed, and blocked items in `DEVELOPMENT_CHECKPOINT.md`.
+
+
+## 9. Mandatory real-functionality requirement for every button and control
+- Every visible button, icon-button, menu item, tab, chip, toggle, card-action, form submit, and clickable surface in SUHAS-MAX must have a defined, implemented, and tested action. Visual resemblance alone is not completion.
+- Maintain a control inventory for each screen: control label/selector, intended action, handler, data/API dependency, authorization/RLS requirement, loading/disabled state, success state, error state, and test result.
+- No dead buttons, placeholder alerts, fake success toasts, cosmetic-only toggles, or controls that silently do nothing. If an external integration is unavailable, clearly show the real setup requirement and do not label the feature Active or On.
+- A toggle may display On only when the setting is actually saved and the corresponding integration/action is available. Persist preferences where appropriate and restore them on reload.
+- For social actions (like, comment, share, repost, save, follow, friend request, messaging, upload, story, reel, marketplace, group, notification, profile, settings), verify the actual Supabase operation, ownership, authentication, RLS, and refresh behavior.
+- For device features (camera, gallery, location, contacts, phone, external sharing), request permission at the point of use, handle denial/cancellation, and provide a supported fallback. Never claim a call, livestream, cross-post, or media upload succeeded unless the platform/provider confirms it.
+- Before release, enumerate every rendered button/control in the changed screen and verify its handler is reachable. Exercise each control on mobile and desktop when applicable; record passed, failed, blocked, and not-yet-integrated items separately.
+- If a button cannot be safely completed in the current increment, keep it visibly unavailable with an honest explanation and record the dependency; do not ship a misleading active-looking control.
+- This requirement applies to new and existing controls, including all buttons copied or inspired by Facebook's official mobile app.
