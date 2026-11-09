@@ -199,3 +199,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: fetched the committed file again and confirmed the new layout block, horizontal Reels rules, responsive feed styles, and previous 3D/share hooks are present. Browser/device visual inspection and live interaction tests have not been run.
 - No existing tables, records, pages, assets, routes or features were deleted; no database schema was changed.
 - Next: implement the repost-to-profile flow with original-author attribution and privacy-safe visibility, then continue feed menu, media, notifications and Reels interaction tests.
+
+
+## SUHAS-MAX Home Feed Reels shelf — 2026-11-09
+- Added a horizontal, swipeable Reels shelf directly inside the Home Feed, with vertical video previews, caption, creator name, and a See all action to open the existing Reels page.
+- Shelf content is loaded from existing visible video posts in `suhas_posts` and creator names/photos from `suhas_public_profiles`; no sample/fake content and no new database tables were introduced.
+- Kept the existing dedicated Reels page and its Like/Comment/Share actions unchanged.
+- Changed file: `social.html`.
+- Commit: `dea63bce5e692b96641bb7b43db06ed0c2c6f382`.
+- Verification: fetched the committed file, confirmed the shelf markup, query, profile attribution, Home initialization, and existing 3D/share hooks. All inline JavaScript blocks passed syntax parsing.
+- Actual Android rendering, video preview playback, and tap-through behavior still require live browser/device testing.
+- No existing records, tables, pages, media or features were deleted; no schema changes were made.
