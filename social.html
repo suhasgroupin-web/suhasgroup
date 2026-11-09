@@ -1163,6 +1163,45 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .max-menu-see-more span{font-size:18px;transition:transform .18s ease}
 .max-menu-see-more[aria-expanded="true"] span{transform:rotate(180deg)}
 </style>
+
+<style id="suhas-home-composer-layout-correction-20261109">
+/* Correct the home composer hierarchy: avatar above, slim white composer below. */
+#feed.home-feed-panel .home-composer .composer-top{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) 34px!important;
+ grid-template-rows:auto auto!important;
+ align-items:center!important;
+ column-gap:8px!important;
+ row-gap:9px!important;
+}
+#feed.home-feed-panel .home-composer .composer-avatar{
+ grid-column:1/-1!important;grid-row:1!important;
+ width:42px!important;height:42px!important;flex:none!important;
+ margin:0!important;justify-self:start!important;
+}
+#feed.home-feed-panel .home-composer #post-content{
+ grid-column:1!important;grid-row:2!important;
+ width:100%!important;height:42px!important;min-height:42px!important;max-height:42px!important;
+ box-sizing:border-box!important;resize:none!important;
+ border:1px solid #ccd0d5!important;border-radius:24px!important;
+ background:#fff!important;color:#1c1e21!important;
+ padding:0 15px!important;font:15px Arial,sans-serif!important;line-height:40px!important;
+}
+#feed.home-feed-panel .home-composer #post-content::placeholder{
+ color:#606770!important;-webkit-text-fill-color:#606770!important;opacity:1!important;
+}
+#feed.home-feed-panel .home-composer .composer-photo-icon{
+ grid-column:2!important;grid-row:2!important;
+ width:34px!important;height:38px!important;flex:none!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+}
+#feed.home-feed-panel .home-composer .composer-photo-icon span{font-size:23px!important}
+#feed.home-feed-panel .home-composer .composer-options{
+ margin:7px 0 0 0!important;padding:0!important;border:0!important;
+}
+#feed.home-feed-panel .home-composer .composer-meta-row,
+#feed.home-feed-panel .home-composer .composer-submit{margin-left:0!important}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
