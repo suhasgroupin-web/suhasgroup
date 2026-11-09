@@ -61,7 +61,7 @@
   function message(t,ok){var el=document.getElementById('link-job-msg');el.textContent=t;el.style.display='block';el.style.background=ok?'#E7F6EC':'#FDECEA';el.style.color=ok?'#1B6B3A':'#A5321F';}
   function field(id,value){var el=document.getElementById(id);if(el)el.value=value||'';}
   function validLinkedInUrl(value){try{var u=new URL(value);return u.protocol==='https:'&&(u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'));}catch(e){return false;}}
-  var linkedinEndpoint=(window.SUHAS_CONFIG&&window.SUHAS_CONFIG.SUPABASE_URL||'').replace(/\\/$/,'')+'/functions/v1/linkedin-oauth';
+  var linkedinEndpoint=(window.SUHAS_CONFIG&&window.SUHAS_CONFIG.SUPABASE_URL||'').replace(/\/$/,'')+'/functions/v1/linkedin-oauth';
   async function linkedinRequest(action,method){
     var sessionResult=await sb.auth.getSession(),session=sessionResult.data.session;
     if(!session)throw new Error('Sign in to SUHAS-MAX first.');
