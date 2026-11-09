@@ -164,3 +164,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification performed in this increment: source-level replacement guard confirmed the intended handler existed before update and the updated file was committed. Browser/device interaction and authenticated Supabase two-account behavior are not yet verified.
 - No existing tables, records, pages, assets, routes or features were deleted or replaced.
 - Next step: run JavaScript syntax validation and inspect GitHub Pages deployment/workflow status; then test the Group Join action with an authenticated account.
+
+
+## SUHAS-MAX 3D Like button correction — 2026-11-09
+- Audited the latest 3D engagement update and found the Like button markup was missing the existing `suhas-3d-action suhas-like-action` classes in both the main feed and Reels.
+- Added the existing 3D Like classes to exactly one feed Like button template and one Reels Like button template; existing Like handlers and database operations were left unchanged.
+- Changed file: `social.html`.
+- Commit: `ad20bf9499748b95a5033f45a6b97b68d2174ead`.
+- Verification: fetched the committed file again and confirmed Feed Like, Reels Like, Comment and Share all carry their expected 3D styling hooks.
+- Static JavaScript syntax check passed for both inline scripts (61 bytes and 78,340 bytes).
+- No database schema, records, pages, routes, media assets or existing features were deleted or modified.
+- Live browser/device rendering and authenticated Like/Unlike interactions are still pending; do not mark those as confirmed until tested.
