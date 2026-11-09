@@ -543,6 +543,38 @@ button:focus-visible,a:focus-visible,.action:focus-visible,input:focus-visible,t
 }
 @media(prefers-reduced-motion:reduce){button,.action,.home-person-card,.panel,.side-card,.right-card,.settings-group{transition:none!important}}
 </style>
+<style>
+/* Facebook-inspired slide-in menu drawer */
+.max-menu-drawer[hidden]{display:none!important}
+.max-menu-drawer{position:fixed;inset:0;z-index:1000;display:block!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.max-menu-scrim{position:absolute;inset:0;background:rgba(0,0,0,.42);animation:maxMenuFade .18s ease}
+.max-menu-sheet{position:absolute;inset:0 auto 0 0;width:min( min(88vw, 390px), 440px);height:100%;overflow-y:auto;overscroll-behavior:contain;background:#fff;color:#1c1e21;padding:16px 14px calc(20px + env(safe-area-inset-bottom));box-shadow:8px 0 28px #0002;animation:maxMenuSlide .22s ease}
+.max-menu-account{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 4px 18px;border-bottom:1px solid #e4e6eb}
+.max-menu-account-profile{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:#1c1e21;font-size:19px}
+.max-menu-account-profile img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:1px solid #e4e6eb}
+.max-menu-close{width:40px;height:40px;border:0;border-radius:50%;background:#eef0f3;font-size:28px;line-height:1;color:#333}
+.max-menu-shortcut-title{font-size:16px;font-weight:700;margin:18px 2px 12px}
+.max-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.max-menu-grid button{min-height:86px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;padding:12px 14px;border:1px solid #e4e6eb;border-radius:17px;background:#fff;color:#1c1e21;text-align:left;box-shadow:0 1px 2px #0000000b}
+.max-menu-grid button span{font-size:27px;line-height:1.1;font-weight:700}
+.max-menu-grid button b{font-size:15px}
+.max-menu-see-more{width:100%;margin:16px 0 18px;padding:12px;border:0;border-radius:10px;background:#e4e6eb;color:#1c1e21;font-size:15px;font-weight:700}
+.max-menu-extra{display:grid;gap:2px;margin:-10px 0 16px}
+.max-menu-extra button,.max-menu-section-body button,.max-menu-section-body a{display:block;width:100%;padding:12px;border:0;background:#fff;text-align:left;text-decoration:none;color:#1c1e21;font-size:14px;font-weight:600}
+.max-menu-sections{margin:0 -14px;border-top:1px solid #e4e6eb}
+.max-menu-sections details{border-bottom:1px solid #e4e6eb}
+.max-menu-sections summary{padding:16px 18px;list-style:none;font-size:16px;font-weight:700;cursor:pointer}
+.max-menu-sections summary::-webkit-details-marker{display:none}
+.max-menu-sections summary:after{content:'⌄';float:right;color:#65676b}
+.max-menu-section-body{padding:0 14px 12px}
+.max-menu-logout{display:block;margin-top:20px;padding:13px;text-align:center;text-decoration:none;border-radius:10px;background:#e4e6eb;color:#1c1e21;font-weight:700}
+.max-menu-footer{display:flex;justify-content:space-between;gap:10px;padding:18px 4px 4px;color:#65676b;font-size:12px}
+@keyframes maxMenuSlide{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes maxMenuFade{from{opacity:0}to{opacity:1}}
+body.max-menu-open{overflow:hidden}
+@media(min-width:761px){.max-menu-sheet{width:min(390px,42vw)}}
+@media(prefers-reduced-motion:reduce){.max-menu-sheet,.max-menu-scrim{animation:none}}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -588,26 +620,39 @@ button:focus-visible,a:focus-visible,.action:focus-visible,input:focus-visible,t
 <div class="home-reels-section"><div class="home-reels-heading"><div><strong>Reels</strong><span>Short videos from the community</span></div><button type="button" data-tab="reels">See all</button></div><div id="home-reels-list" class="home-reels-list"><div class="empty">Loading Reels…</div></div></div>
 <div id="feed-list"><div class="empty">Loading posts…</div></div>
 </section>
-<section id="maxmenu" class="panel max-menu-panel" hidden>
-<h2>SUHAS-MAX Menu</h2>
-<p class="max-menu-intro">Everything in your SUHAS-MAX community, in one place.</p>
-<div class="max-menu-grid">
-<button type="button" data-tab="people"><span>⌕</span><b>Find People</b><small>Discover community members</small></button>
-<button type="button" data-tab="friends"><span>♧</span><b>Friends</b><small>Your friends and connections</small></button>
-<button type="button" data-tab="saved"><span>🔖</span><b>Saved</b><small>Posts you saved for later</small></button>
-<button type="button" data-tab="requests"><span>✉</span><b>Friend Requests</b><small>Manage incoming requests</small></button>
-<button type="button" data-tab="following"><span>☆</span><b>Following</b><small>People you follow</small></button>
-<button type="button" data-tab="groups"><span>▦</span><b>Groups</b><small>Communities and discussions</small></button>
-<button type="button" data-tab="marketplace"><span>🛍</span><b>Marketplace</b><small>Browse community listings</small></button>
-<button type="button" data-tab="reels"><span>▶</span><b>Reels</b><small>Watch short videos</small></button>
-<button type="button" data-tab="gaming"><span>🎮</span><b>Games</b><small>Community games and scores</small></button>
-<button type="button" data-tab="notifications"><span>🔔</span><b>Notifications</b><small>Your latest activity</small></button>
-<button type="button" data-tab="settings"><span>⚙</span><b>Settings & Privacy</b><small>Appearance, feed and privacy preferences</small></button>
-<button type="button" data-tab="messages"><span>▤</span><b>Messages</b><small>Private conversations</small></button>
-<a href="profile.html"><span>👤</span><b>My Profile</b><small>View and edit your profile</small></a>
-<a class="max-menu-main-access" href="app.html"><span>↗</span><b>Go to Suhas access</b><small>Open the main SUHAS app</small></a>
+<section id="maxmenu" class="max-menu-drawer" hidden aria-label="SUHAS-MAX menu">
+<div class="max-menu-scrim" data-menu-close></div>
+<aside class="max-menu-sheet" role="dialog" aria-modal="true" aria-label="Main menu">
+<div class="max-menu-account">
+<a class="max-menu-account-profile" href="profile.html"><img src="assets/logo.png" alt=""><strong>SUHAS-MAX</strong></a>
+<button type="button" class="max-menu-close" data-menu-close aria-label="Close menu">×</button>
 </div>
+<div class="max-menu-shortcut-title">Your shortcuts</div>
+<div class="max-menu-grid">
+<button type="button" data-tab="friends"><span>♧</span><b>Friends</b></button>
+<button type="button" data-tab="people"><span>⌕</span><b>Find People</b></button>
+<button type="button" data-tab="groups"><span>▦</span><b>Groups</b></button>
+<button type="button" data-tab="reels"><span>▶</span><b>Reels</b></button>
+<button type="button" data-tab="marketplace"><span>▣</span><b>Marketplace</b></button>
+<button type="button" data-tab="saved"><span>🔖</span><b>Saved</b></button>
+<button type="button" data-tab="messages"><span>✉</span><b>Messages</b></button>
+<button type="button" data-tab="notifications"><span>♧</span><b>Notifications</b></button>
+</div>
+<button type="button" class="max-menu-see-more" id="max-menu-see-more" aria-expanded="false">See more</button>
+<div class="max-menu-extra" id="max-menu-extra" hidden>
+<button type="button" data-tab="requests">Friend Requests</button>
+<button type="button" data-tab="following">Following</button>
+<button type="button" data-tab="gaming">Gaming Hub</button>
+<button type="button" data-tab="feed">Home Feed</button>
+</div>
+<div class="max-menu-sections">
+<details><summary>Help and support</summary><div class="max-menu-section-body"><a href="mailto:suhasgroup.in@gmail.com">Contact SUHAS support</a></div></details>
+<details><summary>Settings and privacy</summary><div class="max-menu-section-body"><button type="button" data-tab="settings">Settings &amp; Privacy</button><button type="button" data-tab="settings">Privacy preferences</button></div></details>
+<details><summary>SUHAS services</summary><div class="max-menu-section-body"><a href="app.html">Open SUHAS main app</a><a href="profile.html">My Profile</a></div></details>
+</div>
+<a class="max-menu-logout" href="login.html">Log out</a>
 <div class="max-menu-footer"><strong>SUHAS-MAX</strong><span>Powered by SUHAS GROUP</span></div>
+</aside>
 </section>
 <section id="people" class="panel" hidden><h2>Find People</h2><input id="search" class="search" placeholder="Search people, company, position or location"><div id="people-list"><div class="empty">Loading members…</div></div></section>
 <section id="friends" class="panel" hidden><h2>Friends</h2><div id="friends-list"><div class="empty">Loading friends…</div></div></section>
@@ -1023,7 +1068,14 @@ $('settings-reset').addEventListener('click',()=>{localStorage.removeItem('suhas
 $('settings-search').addEventListener('input',()=>{const q=$('settings-search').value.trim().toLowerCase();document.querySelectorAll('[data-settings-category]').forEach(g=>g.hidden=!!q&&!g.innerText.toLowerCase().includes(q));});
 $('settings-password-form').addEventListener('submit',async e=>{e.preventDefault();const a=$('settings-new-password').value,b=$('settings-confirm-password').value,status=$('settings-password-status');if(a.length<8){status.textContent='Password must be at least 8 characters.';return;}if(a!==b){status.textContent='Passwords do not match.';return;}const btn=e.submitter;btn.disabled=true;status.textContent='Updating password…';try{const r=await client.auth.updateUser({password:a});if(r.error)throw r.error;$('settings-password-form').reset();status.textContent='Password updated successfully.';}catch(err){status.textContent=err.message||'Password update failed.';}finally{btn.disabled=false;}});
 $('settings-blocked').addEventListener('click',()=>{const ids=JSON.parse(localStorage.getItem('suhas-max-blocked-profiles')||'[]');if(!ids.length){notice('No profiles are hidden on this device.');return;}if(confirm(ids.length+' hidden profile(s) found. Clear this device-only hidden list?')){localStorage.removeItem('suhas-max-blocked-profiles');notice('Hidden profile list cleared on this device.');}});
-async function activateMaxTab(tab){const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){renderDailyChallenge();await loadGameScores();await loadGamingLeaderboard();await loadGameRooms();await loadTournaments();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
+
+document.addEventListener('click',e=>{
+ const close=e.target.closest('[data-menu-close]');
+ if(close){const panel=document.getElementById('maxmenu');if(panel)panel.hidden=true;document.body.classList.remove('max-menu-open');return;}
+ const more=e.target.closest('#max-menu-see-more');
+ if(more){const extra=document.getElementById('max-menu-extra');if(extra){extra.hidden=!extra.hidden;more.setAttribute('aria-expanded',String(!extra.hidden));more.textContent=extra.hidden?'See more':'See less';}return;}
+});
+async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){renderDailyChallenge();await loadGameScores();await loadGamingLeaderboard();await loadGameRooms();await loadTournaments();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
 document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();activateMaxTab(b.dataset.tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
