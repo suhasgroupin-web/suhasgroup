@@ -1060,16 +1060,57 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
  .messenger-head-icon{width:24px!important;height:24px!important;flex-basis:24px!important}
 }
 </style>
+
+<style id="suhas-max-facebook-finetune-20261109">
+/* Consistent Facebook-inspired navigation and home-feed polish; routes and data handlers stay intact. */
+.social-topnav{align-items:stretch!important;gap:3px!important}
+.social-topnav button{display:flex!important;align-items:center!important;justify-content:center!important;min-width:62px!important;height:56px!important;padding:0 13px!important;border-bottom:3px solid transparent!important;border-radius:8px 8px 0 0!important;color:#65676b!important}
+.social-topnav button svg{width:25px!important;height:25px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.social-topnav button.active{color:#0866ff!important;border-bottom-color:#0866ff!important}
+.social-topnav button:hover{background:#f0f2f5!important}
+.social-topnav .social-main-menu-link{width:44px!important;min-width:44px!important;height:44px!important;align-self:center!important;border:0!important;border-radius:50%!important;background:#f0f2f5!important;color:#1c1e21!important;padding:9px!important}
+.social-topnav .social-main-menu-link svg{width:23px!important;height:23px!important}
+.social-mobile-nav button{transition:color .15s ease,background .15s ease!important}
+.social-mobile-nav button .mobile-nav-icon{display:grid!important;place-items:center!important;width:28px!important;height:27px!important}
+.social-mobile-nav button .mobile-nav-icon svg{display:block!important;width:24px!important;height:24px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.home-stories-section{background:#fff!important;border:1px solid #e4e6eb!important;border-radius:12px!important;padding:14px!important;margin:0 0 12px!important}
+.home-stories-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-bottom:12px!important}
+.home-stories-heading strong{font-size:17px!important;color:#1c1e21!important}
+.home-stories-heading span{font-size:11px!important;color:#65676b!important}
+.home-stories-list{gap:12px!important;padding:2px 0 8px!important;scroll-snap-type:x proximity!important}
+.home-story-card{scroll-snap-align:start!important;flex-basis:78px!important;width:78px!important}
+.home-story-ring{width:68px!important;height:68px!important}
+.home-story-name{font-size:12px!important}
+.home-composer{background:#fff!important;border:1px solid #e4e6eb!important;border-radius:12px!important;padding:14px!important;margin:0 0 12px!important}
+.composer-top textarea{background:#f0f2f5!important;border-radius:24px!important}
+.composer-options{margin-left:0!important;padding-top:12px!important;justify-content:space-around!important}
+.composer-submit{display:flex!important;justify-content:flex-end!important;gap:8px!important}
+.composer-submit .action{min-width:92px!important;border-radius:8px!important;font-weight:700!important}
+#feed-list .post-card{background:#fff!important;color:#1c1e21!important;border:1px solid #e4e6eb!important;border-radius:12px!important;padding:14px!important;margin:0 0 12px!important;box-shadow:0 1px 2px rgba(0,0,0,.05)!important}
+#feed-list .post-card p,#feed-list .post-card .post-meta,#feed-list .post-card .post-meta b{color:#1c1e21!important}
+@media(max-width:760px){
+ .social-topnav{display:none!important}
+ .home-stories-section{border-left:0!important;border-right:0!important;border-radius:0!important;margin-bottom:9px!important}
+ .home-composer{border-left:0!important;border-right:0!important;border-radius:0!important;margin-bottom:9px!important}
+ #feed-list .post-card{border-left:0!important;border-right:0!important;border-radius:0!important;margin-bottom:8px!important;padding:13px 14px!important}
+ .social-mobile-nav button .mobile-nav-icon svg{width:24px!important;height:24px!important}
+}
+@media(min-width:761px){
+ .social-shell{max-width:1440px!important;grid-template-columns:minmax(220px,280px) minmax(480px,680px) minmax(220px,300px)!important;gap:20px!important}
+ .social-center{min-width:0!important}
+ .home-feed-panel{border-radius:12px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
-<button class="active" data-tab="feed" type="button" aria-label="Home" title="Home">⌂</button>
-<button data-tab="friends" type="button" aria-label="Friends" title="Friends">♧</button>
-<button data-tab="groups" type="button" aria-label="Groups" title="Groups">▦</button>
-<button data-tab="reels" type="button" aria-label="Reels" title="Reels">▶</button>
-<button data-tab="marketplace" type="button" aria-label="Marketplace" title="Marketplace">🛍</button>
-<button data-tab="notifications" type="button" aria-label="Notifications" title="Notifications">🔔</button>
-<button class="social-main-menu-link" data-tab="maxmenu" type="button" aria-label="Menu" title="Menu">☰</button>
+<button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
+<button data-tab="friends" type="button" aria-label="Friends" title="Friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c.4-3.4 2.7-5.2 6.5-5.2s6.1 1.8 6.5 5.2zM16 5.2a3 3 0 0 1 0 5.8M17 14.8c2.8.4 4.3 2.1 4.5 5.2h-3"/></svg></button>
+<button data-tab="groups" type="button" aria-label="Groups" title="Groups"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11M15 9v11"/></svg></button>
+<button data-tab="reels" type="button" aria-label="Reels" title="Reels"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4zM3 8h18M8 3l4 5M15 3l4 5"/></svg></button>
+<button data-tab="marketplace" type="button" aria-label="Marketplace" title="Marketplace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.3 11H5.3zM3 9l2-5h14l2 5M9 9a3 3 0 0 0 6 0"/></svg></button>
+<button data-tab="notifications" type="button" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
+<button class="social-main-menu-link" data-tab="maxmenu" type="button" aria-label="Menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/></svg></button>
 </nav>
 <div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Search people" title="Search">⌕</button><button class="mobile-head-action messenger-head-action" type="button" data-tab="messages" aria-label="Open Messenger messages" title="Messenger"><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00B2FF"/><stop offset="1" stop-color="#006AFF"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
@@ -1179,12 +1220,12 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 </aside>
 </main>
 <nav class="social-mobile-nav" aria-label="Main navigation">
-<button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="mobile-nav-icon">⌂</span><span>Home</span></button>
-<button data-tab="friends" type="button" aria-label="Friends"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
-<button data-tab="reels" type="button" aria-label="Reels"><span class="mobile-nav-icon">▶</span><span>Reels</span></button>
-<button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="mobile-nav-icon">🛍</span><span>Market</span></button>
-<button data-tab="notifications" type="button" aria-label="Notifications"><span class="mobile-nav-icon">🔔</span><span>Alerts</span></button>
-<button data-tab="maxmenu" class="mobile-main-menu" type="button" aria-label="Menu"><span class="mobile-nav-icon">☰</span><span>Menu</span></button>
+<button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Home</span></button>
+<button data-tab="friends" type="button" aria-label="Friends"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c.4-3.4 2.7-5.2 6.5-5.2s6.1 1.8 6.5 5.2zM16 5.2a3 3 0 0 1 0 5.8M17 14.8c2.8.4 4.3 2.1 4.5 5.2h-3"/></svg></span><span>Friends</span></button>
+<button data-tab="reels" type="button" aria-label="Reels"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4zM3 8h18M8 3l4 5M15 3l4 5"/></svg></span><span>Reels</span></button>
+<button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.3 11H5.3zM3 9l2-5h14l2 5M9 9a3 3 0 0 0 6 0"/></svg></span><span>Market</span></button>
+<button data-tab="notifications" type="button" aria-label="Notifications"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span>Alerts</span></button>
+<button data-tab="maxmenu" class="mobile-main-menu" type="button" aria-label="Menu"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/></svg></span><span>Menu</span></button>
 </nav>
 <section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
