@@ -660,6 +660,66 @@ html body.suhas-dark #post-form #post-content::placeholder{
  color:#d1d5db!important;-webkit-text-fill-color:#d1d5db!important;
 }
 </style>
+<style id="suhas-comment-composer-contrast-fix">
+/* Make typed comment text readable on desktop, mobile and dark theme */
+html body form.compose[data-comment-form] input,
+html body form.compose[data-comment-form] textarea,
+html body .post-card form.compose input,
+html body #reels-list form.compose input{
+ display:block!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:44px!important;
+ box-sizing:border-box!important;
+ padding:11px 14px!important;
+ border:1px solid #c7cfda!important;
+ border-radius:12px!important;
+ background-color:#f0f2f5!important;
+ color:#111827!important;
+ -webkit-text-fill-color:#111827!important;
+ caret-color:#0866ff!important;
+ font:500 15px/1.45 Arial,Helvetica,sans-serif!important;
+ opacity:1!important;
+ text-shadow:none!important;
+}
+html body form.compose[data-comment-form] input::placeholder,
+html body form.compose[data-comment-form] textarea::placeholder,
+html body .post-card form.compose input::placeholder,
+html body #reels-list form.compose input::placeholder{
+ color:#596579!important;
+ -webkit-text-fill-color:#596579!important;
+ opacity:1!important;
+ font-weight:400!important;
+}
+html body form.compose[data-comment-form] input:focus,
+html body form.compose[data-comment-form] textarea:focus,
+html body .post-card form.compose input:focus,
+html body #reels-list form.compose input:focus{
+ background-color:#fff!important;
+ border-color:#0866ff!important;
+ outline:2px solid #9bbcff!important;
+ outline-offset:1px!important;
+}
+html body.suhas-dark form.compose[data-comment-form] input,
+html body.suhas-dark form.compose[data-comment-form] textarea,
+html body.suhas-dark .post-card form.compose input,
+html body.suhas-dark #reels-list form.compose input{
+ background-color:#30343b!important;
+ color:#f9fafb!important;
+ -webkit-text-fill-color:#f9fafb!important;
+ border-color:#687386!important;
+ caret-color:#78aaff!important;
+}
+html body.suhas-dark form.compose[data-comment-form] input::placeholder,
+html body.suhas-dark form.compose[data-comment-form] textarea::placeholder,
+html body.suhas-dark .post-card form.compose input::placeholder,
+html body.suhas-dark #reels-list form.compose input::placeholder{
+ color:#d1d5db!important;-webkit-text-fill-color:#d1d5db!important;
+}
+html body form.compose[data-comment-form] button[type="submit"]{
+ flex:0 0 auto!important;min-height:42px!important;white-space:nowrap!important;
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
