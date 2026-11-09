@@ -1032,6 +1032,34 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
   .social-mobile-nav button .mobile-nav-icon{font-size:19px!important}
 }
 </style>
+
+<style id="suhas-max-messenger-header-fit-20261109">
+/* Messenger shortcut: crisp, centered icon with a full tap target and no clipping. */
+.social-user-actions{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important}
+.mobile-head-action{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;flex:0 0 40px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;padding:0!important;overflow:visible!important;border:0!important;border-radius:50%!important;background:#f0f2f5!important;color:#1c1e21!important;line-height:1!important}
+.messenger-head-action{background:#f0f2f5!important}
+.messenger-head-icon{display:block!important;width:27px!important;height:27px!important;max-width:none!important;flex:0 0 27px!important;overflow:visible!important}
+.mobile-head-action:focus-visible{outline:3px solid #0866ff!important;outline-offset:2px!important}
+@media(max-width:760px){
+ .nav-wrap{gap:6px!important;padding-left:8px!important;padding-right:8px!important}
+ .brand{gap:6px!important;flex:1 1 0!important}
+ .brand img{width:32px!important;height:32px!important;flex:0 0 32px!important;object-fit:contain}
+ .brand-name{font-size:clamp(15px,4.5vw,19px)!important}
+ .brand-tag{display:none!important}
+ .social-user-actions{gap:6px!important;flex:0 0 auto!important}
+ .mobile-head-action{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;flex-basis:38px!important}
+ .messenger-head-icon{width:26px!important;height:26px!important;flex-basis:26px!important}
+ .social-profile-link{display:none!important}
+}
+@media(max-width:360px){
+ .nav-wrap{gap:4px!important;padding-left:6px!important;padding-right:6px!important}
+ .brand img{width:28px!important;height:28px!important;flex-basis:28px!important}
+ .brand-name{font-size:15px!important}
+ .social-user-actions{gap:4px!important}
+ .mobile-head-action{width:35px!important;height:35px!important;min-width:35px!important;min-height:35px!important;flex-basis:35px!important}
+ .messenger-head-icon{width:24px!important;height:24px!important;flex-basis:24px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -1043,7 +1071,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <button data-tab="notifications" type="button" aria-label="Notifications" title="Notifications">🔔</button>
 <button class="social-main-menu-link" data-tab="maxmenu" type="button" aria-label="Menu" title="Menu">☰</button>
 </nav>
-<div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Search people" title="Search">⌕</button><button class="mobile-head-action" type="button" data-tab="messages" aria-label="Messages" title="Messages">✉</button><a class="social-profile-link" href="profile.html">My Profile</a></div>
+<div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Search people" title="Search">⌕</button><button class="mobile-head-action messenger-head-action" type="button" data-tab="messages" aria-label="Open Messenger messages" title="Messenger"><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00B2FF"/><stop offset="1" stop-color="#006AFF"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
 <aside class="social-left">
