@@ -1706,7 +1706,7 @@ async function loadHomeStories(){
   $('story-viewer-author').textContent=profile.full_name||'SUHAS Member';
   $('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();
   viewer.showModal();
-  if(audio){audio.load();const startAudio=()=>audio.play().catch(err=>{console.warn('Story audio playback was blocked by the browser',err);});startAudio();audio.addEventListener('canplay',()=>{if(audio.paused)startAudio();},{once:true});body.onclick=(event)=>{if(event.target.closest('button,a,input,video[controls]'))return;if(audio.paused)startAudio();else audio.pause();};viewer.onclose=()=>{audio.pause();audio.currentTime=0;body.onclick=null;};}else{body.onclick=null;viewer.onclose=null;}
+  if(audio){audio.load();const startAudio=()=>{if(audio.paused)audio.play().catch(err=>console.warn('Story audio playback was blocked by the browser',err));};startAudio();audio.addEventListener('canplay',startAudio,{once:true});body.onclick=(event)=>{if(event.detail<2||event.target.closest('button,a,input,video[controls]'))return;if(audio.paused)startAudio();else audio.pause();};viewer.onclose=()=>{audio.pause();audio.currentTime=0;body.onclick=null;};}else{body.onclick=null;viewer.onclose=null;}
   if(story.user_id!==me)client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true}).then(v=>{if(v.error)notice(v.error.message,true);});
   if(story.user_id===me)loadHomeStories().catch(err=>console.warn('Could not refresh story views',err));
  }));
