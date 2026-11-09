@@ -20,7 +20,7 @@
 <section id="create-link-job" class="career-note" style="margin:0 auto 22px;max-width:850px;display:none">
 <h2 style="margin:0 0 8px;color:#10264a;font-size:22px">Create Job by Link</h2>
 <p style="margin:0 0 14px">Paste only the public SUHAS Career PLC LinkedIn post URL. Once the approved LinkedIn connection is enabled, the system will import the post details, publish the job to SUHAS Jobs and send the channel update.</p>
-<div id="link-job-msg" class="msg"></div>
+<div id="link-job-msg" class="msg"></div>\n<div style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px"><button class="btn btn-outline" id="linkedin-connect" type="button">Connect LinkedIn</button><span id="linkedin-status" style="align-self:center;font-size:13px;color:#5b6b85">Checking LinkedIn connection…</span></div>
 <form id="link-job-form">
 <div class="form-row"><label>Public LinkedIn post / job URL</label><input id="link-job-url" type="url" required placeholder="https://www.linkedin.com/posts/..."></div>
 <div class="form-row"><label>Paste the complete job-post text</label><textarea id="link-job-text" rows="7" placeholder="Open the public LinkedIn post, copy its job details and paste them here. The system will not scrape LinkedIn or request your password."></textarea></div>
@@ -61,7 +61,29 @@
   function message(t,ok){var el=document.getElementById('link-job-msg');el.textContent=t;el.style.display='block';el.style.background=ok?'#E7F6EC':'#FDECEA';el.style.color=ok?'#1B6B3A':'#A5321F';}
   function field(id,value){var el=document.getElementById(id);if(el)el.value=value||'';}
   function validLinkedInUrl(value){try{var u=new URL(value);return u.protocol==='https:'&&(u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'));}catch(e){return false;}}
-  (async function(){try{var s=await sb.auth.getSession();if(!s.data.session)return;if(await window.checkIsAdmin())panel.style.display='block';}catch(e){}})();
+  var linkedinEndpoint=(window.SUHAS_CONFIG&&window.SUHAS_CONFIG.SUPABASE_URL||'').replace(/\\/$/,'')+'/functions/v1/linkedin-oauth';
+  async function linkedinRequest(action,method){
+    var sessionResult=await sb.auth.getSession(),session=sessionResult.data.session;
+    if(!session)throw new Error('Sign in to SUHAS-MAX first.');
+    var response=await fetch(linkedinEndpoint+'?action='+encodeURIComponent(action),{method:method||'GET',headers:{'Authorization':'Bearer '+session.access_token,'apikey':window.SUHAS_CONFIG.SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'}});
+    var data=await response.json().catch(function(){return {};});
+    if(!response.ok)throw new Error(data.error||('LinkedIn request failed ('+response.status+').'));
+    return data;
+  }
+  async function refreshLinkedInStatus(){
+    var el=document.getElementById('linkedin-status');
+    try{var s=await linkedinRequest('status','GET');
+      if(!s.configured){el.textContent='Not configured yet — LinkedIn credentials and secure storage are incomplete.';return;}
+      if(!s.company_page_scopes_enabled){el.textContent='OAuth is configured, but Company Page API permissions are not enabled.';return;}
+      el.textContent='Credentials and Company Page scopes are configured. Login test still required.';
+    }catch(e){el.textContent=e.message;}
+  }
+  document.getElementById('linkedin-connect').addEventListener('click',async function(){
+    var b=this;b.disabled=true;var old=b.textContent;b.textContent='Connecting…';
+    try{var data=await linkedinRequest('start','POST');if(!data.authorization_url)throw new Error('LinkedIn did not return an authorization URL.');location.href=data.authorization_url;}
+    catch(e){message(e.message,false);b.disabled=false;b.textContent=old;}
+  });
+  (async function(){try{var s=await sb.auth.getSession();if(!s.data.session)return;if(await window.checkIsAdmin()){panel.style.display='block';refreshLinkedInStatus();}}catch(e){}})();
   document.getElementById('link-job-prepare').addEventListener('click',function(){
     var url=document.getElementById('link-job-url').value.trim(),raw=document.getElementById('link-job-text').value.trim();
     if(!validLinkedInUrl(url)){message('Please paste a valid public HTTPS LinkedIn post or job URL.',false);return;}
