@@ -420,3 +420,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Kept the existing Supabase story upload/insert/view flow; story creator closes only after the existing submit handler confirms successful insert and reload. Added `suhas_stories.metadata jsonb not null default '{}'` and GIN index additively for future structured story options.
 - Latest commits: `54dca4ee94f4d3e0132243f70a9b599f445ebed8` (UI) and `93aac8e37794e789481f616093995309cb50ef77` (success-only close).
 - All six inline JavaScript blocks parse successfully. Latest GitHub Actions for commit `93aac8e...`: Pages deploy, CodeQL, site quality and Datadog tests queued/pending at last check. Android visual/runtime verification remains pending.
+
+ 
+## 2026-11-09 — Premium Home header, member search and Messenger presence
+- Updated `social.html` additively in commit `41f1c5111ded09141983f5f05e40b798a12f35d5`.
+- Header now keeps the existing left hamburger and SUHAS-MAX identity, and places the controls at the right in this order: Messenger, expandable member search, circular premium Create (+), and a 3×3 three-dot menu. The old center navigation menu button was moved out of the center navigation; its existing `data-tab="maxmenu"` action and current SUHAS-MAX menu drawer remain the action target.
+- Messenger uses the blue/cyan/purple gradient icon treatment. Header search opens the existing Find People section and filters the existing Supabase-backed public member list as the user types; no separate or fake account store was introduced.
+- Messenger's start-conversation list now includes all loaded `profile_complete=true` public profiles (up to the existing 500-row query limit), sorted online-first then alphabetically. Added ephemeral Supabase Realtime Presence tracking: green dot means a member currently has an active SUHAS-MAX session on the shared presence channel; gray means no active presence was observed. No new database table or schema change was made.
+- SUHAS-MAX wordmark received a blue/silver premium gradient treatment. Existing Story Audio code was checked and preserved.
+- Verification: all 6 inline scripts in `social.html` parse successfully; static checks confirmed header controls, search wiring, Presence channel, status indicators, and unchanged Story Audio handler. GitHub Site quality workflow run `42648709579` completed successfully. Combined commit status endpoint returned no individual status entries.
+- Not yet verified: Android/desktop visual tap-through, real two-account Presence behavior, and live GitHub Pages deployment for this commit. Demo-only entries not represented by real Supabase public profiles are not fabricated or shown as chat-capable accounts; they require a separate, clearly marked demo source before they can appear.
+- Recovery: commit `41f1c5111ded09141983f5f05e40b798a12f35d5`; no prior page, account, message, story, media, data, or feature was deleted.
