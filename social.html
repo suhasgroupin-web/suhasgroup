@@ -730,6 +730,35 @@ html body form.compose[data-comment-form] button[type="submit"]{
  .social-mobile-nav .mobile-nav-icon{font-size:21px!important;line-height:1.1!important}
 }
 </style>
+
+<style id="suhas-max-bottom-nav-layout-hotfix">
+/* Keep the six primary destinations in one compact horizontal mobile bar. */
+@media(max-width:760px){
+  html body nav.social-mobile-nav{
+    position:fixed!important;inset:auto 0 0 0!important;
+    display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-auto-flow:column!important;grid-auto-columns:minmax(0,1fr)!important;
+    flex-direction:row!important;flex-wrap:nowrap!important;
+    align-items:stretch!important;align-content:center!important;justify-content:stretch!important;
+    width:100%!important;height:auto!important;min-height:76px!important;max-height:calc(88px + env(safe-area-inset-bottom))!important;
+    margin:0!important;transform:none!important;overflow:visible!important;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom))!important;
+    box-sizing:border-box!important;gap:4px!important;
+  }
+  html body nav.social-mobile-nav>button{
+    display:flex!important;position:relative!important;float:none!important;
+    flex:initial!important;width:100%!important;min-width:0!important;max-width:none!important;
+    height:62px!important;min-height:62px!important;max-height:62px!important;
+    margin:0!important;padding:4px 1px!important;
+    flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    white-space:nowrap!important;box-sizing:border-box!important;
+  }
+  html body nav.social-mobile-nav>button .mobile-nav-icon{width:30px!important;height:30px!important;font-size:20px!important}
+  html body nav.social-mobile-nav>button>span:last-child{display:block!important;font-size:9px!important;line-height:1.1!important;letter-spacing:-.25px!important}
+  html body .social-shell{padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
+}
+</style>
+
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
