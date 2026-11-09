@@ -153,3 +153,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: read-only Supabase catalog query confirmed the relevant RLS policy definitions; GitHub source update succeeded. No live two-account send/deny UI test was performed.
 - No schema, records, routes, existing features or user data were changed or deleted.
 - Next step: run authenticated two-account tests for friend requests and messages; then audit feed audience enforcement, profile visibility, block/report, notification routing, media storage, and remaining Facebook-style feature gaps.
+
+
+## SUHAS-MAX group-join error recovery — 2026-11-09
+- Continued the group action hardening after the duplicate-handler and repeat-tap guards.
+- Wrapped the existing Group Join request and subsequent group refresh/open steps in error handling. The button is disabled and shows `Joining…` during the request; on a returned database error (other than unique violation `23505`) or a later refresh/open failure, the original button label and enabled state are restored and a visible error notice is shown.
+- Duplicate membership (`23505`) continues to be treated as already joined, followed by refreshing and opening the group.
+- Changed file: `social.html`.
+- Code commit: `edae48e970a37790ed1cc16b38bbe1ed6455d7a6`.
+- Verification performed in this increment: source-level replacement guard confirmed the intended handler existed before update and the updated file was committed. Browser/device interaction and authenticated Supabase two-account behavior are not yet verified.
+- No existing tables, records, pages, assets, routes or features were deleted or replaced.
+- Next step: run JavaScript syntax validation and inspect GitHub Pages deployment/workflow status; then test the Group Join action with an authenticated account.
