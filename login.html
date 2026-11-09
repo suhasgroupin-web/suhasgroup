@@ -73,7 +73,43 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',s.user.id).maybeSingle(); location.replace(p.data && p.data.profile_complete===true ? 'app.html' : 'profile.html?setup=1'); } })();
+(async function(){
+ var sessionResult=await sb.auth.getSession();
+ var session=sessionResult.data&&sessionResult.data.session;
+ if(!session)return;
+ var box=document.createElement('div');
+ box.id='existing-session-choice';
+ box.style.cssText='border:1px solid #dbe4f0;background:#f4f7fc;border-radius:16px;padding:16px;margin:0 0 18px';
+ var email=document.createElement('div');
+ email.style.cssText='font-weight:700;color:#173b70;margin-bottom:8px';
+ email.textContent='Already signed in as '+(session.user.email||'this account');
+ var note=document.createElement('p');
+ note.style.cssText='margin:0 0 14px;color:#64748b;font-size:14px';
+ note.textContent='Continue with this account, or switch to another email on this device.';
+ var actions=document.createElement('div');
+ actions.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px';
+ var proceed=document.createElement('button');
+ proceed.type='button';proceed.className='btn btn-primary';proceed.textContent='Continue account';
+ var change=document.createElement('button');
+ change.type='button';change.className='btn';change.textContent='Switch account';
+ change.style.cssText='border:1px solid #cbd5e1;background:#fff;color:#173b70';
+ proceed.addEventListener('click',async function(){
+  proceed.disabled=true;proceed.textContent='Opening...';
+  var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
+  location.replace(p.data&&p.data.profile_complete===true?'app.html':'profile.html?setup=1');
+ });
+ change.addEventListener('click',async function(){
+  change.disabled=true;change.textContent='Switching...';
+  var out=await sb.auth.signOut();
+  if(out.error){showMsg('msg','Could not switch account: '+out.error.message,false);change.disabled=false;change.textContent='Switch account';return;}
+  box.remove();
+  document.getElementById('email').focus();
+  showMsg('msg','Signed out from the previous account. Enter another email and password.',true);
+ });
+ actions.append(proceed,change);box.append(email,note,actions);
+ var form=document.querySelector('.auth-form .form-card');
+ if(form)form.insertBefore(box,form.querySelector('#msg'));
+})();
 document.getElementById('tg').addEventListener('click', function(){ var p=document.getElementById('password'); var h=p.type==='password'; p.type=h?'text':'password'; this.textContent=h?'Hide':'Show'; });
 document.getElementById('login-form').addEventListener('submit', async function(e){
   e.preventDefault();
