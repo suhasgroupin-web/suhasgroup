@@ -905,6 +905,30 @@ html body:not(.suhas-dark) #messages .msg-list .bubble {color:#1c1e21!important;
 html body.suhas-dark #messages .msg-list .bubble {color:#f0f2f5!important;-webkit-text-fill-color:#f0f2f5!important}
 html body.suhas-dark #messages .msg-list .bubble.mine {color:#fff!important;-webkit-text-fill-color:#fff!important}
 </style>
+
+<style id="suhas-comment-input-contrast-fix">
+/* Explicit high-contrast styling for dynamically rendered comment inputs. */
+html body:not(.suhas-dark) #feed-list form[data-comment-form] > input,
+html body:not(.suhas-dark) #reels-list form[data-comment-form] > input {
+  background:#f7f8fa!important;color:#111827!important;
+  -webkit-text-fill-color:#111827!important;caret-color:#0866ff!important;
+  opacity:1!important;text-shadow:none!important;
+}
+html body:not(.suhas-dark) #feed-list form[data-comment-form] > input::placeholder,
+html body:not(.suhas-dark) #reels-list form[data-comment-form] > input::placeholder {
+  color:#596579!important;-webkit-text-fill-color:#596579!important;opacity:1!important;
+}
+html body.suhas-dark #feed-list form[data-comment-form] > input,
+html body.suhas-dark #reels-list form[data-comment-form] > input {
+  background:#30343b!important;color:#f9fafb!important;
+  -webkit-text-fill-color:#f9fafb!important;caret-color:#9fc2ff!important;
+  border-color:#687386!important;opacity:1!important;text-shadow:none!important;
+}
+html body.suhas-dark #feed-list form[data-comment-form] > input::placeholder,
+html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
+  color:#d1d5db!important;-webkit-text-fill-color:#d1d5db!important;opacity:1!important;
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -1242,6 +1266,24 @@ document.getElementById('story-media')?.addEventListener('change',e=>{const file
 document.getElementById('story-submit')?.addEventListener('click',e=>{const file=$('story-media').files?.[0],content=$('story-content').value.trim();if(!file&&!content){e.preventDefault();$('story-media').click();}});
 
 document.getElementById('story-create-form')?.addEventListener('submit',async e=>{e.preventDefault();const content=$('story-content').value.trim(),file=$('story-media').files?.[0]||null;if(!content&&!file){notice('Write a story or choose a photo/video.',true);return;}if(file&&(!['image/jpeg','image/png','image/webp','video/mp4','video/webm'].includes(file.type)||file.size>26214400)){notice('Choose JPG, PNG, WebP, MP4 or WebM up to 25 MB.',true);return;}const submit=e.currentTarget.querySelector('button[type="submit"]');submit.disabled=true;submit.textContent='Uploading…';let mediaPath=null;try{if(file){const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];mediaPath=me+'/'+crypto.randomUUID()+'.'+ext;const upload=await client.storage.from('suhas-max-stories').upload(mediaPath,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(upload.error)throw upload.error;}const result=await client.from('suhas_stories').insert({user_id:me,content:content||' ',media_path:mediaPath,media_type:file?.type||null,audience:$('story-audience').value,expires_at:new Date(Date.now()+24*60*60*1000).toISOString()});if(result.error)throw result.error;$('story-content').value='';$('story-media').value='';$('story-media-name').textContent='';$('story-media-preview').innerHTML='';$('story-media-preview').hidden=true;if(storyPreviewUrl){URL.revokeObjectURL(storyPreviewUrl);storyPreviewUrl=null;}$('story-submit').textContent='＋ Add Story';await loadHomeStories();notice('Story shared. It will expire after 24 hours.');}catch(err){if(mediaPath)await client.storage.from('suhas-max-stories').remove([mediaPath]);notice(err.message||'Could not share story.',true);}finally{submit.disabled=false;submit.textContent='＋ Add Story';}});
+/* Keep the live comment editor readable while the user is typing. */
+document.addEventListener('focusin',function suhasCommentInputLiveContrast(e){
+ const input=e.target.closest('#feed-list form[data-comment-form] > input, #reels-list form[data-comment-form] > input');
+ if(!input)return;
+ const dark=document.body.classList.contains('suhas-dark');
+ input.style.setProperty('background-color',dark?'#30343b':'#f7f8fa','important');
+ input.style.setProperty('color',dark?'#f9fafb':'#111827','important');
+ input.style.setProperty('-webkit-text-fill-color',dark?'#f9fafb':'#111827','important');
+ input.style.setProperty('caret-color',dark?'#9fc2ff':'#0866ff','important');
+ input.style.setProperty('opacity','1','important');
+});
+document.addEventListener('input',function suhasCommentInputLiveContrast(e){
+ const input=e.target.closest('#feed-list form[data-comment-form] > input, #reels-list form[data-comment-form] > input');
+ if(!input)return;
+ const dark=document.body.classList.contains('suhas-dark');
+ input.style.setProperty('color',dark?'#f9fafb':'#111827','important');
+ input.style.setProperty('-webkit-text-fill-color',dark?'#f9fafb':'#111827','important');
+});
 document.addEventListener('submit',async e=>{const form=e.target.closest('[data-comment-form]');if(!form)return;e.preventDefault();const input=form.querySelector('input'),content=input.value.trim();if(!content)return;const r=await client.from('suhas_post_comments').insert({post_id:Number(form.dataset.commentForm),user_id:me,content});if(r.error){notice(r.error.message,true);return;}await loadFeed();});
 document.addEventListener('click',async e=>{
  const profileTarget=e.target.closest('[data-profile-open]');if(profileTarget){try{await openMemberProfile(profileTarget.dataset.profileOpen);}catch(err){notice(err.message||'Could not load profile.',true);}return;}
