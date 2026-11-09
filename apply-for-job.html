@@ -22,8 +22,24 @@
 <p style="margin:0 0 14px">Paste only the public SUHAS Career PLC LinkedIn post URL. Once the approved LinkedIn connection is enabled, the system will import the post details, publish the job to SUHAS Jobs and send the channel update.</p>
 <div id="link-job-msg" class="msg"></div>
 <form id="link-job-form">
-<div class="form-row"><label>LinkedIn job post URL</label><input id="link-job-url" type="url" required placeholder="https://www.linkedin.com/posts/..."></div>
-<button class="btn btn-primary" id="link-job-submit" type="submit">Create Job by Link</button>
+<div class="form-row"><label>Public LinkedIn post / job URL</label><input id="link-job-url" type="url" required placeholder="https://www.linkedin.com/posts/..."></div>
+<div class="form-row"><label>Paste the complete job-post text</label><textarea id="link-job-text" rows="7" placeholder="Open the public LinkedIn post, copy its job details and paste them here. The system will not scrape LinkedIn or request your password."></textarea></div>
+<button class="btn btn-outline" id="link-job-prepare" type="button">Prepare job details</button>
+<div id="link-job-fields" style="display:none;margin-top:18px;padding-top:16px;border-top:1px solid #dce4f0">
+<p style="font-weight:700;color:#10264a;margin:0 0 12px">Review and complete the details before publishing</p>
+<div class="form-row"><label>Job title *</label><input id="lj-title" required></div>
+<div class="form-row"><label>Company / brand</label><input id="lj-company" value="SUHAS GROUP"></div>
+<div class="form-row"><label>Category</label><select id="lj-category"><option>Quality Assurance / QC</option><option>Merchandising</option><option>Production &amp; Operations</option><option>HR &amp; Admin</option><option>Compliance &amp; Sustainability</option><option>Industrial Engineering</option><option>Supply Chain &amp; Logistics</option><option>Finance &amp; Accounts</option><option>Sales &amp; Marketing</option><option>IT &amp; Software</option><option>Design &amp; Product Development</option><option>Customer Service</option><option>Security &amp; Safety</option><option>Other</option></select></div>
+<div class="form-row"><label>Location *</label><input id="lj-location" required placeholder="e.g. Dhaka, Bangladesh"></div>
+<div class="form-row"><label>Employment type</label><input id="lj-type" placeholder="e.g. Full-time"></div>
+<div class="form-row"><label>Salary</label><input id="lj-salary" placeholder="As stated in the post"></div>
+<div class="form-row"><label>Experience</label><input id="lj-experience"></div>
+<div class="form-row"><label>Application deadline</label><input id="lj-deadline" type="date"></div>
+<div class="form-row"><label>Job description *</label><textarea id="lj-description" rows="7" required></textarea></div>
+<div class="form-row"><label>Requirements</label><textarea id="lj-requirements" rows="4"></textarea></div>
+<p style="font-size:13px;color:#5b6b85">Only publish after checking every field. The original LinkedIn link will be saved so applicants can open the source post.</p>
+<button class="btn btn-primary" id="link-job-submit" type="submit">Publish Job to SUHAS Jobs</button>
+</div>
 </form>
 </section>
 <div class="career-grid">
@@ -37,32 +53,49 @@
 <a class="career-tile green" href="https://whatsapp.com/channel/0029VaGiyHs1XquODhluFX1N" target="_blank" rel="noopener noreferrer"><span class="tile-icon">◉</span><strong>WhatsApp Channel</strong><small>Follow vacancy alerts and official updates on WhatsApp.</small></a>
 </div>
 <div class="career-note"><strong>Visitor access:</strong> Anyone can browse public job listings and contact the hiring team. To submit an application or track it in a personal account, sign in or create a free account. Job-management tools remain restricted to authorized administrators.</div>
-</div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script src="assets/script.js"></script><script>
+</div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script src="assets/script.js"></script><script src="assets/jobimport.js"></script><script>
 (function(){
   var panel=document.getElementById('create-link-job');
   var form=document.getElementById('link-job-form');
   if(!panel||!form)return;
   function message(t,ok){var el=document.getElementById('link-job-msg');el.textContent=t;el.style.display='block';el.style.background=ok?'#E7F6EC':'#FDECEA';el.style.color=ok?'#1B6B3A':'#A5321F';}
-  (async function(){
-    try{
-      var s=await sb.auth.getSession();
-      if(!s.data.session)return;
-      if(await window.checkIsAdmin())panel.style.display='block';
-    }catch(e){}
-  })();
-  form.addEventListener('submit',function(e){
+  function field(id,value){var el=document.getElementById(id);if(el)el.value=value||'';}
+  function validLinkedInUrl(value){try{var u=new URL(value);return u.protocol==='https:'&&(u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'));}catch(e){return false;}}
+  (async function(){try{var s=await sb.auth.getSession();if(!s.data.session)return;if(await window.checkIsAdmin())panel.style.display='block';}catch(e){}})();
+  document.getElementById('link-job-prepare').addEventListener('click',function(){
+    var url=document.getElementById('link-job-url').value.trim(),raw=document.getElementById('link-job-text').value.trim();
+    if(!validLinkedInUrl(url)){message('Please paste a valid public HTTPS LinkedIn post or job URL.',false);return;}
+    if(!raw){message('Paste the copied job-post text first. LinkedIn is not automatically scraped.',false);return;}
+    var parsed=window.JobImport?window.JobImport.parse(url+'\n'+raw):null;
+    if(!parsed){message('The job text parser is unavailable. Refresh the page and try again.',false);return;}
+    field('lj-title',parsed.title);field('lj-company',parsed.company||'SUHAS GROUP');field('lj-location',parsed.location);
+    field('lj-type',parsed.job_type);field('lj-salary',parsed.salary);field('lj-experience',parsed.experience);
+    field('lj-deadline',parsed.deadline);field('lj-description',parsed.description||raw);field('lj-requirements',parsed.requirements);
+    if(parsed.category){var cat=document.getElementById('lj-category');if(Array.prototype.some.call(cat.options,function(o){return o.value===parsed.category||o.text===parsed.category;}))cat.value=parsed.category;}
+    document.getElementById('link-job-fields').style.display='block';
+    message('Details prepared. Review and correct every field before publishing. Nothing has been published yet.',true);
+    document.getElementById('lj-title').focus();
+  });
+  form.addEventListener('submit',async function(e){
     e.preventDefault();
     var url=document.getElementById('link-job-url').value.trim();
-    var btn=document.getElementById('link-job-submit');
+    if(!validLinkedInUrl(url)){message('Please use a valid HTTPS LinkedIn URL.',false);return;}
+    var title=document.getElementById('lj-title').value.trim(),locationValue=document.getElementById('lj-location').value.trim(),description=document.getElementById('lj-description').value.trim();
+    if(!title||!locationValue||!description){message('Job title, location and description are required. Complete them before publishing.',false);return;}
+    var btn=document.getElementById('link-job-submit');btn.disabled=true;var old=btn.textContent;btn.textContent='Publishing...';
     try{
-      var parsed=new URL(url);
-      if(parsed.protocol!=='https:'||!(parsed.hostname==='linkedin.com'||parsed.hostname.endsWith('.linkedin.com'))){
-        message('Please paste a valid HTTPS LinkedIn post URL.',false);return;
-      }
-      message('LinkedIn import is not connected yet. No incomplete job has been published. Please enable the approved LinkedIn Page API access; then this button can import the full post and complete the publishing workflow.',false);
-    }catch(err){
-      message('Please enter a valid LinkedIn URL.',false);
-    }
+      var sessionResult=await sb.auth.getSession();
+      if(!sessionResult.data.session||!(await window.checkIsAdmin()))throw new Error('Your admin session is not active. Sign in with an authorized SUHAS admin account.');
+      var row={title:title,company:document.getElementById('lj-company').value.trim()||'SUHAS GROUP',category:document.getElementById('lj-category').value,
+        location:locationValue,job_type:document.getElementById('lj-type').value.trim(),salary:document.getElementById('lj-salary').value.trim(),
+        experience:document.getElementById('lj-experience').value.trim(),deadline:document.getElementById('lj-deadline').value||null,
+        description:description,requirements:document.getElementById('lj-requirements').value.trim(),source:'LinkedIn',external_url:url,status:'published'};
+      var saved=await sb.from('jobs').insert(row).select('id,job_code').single();
+      if(saved.error)throw saved.error;
+      message('Published successfully to SUHAS Jobs'+(saved.data.job_code?' ('+saved.data.job_code+')':'')+'. The original LinkedIn link is attached for applicants.',true);
+      form.reset();document.getElementById('lj-company').value='SUHAS GROUP';document.getElementById('link-job-fields').style.display='none';
+    }catch(err){message(err&&err.message?err.message:'Could not publish the job. Please check the details and try again.',false);}
+    finally{btn.disabled=false;btn.textContent=old;}
   });
 })();
 </script></body></html>
