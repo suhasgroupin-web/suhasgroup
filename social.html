@@ -1440,6 +1440,14 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .suhas-story-audio-preview audio{width:100%}
 .suhas-story-audio-preview button{border:0;background:transparent;color:#b42318;padding:5px}
 .suhas-story-create-hint{display:none!important}
+</style><style id="suhas-story-card-uploaded-media-fix">
+.home-story-photo{position:relative!important;overflow:hidden!important}
+.home-story-photo .home-story-preview-media{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important}
+.home-story-photo video.home-story-preview-media{pointer-events:none}
+.story-viewer-content{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:10px!important}
+.story-viewer-content .story-viewer-media{width:100%!important;max-width:100%!important;max-height:58vh!important;object-fit:contain!important}
+.story-viewer-audio{display:none!important}
+.story-viewer-content p{margin:0!important;white-space:pre-wrap}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -1626,12 +1634,51 @@ async function loadHomeStories(){
  const ownPhoto=own.profile_photo_url?'<img src="'+safe(own.profile_photo_url)+'" alt="'+safe(own.full_name||'Your profile photo')+'">': '<span>'+safe((own.full_name||'S').slice(0,1).toUpperCase())+'</span>';
  const ownCard='<button type="button" class="home-story-card home-story-create-card" data-create-story-modal aria-label="Create story"><span class="home-story-create-photo">'+ownPhoto+'<span class="home-story-plus">+</span></span><span class="home-story-create-label">Create story</span></button>';
  if(!rows.length){host.innerHTML=ownCard+'<div class="home-stories-empty">No stories yet. Share the first one.</div>';bindStoryCreateCard();return;}
+ const mediaPaths=[...new Set(rows.map(x=>x.media_path).filter(Boolean))];
+ const audioPaths=[...new Set(rows.map(x=>x.metadata&&x.metadata.audio_path).filter(Boolean))];
+ const [mediaSigned,audioSigned]=await Promise.all([
+  mediaPaths.length?client.storage.from('suhas-max-stories').createSignedUrls(mediaPaths,3600):Promise.resolve({data:[],error:null}),
+  audioPaths.length?client.storage.from('suhas-max-stories').createSignedUrls(audioPaths,3600):Promise.resolve({data:[],error:null})
+ ]);
+ if(mediaSigned.error)console.warn('Story media preview URLs unavailable',mediaSigned.error);
+ if(audioSigned.error)console.warn('Story audio URLs unavailable',audioSigned.error);
+ const mediaUrlByPath=Object.fromEntries((mediaSigned.data||[]).filter(x=>x.signedUrl).map(x=>[x.path,x.signedUrl]));
+ const audioUrlByPath=Object.fromEntries((audioSigned.data||[]).filter(x=>x.signedUrl).map(x=>[x.path,x.signedUrl]));
  const ownIds=rows.filter(x=>x.user_id===me).map(x=>x.id);
  let viewCounts={};
  if(ownIds.length){const vr=await client.from('suhas_story_views').select('story_id').in('story_id',ownIds);if(vr.error)throw vr.error;(vr.data||[]).forEach(v=>viewCounts[v.story_id]=(viewCounts[v.story_id]||0)+1);}
- host.innerHTML=ownCard+rows.map(x=>{const profile=byId[x.user_id]||{};const isOwn=x.user_id===me;return '<button type="button" class="home-story-card" data-story-open="'+x.id+'"><span class="home-story-photo">'+(profile.profile_photo_url?'<img src="'+safe(profile.profile_photo_url)+'" alt="">':'<span>'+safe((profile.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'</span><span class="home-story-name">'+safe(profile.full_name||'SUHAS Member')+'</span>'+(isOwn?'<span class="home-story-views">'+(viewCounts[x.id]||0)+' views</span>':'')+'</button>';}).join('');
+ host.innerHTML=ownCard+rows.map(x=>{
+  const profile=byId[x.user_id]||{},isOwn=x.user_id===me,preview=mediaUrlByPath[x.media_path];
+  let visual='';
+  if(preview&&x.media_type&&x.media_type.startsWith('video/'))visual='<video class="home-story-preview-media" src="'+safe(preview)+'" muted playsinline preload="metadata"></video>';
+  else if(preview)visual='<img class="home-story-preview-media" src="'+safe(preview)+'" alt="Story photo">';
+  else visual=profile.profile_photo_url?'<img class="home-story-preview-media" src="'+safe(profile.profile_photo_url)+'" alt="">':'<span>'+safe((profile.full_name||'S').slice(0,1).toUpperCase())+'</span>';
+  return '<button type="button" class="home-story-card" data-story-open="'+x.id+'"><span class="home-story-photo">'+visual+'</span><span class="home-story-name">'+safe(profile.full_name||'SUHAS Member')+'</span>'+(isOwn?'<span class="home-story-views">'+(viewCounts[x.id]||0)+' views</span>':'')+'</button>';
+ }).join('');
  bindStoryCreateCard();
- host.querySelectorAll('[data-story-open]').forEach(btn=>btn.addEventListener('click',async()=>{const story=rows.find(x=>String(x.id)===btn.dataset.storyOpen);if(!story)return;if(story.user_id!==me){const v=await client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true});if(v.error){notice(v.error.message,true);return;}}const profile=byId[story.user_id]||{};const viewer=$('story-viewer');$('story-viewer-author').textContent=profile.full_name||'SUHAS Member';const body=$('story-viewer-content');body.textContent=story.content||'';body.querySelectorAll('img,video').forEach(n=>n.remove());if(story.media_path){const signed=await client.storage.from('suhas-max-stories').createSignedUrl(story.media_path,3600);if(signed.error){notice(signed.error.message,true);return;}const media=document.createElement(story.media_type&&story.media_type.startsWith('video/')?'video':'img');media.className='story-viewer-media';media.src=signed.data.signedUrl;if(media.tagName==='VIDEO'){media.controls=true;media.playsInline=true;}else media.alt='Story photo';body.prepend(media);}if(story.metadata&&story.metadata.audio_path){const audioSigned=await client.storage.from('suhas-max-stories').createSignedUrl(story.metadata.audio_path,3600);if(!audioSigned.error){const audio=document.createElement('audio');audio.controls=true;audio.src=audioSigned.data.signedUrl;audio.className='story-viewer-audio';body.appendChild(audio);}}$('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();viewer.showModal();if(story.user_id===me)await loadHomeStories();}));
+ host.querySelectorAll('[data-story-open]').forEach(btn=>btn.addEventListener('click',()=>{
+  const story=rows.find(x=>String(x.id)===btn.dataset.storyOpen);if(!story)return;
+  const profile=byId[story.user_id]||{},viewer=$('story-viewer'),body=$('story-viewer-content');
+  body.replaceChildren();
+  if(story.content&&story.content.trim()) {const caption=document.createElement('p');caption.textContent=story.content;body.appendChild(caption);}
+  const mediaUrl=mediaUrlByPath[story.media_path];
+  if(story.media_path&&mediaUrl){
+   const media=document.createElement(story.media_type&&story.media_type.startsWith('video/')?'video':'img');
+   media.className='story-viewer-media';media.src=mediaUrl;
+   if(media.tagName==='VIDEO'){media.controls=true;media.playsInline=true;media.autoplay=true;}
+   else media.alt='Story photo';
+   body.prepend(media);
+  }
+  const audioUrl=story.metadata&&audioUrlByPath[story.metadata.audio_path];
+  let audio=null;
+  if(audioUrl){audio=document.createElement('audio');audio.className='story-viewer-audio';audio.src=audioUrl;audio.preload='auto';audio.autoplay=true;audio.setAttribute('playsinline','');body.appendChild(audio);}
+  $('story-viewer-author').textContent=profile.full_name||'SUHAS Member';
+  $('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();
+  viewer.showModal();
+  if(audio){const startAudio=()=>audio.play().catch(err=>console.warn('Story audio playback was blocked by the browser',err));startAudio();}
+  if(story.user_id!==me)client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true}).then(v=>{if(v.error)notice(v.error.message,true);});
+  if(story.user_id===me)loadHomeStories().catch(err=>console.warn('Could not refresh story views',err));
+ }));
 }
 function bindStoryCreateCard(){document.querySelectorAll('[data-create-story-modal]').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',openSuhasStoryCreator);});}
 async function loadHomeReels(){
