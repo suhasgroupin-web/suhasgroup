@@ -281,3 +281,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commits: `f93f2af48d5bb169319cf9acd368d142cbbfa431` (feature), `58d75389c7ea3a4ac34c3e0f1a89fae21caf23ca` (syntax fix).
 - Supabase security advisor still reports the pre-existing warning that leaked-password protection is disabled; no change made to Auth settings.
 - Not yet live-tested with actual Android uploads, friend/public audience accounts, or video playback.
+
+
+## 2026-11-09 — Facebook-style Menu Drawer
+- Updated `social.html` to replace the full-page Menu panel with a left-side slide-in drawer matching the supplied Facebook reference: account header, two-column shortcuts, See more/less, expandable Help and support / Settings and privacy / SUHAS services, and Log out link.
+- Added dimmed scrim, close controls, body scroll lock, responsive sizing, and reduced-motion handling. Existing tab navigation remains wired through `activateMaxTab`; selecting a menu destination closes the drawer.
+- GitHub commit: `942509fc7ad086a81527d49931f60fc653e5c1b6`.
+- Verification: latest `social.html` re-fetched from `main`; drawer/overlay/shortcut/see-more/close/open hooks found; both inline scripts passed JavaScript syntax parsing.
+- Not yet verified: live deployment, actual Android layout/tap behavior, and authentication/logout behavior on device.
