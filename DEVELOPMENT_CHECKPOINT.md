@@ -221,3 +221,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: fetched committed source, confirmed form/loader/expiry/audience/viewer hooks, and parsed inline JavaScript. Confirmed stories table and four RLS policies exist.
 - Not yet tested with authenticated browser sessions or actual users; live create/view/privacy/expiry behavior remains pending.
 - No existing tables, records, pages, assets, or features were deleted; additive migration only.
+
+
+## SUHAS-MAX Story View Tracking UI — 2026-11-09
+- Connected the Home Stories UI to the additive `suhas_story_views` table: opening another member's active story records one view per viewer; opening own story displays the recorded view count.
+- Code commit: `97f33dc1b9c08a4798b109f487339dc2a6c2fc22`.
+- Verification: re-fetched committed source; confirmed view-read, unique upsert, and view-count rendering hooks. Both inline JavaScript blocks passed syntax parsing. Confirmed the story-view RLS policies are present.
+- Live multi-user/browser verification remains pending.
+- No existing records or features were deleted.
