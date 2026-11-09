@@ -365,3 +365,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commit: `dfb2d68d59d6134478834ee44c9fc6eb8b4f4774`.
 - Source verification: style block inserted before `</head>`; all target selectors and both theme branches confirmed in the committed source. JavaScript and database behavior were not changed.
 - Pending: visual verification on the user's Android device in both light and dark themes; hard refresh/reopen the SUHAS-MAX social page to load the new CSS.
+
+
+## 2026-11-09 — Facebook-style reference integration started (audit + master rules)
+- Reconnected to GitHub repository `suhasgroupin-web/suhasgroup` on `main` and Supabase project `ehvgxbifqtyajeersnvq` (`suhasgroup`, ACTIVE_HEALTHY).
+- Read the current `social.html`, `app.html`, `index.html`, shared CSS/config/display-mode assets, `DEVELOPMENT_RULES.md`, and the latest checkpoint. Confirmed the production social page already contains Supabase-backed profiles, feed, stories/reels, friend requests, notifications, Messenger, Marketplace, and navigation; avoid importing the supplied static demo's fake/local-only actions.
+- Inspected Supabase public schema with verbose table metadata; existing social tables and RLS are present. Security advisor currently reports leaked-password protection disabled and two RLS-enabled/no-policy LinkedIn OAuth tables. Performance advisor reports findings including unindexed foreign keys, RLS initplan warnings, unused indexes, and multiple permissive policies. No database changes were made.
+- Added a permanent, additive section 8 to `DEVELOPMENT_RULES.md` describing how to use the two supplied HTML files as references, preserve existing app/data, integrate only real Supabase-backed features, and require mobile/desktop functional verification.
+- GitHub commit for rules addendum: `ed7b4dba8e525a10342af07657b6a779880a6ea7`.
+- Completed: repository/database discovery and source audit baseline; master development rules updated. Not completed: UI changes, automated/browser/device tests, deployment, or live visual verification.
+- Next step: continue auditing the supplied reference files against the current live social page and isolate a specific, testable UI/interaction improvement before editing `social.html`. Do not change Supabase schema until a concrete gap and safe migration are demonstrated.
