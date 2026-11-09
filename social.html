@@ -1324,6 +1324,14 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 }
 </style>
 <style id="suhas-facebook-clean-composer-20261109">@media(max-width:760px){#feed.home-feed-panel .home-composer .composer-options,#feed.home-feed-panel .home-composer .composer-meta-row{display:none!important}}</style>
+<style id="suhas-post-repost-ui">
+.post-repost-attribution{display:flex;align-items:center;gap:6px;padding:9px 14px 0;color:#65676b;font-size:13px;font-weight:600;background:#fff}
+.post-repost-attribution b{color:#1c1e21}
+.suhas-share-card .suhas-share-dialog-actions{display:flex;flex-wrap:wrap;gap:8px}
+.suhas-share-dialog-actions button{flex:1 1 auto}
+.suhas-share-dialog-actions button:disabled{opacity:.48;cursor:not-allowed}
+@media(max-width:560px){.suhas-share-card{padding:17px}.suhas-share-dialog-actions button{min-height:42px}}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -1523,7 +1531,57 @@ async function loadHomeReels(){
  const byId=Object.fromEntries(profiles.map(p=>[p.user_id,p]));
  host.innerHTML=rows.map(x=>{const p=byId[x.user_id]||{};return '<button class="home-reel-card" type="button" data-tab="reels" aria-label="Open Reels"><video muted playsinline preload="metadata" src="'+safe(x.media_url)+'"></video><span class="home-reel-play">▶</span><span class="home-reel-caption">'+safe(x.content||'Watch this Reel')+'</span><span class="home-reel-author">'+safe(p.full_name||'SUHAS Member')+'</span></button>';}).join('');
 }
-async function loadFeed(){const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').order('created_at',{ascending:false}).limit(100);if(r.error)throw r.error;const ids=[...new Set((r.data||[]).map(x=>x.user_id))];let ps=[];if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified').in('user_id',ids);if(p.error)throw p.error;ps=p.data||[];}const byId=Object.fromEntries(ps.map(x=>[x.user_id,x]));const postIds=(r.data||[]).map(x=>x.id);let likes=[],comments=[];if(postIds.length){const [lr,cr]=await Promise.all([client.from('suhas_post_likes').select('post_id,user_id').in('post_id',postIds),client.from('suhas_post_comments').select('id,post_id,user_id,content,created_at').in('post_id',postIds).order('created_at')]);if(lr.error)throw lr.error;if(cr.error)throw cr.error;likes=lr.data||[];comments=cr.data||[];}const commentUsers=[...new Set(comments.map(x=>x.user_id))];if(commentUsers.length){const cp=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',commentUsers);if(cp.error)throw cp.error;(cp.data||[]).forEach(p=>byId[p.user_id]=p);}$('feed-list').innerHTML=(r.data||[]).map(x=>{const p=byId[x.user_id]||{};const pl=likes.filter(l=>l.post_id===x.id);const pc=comments.filter(z=>z.post_id===x.id);return '<article class="post-card" id="post-'+x.id+'"><div class="post-head">'+(p.profile_photo_url?'<img class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px"></div>')+'<div class="post-meta post-author"><b class="profile-clickable" data-profile-open="'+x.user_id+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+(p.position||p.company?' · '+safe([p.position,p.company].filter(Boolean).join(', ')):'')+'<br>'+safe(new Date(x.created_at).toLocaleString())+'</div><div class="post-menu-wrap"><button class="post-menu-trigger" type="button" aria-label="Post options" aria-expanded="false" data-post-menu-toggle="'+x.id+'">⋯</button><div class="post-menu" data-post-menu="'+x.id+'"><button type="button" data-post-action="copy" data-post-id="'+x.id+'">🔗 Copy post link</button><button type="button" data-post-action="share" data-post-id="'+x.id+'">↗ Share post</button><button type="button" data-post-action="save" data-post-id="'+x.id+'">🔖 Save post</button>'+(x.media_url?'<button type="button" data-post-action="download" data-post-id="'+x.id+'">⬇ Download photo/video</button>':'')+(x.user_id===me?'<button type="button" data-post-action="edit" data-post-id="'+x.id+'">✎ Edit post text</button>'+(x.media_url?'<button type="button" data-post-action="replace-media" data-post-id="'+x.id+'">▧ Change photo/video</button>':'<button type="button" data-post-action="add-media" data-post-id="'+x.id+'">▧ Add photo/video</button>')+'<button type="button" class="danger" data-post-action="delete" data-post-id="'+x.id+'">🗑 Delete post</button>':'')+'</div></div></div><p>'+safe(x.content)+'</p>'+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:480px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Post media">'):'')+'<div class="social-actions"><button class="action suhas-3d-action suhas-like-action" data-like="'+x.id+'">'+(pl.some(l=>l.user_id===me)?'♥ Liked':'♡ Like')+' · '+pl.length+'</button><button type="button" class="action suhas-3d-action suhas-comment-action" data-focus-comment="'+x.id+'">▢ Comment · '+pc.length+'</button><button type="button" class="action suhas-3d-action suhas-share-action" data-post-action="share" data-post-id="'+x.id+'">↗ Share</button></div><div class="comment-list">'+pc.map(z=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+z.user_id+'">'+safe(byId[z.user_id]?.full_name||'Member')+':</b> '+safe(z.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></article>';}).join('')||'<div class="empty">No posts yet. Be the first to share an update.</div>';}
+async function loadFeed(){
+ const [postsResult,repostsResult]=await Promise.all([
+  client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').order('created_at',{ascending:false}).limit(100),
+  client.from('suhas_post_reposts').select('id,original_post_id,user_id,created_at').order('created_at',{ascending:false}).limit(100)
+ ]);
+ if(postsResult.error)throw postsResult.error;
+ if(repostsResult.error)throw repostsResult.error;
+ const posts=postsResult.data||[],repostRows=repostsResult.data||[];
+ const originals=new Map(posts.map(x=>[String(x.id),x]));
+ const missingIds=[...new Set(repostRows.map(x=>String(x.original_post_id)).filter(id=>!originals.has(id)))];
+ if(missingIds.length){
+  const extra=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('id',missingIds);
+  if(extra.error)throw extra.error;
+  (extra.data||[]).forEach(x=>originals.set(String(x.id),x));
+ }
+ const feedEntries=posts.map(x=>({post:x,repost:null,sortAt:x.created_at}));
+ repostRows.forEach(repost=>{const original=originals.get(String(repost.original_post_id));if(original)feedEntries.push({post:original,repost,sortAt:repost.created_at});});
+ feedEntries.sort((a,b)=>new Date(b.sortAt).getTime()-new Date(a.sortAt).getTime());
+ const visibleEntries=feedEntries.slice(0,100);
+ const profileIds=[...new Set(visibleEntries.flatMap(x=>[x.post.user_id,x.repost?.user_id].filter(Boolean)))];
+ let ps=[];
+ if(profileIds.length){
+  const p=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified').in('user_id',profileIds);
+  if(p.error)throw p.error;ps=p.data||[];
+ }
+ const byId=Object.fromEntries(ps.map(x=>[x.user_id,x]));
+ const postIds=[...new Set(visibleEntries.map(x=>x.post.id))];
+ let likes=[],comments=[];
+ if(postIds.length){
+  const [lr,cr]=await Promise.all([
+   client.from('suhas_post_likes').select('post_id,user_id').in('post_id',postIds),
+   client.from('suhas_post_comments').select('id,post_id,user_id,content,created_at').in('post_id',postIds).order('created_at')
+  ]);
+  if(lr.error)throw lr.error;if(cr.error)throw cr.error;
+  likes=lr.data||[];comments=cr.data||[];
+ }
+ const commentUsers=[...new Set(comments.map(x=>x.user_id))];
+ if(commentUsers.length){
+  const cp=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',commentUsers);
+  if(cp.error)throw cp.error;(cp.data||[]).forEach(p=>byId[p.user_id]=p);
+ }
+ const myReposts=new Map(repostRows.filter(x=>x.user_id===me).map(x=>[String(x.original_post_id),x]));
+ $('feed-list').innerHTML=visibleEntries.map(entry=>{
+  const x=entry.post,repost=entry.repost,p=byId[x.user_id]||{},pl=likes.filter(l=>l.post_id===x.id),pc=comments.filter(z=>z.post_id===x.id);
+  const reposter=repost?(byId[repost.user_id]||{}):null,ownRepost=myReposts.get(String(x.id));
+  const attribution=repost?'<div class="post-repost-attribution">↻ <b class="profile-clickable" data-profile-open="'+safe(repost.user_id)+'">'+safe(reposter.full_name||'SUHAS Member')+'</b> reposted</div>':'';
+  const repostAction=ownRepost?'<button type="button" data-post-action="unrepost" data-post-id="'+x.id+'" data-repost-id="'+safe(ownRepost.id)+'">↶ Remove my repost</button>':'<button type="button" data-post-action="repost" data-post-id="'+x.id+'">↻ Repost to my profile</button>';
+  const cardId=repost?'post-repost-'+safe(repost.id):'post-'+x.id;
+  return attribution+'<article class="post-card" id="'+cardId+'"><div class="post-head">'+(p.profile_photo_url?'<img class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px"></div>')+'<div class="post-meta post-author"><b class="profile-clickable" data-profile-open="'+x.user_id+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+(p.position||p.company?' · '+safe([p.position,p.company].filter(Boolean).join(', ')):'')+'<br>'+safe(new Date(x.created_at).toLocaleString())+'</div><div class="post-menu-wrap"><button class="post-menu-trigger" type="button" aria-label="Post options" aria-expanded="false" data-post-menu-toggle="'+x.id+'">⋯</button><div class="post-menu" data-post-menu="'+x.id+'"><button type="button" data-post-action="copy" data-post-id="'+x.id+'">🔗 Copy post link</button><button type="button" data-post-action="share" data-post-id="'+x.id+'">↗ Share post</button>'+repostAction+'<button type="button" data-post-action="save" data-post-id="'+x.id+'">🔖 Save post</button>'+(x.media_url?'<button type="button" data-post-action="download" data-post-id="'+x.id+'">⬇ Download photo/video</button>':'')+(x.user_id===me?'<button type="button" data-post-action="edit" data-post-id="'+x.id+'">✎ Edit post text</button>'+(x.media_url?'<button type="button" data-post-action="replace-media" data-post-id="'+x.id+'">▧ Change photo/video</button>':'<button type="button" data-post-action="add-media" data-post-id="'+x.id+'">▧ Add photo/video</button>')+'<button type="button" class="danger" data-post-action="delete" data-post-id="'+x.id+'">🗑 Delete post</button>':'')+'</div></div></div><p>'+safe(x.content)+'</p>'+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:480px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Post media">'):'')+'<div class="social-actions"><button class="action suhas-3d-action suhas-like-action" data-like="'+x.id+'">'+(pl.some(l=>l.user_id===me)?'♥ Liked':'♡ Like')+' · '+pl.length+'</button><button type="button" class="action suhas-3d-action suhas-comment-action" data-focus-comment="'+x.id+'">▢ Comment · '+pc.length+'</button><button type="button" class="action suhas-3d-action suhas-share-action" data-post-action="share" data-post-id="'+x.id+'">↗ Share</button></div><div class="comment-list">'+pc.map(z=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+z.user_id+'">'+safe(byId[z.user_id]?.full_name||'Member')+':</b> '+safe(z.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></article>';
+ }).join('')||'<div class="empty">No posts yet. Be the first to share an update.</div>';
+}
 async function openMemberProfile(id){
  activeProfileId=id;$('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
  const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');$('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';
@@ -1565,13 +1623,14 @@ async function sharePostInApp(postId,link,post){
  const rel=await client.from('suhas_friend_requests').select('sender_id,recipient_id').eq('status','accepted').or('sender_id.eq.'+me+',recipient_id.eq.'+me);
  if(rel.error)throw rel.error;
  const friendIds=[...new Set((rel.data||[]).map(x=>x.sender_id===me?x.recipient_id:x.sender_id))];
- if(!friendIds.length)throw new Error('Add a friend before sharing a post in SUHAS-MAX Messenger.');
- const people=await client.from('suhas_public_profiles').select('user_id,full_name').in('user_id',friendIds).order('full_name');
- if(people.error)throw people.error;
- if(!people.data?.length)throw new Error('No available friends were found.');
+ let people=[];
+ if(friendIds.length){
+  const result=await client.from('suhas_public_profiles').select('user_id,full_name').in('user_id',friendIds).order('full_name');
+  if(result.error)throw result.error;people=result.data||[];
+ }
  const dialog=document.createElement('dialog');
  dialog.className='suhas-share-dialog';
- dialog.innerHTML='<form method="dialog" class="suhas-share-card"><h3>Share post in SUHAS-MAX</h3><p>Choose a friend to send this post in Messenger.</p><label for="suhas-share-friend">Friend</label><select id="suhas-share-friend" required><option value="">Choose a friend…</option>'+people.data.map(p=>'<option value="'+safe(p.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</option>').join('')+'</select><div class="suhas-share-dialog-actions"><button type="button" class="action" data-share-cancel>Cancel</button><button type="button" class="action" data-share-external>Other apps</button><button type="submit" class="action primary" data-share-send>Send in Messenger</button></div></form>';
+ dialog.innerHTML='<form method="dialog" class="suhas-share-card"><h3>Share post</h3><p>Repost to your SUHAS-MAX feed, send it to a Messenger friend, or share it through another app.</p><label for="suhas-share-friend">Messenger friend</label><select id="suhas-share-friend" '+(people.length?'required':'disabled')+'><option value="">'+(people.length?'Choose a friend…':'No accepted friends yet')+'</option>'+people.map(p=>'<option value="'+safe(p.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</option>').join('')+'</select><div class="suhas-share-dialog-actions"><button type="button" class="action" data-share-cancel>Cancel</button><button type="button" class="action" data-share-repost>↻ Repost to my feed</button><button type="button" class="action" data-share-external>Other apps</button><button type="submit" class="action primary" data-share-send '+(people.length?'':'disabled')+'>Send in Messenger</button></div></form>';
  document.body.appendChild(dialog);
  const form=dialog.querySelector('form');
  dialog.querySelector('[data-share-cancel]').addEventListener('click',()=>dialog.close());
@@ -1581,10 +1640,18 @@ async function sharePostInApp(postId,link,post){
    else{const copied=await copyToClipboard(link);notice(copied?'Post link copied. You can paste it into another app.':'Could not copy the post link.',!copied);}
   }catch(err){if(err.name!=='AbortError')notice(err.message||'External sharing failed.',true);}
  });
+ dialog.querySelector('[data-share-repost]').addEventListener('click',async()=>{
+  const button=dialog.querySelector('[data-share-repost]');button.disabled=true;button.textContent='Reposting…';
+  try{
+   const result=await client.from('suhas_post_reposts').insert({original_post_id:postId,user_id:me});
+   if(result.error&&result.error.code==='23505')throw new Error('You have already reposted this post.');
+   if(result.error)throw result.error;
+   dialog.close();await loadFeed();notice('Post reposted to your SUHAS-MAX feed.');
+  }catch(err){button.disabled=false;button.textContent='↻ Repost to my feed';notice(err.message||'Could not repost this post.',true);}
+ });
  form.addEventListener('submit',async ev=>{
   ev.preventDefault();
-  const friend=dialog.querySelector('#suhas-share-friend').value;
-  const send=dialog.querySelector('[data-share-send]');
+  const friend=dialog.querySelector('#suhas-share-friend').value,send=dialog.querySelector('[data-share-send]');
   if(!friend)return;
   send.disabled=true;send.textContent='Sending…';
   try{
@@ -1954,7 +2021,7 @@ document.addEventListener('click',async e=>{
   const x=post.data,link=location.origin+location.pathname+'#post-'+encodeURIComponent(id);
   try{
    if(kind==='copy'){const copied=await copyToClipboard(link);notice(copied?'Post link copied. You can paste it anywhere.':'Please copy the post link shown in the box.',!copied);}
-   if(kind==='share'){await sharePostInApp(id,link,x);}
+   if(kind==='share'){await sharePostInApp(id,link,x);}if(kind==='repost'){const result=await client.from('suhas_post_reposts').insert({original_post_id:id,user_id:me});if(result.error&&result.error.code==='23505')throw new Error('You have already reposted this post.');if(result.error)throw result.error;await loadFeed();notice('Post reposted to your SUHAS-MAX feed.');}if(kind==='unrepost'){const result=await client.from('suhas_post_reposts').delete().eq('id',action.dataset.repostId).eq('user_id',me);if(result.error)throw result.error;await loadFeed();notice('Your repost was removed. The original post remains unchanged.');}
    if(kind==='save'){const saved=JSON.parse(localStorage.getItem('suhas-max-saved-posts')||'[]');if(!saved.includes(id))saved.unshift(id);localStorage.setItem('suhas-max-saved-posts',JSON.stringify(saved.slice(0,500)));notice('Post saved on this device.');}
    if(kind==='download'){if(!x.media_url)throw new Error('This post has no media to download.');const a=document.createElement('a');a.href=x.media_url;a.download='suhas-max-post-'+id+(x.media_type==='image/png'?'.png':x.media_type==='image/webp'?'.webp':x.media_type==='video/mp4'?'.mp4':x.media_type==='video/webm'?'.webm':'.jpg');a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();notice('Media download started.');}
    if(kind==='edit'){if(x.user_id!==me)throw new Error('You can edit only your own post.');const next=prompt('Edit your post text:',x.content||'');if(next===null)return;const content=next.trim();if(!content&&!x.media_url)throw new Error('A post must contain text or media.');const r=await client.from('suhas_posts').update({content}).eq('id',id).eq('user_id',me);if(r.error)throw r.error;await loadFeed();notice('Post updated.');}
