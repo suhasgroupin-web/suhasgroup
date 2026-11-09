@@ -251,3 +251,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: re-fetched committed source; confirmed 15 profiles, 8 countries, demo labels and disabled actions. Both inline JavaScript blocks passed syntax parsing.
 - External avatar image availability and Android/browser rendering have not been live-tested. Real Supabase Auth demo-account provisioning is not included in this increment.
 - No existing tables, records, pages, routes, assets or features were deleted or replaced.
+
+
+## SUHAS-MAX young demo profile balance — 2026-11-09
+- Updated the 15 clearly labeled fictional showcase profiles to 10 female and 5 male personas, ages 18–25.
+- Each profile includes gender, age, role, company/industry, city/country, bio and portrait URL; age and gender are displayed on each card.
+- Kept `DEMO USER` country label and disabled `DEMO ONLY` action. No Verified badges, fake activity, Auth accounts or database rows created.
+- Commit: `199678699b63494665c184a7caefa522c43a94f3`.
+- Verification: fetched latest source; profile counts 10 female and 5 male; age range 19–25; both inline JS blocks parsed successfully.
+- Portrait host availability and actual Android/browser rendering remain untested. Existing real member profiles/data/features were not deleted or changed.
