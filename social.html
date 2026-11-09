@@ -721,6 +721,15 @@ html body form.compose[data-comment-form] button[type="submit"]{
 }
 </style>
 <style id="suhas-story-gallery-preview">.story-media-preview{margin-top:10px;padding:8px;border:1px solid #cbd8ea;border-radius:12px;background:#fff}.story-media-preview[hidden]{display:none}.story-media-preview img,.story-media-preview video{display:block;width:100%;max-height:360px;object-fit:contain;border-radius:9px;background:#101827}.story-media-preview .story-preview-caption{margin-top:6px;color:#536176;font-size:12px;font-weight:700}</style>
+<style id="suhas-max-facebook-navigation-refresh">
+/* Mobile quick navigation follows the latest Facebook-style primary destinations */
+@media(max-width:760px){
+ .social-mobile-nav{display:flex!important;grid-template-columns:none!important;gap:4px!important;padding-left:4px!important;padding-right:4px!important}
+ .social-mobile-nav button{flex:1 1 0!important;min-width:0!important;padding-left:1px!important;padding-right:1px!important}
+ .social-mobile-nav button>span:last-child{font-size:10px!important;letter-spacing:-.15px!important}
+ .social-mobile-nav .mobile-nav-icon{font-size:21px!important;line-height:1.1!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -829,11 +838,12 @@ html body form.compose[data-comment-form] button[type="submit"]{
 </aside>
 </main>
 <nav class="social-mobile-nav" aria-label="Main navigation">
-<button class="active" data-tab="feed" type="button"><span class="mobile-nav-icon">⌂</span><span>Home</span></button>
-<button data-tab="friends" type="button"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
-<button data-tab="groups" type="button"><span class="mobile-nav-icon">▦</span><span>Groups</span></button>
-<button data-tab="reels" type="button"><span class="mobile-nav-icon">▶</span><span>Reels</span></button>
-<button data-tab="maxmenu" class="mobile-main-menu" type="button"><span class="mobile-nav-icon">☰</span><span>Menu</span></button>
+<button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="mobile-nav-icon">⌂</span><span>Home</span></button>
+<button data-tab="friends" type="button" aria-label="Friends"><span class="mobile-nav-icon">♧</span><span>Friends</span></button>
+<button data-tab="reels" type="button" aria-label="Reels"><span class="mobile-nav-icon">▶</span><span>Reels</span></button>
+<button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="mobile-nav-icon">🛍</span><span>Market</span></button>
+<button data-tab="notifications" type="button" aria-label="Notifications"><span class="mobile-nav-icon">🔔</span><span>Alerts</span></button>
+<button data-tab="maxmenu" class="mobile-main-menu" type="button" aria-label="Menu"><span class="mobile-nav-icon">☰</span><span>Menu</span></button>
 </nav>
 <section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
