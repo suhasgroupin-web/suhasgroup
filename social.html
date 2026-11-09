@@ -1300,7 +1300,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <button data-tab="notifications" type="button" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
 <button class="social-main-menu-link" data-tab="maxmenu" type="button" aria-label="Menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/></svg></button>
 </nav>
-<div class="social-user-actions"><button class="mobile-head-action" type="button" data-tab="people" aria-label="Search people" title="Search">⌕</button><button class="mobile-head-action messenger-head-action" type="button" data-tab="messages" aria-label="Open Messenger messages" title="Messenger"><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00B2FF"/><stop offset="1" stop-color="#006AFF"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></button><a class="social-profile-link" href="profile.html">My Profile</a></div>
+<div class="social-user-actions"><div class="suhas-create-wrap"><button class="mobile-head-action suhas-create-trigger" type="button" aria-label="Create" title="Create" aria-haspopup="menu" aria-expanded="false" aria-controls="suhas-create-menu">＋</button><div id="suhas-create-menu" class="suhas-create-menu" role="menu" hidden><div class="suhas-create-title">Create</div><button type="button" role="menuitem" data-create-action="story"><span class="suhas-create-symbol story">◉</span><span><b>Story</b><small>Share a photo or update for 24 hours</small></span></button><button type="button" role="menuitem" data-create-action="photo"><span class="suhas-create-symbol photo">▧</span><span><b>Photo</b><small>Share a photo in your feed</small></span></button><button type="button" role="menuitem" data-create-action="video"><span class="suhas-create-symbol video">▶</span><span><b>Video</b><small>Share a video in your feed</small></span></button><button type="button" role="menuitem" data-create-action="reel"><span class="suhas-create-symbol reel">▣</span><span><b>Reel</b><small>Create a short video reel</small></span></button></div></div><button class="mobile-head-action" type="button" data-tab="people" aria-label="Search people" title="Search">⌕</button><button class="mobile-head-action messenger-head-action" type="button" data-tab="messages" aria-label="Open Messenger messages" title="Messenger"><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00B2FF"/><stop offset="1" stop-color="#006AFF"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></button><a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
 <aside class="social-left">
@@ -1991,4 +1991,46 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
   else setTimeout(restore,900);
 })();
-</script><script src="assets/display-mode.js?v=6"></script><dialog id="story-viewer" class="story-viewer"><div class="story-viewer-top"><strong id="story-viewer-author">Story</strong><button type="button" class="action" onclick="document.getElementById('story-viewer').close()">✕</button></div><div id="story-viewer-content" class="story-viewer-content"></div><small id="story-viewer-time" class="story-viewer-time"></small></dialog></body></html>
+</script><script src="assets/display-mode.js?v=6"></script><dialog id="story-viewer" class="story-viewer"><div class="story-viewer-top"><strong id="story-viewer-author">Story</strong><button type="button" class="action" onclick="document.getElementById('story-viewer').close()">✕</button></div><div id="story-viewer-content" class="story-viewer-content"></div><small id="story-viewer-time" class="story-viewer-time"></small></dialog>
+<style id="suhas-top-create-menu-20261109">
+.suhas-create-wrap{position:relative;display:flex;align-items:center;flex:0 0 auto}
+.mobile-head-action.suhas-create-trigger{display:inline-flex!important;flex:0 0 38px;width:38px;height:38px;background:#e4e6eb;color:#0866ff;font-size:29px;font-weight:500;line-height:1;box-shadow:0 2px 4px #00000018}
+.suhas-create-trigger[aria-expanded="true"]{background:#dbeafe;box-shadow:inset 0 0 0 1px #0866ff}
+.suhas-create-menu{position:absolute;top:calc(100% + 10px);left:0;z-index:500;width:min(310px,calc(100vw - 24px));padding:8px;background:#fff;border:1px solid #e4e6eb;border-radius:14px;box-shadow:0 8px 28px #0003;color:#1c1e21}
+.suhas-create-menu[hidden]{display:none!important}
+.suhas-create-title{padding:8px 10px 10px;font-size:19px;font-weight:800;border-bottom:1px solid #e4e6eb;margin-bottom:5px}
+.suhas-create-menu>button{display:flex;align-items:center;gap:12px;width:100%;padding:10px;border:0;border-radius:9px;background:#fff;text-align:left;color:#1c1e21;cursor:pointer}
+.suhas-create-menu>button:hover,.suhas-create-menu>button:focus-visible{background:#f0f2f5;outline:0}
+.suhas-create-menu>button b{display:block;font-size:14px}
+.suhas-create-menu>button small{display:block;margin-top:3px;color:#65676b;font-size:11px;font-weight:400}
+.suhas-create-symbol{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:50%;font-size:21px;font-weight:800;background:#e7f3ff;color:#0866ff}
+.suhas-create-symbol.story{background:#fce8ef;color:#d63384}.suhas-create-symbol.photo{background:#e4f5e9;color:#168b45}.suhas-create-symbol.video{background:#fff0df;color:#e87518}.suhas-create-symbol.reel{background:#eee8ff;color:#7048c8}
+@media(max-width:760px){.mobile-head-action.suhas-create-trigger{flex-basis:36px;width:36px;height:36px}.suhas-create-menu{left:-4px}}
+</style>
+<script id="suhas-top-create-menu-actions-20261109">
+(()=>{
+ const trigger=document.querySelector('.suhas-create-trigger');
+ const menu=document.getElementById('suhas-create-menu');
+ if(!trigger||!menu)return;
+ const close=()=>{menu.hidden=true;trigger.setAttribute('aria-expanded','false');};
+ trigger.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();menu.hidden=!menu.hidden;trigger.setAttribute('aria-expanded',String(!menu.hidden));});
+ menu.addEventListener('click',async e=>{
+  const item=e.target.closest('[data-create-action]');if(!item)return;
+  const action=item.dataset.createAction;close();
+  if(action==='story'){
+   await activateMaxTab('feed');
+   setTimeout(()=>{const form=document.getElementById('story-create-form');form?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('story-content')?.focus({preventScroll:true});},120);
+  }else if(action==='photo'||action==='video'){
+   await activateMaxTab('feed');
+   setTimeout(()=>{const input=document.getElementById('post-media');if(input){input.accept=action==='photo'?'image/jpeg,image/png,image/webp':'video/mp4,video/webm';input.click();}},120);
+  }else if(action==='reel'){
+   await activateMaxTab('reels');
+   setTimeout(()=>{document.getElementById('reel-file')?.click();},120);
+  }
+ });
+ document.addEventListener('click',e=>{if(!e.target.closest('.suhas-create-wrap'))close();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+</script>
+
+</body></html>
