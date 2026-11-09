@@ -931,32 +931,45 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 </style>
 
 <style id="suhas-max-readable-member-colors">
-/* Clear Facebook-style contrast for real and demo member names and profile labels. */
-#home .home-person-card,
-#home .home-person-card .home-person-name,
-#home .home-person-card .home-person-name *,
-#home .home-discovery-list .home-person-name,
+/* High-contrast names on white cards across Home, People, Friends and Feed. */
+#home-discovery .home-person-card,
+#home-discovery .home-person-name,
+#home-discovery .home-person-name *,
+#people-list .member-info,
+#people-list .member-info b,
+#people-list .member-info [data-profile-open],
+#friends-list .member-info,
+#friends-list .member-info b,
+#incoming .member-info,
+#incoming .member-info b,
+#outgoing .member-info,
+#outgoing .member-info b,
+#following-list .member-info,
+#following-list .member-info b,
 #feed-list .post-author,
 #feed-list .post-author b,
-#feed-list .post-author [data-profile-open],
-#feed-list .post-head .post-meta,
-#feed-list .post-head .post-meta b {
-  color:#1c1e21!important;
-  -webkit-text-fill-color:#1c1e21!important;
-  opacity:1!important;
-  text-shadow:none!important;
+#feed-list .post-author [data-profile-open] {
+ color:#1c1e21!important;
+ -webkit-text-fill-color:#1c1e21!important;
+ opacity:1!important;
+ text-shadow:none!important;
 }
-#home .home-person-card .home-person-meta,
-#home .home-person-card .home-person-meta *,
-#home .home-person-card .demo-user-label {
-  opacity:1!important;
-}
-#home .home-person-card .home-person-meta {color:#65676b!important;-webkit-text-fill-color:#65676b!important}
-#home .home-person-card .demo-user-label {color:#805500!important;-webkit-text-fill-color:#805500!important}
-#home .home-person-card .home-person-name {font-size:13px!important;font-weight:800!important;line-height:1.35!important}
-#feed-list .post-head .post-meta {color:#65676b!important;-webkit-text-fill-color:#65676b!important}
+#home-discovery .home-person-card,
+#people-list .member,
+#friends-list .member,
+#incoming .member,
+#outgoing .member,
+#following-list .member {background:#fff!important;color:#1c1e21!important}
+#home-discovery .home-person-meta,
+#people-list .member-info .muted,
+#friends-list .member-info .muted,
+#incoming .member-info .muted,
+#outgoing .member-info .muted,
+#following-list .member-info .muted,
+#feed-list .post-head .post-meta {color:#65676b!important;-webkit-text-fill-color:#65676b!important;opacity:1!important}
+#home-discovery .home-person-name {font-size:13px!important;font-weight:800!important;line-height:1.35!important}
+#home-discovery .demo-user-label {color:#805500!important;-webkit-text-fill-color:#805500!important;opacity:1!important}
 #feed-list .post-head .post-meta b {color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important;font-weight:800!important}
-body.suhas-dark #home .home-person-card {background:#fff!important}
 </style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
