@@ -1926,7 +1926,8 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
 (function(){
   const key='suhas-max-active-section:'+location.pathname;
   function remember(tab){
-    if(!tab)return;
+    // The menu is an overlay, not a page section; never persist it across refresh.
+    if(!tab || tab==='maxmenu')return;
     try{sessionStorage.setItem(key,tab);}catch(_){}
   }
   document.addEventListener('click',function(e){
@@ -1936,6 +1937,8 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
   function restore(){
     let tab='';
     try{tab=sessionStorage.getItem(key)||'';}catch(_){}
+    // Clear stale menu state saved by older versions before restoring a section.
+    if(tab==='maxmenu'){try{sessionStorage.removeItem(key);}catch(_){}return;}
     if(!tab || tab==='feed')return;
     const started=Date.now();
     const timer=setInterval(function(){
