@@ -269,3 +269,15 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verified the latest GitHub source contains the design block once, before `</head>`, and includes the expected 3D action, primary button, focus, and reduced-motion rules.
 - Commit: `5eed4bf27797eb290af7964f6e98eb19991c6240`
 - Limitation: source-level verification only; live Android/browser rendering and real tap interaction still require device testing.
+
+
+## 2026-11-09 — Photo/video Stories
+- Added a private Supabase Storage bucket `suhas-max-stories` (25 MB limit; JPEG, PNG, WebP, MP4, WebM).
+- Added `media_path` and `media_type` columns to `public.suhas_stories`.
+- Added Storage RLS: authenticated owners upload only into their own UUID folder; downloads require ownership or an active story row visible under the story audience RLS.
+- Updated `social.html` Stories composer to accept text-only, photo, or video stories; uploads are attached to the story row and viewer requests a one-hour signed URL.
+- Failed story-row insertion attempts clean up the just-uploaded media object.
+- Verified bucket privacy/limits, both columns, and both Storage policies via SQL; fetched latest GitHub source and JavaScript syntax parsing passed.
+- Commits: `f93f2af48d5bb169319cf9acd368d142cbbfa431` (feature), `58d75389c7ea3a4ac34c3e0f1a89fae21caf23ca` (syntax fix).
+- Supabase security advisor still reports the pre-existing warning that leaked-password protection is disabled; no change made to Auth settings.
+- Not yet live-tested with actual Android uploads, friend/public audience accounts, or video playback.
