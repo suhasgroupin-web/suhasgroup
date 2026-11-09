@@ -629,6 +629,37 @@ body.suhas-dark .story-create-form textarea::placeholder{
  outline:2px solid #9bbcff!important;outline-offset:1px;
 }
 </style>
+<style id="suhas-post-composer-contrast-fix">
+/* High-specificity composer contrast fix for real typed text and placeholder */
+html body #post-form #post-content,
+html body form.home-composer textarea#post-content{
+ color:#111827!important;
+ -webkit-text-fill-color:#111827!important;
+ background-color:#f0f2f5!important;
+ font-size:17px!important;
+ font-weight:500!important;
+ line-height:1.5!important;
+ opacity:1!important;
+ text-shadow:none!important;
+ caret-color:#0866ff!important;
+}
+html body #post-form #post-content::placeholder{
+ color:#596579!important;
+ -webkit-text-fill-color:#596579!important;
+ opacity:1!important;
+ font-weight:400!important;
+}
+html body #post-form #post-content:focus{
+ background-color:#f7f9fc!important;
+ outline:2px solid #86b7fe!important;
+}
+html body.suhas-dark #post-form #post-content{
+ color:#f9fafb!important;-webkit-text-fill-color:#f9fafb!important;background-color:#30343b!important;
+}
+html body.suhas-dark #post-form #post-content::placeholder{
+ color:#d1d5db!important;-webkit-text-fill-color:#d1d5db!important;
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
