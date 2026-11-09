@@ -1252,6 +1252,43 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
  .mobile-head-action{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;flex-basis:34px!important}
 }
 </style>
+
+<style id="suhas-home-composer-inline-fix-20261109">
+/* Keep the profile photo and post prompt side by side, directly below the menu/header row. */
+#feed.home-feed-panel .home-composer .composer-top{
+ display:flex!important;
+ flex-flow:row nowrap!important;
+ align-items:center!important;
+ gap:10px!important;
+}
+#feed.home-feed-panel .home-composer .composer-avatar,
+#feed.home-feed-panel .home-composer #home-composer-avatar{
+ display:grid!important;
+ grid-column:auto!important;grid-row:auto!important;
+ flex:0 0 44px!important;width:44px!important;height:44px!important;
+ margin:0!important;justify-self:auto!important;
+}
+#feed.home-feed-panel .home-composer #post-content{
+ display:block!important;
+ grid-column:auto!important;grid-row:auto!important;
+ flex:1 1 0!important;width:0!important;min-width:0!important;
+ height:44px!important;min-height:44px!important;max-height:44px!important;
+ box-sizing:border-box!important;resize:none!important;
+ border:1px solid #ccd0d5!important;border-radius:24px!important;
+ background:#fff!important;color:#1c1e21!important;
+ padding:0 15px!important;font:15px Arial,sans-serif!important;line-height:42px!important;
+}
+#feed.home-feed-panel .home-composer .composer-photo-icon{
+ display:flex!important;flex:0 0 30px!important;width:30px!important;
+ align-items:center!important;justify-content:center!important;
+}
+@media(max-width:760px){
+ #feed.home-feed-panel .home-composer .composer-top{gap:9px!important}
+ #feed.home-feed-panel .home-composer .composer-avatar,
+ #feed.home-feed-panel .home-composer #home-composer-avatar{flex-basis:42px!important;width:42px!important;height:42px!important}
+ #feed.home-feed-panel .home-composer #post-content{height:42px!important;min-height:42px!important;max-height:42px!important;line-height:40px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
