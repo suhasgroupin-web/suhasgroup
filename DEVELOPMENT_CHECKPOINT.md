@@ -387,3 +387,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - No existing post, account, profile, message, media object, table, page, or feature was deleted. No pre-existing production rows were changed.
 - Pending: confirm the GitHub Pages deploy job reaches success; live browser rendering and two-account Android testing of repost, Messenger delivery, and external share remain unverified. The direct Pages URL could not be fetched through the available live-page viewer in this session, so do not mark live visual verification complete.
 - Next step: confirm deployment status, then test Share dialog on Android with an authenticated member who has an accepted friend; verify repost appears in feed, attribution is correct, remove-repost leaves the source post intact, Messenger sends the post link, and external share sheet opens. Continue the broader visual comparison against the supplied references after these checks.
+
+
+## 2026-11-09 — Profile timeline repost visibility
+- Extended the social profile viewer with a Posts & Reposts timeline. It loads the member's visible original posts and repost records through existing Supabase RLS, resolves original post content/media, and shows repost attribution without copying or modifying the source post.
+- Repost and remove-repost actions refresh the open member's own profile timeline as well as the Home feed. The share dialog labels the action as “Repost to my profile”.
+- Latest `social.html` commit: `31b560320f0eb8b25e005b7cab81d610376c2ef7`.
+- Verification: all four inline scripts in `social.html` and both inline scripts in `apply-for-job.html` parse successfully; profile timeline container and repost action labels are present. GitHub Site quality checks and Datadog Synthetic tests passed for this commit. Supabase security advisor shows no new repost-table warning; existing LinkedIn OAuth policy and leaked-password-protection findings remain unchanged.
+- Pending: GitHub Pages deploy run for this commit is still in progress; real Android visual/tap testing and two-account Messenger/repost verification remain pending.
