@@ -289,3 +289,5 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - GitHub commit: `942509fc7ad086a81527d49931f60fc653e5c1b6`.
 - Verification: latest `social.html` re-fetched from `main`; drawer/overlay/shortcut/see-more/close/open hooks found; both inline scripts passed JavaScript syntax parsing.
 - Not yet verified: live deployment, actual Android layout/tap behavior, and authentication/logout behavior on device.
+
+- Follow-up Menu activation update: account header now loads the signed-in user's `full_name` and `profile_photo_url` from `suhas_public_profiles` with email fallback; Log out now calls Supabase `auth.signOut()` and redirects to login only after success. Commit: `a28414b822523f210a4462c517ff36685a67fb24`. Latest source re-fetched; dynamic profile/logout hooks and both inline script syntax checks passed. Device/live-session test still pending.
