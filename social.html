@@ -101,7 +101,7 @@ input,select,textarea{font-family:Arial,Helvetica,sans-serif}
 #reels-list .post-card p,#reels-list .post-card .post-meta,#reels-list .post-card .post-meta b{color:#fff!important}
 #reels-list video{background:#000!important}
 @media(max-width:760px){.social-shell{padding:8px 0 94px!important}.panel{border-radius:0!important;border-left:0!important;border-right:0!important;padding:13px!important}.social-center{width:100%}.post-card{padding:14px 0}.social-mobile-nav{padding-bottom:env(safe-area-inset-bottom)}}
-</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-home-visibility5"><style>
+.home-person-meta{padding:2px 8px 5px;color:#65676b;font-size:10px;line-height:1.35;min-height:28px}.demo-user-label{display:inline-block;margin:0 8px 4px;padding:3px 6px;border-radius:5px;background:#fff2d8;color:#805500;font-size:9px;font-weight:900;letter-spacing:.45px}.demo-profile-action{background:#eef2f7!important;color:#536176!important;cursor:default!important}.demo-person-card{border-style:dashed!important;border-color:#cbd5e1!important}</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-home-visibility5"><style>
 :root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
@@ -829,7 +829,28 @@ document.addEventListener('click',async e=>{
 });
 $('group-post-form').addEventListener('submit',async e=>{e.preventDefault();if(!activeGroup)return;const content=$('group-post-content').value.trim();if(!content)return;const r=await client.from('suhas_group_posts').insert({group_id:activeGroup,user_id:me,content});if(r.error){notice(r.error.message,true);return;}$('group-post-content').value='';await openGroup(activeGroup);});
 $('post-media').addEventListener('change',()=>{$('composer-file-name').textContent=$('post-media').files[0]?.name||'';});
-function renderHomeDiscovery(){const picks=members.filter(p=>p.user_id!==me).slice(0,12);if(!picks.length){$('home-discovery').hidden=true;return;}$('home-discovery').hidden=false;$('home-discovery-list').innerHTML=picks.map(p=>'<div class="home-person-card">'+(p.profile_photo_url?'<img class="home-person-photo" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="home-person-photo"></div>')+'<div class="home-person-name">'+safe(p.full_name||'SUHAS Member')+'</div><button class="action primary" type="button" data-friend="'+p.user_id+'">Add friend</button></div>').join('');}
+const SUHAS_DEMO_USERS=[
+ {name:'Ariana Rahman',role:'Fashion Merchandiser',company:'Apparel Industry',city:'Dhaka',bio:'Interested in fashion, sourcing and creative collaboration.',photo:'https://i.pravatar.cc/240?img=47'},
+ {name:'Daniel Chowdhury',role:'Software Engineer',company:'Technology',city:'Dhaka',bio:'Building useful digital products and learning new technologies.',photo:'https://i.pravatar.cc/240?img=12'},
+ {name:'Nusrat Jahan',role:'Graphic Designer',company:'Creative Studio',city:'Chattogram',bio:'Visual design, branding and creative ideas.',photo:'https://i.pravatar.cc/240?img=44'},
+ {name:'Rafi Ahmed',role:'Quality Assurance',company:'Manufacturing',city:'Gazipur',bio:'Focused on quality, process improvement and teamwork.',photo:'https://i.pravatar.cc/240?img=13'},
+ {name:'Sadia Islam',role:'HR Executive',company:'Human Resources',city:'Dhaka',bio:'People development, communication and workplace culture.',photo:'https://i.pravatar.cc/240?img=49'},
+ {name:'Imran Hossain',role:'Marketing Executive',company:'Marketing',city:'Narayanganj',bio:'Digital marketing and community engagement.',photo:'https://i.pravatar.cc/240?img=14'},
+ {name:'Mehjabin Akter',role:'Textile Engineer',company:'Textile & Apparel',city:'Dhaka',bio:'Textile innovation and sustainable production.',photo:'https://i.pravatar.cc/240?img= she'},
+ {name:'Tanvir Hasan',role:'Business Analyst',company:'Business Services',city:'Sylhet',bio:'Data, strategy and business growth.',photo:'https://i.pravatar.cc/240?img=15'},
+ {name:'Farzana Noor',role:'Student',company:'Education',city:'Dhaka',bio:'Learning, networking and sharing knowledge.',photo:'https://i.pravatar.cc/240?img=45'},
+ {name:'Sakib Mahmud',role:'Production Officer',company:'Apparel Industry',city:'Gazipur',bio:'Production planning and operational excellence.',photo:'https://i.pravatar.cc/240?img=16'},
+ {name:'Maliha Karim',role:'Content Creator',company:'Media',city:'Chattogram',bio:'Stories, ideas and positive community content.',photo:'https://i.pravatar.cc/240?img=48'},
+ {name:'Arif Hossain',role:'Accountant',company:'Finance',city:'Dhaka',bio:'Finance, reporting and professional development.',photo:'https://i.pravatar.cc/240?img=17'}
+];
+function renderHomeDiscovery(){
+ const picks=members.filter(p=>p.user_id!==me).slice(0,6);
+ const realCards=picks.map(p=>'<div class="home-person-card">'+(p.profile_photo_url?'<img class="home-person-photo" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="home-person-photo"></div>')+'<div class="home-person-name">'+safe(p.full_name||'SUHAS Member')+'</div><div class="home-person-meta">SUHAS-MAX member</div><button class="action primary" type="button" data-friend="'+p.user_id+'">Add friend</button></div>');
+ const demoCards=SUHAS_DEMO_USERS.map((p,i)=>'<div class="home-person-card demo-person-card"><img class="home-person-photo" src="'+safe(p.photo)+'" alt="" loading="lazy"><div class="home-person-name">'+safe(p.name)+'</div><div class="home-person-meta">'+safe(p.role)+' · '+safe(p.city)+'</div><span class="demo-user-label">DEMO USER</span><button class="action demo-profile-action" type="button" data-demo-profile="'+i+'">Demo profile</button></div>');
+ $('home-discovery').hidden=false;
+ $('home-discovery-list').innerHTML=realCards.concat(demoCards).join('');
+}
+
 $('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=$('post-content').value.trim(),file=$('post-media').files[0];if(!content&&!file)return;let media=null;try{media=await uploadMedia(file);}catch(err){notice(err.message,true);return;}const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null});if(r.error){notice(r.error.message,true);return;}$('post-content').value='';$('post-media').value='';$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');});
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
 
