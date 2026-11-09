@@ -808,6 +808,103 @@ html body.suhas-dark #messages .msg-list .bubble.mine{
 }
 </style>
 
+
+<style id="suhas-universal-composer-readable-colors">
+/* Consistent readable text for Home post creation, comments and Messenger.
+   Light mode: dark text on a light field. Dark mode: light text on a dark field. */
+html body:not(.suhas-dark) #post-content,
+html body:not(.suhas-dark) #group-post-content,
+html body:not(.suhas-dark) #market-description,
+html body:not(.suhas-dark) #messages #message,
+html body:not(.suhas-dark) #messages .compose input,
+html body:not(.suhas-dark) #feed-list .compose input,
+html body:not(.suhas-dark) #feed-list .compose textarea,
+html body:not(.suhas-dark) #reels-list .compose input,
+html body:not(.suhas-dark) .post-card form.compose input,
+html body:not(.suhas-dark) form.compose[data-comment-form] input,
+html body:not(.suhas-dark) form.compose[data-comment-form] textarea {
+  background-color:#f7f8fa!important;
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  caret-color:#0866ff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:15px!important;
+  font-weight:500!important;
+  line-height:1.5!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+html body:not(.suhas-dark) #post-content::placeholder,
+html body:not(.suhas-dark) #group-post-content::placeholder,
+html body:not(.suhas-dark) #market-description::placeholder,
+html body:not(.suhas-dark) #messages #message::placeholder,
+html body:not(.suhas-dark) #messages .compose input::placeholder,
+html body:not(.suhas-dark) #feed-list .compose input::placeholder,
+html body:not(.suhas-dark) #reels-list .compose input::placeholder,
+html body:not(.suhas-dark) .post-card form.compose input::placeholder,
+html body:not(.suhas-dark) form.compose[data-comment-form] input::placeholder {
+  color:#596579!important;
+  -webkit-text-fill-color:#596579!important;
+  opacity:1!important;
+  font-weight:400!important;
+}
+html body.suhas-dark #post-content,
+html body.suhas-dark #group-post-content,
+html body.suhas-dark #market-description,
+html body.suhas-dark #messages #message,
+html body.suhas-dark #messages .compose input,
+html body.suhas-dark #feed-list .compose input,
+html body.suhas-dark #feed-list .compose textarea,
+html body.suhas-dark #reels-list .compose input,
+html body.suhas-dark .post-card form.compose input,
+html body.suhas-dark form.compose[data-comment-form] input,
+html body.suhas-dark form.compose[data-comment-form] textarea {
+  background-color:#30343b!important;
+  color:#f9fafb!important;
+  -webkit-text-fill-color:#f9fafb!important;
+  border-color:#687386!important;
+  caret-color:#9fc2ff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:15px!important;
+  font-weight:500!important;
+  line-height:1.5!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+html body.suhas-dark #post-content::placeholder,
+html body.suhas-dark #group-post-content::placeholder,
+html body.suhas-dark #market-description::placeholder,
+html body.suhas-dark #messages #message::placeholder,
+html body.suhas-dark #messages .compose input::placeholder,
+html body.suhas-dark #feed-list .compose input::placeholder,
+html body.suhas-dark #reels-list .compose input::placeholder,
+html body.suhas-dark .post-card form.compose input::placeholder,
+html body.suhas-dark form.compose[data-comment-form] input::placeholder {
+  color:#d1d5db!important;
+  -webkit-text-fill-color:#d1d5db!important;
+  opacity:1!important;
+  font-weight:400!important;
+}
+html body #post-content:focus,
+html body #group-post-content:focus,
+html body #market-description:focus,
+html body #messages #message:focus,
+html body .post-card form.compose input:focus,
+html body #feed-list .compose input:focus,
+html body #reels-list .compose input:focus {
+  outline:2px solid #86b7fe!important;
+  outline-offset:1px!important;
+}
+html body:not(.suhas-dark) #feed-list .comment-list p {
+  background:#f0f2f5!important;color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important;
+}
+html body.suhas-dark #feed-list .comment-list p {
+  background:#30343b!important;color:#f0f2f5!important;-webkit-text-fill-color:#f0f2f5!important;
+}
+html body:not(.suhas-dark) #messages .msg-list .bubble {color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important}
+html body.suhas-dark #messages .msg-list .bubble {color:#f0f2f5!important;-webkit-text-fill-color:#f0f2f5!important}
+html body.suhas-dark #messages .msg-list .bubble.mine {color:#fff!important;-webkit-text-fill-color:#fff!important}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
