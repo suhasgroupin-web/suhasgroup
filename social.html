@@ -595,10 +595,16 @@ async function sharePostInApp(postId,link,post){
  if(!people.data?.length)throw new Error('No available friends were found.');
  const dialog=document.createElement('dialog');
  dialog.className='suhas-share-dialog';
- dialog.innerHTML='<form method="dialog" class="suhas-share-card"><h3>Share post in SUHAS-MAX</h3><p>Choose a friend to send this post in Messenger.</p><label for="suhas-share-friend">Friend</label><select id="suhas-share-friend" required><option value="">Choose a friend…</option>'+people.data.map(p=>'<option value="'+safe(p.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</option>').join('')+'</select><div class="suhas-share-dialog-actions"><button type="button" class="action" data-share-cancel>Cancel</button><button type="submit" class="action primary" data-share-send>Send in Messenger</button></div></form>';
+ dialog.innerHTML='<form method="dialog" class="suhas-share-card"><h3>Share post in SUHAS-MAX</h3><p>Choose a friend to send this post in Messenger.</p><label for="suhas-share-friend">Friend</label><select id="suhas-share-friend" required><option value="">Choose a friend…</option>'+people.data.map(p=>'<option value="'+safe(p.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</option>').join('')+'</select><div class="suhas-share-dialog-actions"><button type="button" class="action" data-share-cancel>Cancel</button><button type="button" class="action" data-share-external>Other apps</button><button type="submit" class="action primary" data-share-send>Send in Messenger</button></div></form>';
  document.body.appendChild(dialog);
  const form=dialog.querySelector('form');
  dialog.querySelector('[data-share-cancel]').addEventListener('click',()=>dialog.close());
+ dialog.querySelector('[data-share-external]').addEventListener('click',async()=>{
+  try{
+   if(navigator.share)await navigator.share({title:'SUHAS-MAX post',text:post.content||'View this post on SUHAS-MAX',url:link});
+   else{const copied=await copyToClipboard(link);notice(copied?'Post link copied. You can paste it into another app.':'Could not copy the post link.',!copied);}
+  }catch(err){if(err.name!=='AbortError')notice(err.message||'External sharing failed.',true);}
+ });
  form.addEventListener('submit',async ev=>{
   ev.preventDefault();
   const friend=dialog.querySelector('#suhas-share-friend').value;
