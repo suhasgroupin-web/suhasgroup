@@ -508,7 +508,42 @@ body.suhas-large-text .post-card p,body.suhas-large-text .panel p{font-size:1.12
 .story-viewer{width:min(92vw,440px);min-height:300px;border:0;border-radius:16px;padding:16px;background:linear-gradient(145deg,#1877f2,#7739a8);color:#fff;box-shadow:0 12px 45px #0005}
 .story-viewer::backdrop{background:#000b}.story-viewer-top{display:flex;justify-content:space-between;align-items:center}.story-viewer-content{min-height:210px;display:grid;place-items:center;text-align:center;font-size:23px;font-weight:800;overflow-wrap:anywhere;padding:22px 8px}.story-viewer-time{display:block;color:#ffffffbb;font-size:11px}
 @media(min-width:761px){.home-stories-section,.home-reels-section{padding-inline:2px}}
-</style></head><body><header class="site-header"><div class="nav-wrap">
+</style>
+<style id="suhas-max-design-polish-20261109">
+/* SUHAS-MAX visual polish: tactile actions, refined cards and accessible focus */
+:root{--smx-blue:#0866ff;--smx-blue-deep:#064fc4;--smx-shadow:0 5px 0 #c9d8ef,0 8px 16px #0b3b7a20;--smx-shadow-pressed:0 2px 0 #c9d8ef,0 4px 9px #0b3b7a18}
+button,.action{transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease,border-color .16s ease}
+#feed-list .social-actions .action,
+.post-card .social-actions .action{
+  min-height:40px;padding:9px 13px;border:1px solid #d8e2f0!important;
+  border-radius:11px!important;background:linear-gradient(180deg,#fff 0%,#f2f6fc 100%)!important;
+  color:#42536b!important;font-weight:750;box-shadow:0 3px 0 #d5deea,0 5px 10px #172b4d12!important;
+}
+#feed-list .social-actions .action:hover,
+.post-card .social-actions .action:hover{background:linear-gradient(180deg,#f5f9ff,#e8f1ff)!important;color:#075bd8!important;transform:translateY(-1px)}
+#feed-list .social-actions .action:active,
+.post-card .social-actions .action:active{transform:translateY(2px);box-shadow:0 1px 0 #d5deea,0 2px 5px #172b4d12!important}
+#feed-list .social-actions .action.liked,
+#feed-list .social-actions .action[aria-pressed="true"],
+.post-card .social-actions .action.liked{background:linear-gradient(180deg,#eaf2ff,#dceaff)!important;color:#075bd8!important;border-color:#a9c8ff!important}
+.action.primary,.composer-submit .action{
+  border:1px solid #0755d4!important;border-radius:11px!important;
+  background:linear-gradient(180deg,#3181ff,#0866ff 65%,#0758dc)!important;
+  box-shadow:0 4px 0 #0646ad,0 7px 14px #0866ff30!important;font-weight:800
+}
+.action.primary:hover,.composer-submit .action:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.action.primary:active,.composer-submit .action:active{transform:translateY(3px);box-shadow:0 1px 0 #0646ad,0 3px 7px #0866ff22!important}
+.home-person-card,.panel,.side-card,.right-card,.settings-group{transition:box-shadow .18s ease,border-color .18s ease}
+.home-person-card:hover{box-shadow:0 8px 22px #102a5018;border-color:#b8ccef}
+button:focus-visible,a:focus-visible,.action:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #80b5ff!important;outline-offset:2px}
+.post-card .post-card-media{max-width:100%}
+@media(max-width:760px){
+ #feed-list .social-actions .action,.post-card .social-actions .action{min-height:42px;padding:9px 5px;font-size:12px}
+ .home-person-card{border-radius:14px}
+}
+@media(prefers-reduced-motion:reduce){button,.action,.home-person-card,.panel,.side-card,.right-card,.settings-group{transition:none!important}}
+</style>
+</head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home">⌂</button>
