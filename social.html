@@ -441,6 +441,37 @@ body.suhas-large-text .post-card p,body.suhas-large-text .panel p{font-size:1.12
 @media(max-width:390px){.suhas-3d-action{font-size:12px!important;min-height:43px!important}}
 
 .suhas-share-dialog{border:0;border-radius:18px;padding:0;width:min(92vw,420px);box-shadow:0 18px 60px rgba(0,0,0,.28)}.suhas-share-dialog::backdrop{background:rgba(15,23,42,.56)}.suhas-share-card{padding:22px;display:grid;gap:12px}.suhas-share-card h3{margin:0;font-size:19px}.suhas-share-card p{margin:0;color:#65676b}.suhas-share-card select{width:100%;padding:12px;border:1px solid #ccd0d5;border-radius:10px;background:white;color:#1c1e21}.suhas-share-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.suhas-share-dialog-actions button{min-height:40px}
+</style><style id="suhas-max-facebook-feed-layout">
+/* Mobile-first Facebook-inspired feed and horizontal Reels shelf */
+#home .home-feed-panel{padding:12px 14px!important}
+#feed-list{display:grid;gap:12px}
+#feed-list .post-card{background:#fff;border:1px solid #e4e6eb;border-radius:14px;padding:14px 14px 10px;margin:0;box-shadow:0 1px 2px rgba(0,0,0,.06);overflow:hidden}
+#feed-list .post-head{display:flex;align-items:center;gap:10px;min-width:0}
+#feed-list .post-head .post-meta{min-width:0;flex:1;line-height:1.35;color:#65676b;font-size:12px}
+#feed-list .post-head .post-author b{display:inline-block;color:#1c1e21;font-size:15px;font-weight:800;margin-bottom:2px}
+#feed-list .post-card>p{font-size:15px;line-height:1.48;color:#1c1e21;white-space:pre-wrap;overflow-wrap:anywhere;margin:13px 0}
+#feed-list .post-card>img,#feed-list .post-card>video{display:block;width:calc(100% + 28px)!important;max-width:none!important;margin:0 -14px;max-height:560px!important;object-fit:cover!important;border-radius:0!important;background:#111}
+#feed-list .comment-list{padding:2px 0 5px}
+#feed-list .comment-list p{margin:7px 0;padding:8px 11px;background:#f0f2f5;border-radius:14px;color:#1c1e21;font-size:13px}
+#feed-list .compose{display:flex;gap:8px;margin-top:8px}
+#feed-list .compose input{min-width:0;flex:1;border-radius:20px!important;background:#f0f2f5!important;padding:10px 14px!important}
+#reels-list{display:flex!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px 14px!important}
+#reels-list::-webkit-scrollbar{display:none}
+#reels-list>.post-card{flex:0 0 min(82vw,360px)!important;width:min(82vw,360px)!important;scroll-snap-align:start;min-width:0}
+#reels-list video{height:min(68vh,680px)!important;min-height:360px!important;object-fit:cover!important}
+@media(min-width:761px){
+ #home .home-feed-panel{max-width:760px;margin-inline:auto}
+ #feed-list .post-card{padding:16px 18px 12px}
+ #feed-list .post-card>img,#feed-list .post-card>video{width:calc(100% + 36px)!important;margin-inline:-18px}
+ #reels-list>.post-card{flex-basis:300px!important;width:300px!important}
+}
+@media(max-width:420px){
+ #home .home-feed-panel{padding:8px!important}
+ #feed-list .post-card{padding:11px 11px 8px;border-radius:12px}
+ #feed-list .post-card>img,#feed-list .post-card>video{width:calc(100% + 22px)!important;margin-inline:-11px}
+ #reels-list>.post-card{flex-basis:84vw!important;width:84vw!important}
+ #reels-list video{min-height:320px!important;height:62vh!important}
+}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
