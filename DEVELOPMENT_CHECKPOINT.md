@@ -229,3 +229,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: re-fetched committed source; confirmed view-read, unique upsert, and view-count rendering hooks. Both inline JavaScript blocks passed syntax parsing. Confirmed the story-view RLS policies are present.
 - Live multi-user/browser verification remains pending.
 - No existing records or features were deleted.
+
+
+## SUHAS-MAX Demo Community Profiles — 2026-11-09
+- Added 12 clearly fictional demo profiles to the Home Feed “People you may know” discovery shelf, alongside up to 6 real community profiles.
+- Demo cards show profile-style photos, names, job/industry, city, and an explicit “DEMO USER” label. Demo controls are disabled and display “DEMO ONLY”; they do not create fake auth users, friend requests, messages, posts, likes, or database activity.
+- Kept all existing real profiles and database records unchanged; no schema or data migration was needed.
+- Changed file: `social.html`.
+- Code commits: `4f755a7b85ab2b57439be4b253d887504be24f47` and `f75959549bfdc92491b2baad1ce65cff580b939f`.
+- Verification: fetched the committed source; confirmed 12 demo profile records, explicit demo labels, disabled demo actions, and valid avatar URL entries. All inline JavaScript blocks passed syntax parsing.
+- Live Android/browser rendering and image-host availability have not been tested. Demo profiles currently appear in the Home Feed discovery shelf, not as real authenticated accounts or real Friends/Messenger identities.
+- No existing tables, records, pages, routes, assets or features were deleted or replaced.
