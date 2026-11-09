@@ -1470,10 +1470,16 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .story-viewer-content .story-viewer-media{width:100%;max-height:58vh;object-fit:cover}
 .story-viewer-content .story-viewer-audio{display:none!important}
 </style><style id="suhas-story-no-shadow-final">
-/* Final override: story thumbnails stay clear; only the creator name overlays the photo. */
-.home-story-card:not(.home-story-create-card)::after{content:none!important;display:none!important;background:none!important}
-.home-story-card .home-story-name{position:absolute!important;left:10px!important;right:8px!important;bottom:10px!important;z-index:4!important;margin:0!important;padding:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;color:#fff!important}
-.home-story-card .home-story-photo{filter:none!important;box-shadow:none!important}
+/* Clean story cards: keep uploaded story media clear; show only the member name. */
+.home-story-card:not(.home-story-create-card),
+.home-story-card:not(.home-story-create-card) .home-story-photo,
+.home-story-card:not(.home-story-create-card) .home-story-preview-media{filter:none!important;box-shadow:none!important}
+.home-story-card:not(.home-story-create-card)::before,
+.home-story-card:not(.home-story-create-card)::after,
+.home-story-card:not(.home-story-create-card) .home-story-photo::before,
+.home-story-card:not(.home-story-create-card) .home-story-photo::after{content:none!important;display:none!important;background:none!important;opacity:0!important}
+.home-story-card .home-story-name{position:absolute!important;left:10px!important;right:8px!important;bottom:10px!important;z-index:4!important;margin:0!important;padding:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;text-shadow:none!important;-webkit-text-stroke:0!important;filter:none!important;color:#fff!important}
+.home-story-card .home-story-photo{background:transparent!important}
 </style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
