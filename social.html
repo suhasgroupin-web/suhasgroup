@@ -1892,7 +1892,7 @@ function renderPostMedia(){const file=postFile.files[0];postPreview.innerHTML=''
 postText.addEventListener('input',()=>{postCount.textContent=postText.value.length+' / 5000';});
 postFile.addEventListener('change',renderPostMedia);
 postText.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();$('post-form').requestSubmit();}});
-$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null,metadata:window.suhasPostMetadata||{}});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
+$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null,metadata:window.suhasPostMetadata||{}});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();window.suhasPostMetadata={};$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
 
 let tttBoard=Array(9).fill(''),tttOver=false;
@@ -2311,11 +2311,7 @@ body.suhas-composer-open{overflow:hidden!important}
   if(action==='feeling'||action==='life'){
    const value=ask('How are you feeling or what life update do you want to share?');if(value===null)return;meta.feeling=value;notice('Feeling/life update added.');return;
   }
-  if(action==='gif'){
-   const value=ask('Paste a direct HTTPS GIF image URL');if(value===null)return;
-   try{const u=new URL(value);if(u.protocol!=='https:'||!(/\.gif($|[?#])/i.test(u.pathname+u.search)))throw new Error();}catch(_){notice('Enter a valid HTTPS URL ending in .gif.',true);return;}
-   meta.gif_url=value;notice('GIF link saved with this post. Add it as a media URL in a future media integration.');return;
-  }
+  if(action==='gif'){notice('GIF search and insertion are not connected yet; this control will be enabled after a verified GIF provider is configured.',true);return;}
   if(action==='whatsapp'){
    notice('Publish this post first, then use Share → WhatsApp from the post menu.');return;
   }
