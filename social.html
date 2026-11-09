@@ -101,7 +101,7 @@ input,select,textarea{font-family:Arial,Helvetica,sans-serif}
 #reels-list .post-card p,#reels-list .post-card .post-meta,#reels-list .post-card .post-meta b{color:#fff!important}
 #reels-list video{background:#000!important}
 @media(max-width:760px){.social-shell{padding:8px 0 94px!important}.panel{border-radius:0!important;border-left:0!important;border-right:0!important;padding:13px!important}.social-center{width:100%}.post-card{padding:14px 0}.social-mobile-nav{padding-bottom:env(safe-area-inset-bottom)}}
-</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-facebook-ui4"><style>
+</style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-home-visibility5"><style>
 :root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
@@ -415,6 +415,22 @@ body.suhas-large-text .post-card p,body.suhas-large-text .panel p{font-size:1.12
  .profile-viewer-body{padding:17px 16px 26px!important}
  .profile-summary-row{padding:12px!important}
 }
+</style>
+<style id="suhas-max-home-visibility-profile-click-fix">
+/* Restore readable home headings and reliable profile-photo tap targets */
+#home,#home *{--home-ink:#1c1e21}
+#home h1,#home h2,#home h3,#home .home-section-title,#home .section-title,
+#home [data-home-heading],.home-section-title,.home-discovery h2,.home-discovery h3{
+ color:#1c1e21!important;opacity:1!important;font-weight:800!important;text-shadow:none!important
+}
+#home .muted,#home .subtle,.home-discovery .muted{color:#65676b!important;opacity:1!important}
+.post-head .avatar[data-profile-open],.post-head img[data-profile-open],
+.post-author [data-profile-open],.member-info [data-profile-open]{
+ cursor:pointer!important;pointer-events:auto!important;position:relative;z-index:2;
+}
+.post-head .avatar[data-profile-open]{outline:0;transition:transform .15s ease,box-shadow .15s ease}
+.post-head .avatar[data-profile-open]:active{transform:scale(.94);box-shadow:0 0 0 4px rgba(8,102,255,.18)}
+.profile-viewer.open{z-index:10050!important}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -525,9 +541,9 @@ async function loadFeed(){const r=await client.from('suhas_posts').select('id,us
 async function openMemberProfile(id){
  activeProfileId=id;$('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
  const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');$('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';
- const r=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified,profile_complete').eq('user_id',id).eq('profile_complete',true).maybeSingle();
- if(r.error)throw r.error;if(!r.data){$('profile-viewer-name').textContent='Profile unavailable';$('profile-viewer-sub').textContent='This member profile is not available.';return;}
- const p=r.data;$('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);$('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';$('profile-viewer-cover').style.backgroundImage=p.cover_photo_url?'url("'+safe(p.cover_photo_url)+'")':'linear-gradient(135deg,#0b2347,#1e58a4)';
+ const r=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified,profile_complete').eq('user_id',id).maybeSingle();
+ if(r.error)throw r.error;let profileData=r.data;if(!profileData){const fallback=await client.from('suhas_member_profiles').select('*').eq('user_id',id).maybeSingle();if(fallback.error)throw fallback.error;profileData=fallback.data;}if(!profileData){$('profile-viewer-name').textContent='Profile unavailable';$('profile-viewer-sub').textContent='This member profile is not available.';return;}
+ const p=profileData;$('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);$('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';$('profile-viewer-cover').style.backgroundImage=p.cover_photo_url?'url("'+safe(p.cover_photo_url)+'")':'linear-gradient(135deg,#0b2347,#1e58a4)';
  $('profile-viewer-sub').textContent=[p.position,p.company].filter(Boolean).join(' at ')||'SUHAS-MAX Member';$('profile-viewer-bio').textContent=p.bio||'';
  const summary=[['🎓','Last Education',[p.education_level,p.university||p.college||p.school].filter(Boolean).join(' · ')],['💼','Last Job',[p.position,p.company].filter(Boolean).join(' at ')],['📍','Present Location',p.location]];
  $('profile-viewer-info').innerHTML='<div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+safe(x[2])+'</div></div></div>').join('')+'</div>';
