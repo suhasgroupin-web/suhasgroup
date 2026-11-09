@@ -1448,6 +1448,12 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .story-viewer-content .story-viewer-media{width:100%!important;max-width:100%!important;max-height:58vh!important;object-fit:contain!important}
 .story-viewer-audio{display:none!important}
 .story-viewer-content p{margin:0!important;white-space:pre-wrap}
+</style><style id="suhas-story-thumbnail-audio-fix">
+.home-story-card .home-story-photo{z-index:0}
+.home-story-card .home-story-preview-media{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;opacity:1!important;visibility:visible!important}
+.home-story-card .home-story-name,.home-story-card .home-story-views{z-index:2!important}
+.story-viewer-content .story-viewer-media{width:100%;max-height:58vh;object-fit:cover}
+.story-viewer-content .story-viewer-audio{display:none!important}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -1636,14 +1642,12 @@ async function loadHomeStories(){
  if(!rows.length){host.innerHTML=ownCard+'<div class="home-stories-empty">No stories yet. Share the first one.</div>';bindStoryCreateCard();return;}
  const mediaPaths=[...new Set(rows.map(x=>x.media_path).filter(Boolean))];
  const audioPaths=[...new Set(rows.map(x=>x.metadata&&x.metadata.audio_path).filter(Boolean))];
- const [mediaSigned,audioSigned]=await Promise.all([
-  mediaPaths.length?client.storage.from('suhas-max-stories').createSignedUrls(mediaPaths,3600):Promise.resolve({data:[],error:null}),
-  audioPaths.length?client.storage.from('suhas-max-stories').createSignedUrls(audioPaths,3600):Promise.resolve({data:[],error:null})
+ const [mediaResults,audioResults]=await Promise.all([
+  Promise.all(mediaPaths.map(async path=>{const result=await client.storage.from('suhas-max-stories').createSignedUrl(path,3600);if(result.error){console.warn('Story media URL unavailable',path,result.error);return [path,null];}return [path,result.data?.signedUrl||null];})),
+  Promise.all(audioPaths.map(async path=>{const result=await client.storage.from('suhas-max-stories').createSignedUrl(path,3600);if(result.error){console.warn('Story audio URL unavailable',path,result.error);return [path,null];}return [path,result.data?.signedUrl||null];}))
  ]);
- if(mediaSigned.error)console.warn('Story media preview URLs unavailable',mediaSigned.error);
- if(audioSigned.error)console.warn('Story audio URLs unavailable',audioSigned.error);
- const mediaUrlByPath=Object.fromEntries((mediaSigned.data||[]).filter(x=>x.signedUrl).map(x=>[x.path,x.signedUrl]));
- const audioUrlByPath=Object.fromEntries((audioSigned.data||[]).filter(x=>x.signedUrl).map(x=>[x.path,x.signedUrl]));
+ const mediaUrlByPath=Object.fromEntries(mediaResults.filter(x=>x[1]));
+ const audioUrlByPath=Object.fromEntries(audioResults.filter(x=>x[1]));
  const ownIds=rows.filter(x=>x.user_id===me).map(x=>x.id);
  let viewCounts={};
  if(ownIds.length){const vr=await client.from('suhas_story_views').select('story_id').in('story_id',ownIds);if(vr.error)throw vr.error;(vr.data||[]).forEach(v=>viewCounts[v.story_id]=(viewCounts[v.story_id]||0)+1);}
@@ -1671,11 +1675,11 @@ async function loadHomeStories(){
   }
   const audioUrl=story.metadata&&audioUrlByPath[story.metadata.audio_path];
   let audio=null;
-  if(audioUrl){audio=document.createElement('audio');audio.className='story-viewer-audio';audio.src=audioUrl;audio.preload='auto';audio.autoplay=true;audio.setAttribute('playsinline','');body.appendChild(audio);}
+  if(audioUrl){audio=document.createElement('audio');audio.className='story-viewer-audio';audio.src=audioUrl;audio.preload='auto';audio.autoplay=true;audio.setAttribute('playsinline','');audio.setAttribute('webkit-playsinline','');audio.style.display='none';body.appendChild(audio);}
   $('story-viewer-author').textContent=profile.full_name||'SUHAS Member';
   $('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();
   viewer.showModal();
-  if(audio){const startAudio=()=>audio.play().catch(err=>console.warn('Story audio playback was blocked by the browser',err));startAudio();}
+  if(audio){audio.load();const startAudio=()=>audio.play().catch(err=>{console.warn('Story audio autoplay was blocked; retrying on the active story tap',err);});startAudio();audio.addEventListener('canplay',startAudio,{once:true});}
   if(story.user_id!==me)client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true}).then(v=>{if(v.error)notice(v.error.message,true);});
   if(story.user_id===me)loadHomeStories().catch(err=>console.warn('Could not refresh story views',err));
  }));
