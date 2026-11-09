@@ -188,3 +188,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: fetched the committed source again; confirmed friend picker, Messenger insert path, external share option, Web Share API, copy fallback and private-post restriction.
 - Static JavaScript syntax check passed for both inline scripts (61 bytes and 81,124 bytes).
 - Live authenticated browser/device test, actual recipient delivery, external app chooser behavior and share analytics remain pending.
+
+
+## SUHAS-MAX Facebook-inspired mobile feed and Reels layout — 2026-11-09
+- Added a mobile-first feed presentation with white rounded post cards, clearer author/profile header, readable post text, edge-to-edge media, compact comment bubbles, and a responsive comment composer.
+- Changed the Reels shelf to a horizontally scrollable, snap-aligned card row, matching the reference screenshot's swipeable Reels presentation; kept the existing video elements and controls.
+- Preserved existing 3D Like/Comment/Share controls and the in-app/external share implementation.
+- Changed file: `social.html`.
+- Commit: `47b2b9454a10ea339e19b1b56a5a6a3d5ee4b9c6`.
+- Verification: fetched the committed file again and confirmed the new layout block, horizontal Reels rules, responsive feed styles, and previous 3D/share hooks are present. Browser/device visual inspection and live interaction tests have not been run.
+- No existing tables, records, pages, assets, routes or features were deleted; no database schema was changed.
+- Next: implement the repost-to-profile flow with original-author attribution and privacy-safe visibility, then continue feed menu, media, notifications and Reels interaction tests.
