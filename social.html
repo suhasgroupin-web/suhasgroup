@@ -1989,14 +1989,15 @@ document.getElementById('story-create-form')?.addEventListener('submit',async e=
  const uploadedPaths=[];let audioPath=null;
  try{
   if(audio){const ext=(audio.name.split('.').pop()||'mp3').replace(/[^a-z0-9]/gi,'').toLowerCase();audioPath=me+'/'+crypto.randomUUID()+'.'+ext;const up=await client.storage.from('suhas-max-stories').upload(audioPath,audio,{cacheControl:'3600',upsert:false,contentType:audio.type||'audio/mpeg'});if(up.error)throw up.error;uploadedPaths.push(audioPath);}
-  const items=files.length?files:[null];
-  for(const file of items){
+  const storyRows=[];
+  for(const file of (files.length?files:[null])){
    let mediaPath=null;
    if(file){const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];mediaPath=me+'/'+crypto.randomUUID()+'.'+ext;const up=await client.storage.from('suhas-max-stories').upload(mediaPath,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(up.error)throw up.error;uploadedPaths.push(mediaPath);}
    const metadata={};if(audioPath)metadata.audio_path=audioPath;
-   const result=await client.from('suhas_stories').insert({user_id:me,content:content||' ',media_path:mediaPath,media_type:file?.type||null,audience:$('story-audience').value,metadata,expires_at:new Date(Date.now()+24*60*60*1000).toISOString()});
-   if(result.error)throw result.error;
+   storyRows.push({user_id:me,content:content||' ',media_path:mediaPath,media_type:file?.type||null,audience:$('story-audience').value,metadata,expires_at:new Date(Date.now()+24*60*60*1000).toISOString()});
   }
+  const result=await client.from('suhas_stories').insert(storyRows);
+  if(result.error)throw result.error;
   $('story-content').value='';$('story-media').value='';$('story-media-name').textContent='';$('story-media-preview').innerHTML='';$('story-media-preview').hidden=true;audioInput.value='';audioFile=null;audioPreview.hidden=true;audioPreview.innerHTML='';clearGalleryPreview();if(storyPreviewUrl){URL.revokeObjectURL(storyPreviewUrl);storyPreviewUrl=null;}
   await loadHomeStories();notice(files.length>1?files.length+' stories shared successfully.':'Story shared. It will expire after 24 hours.');document.dispatchEvent(new CustomEvent('suhas-story-published'));
  }catch(err){if(uploadedPaths.length)await client.storage.from('suhas-max-stories').remove(uploadedPaths);notice(err.message||'Could not share story.',true);}
