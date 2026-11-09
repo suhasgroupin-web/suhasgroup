@@ -349,3 +349,10 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Repository audit: `app.html`, `social.html`, `profile.html`, `login.html`, and `index.html` inline JavaScript syntax checks all passed (3/3, 2/2, 2/2, 1/1, 1/1 respectively). No files or user data were deleted.
 - Supabase advisors: security warning — leaked-password protection is not enabled (https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Performance findings include 19 unindexed foreign keys, 31 RLS initplan warnings, 11 unused indexes, and 3 multiple-permissive-policy warnings. These require policy/index-by-index review; no potentially risky blanket database changes were made.
 - GitHub UI commit: `bb7de88934fa7ec1f0e52b6680d8d4454b8edd8b`.
+
+
+## 2026-11-09 — Mobile bottom navigation layout hotfix
+- Fixed `social.html` mobile bottom navigation so all six primary destinations render in a single horizontal six-column bar, not a vertical centered stack.
+- Added high-specificity mobile-only layout rules for fixed bottom positioning, compact button sizing, icon/label sizing, and page bottom clearance. Existing navigation actions and destination handlers are unchanged.
+- GitHub commit: `410ab6bb36636d9c24cbccfaa8c63cd3f8bd5bd4`.
+- Source update committed; actual Android browser rendering and tap-through verification still pending.
