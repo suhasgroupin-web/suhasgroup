@@ -510,3 +510,18 @@ body.suhas-desktop-mode .social-grid{grid-template-columns:minmax(300px,.85fr) m
 @media(prefers-reduced-motion:reduce){
  .suhas-display-trigger{transition:none}
 }
+
+
+/* SUHAS-MAX Facebook-inspired shared interface refresh (additive) */
+:root{--fb-blue:#0866ff;--fb-surface:#fff;--fb-canvas:#f0f2f5;--fb-border:#e4e6eb;--fb-muted:#65676b}
+body{background:var(--fb-canvas)}
+button,.btn,[role="button"]{transition:background .16s ease,box-shadow .16s ease,transform .16s ease}
+button:not(.menu-toggle):not(.social-topnav button):not(.social-mobile-nav button){cursor:pointer}
+input,select,textarea{border:1px solid var(--fb-border);border-radius:10px;background:#fff;color:#1c1e21}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(8,102,255,.18);border-color:var(--fb-blue)}
+.btn-primary,.btn-in{background:linear-gradient(180deg,#2680ff,#0866ff);border:1px solid #0758d8;color:#fff;box-shadow:0 2px 0 #0649b2,0 4px 10px rgba(8,102,255,.2)}
+.btn-primary:active,.btn-in:active{transform:translateY(2px);box-shadow:0 1px 0 #0649b2}
+.company-card,.cat-card,.step,.job-row,.toolbar,.owner,.mv-card,.right-card,.panel{border-color:var(--fb-border);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.company-card,.cat-card,.step,.job-row,.toolbar,.owner{border-radius:14px}
+.site-header{background:rgba(255,255,255,.97);border-bottom:1px solid var(--fb-border);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+@media(max-width:760px){.container{padding-left:14px;padding-right:14px}.section{padding-top:48px;padding-bottom:48px}.btn{border-radius:10px}}
