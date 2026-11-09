@@ -260,3 +260,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commit: `199678699b63494665c184a7caefa522c43a94f3`.
 - Verification: fetched latest source; profile counts 10 female and 5 male; age range 19–25; both inline JS blocks parsed successfully.
 - Portrait host availability and actual Android/browser rendering remain untested. Existing real member profiles/data/features were not deleted or changed.
+
+
+## 2026-11-09 — Social UI design polish
+- Added a visual polish layer to `social.html` without deleting or replacing existing features.
+- Feed Like/Comment/Share action controls now have tactile 3D-style raised/pressed states; primary actions have matching depth and pressed feedback.
+- Added keyboard-visible focus styling, reduced-motion support, and subtle discovery-card hover treatment.
+- Verified the latest GitHub source contains the design block once, before `</head>`, and includes the expected 3D action, primary button, focus, and reduced-motion rules.
+- Commit: `5eed4bf27797eb290af7964f6e98eb19991c6240`
+- Limitation: source-level verification only; live Android/browser rendering and real tap interaction still require device testing.
