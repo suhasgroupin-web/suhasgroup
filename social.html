@@ -1811,4 +1811,34 @@ function arcadeTick(){
 }
 function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeReady=true;document.querySelectorAll('[data-arcade]').forEach(b=>b.addEventListener('click',()=>arcadeStart(b.dataset.arcade)));$('arcade-close').addEventListener('click',()=>{arcadeRunning=false;cancelAnimationFrame(arcadeRAF);$('arcade-stage').hidden=true;arcadeShowBest();});document.querySelectorAll('[data-control]').forEach(b=>{const k=b.dataset.control;if(k==='restart'){b.addEventListener('click',()=>arcadeStart(arcadeKind));return;}const down=e=>{e.preventDefault();arcadeKeys[k]=true;};const up=e=>{e.preventDefault();arcadeKeys[k]=false;};b.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,up));});window.addEventListener('keydown',e=>{const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',Space:'jump',ArrowDown:'brake'};if(map[e.code]){arcadeKeys[map[e.code]]=true;e.preventDefault();}});window.addEventListener('keyup',e=>{const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',Space:'jump',ArrowDown:'brake'};if(map[e.code])arcadeKeys[map[e.code]]=false;});arcadeShowBest();}
 })().catch(e=>{const n=document.getElementById('notice');if(n){n.textContent=e.message||'Could not connect.';n.style.display='block';}});
+</script><script>
+/* Preserve the active SUHAS-MAX section across refreshes on this page. */
+(function(){
+  const key='suhas-max-active-section:'+location.pathname;
+  function remember(tab){
+    if(!tab)return;
+    try{sessionStorage.setItem(key,tab);}catch(_){}
+  }
+  document.addEventListener('click',function(e){
+    const button=e.target.closest('[data-tab]');
+    if(button) remember(button.dataset.tab);
+  },true);
+  function restore(){
+    let tab='';
+    try{tab=sessionStorage.getItem(key)||'';}catch(_){}
+    if(!tab || tab==='feed')return;
+    const started=Date.now();
+    const timer=setInterval(function(){
+      const button=document.querySelector('[data-tab="'+CSS.escape(tab)+'"]');
+      if(button && document.documentElement.classList.contains('suhas-auth-pending')===false){
+        clearInterval(timer);
+        button.click();
+      }else if(Date.now()-started>15000){
+        clearInterval(timer);
+      }
+    },300);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
+  else setTimeout(restore,900);
+})();
 </script><script src="assets/display-mode.js?v=6"></script><dialog id="story-viewer" class="story-viewer"><div class="story-viewer-top"><strong id="story-viewer-author">Story</strong><button type="button" class="action" onclick="document.getElementById('story-viewer').close()">✕</button></div><div id="story-viewer-content" class="story-viewer-content"></div><small id="story-viewer-time" class="story-viewer-time"></small></dialog></body></html>
