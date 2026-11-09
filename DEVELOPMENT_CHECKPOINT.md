@@ -141,3 +141,15 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static source verification: the updated handler was written successfully. No authenticated browser/device test has been run; live behavior remains unverified.
 - No existing tables, records, pages, assets, routes or features were deleted or replaced.
 - Next step: continue the delegated-action audit, then enforce saved friend-request/message privacy preferences at every relevant social entry point after reviewing the preference schema and existing policies.
+
+
+## SUHAS-MAX privacy enforcement audit and UI status correction — 2026-11-09
+- Audited the live Supabase RLS policies for `suhas_friend_requests` and `suhas_messages` plus the existing Account Control Centre save/load code.
+- Confirmed the friend-request INSERT policy checks the recipient's `allow_friend_requests` preference (default allow when no preference row exists).
+- Confirmed the message INSERT policy blocks recipients set to `nobody` and requires an accepted friendship when the recipient setting is `friends`; `everyone` remains allowed.
+- The earlier checkpoint wording that these preferences were “saved only” was stale relative to the live database policies. Updated `member-tools.html` helper text and save confirmation so the UI accurately says these permissions are enforced.
+- Changed file: `member-tools.html`.
+- Code commit: `7c835180375083b0dbe7fb1094a60187187e5fe8`.
+- Verification: read-only Supabase catalog query confirmed the relevant RLS policy definitions; GitHub source update succeeded. No live two-account send/deny UI test was performed.
+- No schema, records, routes, existing features or user data were changed or deleted.
+- Next step: run authenticated two-account tests for friend requests and messages; then audit feed audience enforcement, profile visibility, block/report, notification routing, media storage, and remaining Facebook-style feature gaps.
