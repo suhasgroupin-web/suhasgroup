@@ -439,6 +439,8 @@ body.suhas-large-text .post-card p,body.suhas-large-text .panel p{font-size:1.12
 .suhas-share-action{background:linear-gradient(145deg,#ba91ff,#8050d8 58%,#5630a8)!important}
 .suhas-3d-action:active{transform:perspective(120px) rotateX(0) translateY(3px)!important;box-shadow:0 1px 0 rgba(25,39,62,.3),inset 0 2px 5px rgba(0,0,0,.2)!important;filter:brightness(.96)}
 @media(max-width:390px){.suhas-3d-action{font-size:12px!important;min-height:43px!important}}
+
+.suhas-share-dialog{border:0;border-radius:18px;padding:0;width:min(92vw,420px);box-shadow:0 18px 60px rgba(0,0,0,.28)}.suhas-share-dialog::backdrop{background:rgba(15,23,42,.56)}.suhas-share-card{padding:22px;display:grid;gap:12px}.suhas-share-card h3{margin:0;font-size:19px}.suhas-share-card p{margin:0;color:#65676b}.suhas-share-card select{width:100%;padding:12px;border:1px solid #ccd0d5;border-radius:10px;background:white;color:#1c1e21}.suhas-share-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.suhas-share-dialog-actions button{min-height:40px}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -581,6 +583,39 @@ $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.clo
 $('profile-viewer-close').addEventListener('click',()=>{$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;});
 $('profile-viewer').addEventListener('click',e=>{if(e.target===$('profile-viewer'))$('profile-viewer-close').click();});
 async function loadSavedPosts(){const ids=JSON.parse(localStorage.getItem('suhas-max-saved-posts')||'[]');if(!ids.length){$('saved-list').innerHTML='<div class="empty">No saved posts yet. Save a post from its 3-dot menu.</div>';return;}const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('id',ids);if(r.error)throw r.error;const rows=(r.data||[]).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));const users=[...new Set(rows.map(x=>x.user_id))];let names={};if(users.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',users);if(p.error)throw p.error;names=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));}$('saved-list').innerHTML=rows.map(x=>{const p=names[x.user_id]||{};return '<article class="post-card"><div class="post-head"><b>'+safe(p.full_name||'SUHAS Member')+'</b><span class="post-meta">'+safe(new Date(x.created_at).toLocaleString())+'</span></div><p>'+safe(x.content||'')+'</p>'+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:360px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:360px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Saved post media">'):'')+'<div class="social-actions"><button class="action" type="button" data-unsave-post="'+x.id+'">Remove from saved</button><button class="action" type="button" data-open-saved-post="'+x.id+'">Open in feed</button></div></article>';}).join('')||'<div class="empty">Saved posts are no longer available.</div>';}
+
+async function sharePostInApp(postId,link,post){
+ if(post.audience==='only_me')throw new Error('This private post cannot be shared.');
+ const rel=await client.from('suhas_friend_requests').select('sender_id,recipient_id').eq('status','accepted').or('sender_id.eq.'+me+',recipient_id.eq.'+me);
+ if(rel.error)throw rel.error;
+ const friendIds=[...new Set((rel.data||[]).map(x=>x.sender_id===me?x.recipient_id:x.sender_id))];
+ if(!friendIds.length)throw new Error('Add a friend before sharing a post in SUHAS-MAX Messenger.');
+ const people=await client.from('suhas_public_profiles').select('user_id,full_name').in('user_id',friendIds).order('full_name');
+ if(people.error)throw people.error;
+ if(!people.data?.length)throw new Error('No available friends were found.');
+ const dialog=document.createElement('dialog');
+ dialog.className='suhas-share-dialog';
+ dialog.innerHTML='<form method="dialog" class="suhas-share-card"><h3>Share post in SUHAS-MAX</h3><p>Choose a friend to send this post in Messenger.</p><label for="suhas-share-friend">Friend</label><select id="suhas-share-friend" required><option value="">Choose a friend…</option>'+people.data.map(p=>'<option value="'+safe(p.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</option>').join('')+'</select><div class="suhas-share-dialog-actions"><button type="button" class="action" data-share-cancel>Cancel</button><button type="submit" class="action primary" data-share-send>Send in Messenger</button></div></form>';
+ document.body.appendChild(dialog);
+ const form=dialog.querySelector('form');
+ dialog.querySelector('[data-share-cancel]').addEventListener('click',()=>dialog.close());
+ form.addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  const friend=dialog.querySelector('#suhas-share-friend').value;
+  const send=dialog.querySelector('[data-share-send]');
+  if(!friend)return;
+  send.disabled=true;send.textContent='Sending…';
+  try{
+   await startMessage(friend);
+   const body='Shared a post with you on SUHAS-MAX:\n'+(post.content||'View this post')+'\n'+link;
+   const sent=await client.from('suhas_messages').insert({conversation_id:activeConversation,sender_id:me,body});
+   if(sent.error)throw sent.error;
+   dialog.close();notice('Post sent to your friend in Messenger.');
+  }catch(err){send.disabled=false;send.textContent='Send in Messenger';notice(err.message||'Could not share this post.',true);}
+ });
+ dialog.addEventListener('close',()=>dialog.remove(),{once:true});
+ dialog.showModal();
+}
 function notice(t,bad=false){$('notice').textContent=t;$('notice').style.display='block';$('notice').style.background=bad?'#fff0ef':'#edf4ff';$('notice').style.color=bad?'#a53225':'#234a7c';}
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function verifiedBadge(p){return p&&p.email_verified===true?'<span class="verified-badge" title="Verified account · email confirmed" aria-label="Verified account, email confirmed"><svg viewBox="0 0 24 24" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="suhasVerifiedGold" x1="3" y1="1" x2="21" y2="23" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8d6826"/><stop offset=".3" stop-color="#5c3b0b"/><stop offset=".68" stop-color="#3d2608"/><stop offset="1" stop-color="#211604"/></linearGradient><linearGradient id="suhasVerifiedGoldShine" x1="4" y1="2" x2="18" y2="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f5d98b" stop-opacity=".42"/><stop offset=".45" stop-color="#d7ad55" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><path class="verified-rosette" fill="url(#suhasVerifiedGold)" stroke="#d8b66c" stroke-width=".55" d="M12 1.1l2.25 1.55 2.72-.22 1.35 2.36 2.55 1.03.02 2.73 1.72 2.12-1.2 2.48.56 2.68-2.26 1.67-.82 2.62-2.7.3L12 22.9l-2.2-1.48-2.72.22-1.35-2.36-2.55-1.03-.02-2.73-1.72-2.12 1.2-2.48-.56-2.68 2.26-1.67.82-2.62 2.7-.3L12 1.1z"/><path fill="url(#suhasVerifiedGoldShine)" d="M12 2.4l1.9 1.3 2.3-.18 1.14 2 2.16.87.02 2.3 1.45 1.8-1.01 2.1.47 2.26-1.91 1.41-.7 2.22-2.28.25L12 20.8l-1.86-1.25-2.3.18-1.14-2-2.16-.87-.02-2.3-1.45-1.8 1.01-2.1-.47-2.26 1.91-1.41.7-2.22 2.28-.25L12 2.4z"/><path class="verified-check" d="M6.9 12.05l3.35 3.45 6.9-7.25" stroke="#fff" stroke-width="2.65" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>':'';}
@@ -839,12 +874,12 @@ document.addEventListener('click',async e=>{
  if(toggle){const id=toggle.dataset.postMenuToggle,menu=document.querySelector('[data-post-menu="'+id+'"]');document.querySelectorAll('.post-menu.open').forEach(m=>{if(m!==menu)m.classList.remove('open');});menu?.classList.toggle('open');toggle.setAttribute('aria-expanded',menu?.classList.contains('open')?'true':'false');return;}
  const action=e.target.closest('[data-post-action]');
  if(action){
-  const id=action.dataset.postId,kind=action.dataset.postAction,post=await client.from('suhas_posts').select('id,user_id,content,media_url,media_path,media_type').eq('id',id).maybeSingle();
+  const id=action.dataset.postId,kind=action.dataset.postAction,post=await client.from('suhas_posts').select('id,user_id,content,media_url,media_path,media_type,audience').eq('id',id).maybeSingle();
   if(post.error){notice(post.error.message,true);return;}if(!post.data){notice('This post is no longer available.',true);return;}
   const x=post.data,link=location.origin+location.pathname+'#post-'+encodeURIComponent(id);
   try{
    if(kind==='copy'){const copied=await copyToClipboard(link);notice(copied?'Post link copied. You can paste it anywhere.':'Please copy the post link shown in the box.',!copied);}
-   if(kind==='share'){if(navigator.share)await navigator.share({title:'SUHAS-MAX post',text:x.content||'View this post on SUHAS-MAX',url:link});else{const copied=await copyToClipboard(link);notice(copied?'Sharing is not available here. Post link copied instead.':'Please copy the post link shown in the box.',!copied);}}
+   if(kind==='share'){await sharePostInApp(id,link,x);}
    if(kind==='save'){const saved=JSON.parse(localStorage.getItem('suhas-max-saved-posts')||'[]');if(!saved.includes(id))saved.unshift(id);localStorage.setItem('suhas-max-saved-posts',JSON.stringify(saved.slice(0,500)));notice('Post saved on this device.');}
    if(kind==='download'){if(!x.media_url)throw new Error('This post has no media to download.');const a=document.createElement('a');a.href=x.media_url;a.download='suhas-max-post-'+id+(x.media_type==='image/png'?'.png':x.media_type==='image/webp'?'.webp':x.media_type==='video/mp4'?'.mp4':x.media_type==='video/webm'?'.webm':'.jpg');a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();notice('Media download started.');}
    if(kind==='edit'){if(x.user_id!==me)throw new Error('You can edit only your own post.');const next=prompt('Edit your post text:',x.content||'');if(next===null)return;const content=next.trim();if(!content&&!x.media_url)throw new Error('A post must contain text or media.');const r=await client.from('suhas_posts').update({content}).eq('id',id).eq('user_id',me);if(r.error)throw r.error;await loadFeed();notice('Post updated.');}
