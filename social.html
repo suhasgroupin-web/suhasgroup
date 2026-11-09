@@ -503,7 +503,7 @@ body.suhas-large-text .post-card p,body.suhas-large-text .panel p{font-size:1.12
 .home-story-card.own .home-story-ring{background:linear-gradient(135deg,#1877f2,#54a4ff)}
 .home-story-avatar{width:100%;height:100%;border:3px solid #fff;border-radius:50%;background:#dce8fb;color:#174b91;display:grid;place-items:center;overflow:hidden;font-size:20px;font-weight:800}
 .home-story-avatar img{width:100%;height:100%;object-fit:cover}
-.home-story-name{width:100%;font-size:11px;font-weight:700;color:#343a40;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.home-story-views{font-size:10px;color:#65676b;text-align:center}.home-story-name{width:100%;font-size:11px;font-weight:700;color:#343a40;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .home-stories-empty{padding:12px;border-radius:10px;background:#f0f2f5;color:#65676b;font-size:12px}
 .story-viewer{width:min(92vw,440px);min-height:300px;border:0;border-radius:16px;padding:16px;background:linear-gradient(145deg,#1877f2,#7739a8);color:#fff;box-shadow:0 12px 45px #0005}
 .story-viewer::backdrop{background:#000b}.story-viewer-top{display:flex;justify-content:space-between;align-items:center}.story-viewer-content{min-height:210px;display:grid;place-items:center;text-align:center;font-size:23px;font-weight:800;overflow-wrap:anywhere;padding:22px 8px}.story-viewer-time{display:block;color:#ffffffbb;font-size:11px}
@@ -623,9 +623,13 @@ async function loadHomeStories(){
  const rows=r.data||[];if(!rows.length){host.innerHTML='<div class="home-stories-empty">No active stories yet. Add the first story.</div>';return;}
  const ids=[...new Set(rows.map(x=>x.user_id))];
  const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',ids);
- if(p.error)throw p.error;const byId=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));
- host.innerHTML=rows.map(x=>{const profile=byId[x.user_id]||{};const own=x.user_id===me;return '<button type="button" class="home-story-card '+(own?'own':'')+'" data-story-open="'+x.id+'"><span class="home-story-ring"><span class="home-story-avatar">'+(profile.profile_photo_url?'<img src="'+safe(profile.profile_photo_url)+'" alt="">':safe((profile.full_name||'S').slice(0,1).toUpperCase()))+'</span></span><span class="home-story-name">'+safe(own?'Your story':profile.full_name||'SUHAS Member')+'</span></button>';}).join('');
- host.querySelectorAll('[data-story-open]').forEach(btn=>btn.addEventListener('click',()=>{const story=rows.find(x=>String(x.id)===btn.dataset.storyOpen);if(!story)return;const profile=byId[story.user_id]||{};const viewer=$('story-viewer');$('story-viewer-author').textContent=profile.full_name||'SUHAS Member';$('story-viewer-content').textContent=story.content;$('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();viewer.showModal();}));
+ if(p.error)throw p.error;
+ const byId=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));
+ const ownIds=rows.filter(x=>x.user_id===me).map(x=>x.id);
+ let viewCounts={};
+ if(ownIds.length){const vr=await client.from('suhas_story_views').select('story_id').in('story_id',ownIds);if(vr.error)throw vr.error;(vr.data||[]).forEach(v=>viewCounts[v.story_id]=(viewCounts[v.story_id]||0)+1);}
+ host.innerHTML=rows.map(x=>{const profile=byId[x.user_id]||{};const own=x.user_id===me;return '<button type="button" class="home-story-card '+(own?'own':'')+'" data-story-open="'+x.id+'"><span class="home-story-ring"><span class="home-story-avatar">'+(profile.profile_photo_url?'<img src="'+safe(profile.profile_photo_url)+'" alt="">':safe((profile.full_name||'S').slice(0,1).toUpperCase()))+'</span></span><span class="home-story-name">'+safe(own?'Your story':profile.full_name||'SUHAS Member')+'</span>'+(own?'<span class="home-story-views">'+(viewCounts[x.id]||0)+' views</span>':'')+'</button>';}).join('');
+ host.querySelectorAll('[data-story-open]').forEach(btn=>btn.addEventListener('click',async()=>{const story=rows.find(x=>String(x.id)===btn.dataset.storyOpen);if(!story)return;if(story.user_id!==me){const v=await client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true});if(v.error){notice(v.error.message,true);return;}}const profile=byId[story.user_id]||{};const viewer=$('story-viewer');$('story-viewer-author').textContent=profile.full_name||'SUHAS Member';$('story-viewer-content').textContent=story.content;$('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();viewer.showModal();if(story.user_id===me)await loadHomeStories();}));
 }
 async function loadHomeReels(){
  const host=$('home-reels-list');if(!host)return;
