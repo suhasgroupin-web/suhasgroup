@@ -1417,6 +1417,17 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .suhas-story-gallery-head{display:flex;align-items:center;justify-content:space-between;padding:20px}
 .suhas-story-gallery-head strong{font-size:19px}
 .suhas-story-gallery-head button{border:1.5px solid #1c1e21;border-radius:28px;background:#fff;padding:12px 17px;font-size:15px}
+.suhas-story-gallery-head span{font-size:13px;color:#65676b}
+.suhas-story-emoji-picker{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 12px}
+.suhas-story-emoji-picker[hidden]{display:none}
+.suhas-story-emoji-picker button{border:0;border-radius:9px;background:#f0f2f5;padding:8px 10px;font-size:23px}
+.suhas-story-create-dialog #suhas-story-form-host .story-media-pick,
+.suhas-story-create-dialog #suhas-story-form-host #story-media-name,
+.suhas-story-create-dialog #suhas-story-form-host #story-media-preview,
+.suhas-story-create-dialog #suhas-story-form-host #story-media{display:none!important}
+.suhas-story-create-dialog .story-create-form textarea{min-height:82px!important}
+.suhas-story-create-dialog .story-create-controls button[type=submit]{min-height:48px;flex:1;background:#0866ff;color:#fff;font-size:16px}
+.suhas-story-gallery-preview{cursor:pointer}
 .suhas-story-create-dialog .story-create-form{display:block!important;margin:0!important;padding:12px 20px 30px!important;background:#fff!important}
 .suhas-story-create-dialog .story-create-form textarea{min-height:120px!important;font-size:20px!important;background:#fff!important}
 .suhas-story-create-dialog .story-media-pick{display:inline-flex!important}
@@ -1967,7 +1978,30 @@ let storyPreviewUrl=null;
 document.getElementById('story-media')?.addEventListener('change',e=>{const file=e.target.files?.[0]||null;$('story-media-name').textContent=file?file.name:'';const preview=$('story-media-preview');if(storyPreviewUrl){URL.revokeObjectURL(storyPreviewUrl);storyPreviewUrl=null;}preview.innerHTML='';preview.hidden=!file;if(file){storyPreviewUrl=URL.createObjectURL(file);const media=document.createElement(file.type.startsWith('video/')?'video':'img');media.src=storyPreviewUrl;if(media.tagName==='VIDEO'){media.controls=true;media.playsInline=true;}else media.alt='Selected story photo preview';preview.append(media);const caption=document.createElement('div');caption.className='story-preview-caption';caption.textContent='Preview · This media will appear in your story';preview.append(caption);$('story-submit').textContent='Share Story';}});
 document.getElementById('story-submit')?.addEventListener('click',e=>{const file=$('story-media').files?.[0],content=$('story-content').value.trim();if(!file&&!content){e.preventDefault();$('story-media').click();}});
 
-document.getElementById('story-create-form')?.addEventListener('submit',async e=>{e.preventDefault();const content=$('story-content').value.trim(),file=$('story-media').files?.[0]||null,audio=document.getElementById('suhas-story-audio-file')?.files?.[0]||null;if(!content&&!file&&!audio){notice('Write a story, choose a photo/video, or add music.',true);return;}const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];if(file&&(!allowed.includes(file.type)||file.size>26214400)){notice('Choose JPG, PNG, WebP, MP4 or WebM up to 25 MB.',true);return;}if(audio&&(!audio.type.startsWith('audio/')||audio.size>26214400)){notice('Choose a supported audio file up to 25 MB.',true);return;}const submit=e.currentTarget.querySelector('button[type="submit"]');submit.disabled=true;submit.textContent='Uploading…';let mediaPath=null,audioPath=null;try{if(file){const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];mediaPath=me+'/'+crypto.randomUUID()+'.'+ext;const upload=await client.storage.from('suhas-max-stories').upload(mediaPath,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(upload.error)throw upload.error;}if(audio){const ext=(audio.name.split('.').pop()||'mp3').replace(/[^a-z0-9]/gi,'').toLowerCase();audioPath=me+'/'+crypto.randomUUID()+'.'+ext;const uploadAudio=await client.storage.from('suhas-max-stories').upload(audioPath,audio,{cacheControl:'3600',upsert:false,contentType:audio.type||'audio/mpeg'});if(uploadAudio.error)throw uploadAudio.error;}const metadata={};if(audioPath)metadata.audio_path=audioPath;const result=await client.from('suhas_stories').insert({user_id:me,content:content||' ',media_path:mediaPath,media_type:file?.type||null,audience:$('story-audience').value,metadata,expires_at:new Date(Date.now()+24*60*60*1000).toISOString()});if(result.error)throw result.error;$('story-content').value='';$('story-media').value='';$('story-media-name').textContent='';$('story-media-preview').innerHTML='';$('story-media-preview').hidden=true;document.getElementById('suhas-story-audio-file').value='';document.getElementById('suhas-story-audio-preview').hidden=true;document.getElementById('suhas-story-audio-preview').innerHTML='';if(storyPreviewUrl){URL.revokeObjectURL(storyPreviewUrl);storyPreviewUrl=null;}await loadHomeStories();notice('Story shared. It will expire after 24 hours.');document.dispatchEvent(new CustomEvent('suhas-story-published'));}catch(err){const paths=[mediaPath,audioPath].filter(Boolean);if(paths.length)await client.storage.from('suhas-max-stories').remove(paths);notice(err.message||'Could not share story.',true);}finally{submit.disabled=false;submit.textContent='＋ Add Story';}});
+document.getElementById('story-create-form')?.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const content=$('story-content').value.trim(),files=[...($('story-media').files||[])],audio=audioInput.files?.[0]||null;
+ if(!content&&!files.length&&!audio){notice('Choose a photo/video, add audio, or write story text.',true);mediaInput.click();return;}
+ const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];
+ if(files.some(file=>!allowed.includes(file.type)||file.size>26214400)){notice('Each file must be JPG, PNG, WebP, MP4 or WebM and no larger than 25 MB.',true);return;}
+ if(audio&&(!audio.type.startsWith('audio/')||audio.size>26214400)){notice('Choose a supported audio file up to 25 MB.',true);return;}
+ const submit=e.currentTarget.querySelector('button[type="submit"]');submit.disabled=true;submit.textContent='Uploading…';
+ const uploadedPaths=[];let audioPath=null;
+ try{
+  if(audio){const ext=(audio.name.split('.').pop()||'mp3').replace(/[^a-z0-9]/gi,'').toLowerCase();audioPath=me+'/'+crypto.randomUUID()+'.'+ext;const up=await client.storage.from('suhas-max-stories').upload(audioPath,audio,{cacheControl:'3600',upsert:false,contentType:audio.type||'audio/mpeg'});if(up.error)throw up.error;uploadedPaths.push(audioPath);}
+  const items=files.length?files:[null];
+  for(const file of items){
+   let mediaPath=null;
+   if(file){const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];mediaPath=me+'/'+crypto.randomUUID()+'.'+ext;const up=await client.storage.from('suhas-max-stories').upload(mediaPath,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(up.error)throw up.error;uploadedPaths.push(mediaPath);}
+   const metadata={};if(audioPath)metadata.audio_path=audioPath;
+   const result=await client.from('suhas_stories').insert({user_id:me,content:content||' ',media_path:mediaPath,media_type:file?.type||null,audience:$('story-audience').value,metadata,expires_at:new Date(Date.now()+24*60*60*1000).toISOString()});
+   if(result.error)throw result.error;
+  }
+  $('story-content').value='';$('story-media').value='';$('story-media-name').textContent='';$('story-media-preview').innerHTML='';$('story-media-preview').hidden=true;audioInput.value='';audioFile=null;audioPreview.hidden=true;audioPreview.innerHTML='';clearGalleryPreview();if(storyPreviewUrl){URL.revokeObjectURL(storyPreviewUrl);storyPreviewUrl=null;}
+  await loadHomeStories();notice(files.length>1?files.length+' stories shared successfully.':'Story shared. It will expire after 24 hours.');document.dispatchEvent(new CustomEvent('suhas-story-published'));
+ }catch(err){if(uploadedPaths.length)await client.storage.from('suhas-max-stories').remove(uploadedPaths);notice(err.message||'Could not share story.',true);}
+ finally{submit.disabled=false;submit.textContent='＋ Add Story';}
+});
 /* Keep the live comment editor readable while the user is typing. */
 document.addEventListener('focusin',function suhasCommentInputLiveContrast(e){
  const input=e.target.closest('#feed-list form[data-comment-form] > input, #reels-list form[data-comment-form] > input');
@@ -2478,13 +2512,15 @@ body.suhas-composer-open{overflow:hidden!important}
 <dialog id="suhas-story-create-dialog" class="suhas-story-create-dialog" aria-label="Create story">
  <div class="suhas-story-create-header"><button type="button" id="suhas-story-create-close" aria-label="Close">×</button><strong>Create story</strong><button type="button" id="suhas-story-create-settings" aria-label="Story settings">⚙</button></div>
  <div class="suhas-story-tools">
-  <button type="button" id="suhas-story-text">Aa<span>Text</span></button>
-  <button type="button" id="suhas-story-music">♫<span>Music</span></button>
+  <button type="button" id="suhas-story-text">Aa<span>Add text</span></button>
+  <button type="button" id="suhas-story-music">♫<span>Audio</span></button>
+  <button type="button" id="suhas-story-stickers">☺<span>Stickers</span></button>
   <button type="button" id="suhas-story-collage">▦<span>Collage</span></button>
-  <button type="button" id="suhas-story-boomerang" disabled title="Boomerang video creation is not yet available">∞<span>Boomerang</span></button>
+  <button type="button" id="suhas-story-boomerang" disabled title="Boomerang creation requires a video-processing feature">∞<span>Boomerang</span></button>
  </div>
- <div class="suhas-story-gallery-head"><strong>Gallery ⌄</strong><button type="button" id="suhas-story-gallery-open">▧ &nbsp; Select photo/video</button></div>
- <div id="suhas-story-gallery-preview" class="suhas-story-gallery-preview" aria-live="polite"><span>Choose photos or videos from your phone to add to your story.</span></div>
+ <div id="suhas-story-emoji-picker" class="suhas-story-emoji-picker" hidden aria-label="Story stickers"></div>
+ <div class="suhas-story-gallery-head"><strong>Gallery</strong><span id="suhas-story-selection-count" aria-live="polite">Choose photos or videos</span></div>
+ <div id="suhas-story-gallery-preview" class="suhas-story-gallery-preview" aria-live="polite"><span>Your phone gallery will open automatically. Select one or more photos/videos.</span></div>
  <div id="suhas-story-audio-preview" class="suhas-story-audio-preview" hidden></div>
  <input id="suhas-story-audio-file" type="file" accept="audio/*" hidden>
  <input id="suhas-story-collage-files" type="file" accept="image/*" multiple hidden>
@@ -2496,24 +2532,30 @@ body.suhas-composer-open{overflow:hidden!important}
  if(!dialog||!form)return;
  const host=document.getElementById('suhas-story-form-host');
  host.appendChild(form);
- const open=()=>{if(!dialog.open)dialog.showModal();};
+ const open=()=>{if(!dialog.open){dialog.showModal();setTimeout(()=>mediaInput.click(),180);}};
  window.openSuhasStoryCreator=open;
  document.getElementById('suhas-story-create-close').addEventListener('click',()=>dialog.close());
  const mediaInput=document.getElementById('story-media');
+ mediaInput.multiple=true;
+ mediaInput.setAttribute('aria-label','Choose multiple story photos or videos');
  const audioInput=document.getElementById('suhas-story-audio-file');
  const collageInput=document.getElementById('suhas-story-collage-files');
  const galleryPreview=document.getElementById('suhas-story-gallery-preview');
+ const selectionCount=document.getElementById('suhas-story-selection-count');
  const audioPreview=document.getElementById('suhas-story-audio-preview');
+ const emojiPicker=document.getElementById('suhas-story-emoji-picker');
  let audioFile=null,previewUrls=[];
- const clearGalleryPreview=()=>{previewUrls.forEach(URL.revokeObjectURL);previewUrls=[];galleryPreview.innerHTML='<span>Choose photos or videos from your phone to add to your story.</span>';};
- const showGalleryFiles=files=>{clearGalleryPreview();[...files].forEach(file=>{const url=URL.createObjectURL(file);previewUrls.push(url);const el=document.createElement(file.type.startsWith('video/')?'video':'img');el.src=url;if(el.tagName==='VIDEO'){el.muted=true;el.playsInline=true;}el.alt=file.name;galleryPreview.appendChild(el);});};
- document.getElementById('suhas-story-gallery-open').addEventListener('click',()=>mediaInput.click());
+ const clearGalleryPreview=()=>{previewUrls.forEach(URL.revokeObjectURL);previewUrls=[];galleryPreview.innerHTML='<span>Your phone gallery will open automatically. Select one or more photos/videos.</span>';if(selectionCount)selectionCount.textContent='Choose photos or videos';};
+ const showGalleryFiles=files=>{clearGalleryPreview();const chosen=[...files];if(selectionCount)selectionCount.textContent=chosen.length+' selected';chosen.forEach(file=>{const url=URL.createObjectURL(file);previewUrls.push(url);const el=document.createElement(file.type.startsWith('video/')?'video':'img');el.src=url;if(el.tagName==='VIDEO'){el.muted=true;el.playsInline=true;}el.alt=file.name;galleryPreview.appendChild(el);});};
+ galleryPreview.addEventListener('click',()=>mediaInput.click());
  document.getElementById('suhas-story-text').addEventListener('click',()=>document.getElementById('story-content').focus());
  document.getElementById('suhas-story-music').addEventListener('click',()=>audioInput.click());
  document.getElementById('suhas-story-collage').addEventListener('click',()=>collageInput.click());
+ document.getElementById('suhas-story-stickers').addEventListener('click',()=>{emojiPicker.hidden=!emojiPicker.hidden;});
+ ['😀','😍','😂','🥳','❤️','🔥','👏','✨','🌈','🎉','👍','💯'].forEach(emoji=>{const b=document.createElement('button');b.type='button';b.textContent=emoji;b.addEventListener('click',()=>{const field=document.getElementById('story-content');const start=field.selectionStart,end=field.selectionEnd;field.setRangeText(emoji,start,end,'end');field.focus();emojiPicker.hidden=true;});emojiPicker.appendChild(b);});
  document.getElementById('suhas-story-create-settings').addEventListener('click',()=>document.getElementById('story-audience').focus());
  mediaInput.addEventListener('change',()=>{if(mediaInput.files.length)showGalleryFiles(mediaInput.files);});
- audioInput.addEventListener('change',()=>{audioFile=audioInput.files[0]||null;audioPreview.hidden=!audioFile;audioPreview.innerHTML='';if(audioFile){const label=document.createElement('div');label.textContent='♫ '+audioFile.name;const player=document.createElement('audio');player.controls=true;player.src=URL.createObjectURL(audioFile);const remove=document.createElement('button');remove.type='button';remove.textContent='Remove audio';remove.addEventListener('click',()=>{audioFile=null;audioInput.value='';audioPreview.hidden=true;audioPreview.innerHTML='';});audioPreview.append(label,player,remove);}});
+ audioInput.addEventListener('change',()=>{audioFile=audioInput.files[0]||null;audioPreview.hidden=!audioFile;audioPreview.innerHTML='';if(audioFile){const label=document.createElement('div');label.textContent='♫ '+audioFile.name+' · will play when the story is opened';const remove=document.createElement('button');remove.type='button';remove.textContent='Remove audio';remove.addEventListener('click',()=>{audioFile=null;audioInput.value='';audioPreview.hidden=true;audioPreview.innerHTML='';});audioPreview.append(label,remove);}});
  collageInput.addEventListener('change',async()=>{const files=[...collageInput.files].filter(f=>f.type.startsWith('image/')).slice(0,9);if(files.length<2){notice('Select at least 2 photos for a collage.',true);return;}try{const tiles=await Promise.all(files.map(file=>createImageBitmap(file)));const cols=files.length===2?2:3,rows=Math.ceil(files.length/cols),w=900,h=Math.ceil(rows*600/cols);const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);const cellW=w/cols,cellH=h/rows;tiles.forEach((img,i)=>{const x=(i%cols)*cellW,y=Math.floor(i/cols)*cellH,scale=Math.max(cellW/img.width,cellH/img.height),dw=img.width*scale,dh=img.height*scale;ctx.save();ctx.beginPath();ctx.rect(x+5,y+5,cellW-10,cellH-10);ctx.clip();ctx.drawImage(img,x+(cellW-dw)/2,y+(cellH-dh)/2,dw,dh);ctx.restore();img.close?.();});const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.9));if(!blob)throw new Error('Could not create collage');const collage=new File([blob],'suhas-story-collage.jpg',{type:'image/jpeg'});const dt=new DataTransfer();dt.items.add(collage);mediaInput.files=dt.files;showGalleryFiles([collage]);notice('Collage ready. Publish it as your story.');}catch(err){notice(err.message||'Could not create collage.',true);}finally{collageInput.value='';}});
  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open)dialog.close();});
