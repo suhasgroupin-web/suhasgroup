@@ -1529,7 +1529,57 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 }
 @media(prefers-reduced-motion:reduce){.suhas-premium-header-actions .mobile-head-action{transition:none}}
 </style>
-</head><body><header class="site-header"><div class="nav-wrap">
+<style id="suhas-home-header-final-design-20261109">
+/* Final Home header lock: compact logo, horizontal three-dot menu, colorful Messenger, live search suggestions. */
+.site-header .nav-wrap{gap:clamp(5px,1vw,12px)!important}
+.site-header .brand{gap:6px!important;min-width:0!important;flex:0 1 auto!important}
+.site-header .brand img{width:30px!important;height:30px!important;flex:0 0 30px!important}
+.site-header .brand-name{font-size:clamp(12px,1.45vw,16px)!important;font-weight:950!important;letter-spacing:.35px!important;line-height:1.05!important;background:linear-gradient(105deg,#063b91 0%,#087bff 27%,#20c8df 48%,#a9b9d0 62%,#7258d8 78%,#073b83 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:0 1px 0 #fff,0 2px 3px #174a8430!important;filter:drop-shadow(0 1px 1px #164b8a30)!important}
+.site-header .brand-tag{display:none!important}
+.suhas-premium-header-actions{display:flex!important;align-items:center!important;gap:7px!important;margin-left:auto!important;flex:0 0 auto!important}
+.suhas-premium-header-actions .mobile-head-action{width:39px!important;height:39px!important;min-width:39px!important;min-height:39px!important;flex:0 0 39px!important;border:1px solid #b8d4fa!important;border-radius:50%!important;background:linear-gradient(145deg,#fff 0%,#e8f2ff 43%,#a9cbf5 100%)!important;color:#0755b8!important;box-shadow:inset 0 2px 3px #fff,0 3px 8px #174a8430!important}
+.suhas-premium-header-actions .messenger-head-action{background:linear-gradient(145deg,#f5fdff,#d8f0ff 52%,#b5d8ff)!important;border-color:#8dc8fa!important}
+.suhas-premium-header-actions .messenger-head-icon{width:30px!important;height:30px!important;filter:none!important;opacity:1!important}
+.suhas-premium-header-actions .header-search-trigger svg,.suhas-premium-header-actions .suhas-top-menu-trigger svg{width:22px!important;height:22px!important;fill:none!important;stroke:currentColor!important;stroke-width:2.25!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.suhas-premium-header-actions .suhas-create-trigger{font-size:27px!important;font-weight:600!important;background:linear-gradient(145deg,#f4fbff 0%,#a9d1ff 48%,#397fe0 100%)!important;color:#073b83!important;border-color:#76a9e9!important;text-shadow:0 1px #fff!important;box-shadow:inset 0 2px 3px #fff9,0 4px 9px #124b9240!important}
+.header-search-wrap{position:relative!important;display:flex!important;align-items:center!important;gap:7px!important}
+.header-member-search{width:min(230px,28vw)!important;height:39px!important;border-radius:22px!important;background:#f5f9ff!important;color:#152b4d!important}
+.header-search-results{position:absolute!important;top:calc(100% + 9px)!important;right:0!important;z-index:800!important;width:min(360px,calc(100vw - 18px))!important;max-height:min(65vh,480px)!important;overflow:auto!important;padding:7px!important;border:1px solid #dce6f4!important;border-radius:15px!important;background:#fff!important;box-shadow:0 16px 40px #0b2d5830!important}
+.header-search-results[hidden]{display:none!important}
+.header-search-result{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;min-height:58px!important;padding:8px!important;border:0!important;border-radius:10px!important;background:#fff!important;text-align:left!important;color:#172b4d!important;cursor:pointer!important}
+.header-search-result:hover{background:#f0f6ff!important}
+.header-search-result img,.header-search-avatar{width:40px!important;height:40px!important;flex:0 0 40px!important;object-fit:cover!important;border-radius:50%!important;background:#e8eef8!important;display:grid!important;place-items:center!important;font-weight:800!important;color:#1758a8!important}
+.header-search-result>span:nth-child(2){display:grid!important;gap:2px!important;min-width:0!important;flex:1!important}
+.header-search-result b{font-size:13px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.header-search-result small{font-size:11px!important;color:#66758b!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.header-result-kind{font-size:9px!important;font-weight:900!important;letter-spacing:.6px!important;color:#1263c7!important;background:#e8f2ff!important;border-radius:20px!important;padding:4px 7px!important}
+.header-search-result.demo-result{cursor:default!important;opacity:.92!important}
+.header-search-result.demo-result:hover{background:#fff!important}
+.header-result-kind.demo-kind{color:#855b12!important;background:#fff1d2!important}
+.header-search-empty{padding:16px 12px!important;color:#66758b!important;font-size:13px!important;text-align:center!important}
+.suhas-premium-header-actions .mobile-head-action:focus-visible{outline:3px solid #0866ff!important;outline-offset:2px!important}
+@media(max-width:760px){
+ .site-header .nav-wrap{min-height:58px!important;padding:0 7px!important;gap:5px!important}
+ .site-header .brand{gap:4px!important;flex:1 1 auto!important;min-width:0!important}
+ .site-header .brand img{width:27px!important;height:27px!important;flex-basis:27px!important}
+ .site-header .brand-name{font-size:clamp(11px,3.15vw,14px)!important;letter-spacing:.1px!important}
+ .suhas-premium-header-actions{gap:5px!important}
+ .suhas-premium-header-actions .mobile-head-action{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;flex-basis:34px!important}
+ .suhas-premium-header-actions .messenger-head-icon{width:27px!important;height:27px!important;filter:none!important}
+ .suhas-premium-header-actions .header-search-trigger svg,.suhas-premium-header-actions .suhas-top-menu-trigger svg{width:19px!important;height:19px!important}
+ .suhas-premium-header-actions .suhas-create-trigger{font-size:24px!important}
+ .header-member-search{position:absolute!important;top:calc(100% + 8px)!important;right:0!important;width:min(260px,calc(100vw - 18px))!important;height:42px!important}
+ .header-search-results{top:calc(100% + 57px)!important;right:0!important;width:min(340px,calc(100vw - 14px))!important}
+}
+@media(max-width:380px){
+ .site-header .nav-wrap{gap:4px!important;padding-inline:5px!important}
+ .site-header .brand img{width:24px!important;height:24px!important;flex-basis:24px!important}
+ .site-header .brand-name{font-size:10.5px!important;letter-spacing:0!important}
+ .suhas-premium-header-actions{gap:4px!important}
+ .suhas-premium-header-actions .mobile-head-action{width:31px!important;height:31px!important;min-width:31px!important;min-height:31px!important;flex-basis:31px!important}
+}
+@media(prefers-reduced-motion:reduce){.suhas-premium-header-actions .mobile-head-action{transition:none!important}}
+</style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
@@ -1541,10 +1591,10 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 
 </nav>
 <div class="social-user-actions suhas-premium-header-actions">
+<button class="mobile-head-action suhas-top-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open SUHAS-MAX menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
 <button class="mobile-head-action messenger-head-action" type="button" data-tab="messages" aria-label="Open Messenger messages" title="Messenger"><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00C6FF"/><stop offset=".48" stop-color="#087BFF"/><stop offset="1" stop-color="#5B3DF5"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></button>
-<div class="header-search-wrap"><button id="header-search-toggle" class="mobile-head-action header-search-trigger" type="button" aria-label="Search SUHAS-MAX members" title="Search" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button><input id="header-member-search" class="header-member-search" type="search" placeholder="Search people…" aria-label="Search SUHAS-MAX members" hidden autocomplete="off"></div>
+<div class="header-search-wrap"><button id="header-search-toggle" class="mobile-head-action header-search-trigger" type="button" aria-label="Search SUHAS-MAX members" title="Search" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button><input id="header-member-search" class="header-member-search" type="search" placeholder="Search people…" aria-label="Search SUHAS-MAX members" hidden autocomplete="off"><div id="header-search-results" class="header-search-results" hidden role="listbox" aria-label="Matching SUHAS-MAX accounts"></div></div>
 <div class="suhas-create-wrap"><button class="mobile-head-action suhas-create-trigger" type="button" aria-label="Create" title="Create" aria-haspopup="menu" aria-expanded="false" aria-controls="suhas-create-menu">＋</button><div id="suhas-create-menu" class="suhas-create-menu" role="menu" hidden><div class="suhas-create-title">Create</div><button type="button" role="menuitem" data-create-action="story"><span class="suhas-create-symbol story">◉</span><span><b>Story</b><small>Share a photo or update for 24 hours</small></span></button><button type="button" role="menuitem" data-create-action="photo"><span class="suhas-create-symbol photo">▧</span><span><b>Photo</b><small>Share a photo in your feed</small></span></button><button type="button" role="menuitem" data-create-action="video"><span class="suhas-create-symbol video">▶</span><span><b>Video</b><small>Share a video in your feed</small></span></button><button type="button" role="menuitem" data-create-action="reel"><span class="suhas-create-symbol reel">▣</span><span><b>Reel</b><small>Create a short video reel</small></span></button></div></div>
-<button class="mobile-head-action suhas-top-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open SUHAS-MAX menu" title="More"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="19" cy="5" r="1.8"/><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/><circle cx="5" cy="19" r="1.8"/><circle cx="12" cy="19" r="1.8"/><circle cx="19" cy="19" r="1.8"/></svg></button>
 <a class="social-profile-link" href="profile.html">My Profile</a></div>
 </div></header>
 <main class="social-shell">
@@ -2150,9 +2200,20 @@ postFile.addEventListener('change',renderPostMedia);
 postText.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();$('post-form').requestSubmit();}});
 $('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null,metadata:window.suhasPostMetadata||{}});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();window.suhasPostMetadata={};$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
-$('header-search-toggle').addEventListener('click',async()=>{const field=$('header-member-search'),button=$('header-search-toggle'),opening=field.hidden;field.hidden=!opening;button.setAttribute('aria-expanded',String(opening));if(opening){await activateMaxTab('people');await renderPeople();field.focus();}else{field.value='';$('search').value='';await renderPeople();}});
-$('header-member-search').addEventListener('input',async()=>{const field=$('header-member-search');$('search').value=field.value;if($('people').hidden)await activateMaxTab('people');await renderPeople();});
-$('header-member-search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();activateMaxTab('people');$('search').focus();}});
+function renderHeaderSearchResults(){
+ const field=$('header-member-search'),host=$('header-search-results'),q=(field.value||'').trim().toLowerCase();
+ if(!host||!field||field.hidden||!q){if(host){host.hidden=true;host.innerHTML='';}return;}
+ const real=members.filter(p=>p.user_id!==me&&[p.full_name,p.company,p.position,p.location,p.skills].filter(Boolean).join(' ').toLowerCase().includes(q)).slice(0,12);
+ const demo=SUHAS_DEMO_USERS.filter(p=>[p.name,p.role,p.company,p.city,p.country,p.bio].filter(Boolean).join(' ').toLowerCase().includes(q)).slice(0,8);
+ const realHtml=real.map(p=>'<button type="button" class="header-search-result" role="option" data-profile-open="'+safe(p.user_id)+'">'+(p.profile_photo_url?'<img src="'+safe(p.profile_photo_url)+'" alt="">':'<span class="header-search-avatar">'+safe((p.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<span><b>'+safe(p.full_name||'SUHAS Member')+'</b><small>'+safe([p.position,p.company,p.location].filter(Boolean).join(' · ')||'SUHAS-MAX member')+'</small></span><span class="header-result-kind">MEMBER</span></button>').join('');
+ const demoHtml=demo.map(p=>'<div class="header-search-result demo-result" role="option" aria-disabled="true"><img src="'+safe(p.photo)+'" alt=""><span><b>'+safe(p.name)+'</b><small>'+safe([p.role,p.city].filter(Boolean).join(' · '))+'</small></span><span class="header-result-kind demo-kind">DEMO</span></div>').join('');
+ host.innerHTML=(realHtml||'')+(demoHtml||'')||'<div class="header-search-empty">No matching accounts</div>';
+ host.hidden=false;
+}
+$('header-search-toggle').addEventListener('click',async()=>{const field=$('header-member-search'),button=$('header-search-toggle'),opening=field.hidden;field.hidden=!opening;button.setAttribute('aria-expanded',String(opening));if(opening){field.value='';await activateMaxTab('people');await renderPeople();field.focus();renderHeaderSearchResults();}else{field.value='';$('search').value='';$('header-search-results').hidden=true;await renderPeople();}});
+$('header-member-search').addEventListener('input',async()=>{const field=$('header-member-search');$('search').value=field.value;if($('people').hidden)await activateMaxTab('people');await renderPeople();renderHeaderSearchResults();});
+$('header-member-search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();activateMaxTab('people');$('search').focus();}if(e.key==='Escape'){e.preventDefault();$('header-member-search').value='';$('header-search-results').hidden=true;}});
+document.addEventListener('click',e=>{if(!e.target.closest('.header-search-wrap')){$('header-search-results').hidden=true;}});
 
 let tttBoard=Array(9).fill(''),tttOver=false;
 function tttWinner(b){for(const [a,c,d] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])if(b[a]&&b[a]===b[c]&&b[a]===b[d])return b[a];return b.every(Boolean)?'draw':null;}
