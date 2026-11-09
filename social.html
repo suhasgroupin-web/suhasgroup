@@ -1390,7 +1390,41 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
  .mobile-head-action{width:36px!important;min-width:36px!important;flex-basis:36px!important}
 }
 </style>
-</head><body><header class="site-header"><div class="nav-wrap">
+<style id="suhas-facebook-story-creation-20261109">
+.home-stories-section{padding:12px 0 15px!important}
+.home-stories-heading,.story-create-form{display:none!important}
+.home-stories-list{gap:8px!important;padding:2px 4px 8px!important}
+.home-story-card{position:relative;flex:0 0 124px!important;width:124px!important;height:220px!important;border:1px solid #d7dbe2!important;border-radius:18px!important;overflow:hidden!important;background:#fff!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:0!important;box-shadow:0 1px 2px #00000012}
+.home-story-create-photo,.home-story-photo{position:relative;display:grid;place-items:center;width:100%;height:166px;overflow:hidden;background:#e4e6eb}
+.home-story-create-photo>img,.home-story-photo>img{width:100%;height:100%;object-fit:cover}
+.home-story-create-photo>span:not(.home-story-plus),.home-story-photo>span{font-size:42px;font-weight:700;color:#606770}
+.home-story-plus{position:absolute;bottom:-19px;left:50%;transform:translateX(-50%);width:42px;height:42px;border:4px solid #fff;border-radius:50%;display:grid;place-items:center;background:#0866ff;color:#fff;font-size:32px;font-weight:400;line-height:1}
+.home-story-create-label{height:54px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;color:#1c1e21;font-size:14px;font-weight:700}
+.home-story-name{position:absolute!important;left:10px;right:8px;bottom:10px;color:#fff!important;text-align:left!important;font-size:13px!important;text-shadow:0 1px 4px #000;font-weight:700}
+.home-story-photo{height:100%;position:absolute;inset:0}
+.home-story-card:not(.home-story-create-card):after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#0009);pointer-events:none}
+.home-story-views{position:absolute;top:8px;left:8px;color:#fff!important;z-index:2;text-shadow:0 1px 3px #000}
+.suhas-story-create-dialog{position:fixed;inset:0;width:100%;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;padding:0;background:#fff;color:#111;overflow:auto}
+.suhas-story-create-dialog::backdrop{background:#0008}
+.suhas-story-create-header{height:64px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 12px;border-bottom:1px solid #e4e6eb;position:sticky;top:0;background:#fff;z-index:3}
+.suhas-story-create-header button{border:0;background:transparent;font-size:28px;color:#111;padding:6px}
+.suhas-story-create-header strong{text-align:center;font-size:20px}
+.suhas-story-tools{display:flex;gap:12px;overflow-x:auto;padding:18px 20px 12px}
+.suhas-story-tools button{flex:0 0 145px;height:112px;border:1px solid #e4e6eb;border-radius:18px;background:#fff;box-shadow:0 2px 7px #00000018;font-size:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.suhas-story-tools button span{font-size:18px}
+.suhas-story-tools button:disabled{opacity:.48}
+.suhas-story-gallery-head{display:flex;align-items:center;justify-content:space-between;padding:20px}
+.suhas-story-gallery-head strong{font-size:19px}
+.suhas-story-gallery-head button{border:1.5px solid #1c1e21;border-radius:28px;background:#fff;padding:12px 17px;font-size:15px}
+.suhas-story-create-dialog .story-create-form{display:block!important;margin:0!important;padding:12px 20px 30px!important;background:#fff!important}
+.suhas-story-create-dialog .story-create-form textarea{min-height:120px!important;font-size:20px!important;background:#fff!important}
+.suhas-story-create-dialog .story-media-pick{display:inline-flex!important}
+.suhas-story-create-dialog .story-create-controls{margin-top:18px}
+.suhas-story-create-dialog .story-create-controls button{min-height:48px;flex:1}
+.suhas-story-create-dialog .story-media-preview img,.suhas-story-create-dialog .story-media-preview video{max-height:42vh;max-width:100%;object-fit:contain}
+.suhas-story-create-hint{padding:0 20px 10px;color:#65676b;font-size:12px}
+@media(max-width:420px){.home-story-card{flex-basis:124px!important;width:124px!important;height:220px!important}}
+</style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
@@ -1566,19 +1600,24 @@ let members=[],activeConversation=null,channel=null,notificationChannel=null,act
 async function uploadMedia(file){if(!file)return null;const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];if(!allowed.includes(file.type))throw new Error('Supported files: JPG, PNG, WebP, MP4 and WebM.');if(file.size>26214400)throw new Error('Media file must be 25 MB or smaller.');const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];const path=me+'/'+crypto.randomUUID()+'.'+ext;const r=await client.storage.from('suhas-max-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(r.error)throw r.error;return {path,url:client.storage.from('suhas-max-media').getPublicUrl(path).data.publicUrl,type:file.type};}
 async function loadHomeStories(){
  const host=$('home-stories-list');if(!host)return;
- const r=await client.from('suhas_stories').select('id,user_id,content,background_key,audience,created_at,expires_at,media_path,media_type').gt('expires_at',new Date().toISOString()).order('created_at',{ascending:false}).limit(60);
+ const r=await client.from('suhas_stories').select('id,user_id,content,background_key,audience,created_at,expires_at,media_path,media_type,metadata').gt('expires_at',new Date().toISOString()).order('created_at',{ascending:false}).limit(60);
  if(r.error)throw r.error;
- const rows=r.data||[];if(!rows.length){host.innerHTML='<div class="home-stories-empty">No active stories yet. Add the first story.</div>';return;}
- const ids=[...new Set(rows.map(x=>x.user_id))];
- const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',ids);
- if(p.error)throw p.error;
- const byId=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));
+ const rows=r.data||[];
+ const ids=[...new Set([...rows.map(x=>x.user_id),me].filter(Boolean))];
+ let byId={};
+ if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',ids);if(p.error)throw p.error;byId=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));}
+ const own=byId[me]||{};
+ const ownPhoto=own.profile_photo_url?'<img src="'+safe(own.profile_photo_url)+'" alt="'+safe(own.full_name||'Your profile photo')+'">': '<span>'+safe((own.full_name||'S').slice(0,1).toUpperCase())+'</span>';
+ const ownCard='<button type="button" class="home-story-card home-story-create-card" data-create-story-modal aria-label="Create story"><span class="home-story-create-photo">'+ownPhoto+'<span class="home-story-plus">+</span></span><span class="home-story-create-label">Create story</span></button>';
+ if(!rows.length){host.innerHTML=ownCard+'<div class="home-stories-empty">No stories yet. Share the first one.</div>';bindStoryCreateCard();return;}
  const ownIds=rows.filter(x=>x.user_id===me).map(x=>x.id);
  let viewCounts={};
  if(ownIds.length){const vr=await client.from('suhas_story_views').select('story_id').in('story_id',ownIds);if(vr.error)throw vr.error;(vr.data||[]).forEach(v=>viewCounts[v.story_id]=(viewCounts[v.story_id]||0)+1);}
- host.innerHTML=rows.map(x=>{const profile=byId[x.user_id]||{};const own=x.user_id===me;return '<button type="button" class="home-story-card '+(own?'own':'')+'" data-story-open="'+x.id+'"><span class="home-story-ring"><span class="home-story-avatar">'+(profile.profile_photo_url?'<img src="'+safe(profile.profile_photo_url)+'" alt="">':safe((profile.full_name||'S').slice(0,1).toUpperCase()))+'</span></span><span class="home-story-name">'+safe(own?'Your story':profile.full_name||'SUHAS Member')+'</span>'+(own?'<span class="home-story-views">'+(viewCounts[x.id]||0)+' views</span>':'')+'</button>';}).join('');
+ host.innerHTML=ownCard+rows.map(x=>{const profile=byId[x.user_id]||{};const isOwn=x.user_id===me;return '<button type="button" class="home-story-card" data-story-open="'+x.id+'"><span class="home-story-photo">'+(profile.profile_photo_url?'<img src="'+safe(profile.profile_photo_url)+'" alt="">':'<span>'+safe((profile.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'</span><span class="home-story-name">'+safe(profile.full_name||'SUHAS Member')+'</span>'+(isOwn?'<span class="home-story-views">'+(viewCounts[x.id]||0)+' views</span>':'')+'</button>';}).join('');
+ bindStoryCreateCard();
  host.querySelectorAll('[data-story-open]').forEach(btn=>btn.addEventListener('click',async()=>{const story=rows.find(x=>String(x.id)===btn.dataset.storyOpen);if(!story)return;if(story.user_id!==me){const v=await client.from('suhas_story_views').upsert({story_id:story.id,viewer_id:me},{onConflict:'story_id,viewer_id',ignoreDuplicates:true});if(v.error){notice(v.error.message,true);return;}}const profile=byId[story.user_id]||{};const viewer=$('story-viewer');$('story-viewer-author').textContent=profile.full_name||'SUHAS Member';const body=$('story-viewer-content');body.textContent=story.content||'';body.querySelectorAll('img,video').forEach(n=>n.remove());if(story.media_path){const signed=await client.storage.from('suhas-max-stories').createSignedUrl(story.media_path,3600);if(signed.error){notice(signed.error.message,true);return;}const media=document.createElement(story.media_type&&story.media_type.startsWith('video/')?'video':'img');media.className='story-viewer-media';media.src=signed.data.signedUrl;if(media.tagName==='VIDEO'){media.controls=true;media.playsInline=true;}else media.alt='Story photo';body.prepend(media);}$('story-viewer-time').textContent=new Date(story.created_at).toLocaleString();viewer.showModal();if(story.user_id===me)await loadHomeStories();}));
 }
+function bindStoryCreateCard(){document.querySelectorAll('[data-create-story-modal]').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',openSuhasStoryCreator);});}
 async function loadHomeReels(){
  const host=$('home-reels-list');if(!host)return;
  const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(12);
@@ -2369,4 +2408,34 @@ body.suhas-composer-open{overflow:hidden!important}
  const original=window.addEventListener; // keep the screen closed on initial page load
 })();
 </script>
-</body></html>
+<dialog id="suhas-story-create-dialog" class="suhas-story-create-dialog" aria-label="Create story">
+ <div class="suhas-story-create-header"><button type="button" id="suhas-story-create-close" aria-label="Close">×</button><strong>Create story</strong><button type="button" id="suhas-story-create-settings" aria-label="Story settings">⚙</button></div>
+ <div class="suhas-story-tools">
+  <button type="button" id="suhas-story-text">Aa<span>Text</span></button>
+  <button type="button" disabled title="Music provider integration is not connected">♫<span>Music</span></button>
+  <button type="button" disabled title="Multi-photo collage editor is not connected">▦<span>Collage</span></button>
+  <button type="button" disabled title="Boomerang video creation is not connected">∞<span>Boomerang</span></button>
+ </div>
+ <div class="suhas-story-gallery-head"><strong>Gallery ⌄</strong><button type="button" id="suhas-story-gallery-open">▧ &nbsp; Select photo/video</button></div>
+ <div class="suhas-story-create-hint">Choose a photo or video from your device, or create a text story.</div>
+ <div id="suhas-story-form-host"></div>
+</dialog><script id="suhas-facebook-story-creation-actions-20261109">
+(function(){
+ const dialog=document.getElementById('suhas-story-create-dialog');
+ const form=document.getElementById('story-create-form');
+ if(!dialog||!form)return;
+ const host=document.getElementById('suhas-story-form-host');
+ host.appendChild(form);
+ const open=()=>{if(!dialog.open)dialog.showModal();};
+ window.openSuhasStoryCreator=open;
+ document.getElementById('suhas-story-create-close').addEventListener('click',()=>dialog.close());
+ document.getElementById('suhas-story-gallery-open').addEventListener('click',()=>document.getElementById('story-media').click());
+ document.getElementById('suhas-story-text').addEventListener('click',()=>document.getElementById('story-content').focus());
+ document.getElementById('suhas-story-create-settings').addEventListener('click',()=>document.getElementById('story-audience').focus());
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open)dialog.close();});
+ form.addEventListener('submit',e=>{const submit=form.querySelector('button[type="submit"]');if(submit)submit.addEventListener('click',()=>{}, {once:true});});
+ const originalSubmit=form.querySelector('button[type="submit"]');
+ if(originalSubmit){const observer=new MutationObserver(()=>{if(!originalSubmit.disabled&&originalSubmit.textContent.includes('Add Story')&&!form.querySelector('#story-content').value.trim()&&!form.querySelector('#story-media').files.length&&dialog.open)dialog.close();});observer.observe(originalSubmit,{attributes:true,childList:true,characterData:true,subtree:true});}
+})();
+</script></body></html>
