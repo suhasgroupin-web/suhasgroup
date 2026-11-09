@@ -299,3 +299,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - GitHub commit: `b702bdc1b1a8f45cb87c110e35ab6c30b1748521`.
 - Verification: latest source re-fetched; both inline JS blocks pass syntax parsing. Supabase confirms RLS enabled on `suhas_conversations`, `suhas_conversation_members`, and `suhas_messages`; policies exist for creating conversations, adding participants, viewing member conversations/messages, and sending own messages subject to recipient message preferences/friend restrictions.
 - Not yet verified: actual two-account send/receive, Realtime delivery, and Android live deployment/device interaction.
+
+
+## 2026-11-09 — Friend Request send/show fix
+- Centralized friend-request sending in `sendFriendRequest()` and wired both People discovery (`data-friend`) and profile (`data-profile-friend`) buttons to it.
+- Sends explicit `status:'pending'`, checks both directions for existing pending/accepted/declined relationships to prevent duplicate-pair errors, shows useful feedback, disables/re-enables the action safely, and refreshes both People and Friend Requests (incoming/sent) views after success.
+- GitHub commit: `d834ac49d3124616eeef66124377914b748c45d2`.
+- Latest `social.html` re-fetched; both inline scripts pass syntax parsing; helper and both button integrations verified.
+- Supabase check: `suhas_friend_requests.status` is NOT NULL with default `'pending'`; RLS permits authenticated users to insert own pending requests (subject to recipient friend-request preference), participants to read, and recipient to accept/decline. Unique pair index prevents duplicate same-direction requests.
+- Not yet verified: two separate real accounts sending/receiving and live Android interaction. If recipient has disabled friend requests, RLS will correctly reject the request.
