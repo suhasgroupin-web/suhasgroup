@@ -308,3 +308,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Latest `social.html` re-fetched; both inline scripts pass syntax parsing; helper and both button integrations verified.
 - Supabase check: `suhas_friend_requests.status` is NOT NULL with default `'pending'`; RLS permits authenticated users to insert own pending requests (subject to recipient friend-request preference), participants to read, and recipient to accept/decline. Unique pair index prevents duplicate same-direction requests.
 - Not yet verified: two separate real accounts sending/receiving and live Android interaction. If recipient has disabled friend requests, RLS will correctly reject the request.
+
+
+## 2026-11-09 — Account profile sync RLS and photo/cover fix
+- Root cause confirmed from screenshot: `suhas_public_profiles` had RLS enabled but only a SELECT policy; profile page `syncPublicProfile()` performs UPSERT, which requires INSERT and UPDATE policies. This caused the exact `new row violates row-level security policy` error after the primary `suhas_member_profiles` save.
+- Applied additive Supabase migration `allow_members_to_sync_own_public_profiles`: authenticated members may INSERT their own public profile and UPDATE only their own row (`auth.uid() = user_id` in both USING and WITH CHECK). Existing profile discovery SELECT policy retained.
+- Verified with a transaction executed as database role `authenticated` and simulated JWT subject for a test account: own-row UPSERT succeeded; transaction rolled back. No test data persisted.
+- Fixed `profile.html`: preserve existing `profile_photo_url` when saving the profile form (prevents accidentally nulling the public avatar); add version query to avatar and cover public URLs after upload to avoid stale browser cache.
+- Commit: `281846b7dbafff7a55b51fcd173065ef7081e856`.
+- Latest source re-fetched; both inline scripts pass syntax parsing. Avatar and cover inputs confirmed. Storage bucket `member-avatars` exists, public read enabled, 5 MB max, JPEG/PNG/WebP; own-folder INSERT/UPDATE/DELETE and public SELECT storage policies exist.
+- Not yet verified on user's Android device with a real image upload; the Supabase RLS upsert path is verified in a rolled-back authenticated transaction.
