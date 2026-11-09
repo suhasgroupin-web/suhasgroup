@@ -1856,6 +1856,15 @@ document.addEventListener('click',e=>{
  if(more){const extra=document.getElementById('max-menu-extra');if(extra){const expanded=extra.hidden;extra.hidden=!expanded;more.setAttribute('aria-expanded',String(expanded));more.innerHTML=expanded?'See less <span aria-hidden="true">⌄</span>':'See more <span aria-hidden="true">⌄</span>';if(expanded)extra.scrollIntoView({behavior:'smooth',block:'nearest'});}return;}
 });
 document.getElementById('max-menu-logout')?.addEventListener('click',async()=>{const button=document.getElementById('max-menu-logout');if(button){button.disabled=true;button.textContent='Logging out…';}try{const result=await client.auth.signOut();if(result.error)throw result.error;location.replace('login.html');}catch(error){if(button){button.disabled=false;button.textContent='Log out';}notice(error.message||'Could not log out. Please try again.',true);}});
+// Always start/re-enter the Home page with the menu drawer closed.
+function closeMenuOnHomeLoad(){
+ const panel=document.getElementById('maxmenu');
+ if(panel)panel.hidden=true;
+ document.body.classList.remove('max-menu-open');
+}
+closeMenuOnHomeLoad();
+window.addEventListener('pageshow',closeMenuOnHomeLoad);
+window.addEventListener('DOMContentLoaded',closeMenuOnHomeLoad);
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){initSuhasArcade();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
 document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();activateMaxTab(b.dataset.tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
