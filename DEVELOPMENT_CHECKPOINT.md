@@ -120,3 +120,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Transactional policy test passed under the `authenticated` role: a no-op update against the authenticated owner's own post returned the expected row and was rolled back. No user post content was changed.
 - Matching migration source committed to `supabase/migrations/20261108223813_suhas_posts_owner_update_permissions.sql`.
 - Remaining verification: test actual browser interactions with a signed-in member account, including creating a post, editing a post, replacing media, liking, commenting and deleting. No authenticated browser session is available from this GitHub/Supabase connection.
+
+## SUHAS-MAX duplicate group-action fix — 2026-11-09
+- Audited the delegated click handlers in `social.html`.
+- Found that Group Join and Open Group were processed by both the first document click handler and a later generic action handler, causing duplicate database requests for a single click.
+- Removed only the duplicate Group Join/Open Group branches from the later handler. The original handler remains responsible for joining, refreshing the group list and opening the selected group.
+- Changed file: `social.html`.
+- Commit: `e90cd8cd3461c0820620433b4d50ec1b3ffa5dcf`.
+- Static source verification: confirmed the duplicate branch was removed from the later handler; the original Group Join/Open Group handler remains. No authenticated browser/device test has been run, so live click behavior is not yet verified.
+- No tables, records, pages, assets, routes or existing features were deleted.
+- Next step: continue the social action audit and test group joining/opening with an authenticated member account; then address remaining friend/message preference enforcement.
