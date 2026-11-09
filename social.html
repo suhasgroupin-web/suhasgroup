@@ -1891,7 +1891,7 @@ function renderPostMedia(){const file=postFile.files[0];postPreview.innerHTML=''
 postText.addEventListener('input',()=>{postCount.textContent=postText.value.length+' / 5000';});
 postFile.addEventListener('change',renderPostMedia);
 postText.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();$('post-form').requestSubmit();}});
-$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
+$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
 
 let tttBoard=Array(9).fill(''),tttOver=false;
@@ -2300,7 +2300,7 @@ body.suhas-composer-open{overflow:hidden!important}
   if(action==='life'){const v=prompt(descriptions.life);if(v){textarea.value+=(textarea.value?'\n':'')+'Life update: '+v;textarea.dispatchEvent(new Event('input',{bubbles:true}));sync();}}
   else alert(descriptions[action]||'This option is not available yet.');
  }));
- form.addEventListener('submit',()=>{setTimeout(()=>{if(!next.disabled&&next.textContent==='Publishing…')return;close();},50);});
+ document.addEventListener('suhas-post-published',close);
  const original=window.addEventListener; // keep the screen closed on initial page load
 })();
 </script>
