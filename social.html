@@ -759,6 +759,55 @@ html body form.compose[data-comment-form] button[type="submit"]{
 }
 </style>
 
+
+<style id="suhas-messenger-message-contrast-fix">
+/* Messenger conversation readability: explicit bubble and text contrast */
+html body #messages .msg-list{
+  background:#f7f8fa!important;
+  color:#1c1e21!important;
+  color-scheme:light;
+}
+html body #messages .msg-list .bubble{
+  display:block!important;
+  max-width:82%!important;
+  padding:11px 14px!important;
+  margin:8px 0!important;
+  border-radius:16px!important;
+  background:#e4e6eb!important;
+  color:#1c1e21!important;
+  -webkit-text-fill-color:#1c1e21!important;
+  opacity:1!important;
+  font-size:14px!important;
+  line-height:1.5!important;
+  font-weight:500!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  visibility:visible!important;
+}
+html body #messages .msg-list .bubble.mine{
+  margin-left:auto!important;
+  background:#d9eaff!important;
+  color:#102a43!important;
+  -webkit-text-fill-color:#102a43!important;
+}
+html body.suhas-dark #messages .msg-list{
+  background:#18191a!important;
+  color:#f0f2f5!important;
+  border-color:#3e4042!important;
+  color-scheme:dark;
+}
+html body.suhas-dark #messages .msg-list .bubble{
+  background:#3a3b3c!important;
+  color:#f0f2f5!important;
+  -webkit-text-fill-color:#f0f2f5!important;
+}
+html body.suhas-dark #messages .msg-list .bubble.mine{
+  background:#174b82!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+</style>
+
 </head><body><header class="site-header"><div class="nav-wrap">
 <a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
