@@ -130,3 +130,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static source verification: confirmed the duplicate branch was removed from the later handler; the original Group Join/Open Group handler remains. No authenticated browser/device test has been run, so live click behavior is not yet verified.
 - No tables, records, pages, assets, routes or existing features were deleted.
 - Next step: continue the social action audit and test group joining/opening with an authenticated member account; then address remaining friend/message preference enforcement.
+
+
+## SUHAS-MAX group-join duplicate-submission guard — 2026-11-09
+- Continued the social action audit after the duplicate delegated-handler fix.
+- Updated the existing public Group Join action to disable the clicked button immediately and show “Joining…” while the membership request is in progress, preventing repeated taps from submitting duplicate requests from the same UI.
+- A duplicate-membership response (Postgres unique-violation code 23505) is now handled as an already-joined state; other errors restore the button and show the returned error.
+- Changed file: `social.html`.
+- Code commit: `d8db9854e19251ced80a822572b8bbb1d1c4443e`.
+- Static source verification: the updated handler was written successfully. No authenticated browser/device test has been run; live behavior remains unverified.
+- No existing tables, records, pages, assets, routes or features were deleted or replaced.
+- Next step: continue the delegated-action audit, then enforce saved friend-request/message privacy preferences at every relevant social entry point after reviewing the preference schema and existing policies.
