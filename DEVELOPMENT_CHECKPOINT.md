@@ -291,3 +291,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Not yet verified: live deployment, actual Android layout/tap behavior, and authentication/logout behavior on device.
 
 - Follow-up Menu activation update: account header now loads the signed-in user's `full_name` and `profile_photo_url` from `suhas_public_profiles` with email fallback; Log out now calls Supabase `auth.signOut()` and redirects to login only after success. Commit: `a28414b822523f210a4462c517ff36685a67fb24`. Latest source re-fetched; dynamic profile/logout hooks and both inline script syntax checks passed. Device/live-session test still pending.
+
+
+## 2026-11-09 — Direct Messages / Messenger usability update
+- Updated `social.html` Messages panel with a member search and direct Message actions for up to 12 matching real completed profiles, plus clearer existing-conversation list with avatars and mobile-friendly layout.
+- Existing `startMessage`, `openChat`, `suhas_messages` insert/read, and Supabase Realtime subscription are retained; selecting a member creates/reuses a conversation, opens it, and selecting a thread loads its messages.
+- GitHub commit: `b702bdc1b1a8f45cb87c110e35ab6c30b1748521`.
+- Verification: latest source re-fetched; both inline JS blocks pass syntax parsing. Supabase confirms RLS enabled on `suhas_conversations`, `suhas_conversation_members`, and `suhas_messages`; policies exist for creating conversations, adding participants, viewing member conversations/messages, and sending own messages subject to recipient message preferences/friend restrictions.
+- Not yet verified: actual two-account send/receive, Realtime delivery, and Android live deployment/device interaction.
