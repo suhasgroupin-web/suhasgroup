@@ -318,3 +318,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commit: `281846b7dbafff7a55b51fcd173065ef7081e856`.
 - Latest source re-fetched; both inline scripts pass syntax parsing. Avatar and cover inputs confirmed. Storage bucket `member-avatars` exists, public read enabled, 5 MB max, JPEG/PNG/WebP; own-folder INSERT/UPDATE/DELETE and public SELECT storage policies exist.
 - Not yet verified on user's Android device with a real image upload; the Supabase RLS upsert path is verified in a rolled-back authenticated transaction.
+
+
+## 2026-11-09 — Login existing-session switch-account option
+- Updated `login.html`: an existing Supabase session now shows the current signed-in email with `Continue account` and `Switch account` actions instead of immediately redirecting with no choice.
+- Continue retains the current account flow; Switch calls `sb.auth.signOut()` for the current session only, then reveals the normal login form for another email. It does not delete profile, posts, messages, or other account data.
+- Commit: `8a455a626a8a27aa414657c5e66f902b14f1d729`.
+- Latest login source re-fetched and its inline JavaScript syntax parsed successfully; both actions and sign-out path verified in source.
+- Not yet live-tested on Android with two real accounts or deployment.
