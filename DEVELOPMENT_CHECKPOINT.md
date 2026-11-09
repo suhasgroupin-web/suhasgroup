@@ -340,3 +340,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Existing submit flow uploads selected media to the private `suhas-max-stories` bucket, inserts `media_path`/`media_type` into `suhas_stories`, and the story viewer loads the media using a signed URL. Preview is cleared after successful share.
 - Verified the storage bucket exists (private, 25 MB, JPEG/PNG/WebP/MP4/WebM), required story media columns exist, and both inline JavaScript blocks parse. Actual Android gallery picker, upload, and cross-account story viewing still require live device testing.
 - GitHub commit: `2b26ec053349e4a3bb501f56cd2a745dd873eaf3`.
+
+
+## 2026-11-09 — Facebook UX review and mobile navigation refresh
+- Reviewed Meta's official Facebook product updates: cleaner/immersive Feed, Story and Feed composer, comment improvements, photo grid/full-screen viewing, and more prominent Reels/Friends/Marketplace/Profile navigation. Sources: https://about.fb.com/news/2025/12/making-it-easier-to-create-discover-and-share-content-on-facebook/ and https://about.fb.com/news/2026/10/introducing-your-algorithm-facebook/.
+- Updated `social.html` mobile bottom navigation from Home/Friends/Groups/Reels/Menu to six primary destinations: Home, Friends, Reels, Marketplace, Notifications, Menu. Groups remains available in the desktop navigation and side/menu shortcuts. Added accessible labels/current-page state and tuned six-item mobile spacing.
+- Verification: latest `social.html` refetched; both inline JavaScript blocks parse; all six expected tab routes are present in navigation markup. Browser/device interaction not yet tested.
+- Repository audit: `app.html`, `social.html`, `profile.html`, `login.html`, and `index.html` inline JavaScript syntax checks all passed (3/3, 2/2, 2/2, 1/1, 1/1 respectively). No files or user data were deleted.
+- Supabase advisors: security warning — leaked-password protection is not enabled (https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Performance findings include 19 unindexed foreign keys, 31 RLS initplan warnings, 11 unused indexes, and 3 multiple-permissive-policy warnings. These require policy/index-by-index review; no potentially risky blanket database changes were made.
+- GitHub UI commit: `bb7de88934fa7ec1f0e52b6680d8d4454b8edd8b`.
