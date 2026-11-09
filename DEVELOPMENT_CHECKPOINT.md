@@ -210,3 +210,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: fetched the committed file, confirmed the shelf markup, query, profile attribution, Home initialization, and existing 3D/share hooks. All inline JavaScript blocks passed syntax parsing.
 - Actual Android rendering, video preview playback, and tap-through behavior still require live browser/device testing.
 - No existing records, tables, pages, media or features were deleted; no schema changes were made.
+
+
+## SUHAS-MAX Stories — 2026-11-09
+- Added a Home Feed Stories row with creator avatars, circular story rings, own-story creation, audience selection (Public/Friends), story viewing dialog, and 24-hour expiry.
+- Added `public.suhas_stories` with RLS enabled. Authenticated users can create their own stories; reads are limited to active public stories, accepted friends' stories, and their own stories; updates/deletes are owner-only.
+- No media upload in this first Stories increment; it supports text stories only. Photo/video story upload and view tracking remain pending.
+- Changed file: `social.html`; database migration: `create_suhas_stories_with_privacy`.
+- Code commit: `234bc1f79c2a3215ed1b5430ba830fc90606f138`.
+- Verification: fetched committed source, confirmed form/loader/expiry/audience/viewer hooks, and parsed inline JavaScript. Confirmed stories table and four RLS policies exist.
+- Not yet tested with authenticated browser sessions or actual users; live create/view/privacy/expiry behavior remains pending.
+- No existing tables, records, pages, assets, or features were deleted; additive migration only.
