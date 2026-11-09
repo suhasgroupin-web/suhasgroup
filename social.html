@@ -836,7 +836,7 @@ const SUHAS_DEMO_USERS=[
  {name:'Rafi Ahmed',role:'Quality Assurance',company:'Manufacturing',city:'Gazipur',bio:'Focused on quality, process improvement and teamwork.',photo:'https://i.pravatar.cc/240?img=13'},
  {name:'Sadia Islam',role:'HR Executive',company:'Human Resources',city:'Dhaka',bio:'People development, communication and workplace culture.',photo:'https://i.pravatar.cc/240?img=49'},
  {name:'Imran Hossain',role:'Marketing Executive',company:'Marketing',city:'Narayanganj',bio:'Digital marketing and community engagement.',photo:'https://i.pravatar.cc/240?img=14'},
- {name:'Mehjabin Akter',role:'Textile Engineer',company:'Textile & Apparel',city:'Dhaka',bio:'Textile innovation and sustainable production.',photo:'https://i.pravatar.cc/240?img= she'},
+ {name:'Mehjabin Akter',role:'Textile Engineer',company:'Textile & Apparel',city:'Dhaka',bio:'Textile innovation and sustainable production.',photo:'https://i.pravatar.cc/240?img=46'},
  {name:'Tanvir Hasan',role:'Business Analyst',company:'Business Services',city:'Sylhet',bio:'Data, strategy and business growth.',photo:'https://i.pravatar.cc/240?img=15'},
  {name:'Farzana Noor',role:'Student',company:'Education',city:'Dhaka',bio:'Learning, networking and sharing knowledge.',photo:'https://i.pravatar.cc/240?img=45'},
  {name:'Sakib Mahmud',role:'Production Officer',company:'Apparel Industry',city:'Gazipur',bio:'Production planning and operational excellence.',photo:'https://i.pravatar.cc/240?img=16'},
@@ -846,7 +846,7 @@ const SUHAS_DEMO_USERS=[
 function renderHomeDiscovery(){
  const picks=members.filter(p=>p.user_id!==me).slice(0,6);
  const realCards=picks.map(p=>'<div class="home-person-card">'+(p.profile_photo_url?'<img class="home-person-photo" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="home-person-photo"></div>')+'<div class="home-person-name">'+safe(p.full_name||'SUHAS Member')+'</div><div class="home-person-meta">SUHAS-MAX member</div><button class="action primary" type="button" data-friend="'+p.user_id+'">Add friend</button></div>');
- const demoCards=SUHAS_DEMO_USERS.map((p,i)=>'<div class="home-person-card demo-person-card"><img class="home-person-photo" src="'+safe(p.photo)+'" alt="" loading="lazy"><div class="home-person-name">'+safe(p.name)+'</div><div class="home-person-meta">'+safe(p.role)+' · '+safe(p.city)+'</div><span class="demo-user-label">DEMO USER</span><button class="action demo-profile-action" type="button" data-demo-profile="'+i+'">Demo profile</button></div>');
+ const demoCards=SUHAS_DEMO_USERS.map((p,i)=>'<div class="home-person-card demo-person-card"><img class="home-person-photo" src="'+safe(p.photo)+'" alt="" loading="lazy"><div class="home-person-name">'+safe(p.name)+'</div><div class="home-person-meta">'+safe(p.role)+' · '+safe(p.city)+'</div><span class="demo-user-label">DEMO USER</span><button class="action demo-profile-action" type="button" disabled aria-label="Demo account; interactions disabled">DEMO ONLY</button></div>');
  $('home-discovery').hidden=false;
  $('home-discovery-list').innerHTML=realCards.concat(demoCards).join('');
 }
