@@ -1545,7 +1545,7 @@ async function loadHomeReels(){
 }
 async function loadFeed(){
  const [postsResult,repostsResult]=await Promise.all([
-  client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').order('created_at',{ascending:false}).limit(100),
+  client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').order('created_at',{ascending:false}).limit(100),
   client.from('suhas_post_reposts').select('id,original_post_id,user_id,created_at').order('created_at',{ascending:false}).limit(100)
  ]);
  if(postsResult.error)throw postsResult.error;
@@ -1554,7 +1554,7 @@ async function loadFeed(){
  const originals=new Map(posts.map(x=>[String(x.id),x]));
  const missingIds=[...new Set(repostRows.map(x=>String(x.original_post_id)).filter(id=>!originals.has(id)))];
  if(missingIds.length){
-  const extra=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('id',missingIds);
+  const extra=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').in('id',missingIds);
   if(extra.error)throw extra.error;
   (extra.data||[]).forEach(x=>originals.set(String(x.id),x));
  }
@@ -1591,8 +1591,9 @@ async function loadFeed(){
   const attribution=repost?'<div class="post-repost-attribution">↻ <b class="profile-clickable" data-profile-open="'+safe(repost.user_id)+'">'+safe(reposter.full_name||'SUHAS Member')+'</b> reposted</div>':'';
   const repostAction=ownRepost?'<button type="button" data-post-action="unrepost" data-post-id="'+x.id+'" data-repost-id="'+safe(ownRepost.id)+'">↶ Remove my repost</button>':'<button type="button" data-post-action="repost" data-post-id="'+x.id+'">↻ Repost to my profile</button>';
   const cardId=repost?'post-repost-'+safe(repost.id):'post-'+x.id;
+  const meta=x.metadata||{};const metaChips=[meta.music&&'♫ '+meta.music,meta.location&&'📍 '+meta.location,meta.feeling&&'☻ '+meta.feeling,Array.isArray(meta.tags)&&meta.tags.length?'with '+meta.tags.join(', '):null].filter(Boolean);
   const menuKey=repost?'r-'+repost.id:String(x.id);
-  return attribution+'<article class="post-card" id="'+cardId+'"><div class="post-head">'+(p.profile_photo_url?'<img class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px"></div>')+'<div class="post-meta post-author"><b class="profile-clickable" data-profile-open="'+x.user_id+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+(p.position||p.company?' · '+safe([p.position,p.company].filter(Boolean).join(', ')):'')+'<br>'+safe(new Date(x.created_at).toLocaleString())+'</div><div class="post-menu-wrap"><button class="post-menu-trigger" type="button" aria-label="Post options" aria-expanded="false" data-post-menu-toggle="'+safe(menuKey)+'">⋯</button><div class="post-menu" data-post-menu="'+safe(menuKey)+'"><button type="button" data-post-action="copy" data-post-id="'+x.id+'">🔗 Copy post link</button><button type="button" data-post-action="share" data-post-id="'+x.id+'">↗ Share post</button>'+repostAction+'<button type="button" data-post-action="save" data-post-id="'+x.id+'">🔖 Save post</button>'+(x.media_url?'<button type="button" data-post-action="download" data-post-id="'+x.id+'">⬇ Download photo/video</button>':'')+(x.user_id===me?'<button type="button" data-post-action="edit" data-post-id="'+x.id+'">✎ Edit post text</button>'+(x.media_url?'<button type="button" data-post-action="replace-media" data-post-id="'+x.id+'">▧ Change photo/video</button>':'<button type="button" data-post-action="add-media" data-post-id="'+x.id+'">▧ Add photo/video</button>')+'<button type="button" class="danger" data-post-action="delete" data-post-id="'+x.id+'">🗑 Delete post</button>':'')+'</div></div></div><p>'+safe(x.content)+'</p>'+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:480px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Post media">'):'')+'<div class="social-actions"><button class="action suhas-3d-action suhas-like-action" data-like="'+x.id+'">'+(pl.some(l=>l.user_id===me)?'♥ Liked':'♡ Like')+' · '+pl.length+'</button><button type="button" class="action suhas-3d-action suhas-comment-action" data-focus-comment="'+x.id+'">▢ Comment · '+pc.length+'</button><button type="button" class="action suhas-3d-action suhas-share-action" data-post-action="share" data-post-id="'+x.id+'">↗ Share</button></div><div class="comment-list">'+pc.map(z=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+z.user_id+'">'+safe(byId[z.user_id]?.full_name||'Member')+':</b> '+safe(z.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></article>';
+  return attribution+'<article class="post-card" id="'+cardId+'"><div class="post-head">'+(p.profile_photo_url?'<img class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px"></div>')+'<div class="post-meta post-author"><b class="profile-clickable" data-profile-open="'+x.user_id+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+(p.position||p.company?' · '+safe([p.position,p.company].filter(Boolean).join(', ')):'')+'<br>'+safe(new Date(x.created_at).toLocaleString())+'</div><div class="post-menu-wrap"><button class="post-menu-trigger" type="button" aria-label="Post options" aria-expanded="false" data-post-menu-toggle="'+safe(menuKey)+'">⋯</button><div class="post-menu" data-post-menu="'+safe(menuKey)+'"><button type="button" data-post-action="copy" data-post-id="'+x.id+'">🔗 Copy post link</button><button type="button" data-post-action="share" data-post-id="'+x.id+'">↗ Share post</button>'+repostAction+'<button type="button" data-post-action="save" data-post-id="'+x.id+'">🔖 Save post</button>'+(x.media_url?'<button type="button" data-post-action="download" data-post-id="'+x.id+'">⬇ Download photo/video</button>':'')+(x.user_id===me?'<button type="button" data-post-action="edit" data-post-id="'+x.id+'">✎ Edit post text</button>'+(x.media_url?'<button type="button" data-post-action="replace-media" data-post-id="'+x.id+'">▧ Change photo/video</button>':'<button type="button" data-post-action="add-media" data-post-id="'+x.id+'">▧ Add photo/video</button>')+'<button type="button" class="danger" data-post-action="delete" data-post-id="'+x.id+'">🗑 Delete post</button>':'')+'</div></div></div><p'+(meta.background?' style="background:'+safe(meta.background)+';padding:14px;border-radius:12px"':'')+'>'+safe(x.content)+'</p>'+(metaChips.length?'<div class="post-meta suhas-post-metadata">'+metaChips.map(safe).join(' · ')+'</div>':'')+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:480px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Post media">'):'')+'<div class="social-actions"><button class="action suhas-3d-action suhas-like-action" data-like="'+x.id+'">'+(pl.some(l=>l.user_id===me)?'♥ Liked':'♡ Like')+' · '+pl.length+'</button><button type="button" class="action suhas-3d-action suhas-comment-action" data-focus-comment="'+x.id+'">▢ Comment · '+pc.length+'</button><button type="button" class="action suhas-3d-action suhas-share-action" data-post-action="share" data-post-id="'+x.id+'">↗ Share</button></div><div class="comment-list">'+pc.map(z=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+z.user_id+'">'+safe(byId[z.user_id]?.full_name||'Member')+':</b> '+safe(z.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></article>';
  }).join('')||'<div class="empty">No posts yet. Be the first to share an update.</div>';
 }
 async function loadMemberTimeline(id){
@@ -1891,7 +1892,7 @@ function renderPostMedia(){const file=postFile.files[0];postPreview.innerHTML=''
 postText.addEventListener('input',()=>{postCount.textContent=postText.value.length+' / 5000';});
 postFile.addEventListener('change',renderPostMedia);
 postText.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();$('post-form').requestSubmit();}});
-$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
+$('post-form').addEventListener('submit',async e=>{e.preventDefault();const content=postText.value.trim(),file=postFile.files[0];if(!content&&!file){notice('Write something or add a photo/video first.',true);return;}const btn=$('composer-submit');btn.disabled=true;btn.textContent='Publishing…';let media=null;try{media=await uploadMedia(file);const r=await client.from('suhas_posts').insert({user_id:me,content:content||'Shared media',audience:$('post-audience').value,media_url:media?.url||null,media_path:media?.path||null,media_type:media?.type||null,metadata:window.suhasPostMetadata||{}});if(r.error)throw r.error;postText.value='';postCount.textContent='0 / 5000';clearPostMedia();$('post-audience').value=readMaxSettings().audience||'public';await loadFeed();notice('Your post is now published.');document.dispatchEvent(new CustomEvent('suhas-post-published'));}catch(err){notice(err.message||'Could not publish this post.',true);}finally{btn.disabled=false;btn.textContent='Post';}});
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
 
 let tttBoard=Array(9).fill(''),tttOver=false;
@@ -2285,20 +2286,42 @@ body.suhas-composer-open{overflow:hidden!important}
   if(['public','friends','only_me'].includes(v)){audience.value=v;document.querySelector('#suhas-post-audience span').textContent=v==='only_me'?'Only me':v[0].toUpperCase()+v.slice(1);}
   else alert('Choose Public, Friends, or Only me.');
  });
- document.querySelectorAll('[data-share-target]').forEach(b=>b.addEventListener('click',()=>{b.classList.toggle('active');b.querySelector('span').textContent=b.classList.contains('active')?'On':'Off';}));
- document.querySelectorAll('[data-compose-tool]').forEach(b=>b.addEventListener('click',()=>{
-  const action=b.dataset.composeTool;
-  if(action==='gallery'){document.getElementById('post-media').accept='image/jpeg,image/png,image/webp,video/mp4,video/webm';document.getElementById('post-media').click();return;}
-  if(action==='background'){textarea.style.background=textarea.style.background?'':'#fff2cc';textarea.style.padding=textarea.style.background?'16px':'0';textarea.style.borderRadius=textarea.style.background?'14px':'0';return;}
-  if(action==='tag'||action==='location'||action==='music'||action==='feeling'||action==='gif'){
-   const labels={tag:'Tag/collaborate (enter a name)',location:'Add a location',music:'Add music title',feeling:'Feeling/activity',gif:'Paste a GIF URL'};
-   const value=prompt(labels[action]);if(!value)return;
-   const prefix={tag:'with ',location:'at ',music:'♫ ',feeling:'feeling ',gif:'GIF: '}[action];
-   textarea.value+=(textarea.value?'\n':'')+prefix+value;textarea.dispatchEvent(new Event('input',{bubbles:true}));sync();return;
+ window.suhasPostMetadata={};
+ document.querySelectorAll('[data-share-target]').forEach(b=>{b.disabled=true;b.title='Connect the official platform integration before cross-posting';b.setAttribute('aria-label',b.dataset.shareTarget+' cross-posting is not connected');b.querySelector('span').textContent='Unavailable';});
+ document.querySelectorAll('[data-compose-tool]').forEach(b=>b.addEventListener('click',async()=>{
+  const action=b.dataset.composeTool,meta=window.suhasPostMetadata;
+  const ask=(label,initial='')=>{const value=prompt(label,initial);return value===null?null:value.trim();};
+  if(action==='gallery'){const input=document.getElementById('post-media');input.accept='image/jpeg,image/png,image/webp,video/mp4,video/webm';input.click();return;}
+  if(action==='background'){
+   const colors=['#fff2cc','#dff3ff','#fce4ec','#e8f5e9','#ede7f6','#ffffff'];
+   const chosen=ask('Choose a post background color: '+colors.join(', '),meta.background||colors[0]);if(chosen===null)return;
+   if(!colors.includes(chosen)){notice('Choose one of the listed background colors.',true);return;}
+   meta.background=chosen;textarea.style.background=chosen;textarea.style.padding='16px';textarea.style.borderRadius='14px';return;
   }
-  const descriptions={live:'Live video is not connected to SUHAS-MAX yet.',whatsapp:'WhatsApp sharing can be used after this post is published from the Share menu.',calls:'Calls are available from Messenger after a connection is established.',life:'Add a life update: relationship, work, education, or milestone.'};
-  if(action==='life'){const v=prompt(descriptions.life);if(v){textarea.value+=(textarea.value?'\n':'')+'Life update: '+v;textarea.dispatchEvent(new Event('input',{bubbles:true}));sync();}}
-  else alert(descriptions[action]||'This option is not available yet.');
+  if(action==='location'){
+   if(!navigator.geolocation){notice('Location is not supported by this browser.',true);return;}
+   b.disabled=true;b.textContent='Finding location…';
+   navigator.geolocation.getCurrentPosition(pos=>{meta.location=pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5);notice('Location added to this post.');b.disabled=false;b.innerHTML='● <span>Location</span>';},err=>{notice(err.code===1?'Location permission was denied.':'Could not get your location.',true);b.disabled=false;b.innerHTML='● <span>Location</span>';},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});return;
+  }
+  if(action==='tag'){
+   const value=ask('Enter collaborator/member names (comma-separated)');if(value===null)return;
+   meta.tags=value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,10);notice('Names added to post metadata.');return;
+  }
+  if(action==='music'){const value=ask('Enter the music title or track name');if(value===null)return;meta.music=value;notice('Music title added.');return;}
+  if(action==='feeling'||action==='life'){
+   const value=ask('How are you feeling or what life update do you want to share?');if(value===null)return;meta.feeling=value;notice('Feeling/life update added.');return;
+  }
+  if(action==='gif'){
+   const value=ask('Paste a direct HTTPS GIF image URL');if(value===null)return;
+   try{const u=new URL(value);if(u.protocol!=='https:'||!(/\.gif($|[?#])/i.test(u.pathname+u.search)))throw new Error();}catch(_){notice('Enter a valid HTTPS URL ending in .gif.',true);return;}
+   meta.gif_url=value;notice('GIF link saved with this post. Add it as a media URL in a future media integration.');return;
+  }
+  if(action==='whatsapp'){
+   notice('Publish this post first, then use Share → WhatsApp from the post menu.');return;
+  }
+  if(action==='live'||action==='calls'){
+   notice(action==='live'?'Live video needs a streaming provider and credentials before it can be enabled.':'Voice/video calls need a calling provider and permissions before they can be enabled.',true);return;
+  }
  }));
  document.addEventListener('suhas-post-published',close);
  const original=window.addEventListener; // keep the screen closed on initial page load
