@@ -333,3 +333,10 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Added explicit dark-theme overrides so text remains visible in both light and dark modes, on desktop and mobile responsive layouts. No existing feature or stored post data changed.
 - Commit: `73f8ff197522f628998583d9e45d6645eb0d100b`.
 - Latest source re-fetched; both inline JavaScript blocks parse successfully and light/dark text-fill selectors confirmed. Browser/device visual typing test still pending.
+
+
+## 2026-11-09 — Story gallery picker and media preview
+- Updated `social.html`: clicking `＋ Add Story` with no text/media opens the native device file picker/gallery; selecting an image/video immediately displays a local preview and changes the action label to `Share Story`.
+- Existing submit flow uploads selected media to the private `suhas-max-stories` bucket, inserts `media_path`/`media_type` into `suhas_stories`, and the story viewer loads the media using a signed URL. Preview is cleared after successful share.
+- Verified the storage bucket exists (private, 25 MB, JPEG/PNG/WebP/MP4/WebM), required story media columns exist, and both inline JavaScript blocks parse. Actual Android gallery picker, upload, and cross-account story viewing still require live device testing.
+- GitHub commit: `2b26ec053349e4a3bb501f56cd2a745dd873eaf3`.
