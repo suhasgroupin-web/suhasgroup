@@ -62,3 +62,15 @@ For every task, report:
 - Exact resume point if unfinished.
 
 **Core command:** Develop continuously in small increments; save and checkpoint every completed increment; preserve all existing data, designs, apps, and features; move rather than delete; resume exactly where work stopped.
+
+
+## 8. Facebook Official Mobile App design-reference integration — SUHAS-MAX
+- Treat the user's supplied `home (2).html` and `home.html` files as design/behavior references, not replacement applications.
+- The Supabase-integrated reference is the preferred source for reusable working patterns. The static/demo reference may guide visual layout only; do not import mock accounts, sample metrics, fake content, localStorage-only social actions, or placeholder buttons as production functionality.
+- Match the familiar Facebook Official Mobile App interaction patterns and responsive visual hierarchy across Home Feed, post composer, Stories, Reels, Friends, Notifications, Marketplace, Profile, Menu, Search, and Messenger, while retaining SUHAS-MAX / SUHAS GROUP identity, logo, colors where appropriate, and all corporate modules.
+- Every visible control must perform its real intended action, persist through the existing Supabase-backed data model where applicable, respect authentication and Row Level Security (RLS), and provide clear loading, success, empty, and error states. Do not ship visual-only buttons or fake interactions.
+- Before integrating a reference feature, inspect the current SUHAS-MAX implementation, database tables/columns, RLS policies, storage buckets/policies, and dependent routes. Reuse existing tables and handlers whenever possible; add schema only through backward-compatible migrations when a verified gap requires it.
+- Preserve all existing records, accounts, media, pages, routes, styles, modules, and working behavior. Never replace `social.html` wholesale with either reference file. Prefer small additive, reversible changes and keep compatibility with existing URLs and data.
+- Required workflow for this design task: AUDIT CURRENT APP + REFERENCES → MAP UI/FEATURES → CHECK SUPABASE/RLS/STORAGE → IMPLEMENT A SMALL INCREMENT → STATIC/SYNTAX TEST → FUNCTIONAL TEST → COMMIT + CHECKPOINT → DEPLOY → LIVE VERIFY.
+- Test mobile and desktop layouts, keyboard/accessibility states, navigation, post creation, media upload, likes, comments, share/repost, story/reel viewing, friend requests, notifications, profiles, and messaging. Mark any flow not exercised with real accounts/devices as pending.
+- Do not claim a Facebook-level visual or functional match until the relevant screen and actions have been compared and tested. Record exact completed, pending, failed, and blocked items in `DEVELOPMENT_CHECKPOINT.md`.
