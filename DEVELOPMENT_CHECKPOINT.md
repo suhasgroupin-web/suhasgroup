@@ -326,3 +326,10 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commit: `8a455a626a8a27aa414657c5e66f902b14f1d729`.
 - Latest login source re-fetched and its inline JavaScript syntax parsed successfully; both actions and sign-out path verified in source.
 - Not yet live-tested on Android with two real accounts or deployment.
+
+
+## 2026-11-09 — Invisible typed text fix for post composers
+- Updated `social.html` with explicit foreground text, WebKit text fill, caret, placeholder contrast and focus styles for main Home post composer, group post composer, Marketplace description, message textareas and Story textareas.
+- Added explicit dark-theme overrides so text remains visible in both light and dark modes, on desktop and mobile responsive layouts. No existing feature or stored post data changed.
+- Commit: `73f8ff197522f628998583d9e45d6645eb0d100b`.
+- Latest source re-fetched; both inline JavaScript blocks parse successfully and light/dark text-fill selectors confirmed. Browser/device visual typing test still pending.
