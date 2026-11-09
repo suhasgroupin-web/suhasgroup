@@ -624,7 +624,7 @@ body.max-menu-open{overflow:hidden}
 <div class="max-menu-scrim" data-menu-close></div>
 <aside class="max-menu-sheet" role="dialog" aria-modal="true" aria-label="Main menu">
 <div class="max-menu-account">
-<a class="max-menu-account-profile" href="profile.html"><img src="assets/logo.png" alt=""><strong>SUHAS-MAX</strong></a>
+<a class="max-menu-account-profile" href="profile.html"><img id="max-menu-avatar" src="assets/logo.png" alt="Profile photo"><strong id="max-menu-name">Loading profile…</strong></a>
 <button type="button" class="max-menu-close" data-menu-close aria-label="Close menu">×</button>
 </div>
 <div class="max-menu-shortcut-title">Your shortcuts</div>
@@ -650,7 +650,7 @@ body.max-menu-open{overflow:hidden}
 <details><summary>Settings and privacy</summary><div class="max-menu-section-body"><button type="button" data-tab="settings">Settings &amp; Privacy</button><button type="button" data-tab="settings">Privacy preferences</button></div></details>
 <details><summary>SUHAS services</summary><div class="max-menu-section-body"><a href="app.html">Open SUHAS main app</a><a href="profile.html">My Profile</a></div></details>
 </div>
-<a class="max-menu-logout" href="login.html">Log out</a>
+<button class="max-menu-logout" id="max-menu-logout" type="button">Log out</button>
 <div class="max-menu-footer"><strong>SUHAS-MAX</strong><span>Powered by SUHAS GROUP</span></div>
 </aside>
 </section>
@@ -694,7 +694,9 @@ body.max-menu-open{overflow:hidden}
 (async()=>{
 const $=id=>document.getElementById(id), client=window.sb;
 const session=(await client.auth.getSession()).data.session;if(!session){location.replace('login.html?next='+encodeURIComponent('social.html'));return;}
-const me=session.user.id;let members=[],activeConversation=null,channel=null,notificationChannel=null,activeGroup=null;
+const me=session.user.id;
+try{const profile=await client.from('suhas_public_profiles').select('full_name,profile_photo_url').eq('user_id',me).maybeSingle();if(!profile.error&&profile.data){const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar');if(name)name.textContent=profile.data.full_name||session.user.email||'SUHAS Member';if(avatar&&profile.data.profile_photo_url)avatar.src=profile.data.profile_photo_url;}}catch(e){console.warn('Menu profile could not be loaded',e);}
+let members=[],activeConversation=null,channel=null,notificationChannel=null,activeGroup=null;
 async function uploadMedia(file){if(!file)return null;const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];if(!allowed.includes(file.type))throw new Error('Supported files: JPG, PNG, WebP, MP4 and WebM.');if(file.size>26214400)throw new Error('Media file must be 25 MB or smaller.');const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];const path=me+'/'+crypto.randomUUID()+'.'+ext;const r=await client.storage.from('suhas-max-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(r.error)throw r.error;return {path,url:client.storage.from('suhas-max-media').getPublicUrl(path).data.publicUrl,type:file.type};}
 async function loadHomeStories(){
  const host=$('home-stories-list');if(!host)return;
@@ -1075,6 +1077,7 @@ document.addEventListener('click',e=>{
  const more=e.target.closest('#max-menu-see-more');
  if(more){const extra=document.getElementById('max-menu-extra');if(extra){extra.hidden=!extra.hidden;more.setAttribute('aria-expanded',String(!extra.hidden));more.textContent=extra.hidden?'See more':'See less';}return;}
 });
+document.getElementById('max-menu-logout')?.addEventListener('click',async()=>{const button=document.getElementById('max-menu-logout');if(button){button.disabled=true;button.textContent='Logging out…';}try{const result=await client.auth.signOut();if(result.error)throw result.error;location.replace('login.html');}catch(error){if(button){button.disabled=false;button.textContent='Log out';}notice(error.message||'Could not log out. Please try again.',true);}});
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){renderDailyChallenge();await loadGameScores();await loadGamingLeaderboard();await loadGameRooms();await loadTournaments();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
 document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();activateMaxTab(b.dataset.tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
