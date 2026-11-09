@@ -1403,6 +1403,10 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 .home-story-name{position:absolute!important;left:10px;right:8px;bottom:10px;color:#fff!important;text-align:left!important;font-size:13px!important;text-shadow:0 1px 4px #000;font-weight:700}
 .home-story-photo{height:100%;position:absolute;inset:0}
 .home-story-card:not(.home-story-create-card):after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#0009);pointer-events:none}
+/* Keep story photos fully clear: no dark fade, shadow patch, or text shadow behind names. */
+.home-story-card:not(.home-story-create-card):after{content:none!important;display:none!important;background:none!important}
+.home-story-name{z-index:3!important;text-shadow:none!important;filter:none!important;background:transparent!important;box-shadow:none!important;color:#fff!important}
+.home-story-photo{background:transparent!important;filter:none!important}
 .home-story-views{position:absolute;top:8px;left:8px;color:#fff!important;z-index:2;text-shadow:0 1px 3px #000}
 .suhas-story-create-dialog{position:fixed;inset:0;width:100%;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;padding:0;background:#fff;color:#111;overflow:auto}
 .suhas-story-create-dialog::backdrop{background:#0008}
