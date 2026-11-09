@@ -175,3 +175,16 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static JavaScript syntax check passed for both inline scripts (61 bytes and 78,340 bytes).
 - No database schema, records, pages, routes, media assets or existing features were deleted or modified.
 - Live browser/device rendering and authenticated Like/Unlike interactions are still pending; do not mark those as confirmed until tested.
+
+
+## SUHAS-MAX in-app post sharing — 2026-11-09
+- Added a post-share dialog with an accepted-friends selector.
+- Added an in-app Messenger action that opens or creates the existing one-to-one conversation and sends the post text plus its SUHAS-MAX post link using the existing `suhas_messages` table.
+- Kept external sharing through the device Web Share API and a copy-link fallback.
+- Restricted sharing of posts whose audience is `only_me`.
+- Reused existing friend relationships, conversations and message RLS; no database schema changes or existing records were modified.
+- Changed file: `social.html`.
+- Commit: `7ed162b4215cb6d6045841aa063e98fd6c9bde5d`.
+- Verification: fetched the committed source again; confirmed friend picker, Messenger insert path, external share option, Web Share API, copy fallback and private-post restriction.
+- Static JavaScript syntax check passed for both inline scripts (61 bytes and 81,124 bytes).
+- Live authenticated browser/device test, actual recipient delivery, external app chooser behavior and share analytics remain pending.
