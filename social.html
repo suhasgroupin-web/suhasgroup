@@ -1101,8 +1101,43 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
  .home-feed-panel{border-radius:12px!important}
 }
 </style>
+
+<style id="suhas-max-facebook-top-left-menu-20261109">
+/* Facebook-inspired top-left hamburger opens the existing complete SUHAS-MAX menu drawer. */
+.facebook-left-menu-trigger{
+ width:42px!important;height:42px!important;min-width:42px!important;flex:0 0 42px!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ padding:0!important;border:0!important;border-radius:50%!important;
+ background:#f0f2f5!important;color:#1c1e21!important;cursor:pointer!important;
+ box-shadow:none!important;line-height:1!important;
+}
+.facebook-left-menu-trigger svg{width:23px!important;height:23px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:2!important;stroke-linecap:round!important}
+.facebook-left-menu-trigger:hover{background:#e4e6eb!important}
+.facebook-left-menu-trigger:focus-visible{outline:3px solid #0866ff!important;outline-offset:2px!important}
+.nav-wrap{gap:10px!important}
+.brand{flex:0 1 auto!important;min-width:0!important}
+@media(max-width:760px){
+ .nav-wrap{gap:6px!important;padding-left:7px!important;padding-right:7px!important}
+ .facebook-left-menu-trigger{width:36px!important;height:36px!important;min-width:36px!important;flex-basis:36px!important}
+ .facebook-left-menu-trigger svg{width:21px!important;height:21px!important}
+ .brand{flex:1 1 0!important;gap:5px!important}
+ .brand img{width:30px!important;height:30px!important;flex:0 0 30px!important}
+ .brand-name{font-size:clamp(14px,4.1vw,18px)!important}
+ .social-user-actions{gap:5px!important}
+ .mobile-head-action{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;flex-basis:36px!important}
+ .messenger-head-icon{width:25px!important;height:25px!important;flex-basis:25px!important}
+}
+@media(max-width:360px){
+ .nav-wrap{gap:4px!important;padding-left:5px!important;padding-right:5px!important}
+ .facebook-left-menu-trigger{width:33px!important;height:33px!important;min-width:33px!important;flex-basis:33px!important}
+ .brand img{width:26px!important;height:26px!important;flex-basis:26px!important}
+ .brand-name{font-size:14px!important}
+ .social-user-actions{gap:3px!important}
+ .mobile-head-action{width:33px!important;height:33px!important;min-width:33px!important;min-height:33px!important;flex-basis:33px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
-<a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
+<button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
 <button data-tab="friends" type="button" aria-label="Friends" title="Friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c.4-3.4 2.7-5.2 6.5-5.2s6.1 1.8 6.5 5.2zM16 5.2a3 3 0 0 1 0 5.8M17 14.8c2.8.4 4.3 2.1 4.5 5.2h-3"/></svg></button>
