@@ -356,3 +356,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Added high-specificity mobile-only layout rules for fixed bottom positioning, compact button sizing, icon/label sizing, and page bottom clearance. Existing navigation actions and destination handlers are unchanged.
 - GitHub commit: `410ab6bb36636d9c24cbccfaa8c63cd3f8bd5bd4`.
 - Source update committed; actual Android browser rendering and tap-through verification still pending.
+
+ 
+## 2026-11-09 — Unified text contrast for posts, comments and Messenger
+- Updated `social.html` with a final high-specificity readability layer for Home post creation, group post creation, Marketplace description, feed/Reels comments, and Messenger compose input.
+- Light mode now enforces dark readable text and muted dark placeholders on light input surfaces; dark mode enforces white/light text and pale placeholders on dark surfaces. Added clear focus outlines and explicit contrast for rendered feed comments and Messenger bubbles.
+- Existing data, posts, comments, messages, features, and navigation were not changed; this is a CSS-only additive change.
+- Commit: `dfb2d68d59d6134478834ee44c9fc6eb8b4f4774`.
+- Source verification: style block inserted before `</head>`; all target selectors and both theme branches confirmed in the committed source. JavaScript and database behavior were not changed.
+- Pending: visual verification on the user's Android device in both light and dark themes; hard refresh/reopen the SUHAS-MAX social page to load the new CSS.
