@@ -240,3 +240,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Verification: fetched the committed source; confirmed 12 demo profile records, explicit demo labels, disabled demo actions, and valid avatar URL entries. All inline JavaScript blocks passed syntax parsing.
 - Live Android/browser rendering and image-host availability have not been tested. Demo profiles currently appear in the Home Feed discovery shelf, not as real authenticated accounts or real Friends/Messenger identities.
 - No existing tables, records, pages, routes, assets or features were deleted or replaced.
+
+
+## SUHAS-MAX international male demo profiles — 2026-11-09
+- Expanded the Home Feed discovery shelf from 12 local demo personas to 15 fictional male demo personas across China (Shanghai, Beijing, Shenzhen), USA (New York, Los Angeles, Chicago), United Kingdom, Canada, Japan, India, UAE and Singapore.
+- Each card now includes a portrait URL, fictional name, role, company/industry, city/country and a short bio. Cards retain the visible `DEMO USER` label (with country) and disabled `DEMO ONLY` action; no Verified badge or simulated friend/message/post activity is created.
+- Existing real member discovery cards and all existing app/database records remain unchanged. No Auth users or database rows were created; these are clearly marked demo showcase profiles, not independently sign-in-able accounts.
+- Changed file: `social.html`.
+- Commit: `2e41172e1450f485ac64a698a4f69472e91a5919`.
+- Verification: re-fetched committed source; confirmed 15 profiles, 8 countries, demo labels and disabled actions. Both inline JavaScript blocks passed syntax parsing.
+- External avatar image availability and Android/browser rendering have not been live-tested. Real Supabase Auth demo-account provisioning is not included in this increment.
+- No existing tables, records, pages, routes, assets or features were deleted or replaced.
