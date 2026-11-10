@@ -524,3 +524,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Not yet verified: signed-in Android/desktop rendering, actual audience enforcement for different accounts, and live Production deployment for this commit. No authenticated browser session is available in this workflow.
 - No tables, policies, user records, posts, media, pages, routes, or existing features were deleted or replaced.
 - Next increment: audit the full post card and profile controls, then test the Feed/Composer/Profile flows with a real authenticated member session. Continue screen-by-screen through Stories, Friends, Reels, Notifications, Marketplace, Menu/Search, and Messenger; external integrations (Live, calls, third-party cross-posting, licensed music/GIF providers) remain separate dependencies.
+
+
+## Latest Facebook-reference Profile redesign increment
+- Compared the user-supplied Facebook Official Profile screenshot with the existing SUHAS-MAX profile viewer screenshot.
+- Updated only the existing profile viewer styling in `social.html`: wider desktop profile surface, taller cover, large overlapping profile photo, clearer name/role and connection statistics, Facebook-like action button proportions, and a full-screen mobile profile layout.
+- Added functional in-profile section navigation for Posts, About and Friends. The tabs scroll to the existing data-backed sections; no placeholder Photos/Reels tabs were added.
+- Preserved existing Supabase profile reads, friend/follow/message actions, cover/avatar upload controls, and profile menu actions. No database schema, records, storage objects, or routes changed.
+- Code commit: `738682a4aeaee9c3cd839175a95e7e6462c9950d`.
+- Static verification: 6/6 inline JavaScript blocks parse successfully; profile tab markup, anchors, delegated click handler and mobile full-screen CSS checks passed.
+- Not yet verified: real authenticated mobile/desktop rendering, profile image upload, and tab interaction on a live signed-in account. The supplied screenshots remain the visual reference; this increment does not claim a complete Facebook match.
+- Next step: inspect the new production deployment, then test own profile and another member profile with real authenticated accounts; adjust spacing from actual device screenshots before moving to the next screen.
