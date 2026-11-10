@@ -2887,7 +2887,23 @@ body.suhas-composer-open{overflow:hidden!important}
 .profile-viewer-menu button{display:flex;align-items:center;gap:10px;min-height:44px;padding:11px 12px!important;font-size:14px!important;font-weight:650!important}
 .profile-viewer-menu button:active{background:#e7f0ff!important}
 @media(max-width:560px){.profile-viewer-menu-wrap{padding-top:9px!important}.profile-viewer-menu{right:0;top:50px;width:min(285px,calc(100vw - 28px))!important}.profile-viewer-head>div:first-of-type{flex:1 1 0;min-width:0}}
-</style></body></html>
+</style><script id="suhas-max-refresh-ui-state-20261110">
+(function(){
+ const key='suhas-max-ui:'+location.pathname+location.search;
+ const save=()=>{try{
+  const openMenus=[...document.querySelectorAll('.post-menu.open,.profile-viewer-menu.open,.max-menu-sections details[open]')].map(x=>({id:x.id||'',key:x.getAttribute('data-post-menu')||'',tag:x.tagName}));
+  const expanded=[...document.querySelectorAll('[aria-expanded="true"]')].map(x=>({id:x.id||'',label:x.getAttribute('aria-label')||''}));
+  localStorage.setItem(key,JSON.stringify({openMenus,expanded,scroll:{x:scrollX,y:scrollY}}));
+ }catch(_){}};
+ document.addEventListener('click',()=>setTimeout(save,0),true);window.addEventListener('pagehide',save);
+ window.addEventListener('DOMContentLoaded',()=>{try{
+  const state=JSON.parse(localStorage.getItem(key)||'null');if(!state)return;
+  (state.openMenus||[]).forEach(x=>{let el=x.id&&document.getElementById(x.id);if(!el&&x.key)el=document.querySelector('[data-post-menu="'+CSS.escape(x.key)+'"]');if(el){if(el.tagName==='DETAILS')el.open=true;else el.classList.add('open');}});
+  (state.expanded||[]).forEach(x=>{const el=(x.id&&document.getElementById(x.id))||(x.label&&[...document.querySelectorAll('[aria-label]')].find(y=>y.getAttribute('aria-label')===x.label));if(el)el.setAttribute('aria-expanded','true');});
+  if(state.scroll)setTimeout(()=>scrollTo(state.scroll.x,state.scroll.y),120);
+ }catch(_){}});
+})();
+</script></body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
 .suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
