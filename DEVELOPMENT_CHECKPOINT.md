@@ -686,3 +686,16 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Bumped service-worker cache fallback from v100 to v101.
 - UI commit: `c68c658541d2feb5cc3b2d3c94bf293b4e2bbaa6`; cache commit: `2920df093a499f389f5e424fc1f8aba5ba931b99`.
 - Pending: Production deployment and visual verification.
+
+
+## 2026-11-10 — Facebook-style Messenger inbox and unread count
+- User requested the header Messenger icon to open a Facebook-like Messenger page and show numeric unread counts (1, 2, 5, etc.) that disappear/reduce as conversations are opened/read.
+- Confirmed existing Supabase messaging schema: `suhas_conversations`, `suhas_conversation_members`, `suhas_messages` with `read_at`; participant-only SELECT and recipient-only mark-read RLS policies are already in place.
+- Confirmed `suhas_messages` is already included in the `supabase_realtime` publication; no database schema or RLS changes required.
+- Added a numeric red badge to the header Messenger icon (no notification label), exact unread count with 99+ cap, per-conversation unread counts, and Realtime INSERT/UPDATE refreshes.
+- Messenger panel is now styled as an inbox + conversation layout; header activation explicitly scrolls the opened Messenger panel into view.
+- Removed automatic opening of the first conversation when entering Messenger, so merely opening the inbox does not mark a message as seen. Opening a conversation still marks incoming messages read using existing `read_at` logic.
+- Existing message send, conversation, read receipt and access-control paths preserved.
+- Source commits: `3503be35dea2cecacd6e8803c946a6fbf79d6e1e` (badge/inbox), `30facdbf5cb4ae2aa0653c5da66967f505544050` (header open/scroll); service worker cache bumped to v102 in `1c608b7731ab7db30e956c0d9da761149be507c8`.
+- Database read-only check: current account has 1 conversation and 0 unread messages at check time. No test messages or user data were inserted/modified.
+- Pending: Production deployment and real-device verification of incoming-message badge updates.
