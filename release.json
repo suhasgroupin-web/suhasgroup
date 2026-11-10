@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.10.9",
-  "published_at": "2026-11-10T05:09:56.805Z",
+  "version": "2026.11.10.10",
+  "published_at": "2026-11-10T05:16:30.000Z",
   "notify_after_days": 15,
-  "update_message": "Feed actions now use accessible Facebook-inspired controls with clearer Like, Comment and Share states.",
+  "update_message": "The post composer now has a clear Post action and honest unavailable states for unconnected tools.",
   "mandatory": false
 }
