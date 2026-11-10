@@ -1,14 +1,19 @@
-const CACHE = 'suhas-max-secure-entry-v94';
+const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v95';
+const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
   'index.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
   'login.html','signup.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
-  'assets/styles.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/icons/o5-international-logo.svg',
+  'assets/styles.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
   'barcode/','assets/logo.png','assets/icon-192.png','assets/icon-512.png','manifest.json'
 ];
 
 self.addEventListener('install', function(e){
-  self.skipWaiting();
+  // Updated workers wait until the member chooses Install update.
   e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }));
+});
+
+self.addEventListener('message', function(e){
+  if(e.data && e.data.type === 'SUHAS_SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', function(e){
