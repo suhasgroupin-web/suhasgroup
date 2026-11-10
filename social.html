@@ -2164,8 +2164,20 @@ async function openMemberProfile(id){
  }
  $('profile-edit-menu-item').hidden=id!==me;
  const isOwnProfile=id===me;
- $('profile-cover-change').hidden=!isOwnProfile;
- $('profile-avatar-change').hidden=!isOwnProfile;
+ const cover=$('profile-viewer-cover'),coverCamera=$('profile-cover-change');
+ const avatarWrap=$('profile-viewer-avatar').parentElement,avatarCamera=$('profile-avatar-change');
+ cover.style.setProperty('position','relative','important');
+ cover.style.setProperty('overflow','hidden','important');
+ coverCamera.hidden=!isOwnProfile;
+ coverCamera.style.cssText='position:absolute!important;right:14px!important;left:auto!important;top:auto!important;bottom:14px!important;width:38px!important;height:38px!important;padding:0!important;display:'+(isOwnProfile?'grid':'none')+'!important;place-items:center!important;border:2px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;color:#1c1e21!important;z-index:20!important;box-shadow:0 1px 5px #0003!important;';
+ avatarWrap.style.setProperty('position','relative','important');
+ avatarWrap.style.setProperty('display','block','important');
+ avatarWrap.style.setProperty('flex','0 0 58px','important');
+ avatarWrap.style.setProperty('width','58px','important');
+ avatarWrap.style.setProperty('height','58px','important');
+ avatarCamera.hidden=!isOwnProfile;
+ avatarCamera.style.cssText='position:absolute!important;right:-3px!important;left:auto!important;top:auto!important;bottom:-3px!important;width:28px!important;height:28px!important;padding:0!important;display:'+(isOwnProfile?'grid':'none')+'!important;place-items:center!important;border:2px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;color:#1c1e21!important;z-index:21!important;box-shadow:0 1px 5px #0003!important;';
+
 }
 async function copyToClipboard(value){
  const textValue=String(value);
