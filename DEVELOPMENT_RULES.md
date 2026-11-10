@@ -86,3 +86,15 @@ For every task, report:
 - Before release, enumerate every rendered button/control in the changed screen and verify its handler is reachable. Exercise each control on mobile and desktop when applicable; record passed, failed, blocked, and not-yet-integrated items separately.
 - If a button cannot be safely completed in the current increment, keep it visibly unavailable with an honest explanation and record the dependency; do not ship a misleading active-looking control.
 - This requirement applies to new and existing controls, including all buttons copied or inspired by Facebook's official mobile app.
+
+
+## 10. No-regression / additive-only implementation rule — user-confirmed
+- The user explicitly requires that implementing or improving one feature must never remove, disable, shrink, hide, overwrite, or regress previously completed features or UI elements.
+- Treat every new implementation as an additive enhancement. Preserve all existing buttons, tabs, cards, sections, layouts, routes, interactions, styling, and working behaviors unless the user gives specific permission to remove a named item.
+- Before every edit, inspect the latest committed file and compare the target region with the current production baseline. Identify existing behavior and dependent selectors/handlers before changing markup or CSS.
+- Do not replace entire sections or broad CSS blocks for convenience. Make the smallest scoped patch possible; prefer new classes/IDs and additive overrides. Preserve existing selectors and event-handler contracts.
+- Maintain a per-screen regression checklist. After each change, verify both the new behavior and all adjacent/previously working controls, layout elements, mobile/desktop breakpoints, navigation, and data flows.
+- If a requested improvement conflicts with an existing feature, do not silently sacrifice either. Keep both and adjust layout/interaction, or ask the user before any unavoidable removal.
+- Never describe a change as complete solely because syntax passes or deployment is READY. Confirm the new feature and regression checks; mark unverified items pending.
+- If a regression is found, fix it before starting another enhancement. Record the regression, root cause, repair commit, and test result in `DEVELOPMENT_CHECKPOINT.md`.
+- This rule applies to every future SUHAS/SUHAS-MAX task and takes precedence over implementation convenience.
