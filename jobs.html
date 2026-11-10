@@ -243,4 +243,31 @@ document.getElementById("workmode").addEventListener("change", render);
 document.querySelectorAll("[data-jobview]").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();activeJobView=b.getAttribute("data-jobview");document.querySelectorAll(".job-tab").forEach(function(t){t.classList.toggle("active",t.getAttribute("data-jobview")===activeJobView);});render();document.getElementById("job-workspace").scrollIntoView({behavior:"smooth",block:"start"});});});
 ["jobtype","workmode"].forEach(function(id){document.getElementById(id).addEventListener("change",render);});
 </script>
-</body></html>
+<script id="suhas-page-state-restore-20261110">
+(function(){
+ const key='suhas-page-state:'+location.pathname+location.search;
+ const save=()=>{
+  try{
+   const openDetails=[...document.querySelectorAll('details[open]')].map((x,i)=>x.id||x.getAttribute('data-state-key')||String(i));
+   const openMenus=[...document.querySelectorAll('.post-menu.open,.dropdown-menu.open,[role="menu"]:not([hidden]),[aria-expanded="true"]')].map((x,i)=>x.id||x.getAttribute('data-post-menu')||x.getAttribute('data-tab')||x.getAttribute('aria-label')||String(i));
+   const scroll={x:window.scrollX,y:window.scrollY};
+   sessionStorage.setItem(key,JSON.stringify({openDetails,openMenus,scroll}));
+  }catch(_){}
+ };
+ document.addEventListener('click',()=>setTimeout(save,0),true);
+ document.addEventListener('toggle',save,true);
+ window.addEventListener('pagehide',save);
+ window.addEventListener('DOMContentLoaded',()=>{
+  try{
+   const state=JSON.parse(sessionStorage.getItem(key)||'null');if(!state)return;
+   (state.openDetails||[]).forEach(id=>{const el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;});
+   (state.openMenus||[]).forEach(id=>{
+    let el=document.getElementById(id);
+    if(!el)el=document.querySelector('[data-post-menu="'+CSS.escape(id)+'"]');
+    if(el){el.hidden=false;el.classList.add('open');}
+   });
+   if(state.scroll)setTimeout(()=>window.scrollTo(state.scroll.x,state.scroll.y),80);
+  }catch(_){}
+ });
+})();
+</script></body></html>
