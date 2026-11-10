@@ -547,3 +547,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static verification: all 6 inline scripts in `social.html` and all 3 inline scripts in `profile.html` pass JavaScript syntax parsing; static checks confirm in-app editor overlay, embedded editor mode, edit action, profile-link interception, and back navigation hooks.
 - Not yet verified: authenticated Android/desktop click-through, editor form save from inside iframe, image upload from real device, browser back/forward behavior on device, and live deployment. External third-party links (e.g. LinkedIn) and separate corporate modules are not converted into SUHAS-MAX screens by this increment.
 - Next step: inspect Vercel Production deployment for commit `f2d61f471ce1751987dd39d8956972ff83df8829`; then test Profile → Edit Profile → Save → Back and the bottom Profile/Home navigation using an authenticated account. Continue routing any remaining first-party social-app links to in-app screens without changing corporate modules.
+
+
+## 2026-11-10 — Attach profile and cover camera controls to photo corners
+- User screenshot showed both camera controls detached: profile camera floated above the avatar and cover camera appeared near the bottom of the profile content.
+- Root cause: the camera buttons were siblings of their photo elements, so their absolute positioning used the wrong containing block. Moved the cover camera button inside `#profile-viewer-cover` and wrapped the avatar plus its camera button in `.profile-viewer-avatar-wrap`.
+- Added scoped CSS to anchor cover camera at the cover's bottom-right corner and avatar camera at the avatar's bottom-right corner; corrected flex sizing so the name, verification badge, and menu retain their layout.
+- Existing Gallery picker, preview, cancel, and Supabase upload/save logic remains connected to the same button/input IDs. No database or storage policy changes.
+- Commits: `3993069ea31164be92d92557047e3fd4dcbf9a98`, `8dcb116e9ec2c01f1760937a8168bd73aecf92b9`.
+- Static verification: 6/6 inline JavaScript blocks parse; static checks confirm both buttons are nested within their respective photo containers and existing preview/save handlers remain present.
+- Still required: verify visual placement and gallery/save behavior on an authenticated Android device after deployment.
