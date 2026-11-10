@@ -435,4 +435,31 @@ document.querySelectorAll('.folder-edit').forEach(btn=>btn.addEventListener('cli
 document.getElementById('appSearch').addEventListener('submit',e=>e.preventDefault());
 search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;document.querySelectorAll('.app-tile').forEach(a=>{const match=a.textContent.toLowerCase().includes(q);a.style.display=match?'flex':'none';if(match)count++;});document.querySelectorAll('[data-folder]').forEach(d=>{const has=[...d.querySelectorAll('.app-tile')].some(a=>a.style.display!=='none');d.style.display=has?'block':'none';if(q&&has)d.open=true;});empty.style.display=count?'none':'block';});
 })();
-</script><script src="assets/script.js?v=20261109-homefix"></script><script src="assets/display-mode.js?v=1"></script></body></html>
+</script><script src="assets/script.js?v=20261109-homefix"></script><script src="assets/display-mode.js?v=1"></script><script id="suhas-page-state-restore-20261110">
+(function(){
+ const key='suhas-page-state:'+location.pathname+location.search;
+ const save=()=>{
+  try{
+   const openDetails=[...document.querySelectorAll('details[open]')].map((x,i)=>x.id||x.getAttribute('data-state-key')||String(i));
+   const openMenus=[...document.querySelectorAll('.post-menu.open,.dropdown-menu.open,[role="menu"]:not([hidden]),[aria-expanded="true"]')].map((x,i)=>x.id||x.getAttribute('data-post-menu')||x.getAttribute('data-tab')||x.getAttribute('aria-label')||String(i));
+   const scroll={x:window.scrollX,y:window.scrollY};
+   sessionStorage.setItem(key,JSON.stringify({openDetails,openMenus,scroll}));
+  }catch(_){}
+ };
+ document.addEventListener('click',()=>setTimeout(save,0),true);
+ document.addEventListener('toggle',save,true);
+ window.addEventListener('pagehide',save);
+ window.addEventListener('DOMContentLoaded',()=>{
+  try{
+   const state=JSON.parse(sessionStorage.getItem(key)||'null');if(!state)return;
+   (state.openDetails||[]).forEach(id=>{const el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;});
+   (state.openMenus||[]).forEach(id=>{
+    let el=document.getElementById(id);
+    if(!el)el=document.querySelector('[data-post-menu="'+CSS.escape(id)+'"]');
+    if(el){el.hidden=false;el.classList.add('open');}
+   });
+   if(state.scroll)setTimeout(()=>window.scrollTo(state.scroll.x,state.scroll.y),80);
+  }catch(_){}
+ });
+})();
+</script></body></html>
