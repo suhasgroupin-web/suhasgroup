@@ -3439,7 +3439,7 @@ document.addEventListener('click',async e=>{
   document.querySelectorAll('.post-menu.open').forEach(m=>m.classList.remove('open'));return;
  }
  const n=e.target.closest('[data-notification]');if(n){try{const r=await client.from('suhas_notifications').update({read_at:new Date().toISOString()}).eq('id',n.dataset.notification).eq('recipient_id',me);if(r.error)throw r.error;const target=n.dataset.entity==='post'?'feed':n.dataset.entity==='friend_request'?'requests':'messages';const tab=document.querySelector('[data-tab="'+target+'"]');if(tab)tab.click();else await loadNotifications();}catch(err){notice(err.message,true);}return;}const b=e.target.closest('button');if(!b)return;try{if(b.dataset.unsavePost){const r=await client.from('suhas_saved_posts').delete().eq('user_id',me).eq('post_id',Number(b.dataset.unsavePost));if(r.error)throw r.error;await loadSavedPosts();notice('Post removed from saved.');}if(b.dataset.openSavedPost){const tab=document.querySelector('[data-tab="feed"]');if(tab)tab.click();setTimeout(()=>{const el=document.getElementById('post-'+b.dataset.openSavedPost);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},350);}if(b.dataset.marketSold){const r=await client.from('suhas_marketplace_listings').update({status:'sold',updated_at:new Date().toISOString()}).eq('id',b.dataset.marketSold).eq('seller_id',me);if(r.error)throw r.error;await loadMarketplace();notice('Listing marked as sold.');}if(b.dataset.marketMessage)await startMessage(b.dataset.marketMessage);if(b.dataset.deletePost){const r=await client.from('suhas_posts').delete().eq('id',b.dataset.deletePost).eq('user_id',me);if(r.error)throw r.error;await loadFeed();notice('Post deleted.');}if(b.dataset.friend){await sendFriendRequest(b.dataset.friend,b);}if(b.dataset.follow){const r=await client.from('suhas_follows').insert({follower_id:me,following_id:b.dataset.follow});if(r.error&&r.error.code!=='23505')throw r.error;await renderPeople();}if(b.dataset.unfollow){const r=await client.from('suhas_follows').delete().eq('follower_id',me).eq('following_id',b.dataset.unfollow);if(r.error)throw r.error;await loadFollowing();}if(b.dataset.accept||b.dataset.decline){const r=await client.from('suhas_friend_requests').update({status:b.dataset.accept?'accepted':'declined',updated_at:new Date().toISOString()}).eq('id',b.dataset.accept||b.dataset.decline);if(r.error)throw r.error;await loadRequests();await renderPeople();await loadFriends();notice(b.dataset.accept?'Friend request confirmed.':'Friend request cancelled.');}if(b.dataset.requestDelete){const r=await client.from('suhas_friend_requests').delete().eq('id',b.dataset.requestDelete);if(r.error)throw r.error;await loadRequests();await renderPeople();notice('Friend request deleted.');}if(b.dataset.requestCancel){const r=await client.from('suhas_friend_requests').delete().eq('id',b.dataset.requestCancel).eq('sender_id',me);if(r.error)throw r.error;await loadRequests();await renderPeople();notice('Friend request cancelled.');}if(b.dataset.message)await startMessage(b.dataset.message);if(b.dataset.open)await openChat(b.dataset.open);}catch(err){notice(err.message||'Action failed. Please try again.',true);}});
-$('compose').addEventListener('submit',async e=>{e.preventDefault();const input=$('message'),button=$('compose').querySelector('button[type="submit"]'),body=input.value.trim();if(!body)return;if(!activeConversation){notice('আগে বাম পাশ থেকে একটি conversation খুলুন।',true);return;}button.disabled=true;const original=button.textContent;button.textContent='Sending…';try{const r=await client.from('suhas_messages').insert({conversation_id:activeConversation,sender_id:me,body});if(r.error)throw r.error;input.value='';await loadMessages();notice('Message sent.');}catch(err){console.error('SUHAS-MAX message send failed:',err);notice(err.message||'Message could not be sent. Please try again.',true);}finally{button.disabled=false;button.textContent=original;}});
+$('compose').addEventListener('submit',async e=>{e.preventDefault();const input=$('message'),button=$('compose').querySelector('button[type="submit"]'),body=input.value.trim();if(!body)return;if(!activeConversation){const only=$('threads')?.querySelector('[data-open]');const choices=$('threads')?.querySelectorAll('[data-open]')||[];if(only&&choices.length===1){await openChat(only.dataset.open);}else{notice('একটি conversation খুলে তারপর message পাঠান।',true);return;}}button.disabled=true;const original=button.textContent;button.textContent='Sending…';try{const r=await client.from('suhas_messages').insert({conversation_id:activeConversation,sender_id:me,body});if(r.error)throw r.error;input.value='';await loadMessages();notice('Message sent.');}catch(err){console.error('SUHAS-MAX message send failed:',err);notice(err.message||'Message could not be sent. Please try again.',true);}finally{button.disabled=false;button.textContent=original;}});
 notificationChannel=client.channel('suhas-notifications-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_notifications',filter:'recipient_id=eq.'+me},payload=>{loadNotifications().catch(e=>notice(e.message,true));showSuhasLiveNotification(payload.new);if(payload.new?.kind==='friend_request')loadRequests().catch(e=>notice(e.message,true));}).subscribe();
 messageBadgeChannel=client.channel('suhas-message-badges-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_messages'},payload=>{if(payload.new?.sender_id!==me){refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}}).on('postgres_changes',{event:'UPDATE',schema:'public',table:'suhas_messages'},payload=>{refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}).subscribe();
 refreshUnreadMessageBadge();
@@ -4256,5 +4256,55 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
   const observer=new MutationObserver(mount);observer.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<style id="suhas-max-messenger-inbox-page-20261110">
+/* Dedicated in-app Messenger screen: keeps users inside SUHAS-MAX. */
+#messages:not([hidden]){position:fixed!important;inset:0!important;z-index:12000!important;display:block!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;overflow:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#f0f2f5!important;box-shadow:none!important;padding-bottom:env(safe-area-inset-bottom)!important}
+body.suhas-messenger-page-open{overflow:hidden!important}
+body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.social-mobile-nav{display:none!important}
+#messages .suhas-messenger-pagebar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;min-height:58px;padding:8px 14px;background:#fff;border-bottom:1px solid #e4e6eb;box-shadow:0 1px 3px #00000012}
+#messages .suhas-messenger-back{width:40px;height:40px;flex:0 0 40px;border:0;border-radius:50%;background:#f0f2f5;color:#1c1e21;font-size:24px;font-weight:700;cursor:pointer}
+#messages .suhas-messenger-pagebar strong{font-size:20px;color:#0866ff}
+#messages>h2{display:none!important}
+#messages .message-start{margin:12px 14px!important;padding:14px!important;background:#fff;border:1px solid #e4e6eb;border-radius:14px}
+#messages .message-start h3{margin:0 0 10px!important}
+#messages .social-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr)!important;gap:12px!important;padding:0 14px 16px!important;align-items:start}
+#messages .message-subtitle{margin:0 0 10px!important}
+#messages #threads{display:grid;gap:8px}
+#messages .message-thread{width:100%;min-height:76px;text-align:left;cursor:pointer}
+#messages .message-chat-panel{background:#fff;border:1px solid #e4e6eb;border-radius:14px;padding:14px;min-height:60vh}
+#messages #chat-title{font-size:18px!important;padding-bottom:10px;border-bottom:1px solid #e4e6eb}
+#messages .msg-list{height:55vh;min-height:300px;overflow:auto;background:#f0f2f5;border-radius:14px;padding:12px}
+#messages .compose{display:flex;gap:8px;margin-top:10px}
+#messages .compose input{min-width:0;flex:1;min-height:48px;border:1px solid #ccd0d5;border-radius:24px;padding:0 16px;font-size:16px;background:#f0f2f5;color:#1c1e21}
+#messages .compose button{min-width:78px;min-height:48px;border-radius:12px}
+#messages .suhas-chat-back{display:none;margin-right:8px;border:0;border-radius:50%;width:34px;height:34px;background:#f0f2f5;font-size:21px;cursor:pointer}
+@media(max-width:760px){
+ #messages .social-grid{display:block!important;padding:0 12px 18px!important}
+ #messages .message-chat-panel{display:none;min-height:calc(100dvh - 190px);padding:10px;border-radius:14px}
+ #messages.chat-open .message-start,#messages.chat-open .social-grid>div:first-child{display:none!important}
+ #messages.chat-open .message-chat-panel{display:flex!important;flex-direction:column}
+ #messages.chat-open .msg-list{height:auto;min-height:0;flex:1;max-height:calc(100dvh - 260px)}
+ #messages.chat-open .suhas-chat-back{display:inline-grid;place-items:center}
+}
+@media(min-width:761px){#messages .message-start{max-width:1000px;margin-left:auto!important;margin-right:auto!important}#messages .social-grid{max-width:1200px;margin:auto}}
+</style>
+<script id="suhas-max-messenger-page-controller-20261110">
+(function(){
+ const panel=document.getElementById('messages');if(!panel||panel.dataset.inboxPageReady)return;panel.dataset.inboxPageReady='1';
+ const bar=document.createElement('div');bar.className='suhas-messenger-pagebar';bar.innerHTML='<button type="button" class="suhas-messenger-back" aria-label="Back to SUHAS-MAX">‹</button><strong>Messenger</strong>';panel.prepend(bar);
+ const title=document.getElementById('chat-title');
+ if(title){const back=document.createElement('button');back.type='button';back.className='suhas-chat-back';back.setAttribute('aria-label','Back to inbox');back.textContent='‹';title.prepend(back);}
+ function sync(){const open=!panel.hidden;document.body.classList.toggle('suhas-messenger-page-open',open);if(!open)panel.classList.remove('chat-open');}
+ const observer=new MutationObserver(sync);observer.observe(panel,{attributes:true,attributeFilter:['hidden']});sync();
+ bar.querySelector('button').addEventListener('click',()=>{const home=document.querySelector('.social-mobile-nav [data-tab="feed"],.side-nav [data-tab="feed"]');if(home)home.click();else{panel.hidden=true;sync();}});
+ panel.addEventListener('click',e=>{
+  if(e.target.closest('.suhas-chat-back')){panel.classList.remove('chat-open');return;}
+  if(e.target.closest('[data-open],[data-message]'))panel.classList.add('chat-open');
+ });
+ // Header shortcut always opens the dedicated Messenger view, without navigating away.
+ document.getElementById('header-messenger-open')?.addEventListener('click',()=>{panel.classList.remove('chat-open');},true);
 })();
 </script>
