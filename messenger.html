@@ -63,38 +63,13 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 <button type="button" data-setting="home">Back to SUHAS-MAX</button>
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/config.js"></script>
-<script src="assets/auth.js"></script>
 <script>
 (function(){
  const frame=document.getElementById('messenger-frame');
- frame.removeAttribute('src');
- frame.style.visibility='hidden';
- const gate=document.createElement('div');
- gate.id='messenger-loading';
- gate.textContent='Checking secure SUHAS-MAX access…';
- gate.style.cssText='flex:1;display:grid;place-items:center;padding:24px;color:#b0b3b8;background:#000;text-align:center;font-size:15px';
- document.querySelector('.messenger-app').appendChild(gate);
- async function start(){
-  try{
-   const client=window.sb;
-   if(!client)throw new Error('Messenger authentication service did not load.');
-   const result=await client.auth.getSession();
-   const session=result.data&&result.data.session;
-   if(result.error||!session){
-    location.replace('login.html?next='+encodeURIComponent('messenger.html'));
-    return;
-   }
-   gate.remove();
-   frame.src='social.html?tab=messages&messenger=1';
-   frame.style.visibility='visible';
-  }catch(error){
-   gate.textContent='Messenger could not start: '+(error&&error.message?error.message:'Please refresh and try again.');
-   console.error('Suhas Messenger startup failed:',error);
-  }
- }
- start();
+ // The embedded SUHAS-MAX page owns the single Supabase auth client.
+ // Creating a second client in this shell can contend for the same session storage/refresh lock.
+ frame.src='/social.html?tab=messages&messenger=1&shell=1';
+ frame.style.visibility='visible';
  function styleMessenger(){
   try{
    const doc=frame.contentDocument;
