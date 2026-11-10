@@ -496,3 +496,15 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Live verification: `https://suhasgroup.vercel.app/release.json` returned HTTP 200 with version `2026.11.10.9`; `https://suhasgroup.vercel.app/social.html` returned HTTP 200 and contains the new post-action CSS, updated Like/Comment/Share markup, and existing Save/Share handlers.
 - Authenticated real-account mobile/desktop action tests remain pending; the page is protected and this browser session is not signed in. Do not claim full end-to-end verification until exercised.
 - Next step: complete authenticated Like/Comment/Share/Save tests in a user-authorized session.
+
+## 2026-11-10 — SUHAS-MAX full-app redesign: Post composer increment 1
+- Scope: first isolated step in the user's requested Facebook-inspired, one-feature-at-a-time redesign. Reviewed Meta's official Facebook product update describing the current Feed, standardized multi-photo grid, double-tap Like, full-screen media, tab navigation, refreshed menu, audience/cross-post controls, simplified comments and profile experience.
+- Audited the current `social.html` post composer, upload flow, audience dialog, metadata rendering and tool handlers. The core post flow already uses the existing `suhas_posts` table, existing `uploadMedia()` Storage helper, existing audience selector and current RLS. Existing photo gallery, background, location and feeling metadata paths are preserved.
+- Changed the composer primary action label from misleading `Next` to `Post`, matching its actual behavior (submits the post immediately).
+- Added `assets/suhas-max-composer-v1.css` for a clearer disabled/enabled Post state, touch-friendly focus treatment and honest styling for unsupported composer tools.
+- Disabled Music attachment, Tag/collaborate, GIF search, Live video and Calls controls because their real provider/member-mention/streaming/calling integrations are not configured. The controls now expose an unavailable explanation instead of pretending the action works. Gallery, audience, background, location, feeling/life update and WhatsApp guidance remain on their existing handlers.
+- Files changed: `social.html`, new `assets/suhas-max-composer-v1.css`.
+- Source commits: CSS `6a999fb85d96606cde520e028c2e4ecfabed46e5`; composer `d58f3cb9b12159adbcd3f66ab212bf04726c94ab`.
+- Static verification: re-fetched both committed files; all 6 inline JavaScript blocks pass syntax parsing; confirmed the new stylesheet is linked, primary button reads Post, unsupported controls are gated, and disabled styling exists.
+- Not yet verified: live deployment completion, signed-in Android/desktop post submission, audience persistence, media upload, story creation, share/repost and profile actions. No database schema, existing records, user media, routes or accounts were changed.
+- Next increment: inspect and improve the full post/feed experience (post preview, metadata/background rendering, post menu/edit/delete, reaction/comment/share states) with actual handlers and Supabase/RLS preservation; then continue Stories, Profile, Friends, Reels, Marketplace, Notifications, Menu/Search and Messenger one at a time.
