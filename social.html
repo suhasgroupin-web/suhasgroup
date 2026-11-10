@@ -3147,7 +3147,7 @@ document.addEventListener('click',e=>{
  const close=e.target.closest('[data-menu-close]');
  if(close){const panel=document.getElementById('maxmenu');if(panel)panel.hidden=true;document.body.classList.remove('max-menu-open');return;}
  const more=e.target.closest('#max-menu-see-more');
- if(more){const extra=document.getElementById('max-menu-extra');if(extra){const expanded=extra.hidden;extra.hidden=!expanded;more.setAttribute('aria-expanded',String(expanded));more.innerHTML=expanded?'See less <span aria-hidden="true">⌄</span>':'See more <span aria-hidden="true">⌄</span>';if(expanded)extra.scrollIntoView({behavior:'smooth',block:'nearest'});}return;}
+ if(more){const extra=document.querySelector('#maxmenu .max-menu-grid');if(extra){const expanded=extra.hidden;extra.hidden=!expanded;more.setAttribute('aria-expanded',String(expanded));more.innerHTML=expanded?'See less <span aria-hidden="true">⌄</span>':'See more <span aria-hidden="true">⌄</span>';if(expanded)extra.scrollIntoView({behavior:'smooth',block:'nearest'});}return;}
 });
 document.getElementById('max-menu-logout')?.addEventListener('click',async()=>{const button=document.getElementById('max-menu-logout');if(button){button.disabled=true;button.textContent='Logging out…';}try{const result=await client.auth.signOut();if(result.error)throw result.error;location.replace('login.html');}catch(error){if(button){button.disabled=false;button.textContent='Log out';}notice(error.message||'Could not log out. Please try again.',true);}});
 // Always start/re-enter the Home page with the menu drawer closed.
