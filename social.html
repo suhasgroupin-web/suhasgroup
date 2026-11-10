@@ -2188,6 +2188,15 @@ html body{padding-bottom:76px!important}
 #messages .msg-list{background:#f7f8fa!important;border-radius:10px!important}
 @media(max-width:760px){#messages:not([hidden]){padding:10px!important;border-radius:0!important}#messages .social-grid{grid-template-columns:minmax(0,1fr)!important}#messages #threads{max-height:36vh!important}#messages .message-thread{min-height:58px!important}#messages .msg-list{height:40vh!important;min-height:240px!important}#messages .message-chat-panel{padding:9px!important}}
 </style>
+
+<style id="suhas-header-search-live-fix-20261110">
+.site-header .header-search-wrap{position:relative!important;z-index:1200!important;overflow:visible!important}
+.site-header .header-search-trigger{position:relative!important;z-index:1202!important;cursor:pointer!important;pointer-events:auto!important}
+.site-header .header-member-search:not([hidden]){display:block!important;position:absolute!important;top:calc(100% + 9px)!important;right:0!important;z-index:1203!important;width:min(300px,calc(100vw - 22px))!important;height:46px!important;padding:0 16px!important;border:1px solid #cbd8ea!important;border-radius:24px!important;background:#fff!important;color:#172b4d!important;box-shadow:0 8px 24px #102b5228!important;font-size:15px!important}
+.site-header .header-search-results:not([hidden]){display:block!important;position:absolute!important;top:calc(100% + 62px)!important;right:0!important;z-index:1204!important;width:min(340px,calc(100vw - 18px))!important;max-height:min(62vh,460px)!important;overflow:auto!important;background:#fff!important;border:1px solid #dce6f4!important;border-radius:15px!important;box-shadow:0 16px 40px #0b2d5830!important;padding:7px!important}
+.site-header .header-search-results[hidden],.site-header .header-member-search[hidden]{display:none!important}
+@media(max-width:760px){.site-header .header-member-search:not([hidden]){right:-42px!important;top:calc(100% + 8px)!important;width:min(285px,calc(100vw - 18px))!important}.site-header .header-search-results:not([hidden]){right:-42px!important;top:calc(100% + 64px)!important;width:min(340px,calc(100vw - 14px))!important}}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -3176,9 +3185,9 @@ function renderHeaderSearchResults(){
  host.innerHTML=(realHtml||'')+(demoHtml||'')||'<div class="header-search-empty">No matching accounts</div>';
  host.hidden=false;
 }
-$('header-search-toggle').addEventListener('click',async()=>{const field=$('header-member-search'),button=$('header-search-toggle'),opening=field.hidden;field.hidden=!opening;button.setAttribute('aria-expanded',String(opening));if(opening){field.value='';await activateMaxTab('people');await renderPeople();field.focus();renderHeaderSearchResults();}else{field.value='';$('search').value='';$('header-search-results').hidden=true;await renderPeople();}});
-$('header-member-search').addEventListener('input',async()=>{const field=$('header-member-search');$('search').value=field.value;if($('people').hidden)await activateMaxTab('people');await renderPeople();renderHeaderSearchResults();});
-$('header-member-search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();activateMaxTab('people');$('search').focus();}if(e.key==='Escape'){e.preventDefault();$('header-member-search').value='';$('header-search-results').hidden=true;}});
+$('header-search-toggle').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const field=$('header-member-search'),button=$('header-search-toggle'),results=$('header-search-results'),opening=field.hidden;if(opening){field.hidden=false;button.setAttribute('aria-expanded','true');field.value='';results.hidden=true;results.innerHTML='';requestAnimationFrame(()=>field.focus());}else{field.value='';field.hidden=true;button.setAttribute('aria-expanded','false');results.hidden=true;results.innerHTML='';}});
+$('header-member-search').addEventListener('input',()=>{renderHeaderSearchResults();});
+$('header-member-search').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();$('header-search-toggle').click();}});
 document.addEventListener('click',e=>{if(!e.target.closest('.header-search-wrap')){$('header-search-results').hidden=true;}});
 
 let tttBoard=Array(9).fill(''),tttOver=false;
