@@ -1580,7 +1580,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 }
 @media(prefers-reduced-motion:reduce){.suhas-premium-header-actions .mobile-head-action{transition:none!important}}
 </style></head><body><header class="site-header"><div class="nav-wrap">
-<button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><a href="app.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS GROUP COMMUNITY</div></div></a>
+<button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
 <button data-tab="friends" type="button" aria-label="Friends" title="Friends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c.4-3.4 2.7-5.2 6.5-5.2s6.1 1.8 6.5 5.2zM16 5.2a3 3 0 0 1 0 5.8M17 14.8c2.8.4 4.3 2.1 4.5 5.2h-3"/></svg></button>
@@ -1665,7 +1665,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <div class="max-menu-sections">
 <details><summary>Help and support</summary><div class="max-menu-section-body"><a href="mailto:suhasgroup.in@gmail.com">Help Centre · Contact SUHAS support</a><a href="mailto:suhasgroup.in@gmail.com?subject=Report%20a%20problem">Report a problem</a></div></details>
 <details><summary>Settings and privacy</summary><div class="max-menu-section-body"><button type="button" data-tab="settings">Settings</button><button type="button" data-tab="settings">Privacy settings</button><button type="button" data-tab="settings">Notification settings</button></div></details>
-<details><summary>Also from SUHAS</summary><div class="max-menu-section-body"><a href="app.html">SUHAS main app</a><a href="profile.html">Your profile</a></div></details>
+<details><summary>SUHAS-MAX account</summary><div class="max-menu-section-body"><button type="button" data-tab="settings">Account settings</button><a href="profile.html">Edit your SUHAS-MAX profile</a></div></details>
 </div>
 <button class="max-menu-logout" id="max-menu-logout" type="button">Log out</button>
 <div class="max-menu-footer"><strong>SUHAS-MAX</strong><span>Powered by SUHAS GROUP</span></div>
@@ -2440,8 +2440,30 @@ closeMenuOnHomeLoad();
 window.addEventListener('pageshow',closeMenuOnHomeLoad);
 window.addEventListener('DOMContentLoaded',closeMenuOnHomeLoad);
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){initSuhasArcade();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
-document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();activateMaxTab(b.dataset.tab);},true);
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();const tab=b.dataset.tab;if(tab!=='maxmenu'){try{sessionStorage.setItem('suhas-max-active-section:'+location.pathname,tab);}catch(_){}history.pushState({suhasMax:true,tab},'',location.pathname+location.search+location.hash);}activateMaxTab(tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
+/* SUHAS-MAX owns its navigation history: Back never falls through to the SUHAS Group site. */
+(function(){
+ const key='suhas-max-active-section:'+location.pathname;
+ let tab='feed';
+ try{tab=sessionStorage.getItem(key)||'feed';}catch(_){}
+ const allowed=['feed','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];
+ if(!allowed.includes(tab))tab='feed';
+ history.replaceState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
+ history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
+ window.addEventListener('popstate',function(event){
+  const state=event.state;
+  if(state&&state.suhasMax&&allowed.includes(state.tab)){
+   tab=state.tab;try{sessionStorage.setItem(key,tab);}catch(_){}
+   activateMaxTab(tab);return;
+  }
+  // Re-enter the app instead of navigating to a parent SUHAS Group page.
+  history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
+  activateMaxTab(tab);
+ });
+ window.addEventListener('pagehide',function(){try{sessionStorage.setItem(key,tab);}catch(_){}});
+ document.addEventListener('click',function(e){const b=e.target.closest('button[data-tab]');if(b&&b.dataset.tab!=='maxmenu'&&allowed.includes(b.dataset.tab))tab=b.dataset.tab;},true);
+})();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
 document.addEventListener('click',e=>{if(!e.target.closest('button,a,[role="button"]'))return;const n=document.getElementById('notice');if(n){n.textContent='';n.style.display='none';}},true);
@@ -2906,4 +2928,9 @@ body.suhas-composer-open{overflow:hidden!important}
 .profile-friend-tile strong{font-size:12px;overflow-wrap:anywhere}
 .profile-friends-empty{font-size:13px;color:#65676b}
 @media(max-width:560px){.profile-friends-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}}
+</style>
+<style id="suhas-max-isolated-navigation-20261110">
+.suhas-max-home-brand{border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;padding:0;min-width:0}
+.suhas-max-home-brand:focus-visible{outline:3px solid #1877f2;outline-offset:4px;border-radius:8px}
+#maxmenu .max-menu-sections a[href="app.html"]{display:none!important}
 </style>
