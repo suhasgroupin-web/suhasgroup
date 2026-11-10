@@ -38,7 +38,10 @@ document.addEventListener('DOMContentLoaded', function () {
 // PWA: register service worker + install prompt
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
+    fetch('release.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('release metadata unavailable'); return r.json(); }).then(function (release) {
+      var version = encodeURIComponent(release.version || 'current');
+      return navigator.serviceWorker.register('sw.js?v=' + version, { updateViaCache: 'none' });
+    }).catch(function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   });
 }
 
