@@ -9,25 +9,59 @@
 :root{color-scheme:dark;--blue:#0866ff}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#f0f2f5;font-family:Arial,Helvetica,sans-serif}
-.messenger-app{height:100dvh;display:flex;flex-direction:column;background:#000}
-.messenger-head{height:66px;flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #242526;background:#000}
-.messenger-brand{font-size:30px;font-weight:800;letter-spacing:-1.2px;color:#fff}
+.messenger-app{height:100dvh;display:flex;flex-direction:column;background:#000;position:relative}
+.messenger-head{height:66px;flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:#000}
+.messenger-brand{font-size:31px;font-weight:850;letter-spacing:-1.3px;color:#fff}
 .messenger-head-actions{display:flex;align-items:center;gap:10px}
-.messenger-head button{width:42px;height:42px;border:0;border-radius:50%;background:#242526;color:#fff;font-size:21px;cursor:pointer}
+.messenger-head button{width:40px;height:40px;border:0;border-radius:50%;background:#242526;color:#fff;font-size:21px;font-weight:700;cursor:pointer}
 .messenger-head button:hover{background:#343638}
+.messenger-notice{height:36px;flex:0 0 36px;background:#0866ff;color:white;text-align:center;padding:7px 10px;font-size:14px;cursor:pointer}
+.messenger-search-wrap{height:60px;flex:0 0 60px;padding:7px 18px;display:flex;align-items:center;gap:10px;background:#000}
+.messenger-search-wrap span{font-size:28px;color:#b0b3b8;line-height:1}
+.messenger-search-wrap input{width:100%;height:44px;border:0;outline:0;border-radius:28px;background:#303030;color:#fff;padding:0 16px;font-size:16px}
+.messenger-shortcuts{height:52px;flex:0 0 52px;display:flex;gap:10px;padding:5px 16px 9px;background:#000}
+.shortcut{flex:1;border:0;border-radius:24px;background:#242526;color:#b0b3b8;font-size:15px;font-weight:700}
+.shortcut.active{background:#092b55;color:#65aaff}
 .messenger-frame{border:0;display:block;width:100%;flex:1;min-height:0;background:#000}
-@media(max-width:600px){.messenger-head{height:62px;flex-basis:62px;padding:0 15px}.messenger-brand{font-size:28px}}
+.messenger-bottom{height:62px;flex:0 0 62px;display:flex;justify-content:space-around;align-items:center;background:#000;border-top:1px solid #242526;padding-bottom:env(safe-area-inset-bottom)}
+.messenger-bottom button{border:0;background:none;color:#b0b3b8;min-width:60px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:23px}
+.messenger-bottom button.selected{color:#0866ff}.messenger-bottom small{font-size:11px;font-weight:700}
+.messenger-popover{position:absolute;z-index:9;right:14px;bottom:72px;width:min(280px,85vw);background:#242526;border:1px solid #444;border-radius:14px;padding:8px;box-shadow:0 8px 30px #0009}
+.messenger-popover[hidden]{display:none}.messenger-popover button{display:block;width:100%;border:0;background:transparent;color:#f0f2f5;text-align:left;padding:13px;border-radius:8px;font-size:15px}.messenger-popover button:active{background:#3a3b3c}
+@media(max-width:600px){.messenger-head{height:62px;flex-basis:62px;padding:0 15px}.messenger-brand{font-size:29px}.messenger-frame{min-height:180px}}
 </style>
 </head>
 <body>
 <div class="messenger-app">
 <header class="messenger-head">
-<div class="messenger-brand">Suhas Messenger</div>
+<div class="messenger-brand">messenger</div>
 <div class="messenger-head-actions">
-<button type="button" id="messenger-back" aria-label="Back to SUHAS-MAX" title="Back to SUHAS-MAX">←</button>
+<button type="button" id="messenger-compose" aria-label="New message" title="New message">✎</button>
+<button type="button" id="messenger-settings" aria-label="Settings" title="Settings">⚙</button>
+<button type="button" id="messenger-back" aria-label="Back to SUHAS-MAX" title="Back to SUHAS-MAX">f</button>
 </div>
 </header>
+<div class="messenger-notice" id="messenger-notice" role="button" tabindex="0">Notifications are currently off. Tap to turn on.</div>
+<div class="messenger-search-wrap"><span>⌕</span><input id="messenger-search" type="search" placeholder="Search Suhas Messenger" autocomplete="off" aria-label="Search messages and members"></div>
+<div class="messenger-shortcuts" aria-label="Messenger shortcuts">
+<button type="button" class="shortcut active" data-filter="all">All</button>
+<button type="button" class="shortcut" data-filter="unread">Unread</button>
+<button type="button" class="shortcut" data-filter="groups">Groups</button>
+</div>
 <iframe class="messenger-frame" id="messenger-frame" title="Suhas Messenger Inbox" src="social.html?tab=messages&messenger=1"></iframe>
+<nav class="messenger-bottom" aria-label="Messenger navigation">
+<button class="selected" type="button" data-dest="messages"><span>●</span><small>Chats</small></button>
+<button type="button" data-dest="friends"><span>♧</span><small>People</small></button>
+<button type="button" data-dest="notifications"><span>♢</span><small>Alerts</small></button>
+<button type="button" id="messenger-menu"><span>☰</span><small>Menu</small></button>
+</nav>
+<div class="messenger-popover" id="messenger-popover" hidden>
+<button type="button" data-setting="notifications">Notification settings</button>
+<button type="button" data-setting="sound">Sound &amp; alerts</button>
+<button type="button" data-setting="privacy">Privacy &amp; safety</button>
+<button type="button" data-setting="account">Account settings</button>
+<button type="button" data-setting="home">Back to SUHAS-MAX</button>
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
@@ -78,15 +112,17 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
    style.textContent=`
     html,body{background:#000!important;color:#f0f2f5!important}
     .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading{display:none!important}
-    .social-shell{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 14px 18px!important;background:#000!important}
+    .social-shell{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 12px 12px!important;background:#000!important}
     .social-center{width:100%!important;max-width:none!important}
-    #messages{display:block!important;min-height:100%;padding:10px 14px 16px!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important;color:#f0f2f5!important}
+    #messages{display:block!important;min-height:100%;padding:5px 12px 12px!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important;color:#f0f2f5!important}
+    #messages>h2{display:none!important}
     #messages h2,#messages h3,.message-subtitle{color:#f0f2f5!important}
-    #messages .message-start{padding:0 0 12px!important;border-bottom:1px solid #303030!important}
-    #messages .message-start h3{font-size:15px!important}
-    #messages .search{background:#242526!important;color:#f0f2f5!important;border:0!important;border-radius:24px!important;padding:13px 16px!important}
-    #messages .social-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
-    #messages .message-subtitle{margin:14px 0 6px!important}
+    #messages .message-start{padding:0 0 8px!important;border:0!important}
+    #messages .message-start h3{font-size:14px!important;margin:3px 0 7px!important;color:#b0b3b8!important}
+    #messages .search{background:#242526!important;color:#f0f2f5!important;border:0!important;border-radius:24px!important;padding:12px 16px!important}
+    #messages .social-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+    #messages .message-subtitle{margin:9px 0 5px!important;font-size:18px!important}
+    #message-thread-search{display:none!important}
     #threads{display:flex!important;flex-direction:column!important;gap:0!important;max-height:34vh!important;overflow:auto!important}
     #messages .message-thread{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:78px!important;padding:10px 2px!important;border:0!important;border-bottom:1px solid #242526!important;border-radius:0!important;background:#000!important;text-align:left!important}
     #messages .message-thread-name{color:#f0f2f5!important;font-size:16px!important;font-weight:750!important}
@@ -148,6 +184,17 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
   }catch(e){openInboxDirectly();}
  },10000);
  document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
+ const pop=document.getElementById('messenger-popover');
+ document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
+ document.getElementById('messenger-settings').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
+ document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
+ document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
+ document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.shortcut').forEach(x=>x.classList.toggle('active',x===b));const d=frame.contentDocument;if(!d)return;const threads=[...d.querySelectorAll('#threads .message-thread')];threads.forEach(t=>{const unread=t.querySelector('.unread-count,[data-unread]');const isGroup=/group/i.test(t.innerText);t.style.display=b.dataset.filter==='unread'?(unread?'flex':'none'):b.dataset.filter==='groups'?(isGroup?'flex':'none'):'flex';});}));
+ document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{const d=frame.contentDocument;if(!d)return;const dest=b.dataset.dest;const target=dest==='messages'?'messages':dest;const nav=d.querySelector('[data-tab="'+target+'"]');if(nav)nav.click();document.querySelectorAll('.messenger-bottom button').forEach(x=>x.classList.toggle('selected',x===b));}));
+ document.getElementById('messenger-notice').addEventListener('click',async()=>{if(!('Notification'in window)){alert('This browser does not support notifications.');return;}const permission=await Notification.requestPermission();document.getElementById('messenger-notice').textContent=permission==='granted'?'Notifications are on.':'Notifications are still off.';});
+ document.getElementById('messenger-notice').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.currentTarget.click();}});
+ pop.querySelectorAll('[data-setting]').forEach(b=>b.addEventListener('click',()=>{const action=b.dataset.setting;pop.hidden=true;if(action==='home'){location.href='social.html?tab=feed';return;}if(action==='notifications'){document.getElementById('messenger-notice').click();return;}if(action==='sound'){alert('Sound and alert preferences will be available here.');return;}if(action==='privacy'){const d=frame.contentDocument;d?.querySelector('[data-tab="settings"]')?.click();return;}if(action==='account'){location.href='profile.html';}}));
+
 })();
 </script>
 </body>
