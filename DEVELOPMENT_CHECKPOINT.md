@@ -585,3 +585,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - This is a process safeguard, not a claim that the whole app has been regression-tested. Future increments must include before/after regression checks and record unverified items.
 - Rules commit: `997604a5abbb32a04e11130206270914c7afae31`.
 - Next work: before the next SUHAS-MAX feature edit, read the latest rules/checkpoint, inspect the current screen and existing handlers, write a control/regression checklist, then implement one small additive increment.
+
+
+## 2026-11-10 — Feed comments collapsed by default, light presentation
+- User requested that comments not be visible beneath every post until the Comment button is tapped, and that comment text/background remain black-on-white/light like the post feed rather than dark bubbles.
+- Wrapped the existing feed comment list and comment form in a per-post closed-by-default `details` panel. The existing Comment button now toggles only that post's panel and focuses the existing composer when opening.
+- Preserved the comment count on the Comment button, the comment records/query/rendering, commenter profile links, comment submit form, Like and Share controls, engagement summary, and post layout. No DB schema or records changed.
+- Added scoped light styling for the feed comments panel and comment bubbles, including a dark-theme override so the comments remain white/light grey with black text as requested. This is limited to `#feed-list`; Reels and other comment surfaces were not changed.
+- Source commits: `c20e4f96c8d9607fa43f30b1969183286a2ee269`, `5b74fc8f58e3ce99132b2caf3080924ffacf9b90`.
+- Static validation after the change: all 6 inline scripts parse without syntax errors; static checks confirm closed details wrapper, toggle handler, comment form, Like, Share, and existing engagement summary are present.
+- Pending: Production deployment and authenticated Android interaction/visual verification (tap to open, tap again to close, submit comment, refresh, dark/light mode).
