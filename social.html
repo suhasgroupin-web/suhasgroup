@@ -3445,7 +3445,38 @@ document.addEventListener('click',async e=>{
   document.querySelectorAll('.post-menu.open').forEach(m=>m.classList.remove('open'));return;
  }
  const n=e.target.closest('[data-notification]');if(n){try{const r=await client.from('suhas_notifications').update({read_at:new Date().toISOString()}).eq('id',n.dataset.notification).eq('recipient_id',me);if(r.error)throw r.error;const target=n.dataset.entity==='post'?'feed':n.dataset.entity==='friend_request'?'requests':'messages';const tab=document.querySelector('[data-tab="'+target+'"]');if(tab)tab.click();else await loadNotifications();}catch(err){notice(err.message,true);}return;}const b=e.target.closest('button');if(!b)return;try{if(b.dataset.unsavePost){const r=await client.from('suhas_saved_posts').delete().eq('user_id',me).eq('post_id',Number(b.dataset.unsavePost));if(r.error)throw r.error;await loadSavedPosts();notice('Post removed from saved.');}if(b.dataset.openSavedPost){const tab=document.querySelector('[data-tab="feed"]');if(tab)tab.click();setTimeout(()=>{const el=document.getElementById('post-'+b.dataset.openSavedPost);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},350);}if(b.dataset.marketSold){const r=await client.from('suhas_marketplace_listings').update({status:'sold',updated_at:new Date().toISOString()}).eq('id',b.dataset.marketSold).eq('seller_id',me);if(r.error)throw r.error;await loadMarketplace();notice('Listing marked as sold.');}if(b.dataset.marketMessage)await startMessage(b.dataset.marketMessage);if(b.dataset.deletePost){const r=await client.from('suhas_posts').delete().eq('id',b.dataset.deletePost).eq('user_id',me);if(r.error)throw r.error;await loadFeed();notice('Post deleted.');}if(b.dataset.friend){await sendFriendRequest(b.dataset.friend,b);}if(b.dataset.follow){const r=await client.from('suhas_follows').insert({follower_id:me,following_id:b.dataset.follow});if(r.error&&r.error.code!=='23505')throw r.error;await renderPeople();}if(b.dataset.unfollow){const r=await client.from('suhas_follows').delete().eq('follower_id',me).eq('following_id',b.dataset.unfollow);if(r.error)throw r.error;await loadFollowing();}if(b.dataset.accept||b.dataset.decline){const r=await client.from('suhas_friend_requests').update({status:b.dataset.accept?'accepted':'declined',updated_at:new Date().toISOString()}).eq('id',b.dataset.accept||b.dataset.decline);if(r.error)throw r.error;await loadRequests();await renderPeople();await loadFriends();notice(b.dataset.accept?'Friend request confirmed.':'Friend request cancelled.');}if(b.dataset.requestDelete){const r=await client.from('suhas_friend_requests').delete().eq('id',b.dataset.requestDelete);if(r.error)throw r.error;await loadRequests();await renderPeople();notice('Friend request deleted.');}if(b.dataset.requestCancel){const r=await client.from('suhas_friend_requests').delete().eq('id',b.dataset.requestCancel).eq('sender_id',me);if(r.error)throw r.error;await loadRequests();await renderPeople();notice('Friend request cancelled.');}if(b.dataset.message)await startMessage(b.dataset.message);if(b.dataset.open)await openChat(b.dataset.open);}catch(err){notice(err.message||'Action failed. Please try again.',true);}});
-$('compose').addEventListener('submit',async e=>{e.preventDefault();const input=$('message'),button=$('compose').querySelector('button[type="submit"]'),body=input.value.trim();if(!body)return;if(!activeConversation){const only=$('threads')?.querySelector('[data-open]');const choices=$('threads')?.querySelectorAll('[data-open]')||[];if(only&&choices.length===1){await openChat(only.dataset.open);}else{notice('একটি conversation খুলে তারপর message পাঠান।',true);return;}}button.disabled=true;const original=button.textContent;button.textContent='Sending…';try{const r=await client.from('suhas_messages').insert({conversation_id:activeConversation,sender_id:me,body});if(r.error)throw r.error;input.value='';await loadMessages();notice('Message sent.');}catch(err){console.error('SUHAS-MAX message send failed:',err);notice(err.message||'Message could not be sent. Please try again.',true);}finally{button.disabled=false;button.textContent=original;}});
+let suhasMessageSendInFlight=false;
+$('compose').addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(suhasMessageSendInFlight)return;
+ const input=$('message'),button=$('compose').querySelector('button[type="submit"]'),body=input.value.trim();
+ if(!body)return;
+ suhasMessageSendInFlight=true;
+ button.disabled=true;
+ const original=button.textContent;
+ button.textContent='Sending…';
+ try{
+  if(!activeConversation){
+   const only=$('threads')?.querySelector('[data-open]');
+   const choices=$('threads')?.querySelectorAll('[data-open]')||[];
+   if(only&&choices.length===1)await openChat(only.dataset.open);
+   else throw new Error('একটি conversation খুলে তারপর message পাঠান।');
+  }
+  const conversationId=activeConversation;
+  const r=await client.from('suhas_messages').insert({conversation_id:conversationId,sender_id:me,body});
+  if(r.error)throw r.error;
+  if(input.value.trim()===body)input.value='';
+  await loadMessages();
+  notice('Message sent.');
+ }catch(err){
+  console.error('SUHAS-MAX message send failed:',err);
+  notice(err.message||'Message could not be sent. Please try again.',true);
+ }finally{
+  suhasMessageSendInFlight=false;
+  button.disabled=false;
+  button.textContent=original;
+ }
+});
 notificationChannel=client.channel('suhas-notifications-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_notifications',filter:'recipient_id=eq.'+me},payload=>{loadNotifications().catch(e=>notice(e.message,true));showSuhasLiveNotification(payload.new);if(payload.new?.kind==='friend_request')loadRequests().catch(e=>notice(e.message,true));}).subscribe();
 messageBadgeChannel=client.channel('suhas-message-badges-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_messages'},payload=>{if(payload.new?.sender_id!==me){refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}}).on('postgres_changes',{event:'UPDATE',schema:'public',table:'suhas_messages'},payload=>{refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}).subscribe();
 refreshUnreadMessageBadge();
