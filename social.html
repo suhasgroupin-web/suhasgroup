@@ -1751,8 +1751,15 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 const $=id=>document.getElementById(id), client=window.sb;
 const session=(await client.auth.getSession()).data.session;if(!session){location.replace('login.html?next='+encodeURIComponent('app.html'));return;}
 const me=session.user.id;
-try{const profile=await client.from('suhas_public_profiles').select('full_name,profile_photo_url').eq('user_id',me).maybeSingle();if(!profile.error&&profile.data){const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar'),bottomAvatar=document.getElementById('mobile-profile-nav-avatar');if(name)name.textContent=profile.data.full_name||session.user.email||'SUHAS Member';if(avatar&&profile.data.profile_photo_url)avatar.src=profile.data.profile_photo_url;if(bottomAvatar&&profile.data.profile_photo_url)bottomAvatar.src=profile.data.profile_photo_url;}}catch(e){console.warn('Menu profile could not be loaded',e);}
-// Bottom profile avatar is placed here; its click behavior is intentionally reserved for the user's next instruction.
+const userMeta=session.user.user_metadata||{},fallbackName=userMeta.full_name||userMeta.name||session.user.email||'SUHAS Member',fallbackAvatar=userMeta.avatar_url||userMeta.picture||'assets/logo.png';
+try{
+ const profile=await client.from('suhas_public_profiles').select('full_name,profile_photo_url').eq('user_id',me).maybeSingle();
+ const data=profile.data||{};
+ const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar'),bottomAvatar=document.getElementById('mobile-profile-nav-avatar');
+ if(name)name.textContent=data.full_name||fallbackName;
+ if(avatar)avatar.src=data.profile_photo_url||fallbackAvatar;
+ if(bottomAvatar)bottomAvatar.src=data.profile_photo_url||fallbackAvatar;
+}catch(e){const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar'),bottomAvatar=document.getElementById('mobile-profile-nav-avatar');if(name)name.textContent=fallbackName;if(avatar)avatar.src=fallbackAvatar;if(bottomAvatar)bottomAvatar.src=fallbackAvatar;console.warn('Menu profile could not be loaded',e);}
 let members=[],activeConversation=null,channel=null,notificationChannel=null,activeGroup=null,presenceChannel=null,onlineMemberIds=new Set();
 async function uploadMedia(file){if(!file)return null;const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];if(!allowed.includes(file.type))throw new Error('Supported files: JPG, PNG, WebP, MP4 and WebM.');if(file.size>26214400)throw new Error('Media file must be 25 MB or smaller.');const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];const path=me+'/'+crypto.randomUUID()+'.'+ext;const r=await client.storage.from('suhas-max-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(r.error)throw r.error;return {path,url:client.storage.from('suhas-max-media').getPublicUrl(path).data.publicUrl,type:file.type};}
 async function loadHomeStories(){
@@ -2448,13 +2455,15 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  const makeUrl=(tab,profile)=>{const q=new URLSearchParams(location.search);q.set('tab',tab);if(profile)q.set('profile',profile);else q.delete('profile');return location.pathname+'?'+q.toString();};
  let current=readRoute();
  const render=async state=>{current={...state};await activateMaxTab(current.tab);if(current.profile)await openMemberProfile(current.profile);else if($('profile-viewer').classList.contains('open')){$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;}};
- history.replaceState({...current,guard:true},'',location.pathname+location.search+location.hash);
- history.pushState({...current,guard:true},'',location.pathname+location.search+location.hash);
+ const query=new URLSearchParams(location.search);
+ if(!query.has('tab')&&!query.has('profile')){try{const saved=JSON.parse(localStorage.getItem('suhas-max-last-route')||'null');if(saved&&allowed.includes(saved.tab))current={...current,tab:saved.tab,profile:saved.profile||null};}catch(_){}}
+ const baseState={suhasMax:true,tab:current.tab,profile:null,guard:true};
+ history.replaceState(baseState,'',makeUrl(baseState.tab,null));
+ history.pushState(baseState,'',makeUrl(baseState.tab,null));
+ if(current.profile)history.pushState({...current,guard:false},'',makeUrl(current.tab,current.profile));
  document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;const tab=b.dataset.tab;if(!allowed.includes(tab))return;e.preventDefault();current={suhasMax:true,tab,profile:null,guard:false};history.pushState(current,'',makeUrl(tab,null));activateMaxTab(tab);},true);
- window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){history.pushState({...current,guard:true},'',makeUrl(current.tab,current.profile));return;}await render(state);return;}history.pushState({...current,guard:true},'',makeUrl(current.tab,current.profile));await render(current);});
+ window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){await render({...state,profile:null});history.pushState({...state,guard:true},'',makeUrl(state.tab,null));return;}await render(state);return;}await render(current);history.pushState({...current,profile:null,guard:true},'',makeUrl(current.tab,null));});
  window.addEventListener('pagehide',()=>{try{localStorage.setItem('suhas-max-last-route',JSON.stringify({tab:current.tab,profile:current.profile}));}catch(_){}});
- const q=new URLSearchParams(location.search);
- if(!q.has('tab')&&!q.has('profile')){try{const saved=JSON.parse(localStorage.getItem('suhas-max-last-route')||'null');if(saved&&allowed.includes(saved.tab)){current={...current,tab:saved.tab,profile:saved.profile||null};history.replaceState(current,'',makeUrl(current.tab,current.profile));}}catch(_){}}
  render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
