@@ -2453,9 +2453,11 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
  window.addEventListener('popstate',function(event){
   const state=event.state;
-  if(state&&state.suhasMax&&!state.guard&&allowed.includes(state.tab)){
+  if(state&&state.suhasMax&&allowed.includes(state.tab)){
    tab=state.tab;try{localStorage.setItem(key,tab);}catch(_){}
-   activateMaxTab(tab);return;
+   activateMaxTab(tab);
+   if(state.guard)history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
+   return;
   }
   // Re-enter the app instead of navigating to a parent SUHAS Group page.
   history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
