@@ -491,5 +491,8 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Preserved the existing delegated handlers and Supabase data operations: Like toggles rows in `suhas_post_likes`; Comment focuses the existing composer and inserts into `suhas_post_comments`; Share continues through the existing SUHAS-MAX share/repost dialog flow. Save remains available from the existing post-options menu and writes to `suhas_saved_posts`.
 - Updated the comment composer sizing and post-options menu tap targets for mobile. No tables, policies, storage objects, records, routes, or other app pages were changed.
 - Static verification: all 6 inline JavaScript blocks parsed successfully with `new Function`; source assertions confirmed Like/Comment/Share selectors and existing save handler are retained. Authenticated real-account mobile/desktop action tests are still pending; do not claim full end-to-end verification until exercised.
-- Source commit: pending; production deployment and live verification: pending.
-- Next step: commit this increment with the release metadata and verify Vercel Production READY plus the live asset version; then perform authenticated Like/Comment/Share/Save tests.
+- Source commit: `0acc77fb426c07e15cb5517212e0dc348c5e6c2b`.
+- Production deployment: `dpl_J1BYbHckZYF3WFa4rdM4vwCHqZqm`, state `READY`, target `production`, commit `0acc77fb426c07e15cb5517212e0dc348c5e6c2b`.
+- Live verification: `https://suhasgroup.vercel.app/release.json` returned HTTP 200 with version `2026.11.10.9`; `https://suhasgroup.vercel.app/social.html` returned HTTP 200 and contains the new post-action CSS, updated Like/Comment/Share markup, and existing Save/Share handlers.
+- Authenticated real-account mobile/desktop action tests remain pending; the page is protected and this browser session is not signed in. Do not claim full end-to-end verification until exercised.
+- Next step: complete authenticated Like/Comment/Share/Save tests in a user-authorized session.
