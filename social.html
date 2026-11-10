@@ -4329,6 +4329,27 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
 @media(min-width:761px){.suhas-go-sg{right:20px;bottom:20px}}
 </style>
 <a class="suhas-go-sg" href="https://suhasgroup.vercel.app/" aria-label="Go to Suhas Group main website" title="Go to Suhas Group">Go to SG</a>
+<style id="suhas-go-sg-profile-only-20261111">
+/* Go to SG is available only while the Profile viewer is the active screen. */
+.suhas-go-sg{display:none!important}
+.suhas-go-sg.is-profile-screen{display:flex!important}
+</style>
+<script id="suhas-go-sg-profile-only-20261111-script">
+(function(){
+ const button=document.querySelector('.suhas-go-sg');
+ const profile=document.getElementById('profile-viewer');
+ if(!button||!profile)return;
+ function sync(){
+   const isProfile=profile.classList.contains('open')&&!profile.hidden;
+   button.classList.toggle('is-profile-screen',isProfile);
+   button.setAttribute('aria-hidden',String(!isProfile));
+   button.tabIndex=isProfile?0:-1;
+ }
+ new MutationObserver(sync).observe(profile,{attributes:true,attributeFilter:['class','style','hidden','aria-hidden']});
+ window.addEventListener('popstate',sync);
+ sync();
+})();
+</script>
 
 
 
