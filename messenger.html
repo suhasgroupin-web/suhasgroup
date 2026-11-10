@@ -108,6 +108,13 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
    doc.head.appendChild(style);
   }catch(e){console.warn('Messenger style could not be applied:',e);}
  }
+ let inboxFallbackStarted=false;
+ function openInboxDirectly(){
+  if(inboxFallbackStarted)return;
+  inboxFallbackStarted=true;
+  location.replace('social.html?tab=messages&messenger=1');
+ }
+ frame.addEventListener('error',openInboxDirectly);
  frame.addEventListener('load',function(){
   try{
    const child=frame.contentWindow;
@@ -117,12 +124,29 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
     location.replace(loginUrl.href);
     return;
    }
+   if(!child.document.querySelector('#messages')){
+    setTimeout(function(){
+     try{
+      if(!frame.contentDocument||!frame.contentDocument.querySelector('#messages'))openInboxDirectly();
+     }catch(e){openInboxDirectly();}
+    },1200);
+    return;
+   }
   }catch(e){
-   // If the browser blocks access to an error document, keep the outer shell intact.
+   // A browser error document or blocked frame must not leave a blank Messenger screen.
+   openInboxDirectly();
+   return;
   }
   styleMessenger();
   setTimeout(styleMessenger,350);
  });
+ // Cloudflare/browser frame failures do not always emit an error event.
+ setTimeout(function(){
+  if(inboxFallbackStarted)return;
+  try{
+   if(!frame.contentDocument||!frame.contentDocument.querySelector('#messages'))openInboxDirectly();
+  }catch(e){openInboxDirectly();}
+ },10000);
  document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
 })();
 </script>
