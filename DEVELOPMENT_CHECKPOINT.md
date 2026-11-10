@@ -699,3 +699,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commits: `3503be35dea2cecacd6e8803c946a6fbf79d6e1e` (badge/inbox), `30facdbf5cb4ae2aa0653c5da66967f505544050` (header open/scroll); service worker cache bumped to v102 in `1c608b7731ab7db30e956c0d9da761149be507c8`.
 - Database read-only check: current account has 1 conversation and 0 unread messages at check time. No test messages or user data were inserted/modified.
 - Pending: Production deployment and real-device verification of incoming-message badge updates.
+
+
+## 2026-11-10 — Header search toggle and live profile suggestions
+- User reports tapping the header search icon does not open search; requests Facebook-style name search with profile photos.
+- Existing markup/results renderer already provided member suggestions from loaded `members`, including photo, name, position/company/location, and profile-opening data attributes.
+- Fixed the header search toggle to open/close the search input in-place without navigating away from the current Home page.
+- Search input now filters the already-loaded member directory immediately and displays matching profile-photo/name rows; removed unnecessary async people-page rendering from each keystroke.
+- Escape closes the search. Mobile dropdown/input positioning and z-index/visibility were hardened.
+- UI commit: `79e7dd4bc346ef82f804a5e103620bb8e30a2ca3`; service worker cache bumped to v103 in `fb809644e6fdf535080674f636d13697ec2ab444`.
+- Pending: Production deployment and real-device visual verification.
