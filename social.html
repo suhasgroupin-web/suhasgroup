@@ -1579,6 +1579,71 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
  .suhas-premium-header-actions .mobile-head-action{width:31px!important;height:31px!important;min-width:31px!important;min-height:31px!important;flex-basis:31px!important}
 }
 @media(prefers-reduced-motion:reduce){.suhas-premium-header-actions .mobile-head-action{transition:none!important}}
+</style>
+<style id="suhas-max-premium-skin">
+/* SUHAS-MAX premium visual layer — additive only; preserves existing controls and flows */
+:root{
+ --suhas-ink:#101b36;--suhas-navy:#071a3b;--suhas-blue:#155eef;
+ --suhas-cyan:#38bdf8;--suhas-gold:#d6ad58;--suhas-violet:#7657d6;
+ --suhas-glass:rgba(255,255,255,.92);--suhas-shadow:0 10px 30px rgba(8,27,63,.08);
+ --fb-blue:var(--suhas-blue);
+}
+body{background:linear-gradient(180deg,#edf3fb 0%,#f5f7fb 48%,#eef2f8 100%)!important;color:var(--suhas-ink)}
+.site-header{background:linear-gradient(112deg,#071a3b 0%,#102d61 55%,#173d78 100%)!important;border-bottom:1px solid rgba(214,173,88,.48)!important;box-shadow:0 5px 22px rgba(5,18,44,.22)!important}
+.nav-wrap{min-height:68px}
+.brand-name{color:#fff!important;letter-spacing:.25px;text-shadow:0 1px 10px #38bdf855}
+.brand-tag{display:block!important;color:#e7c77f!important;font-size:9px!important;font-weight:800;letter-spacing:1.35px;margin-top:1px}
+.brand img{filter:drop-shadow(0 2px 7px #0008)}
+.facebook-left-menu-trigger{color:#fff!important}
+.social-topnav button{color:#dbe8ff!important;transition:background .2s ease,color .2s ease}
+.social-topnav button:hover{background:#ffffff12!important;border-radius:12px}
+.social-topnav button.active{color:#fff!important;border-bottom-color:var(--suhas-gold)!important}
+.social-topnav button.active svg{filter:drop-shadow(0 0 5px #f2d38b)}
+.social-user-actions button,.social-user-actions a{box-shadow:0 3px 12px #0002}
+.social-shell{gap:18px}
+.panel,.side-card,.right-card,.settings-group,.home-feed-panel{
+ background:var(--suhas-glass)!important;border:1px solid rgba(151,174,211,.34)!important;
+ border-radius:18px!important;box-shadow:var(--suhas-shadow)!important;backdrop-filter:blur(12px)
+}
+.home-feed-panel{overflow:hidden}
+.home-composer{border-bottom:1px solid #dce5f2!important}
+.home-composer #post-content{background:linear-gradient(120deg,#f8fbff,#eef4fc)!important;border:1px solid #d8e3f2!important;box-shadow:inset 0 1px 2px #0b2b5510!important}
+.home-composer #post-content:focus{outline:2px solid #155eef35!important;border-color:#6a9cf2!important}
+.home-stories-section,.home-reels-section{border-bottom:1px solid #dce5f2!important}
+.home-stories-heading strong,.home-reels-section h2,.home-section-title{color:#102b58!important}
+.home-story-card,.home-reel-card{transition:transform .2s ease,box-shadow .2s ease}
+.home-story-card:hover,.home-reel-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px #0b28552b}
+.home-story-ring{background:linear-gradient(135deg,#155eef,#7657d6 55%,#d6ad58)!important}
+.home-story-create-card .home-story-create-photo{box-shadow:0 0 0 2px #fff,0 0 0 4px #d6ad58}
+.home-reel-card{border:1px solid #ffffff40!important;box-shadow:0 8px 20px #0b1d3b24!important}
+.post-card{border-top:1px solid #e0e8f3!important}
+.post-card .social-actions{border-color:#e0e8f3!important}
+.post-card .social-actions .action{border-radius:10px!important;transition:background .18s ease,color .18s ease,transform .18s ease}
+.post-card .social-actions .action:hover{background:#eaf1ff!important;color:#155eef!important;transform:translateY(-1px)}
+.action.primary,.composer-submit .action,.tab.active{
+ background:linear-gradient(115deg,#1247a5,#1768e8 58%,#3288f2)!important;
+ border:1px solid #7eafff!important;color:#fff!important;
+ box-shadow:0 5px 14px #155eef30!important
+}
+.social-mobile-nav{background:rgba(255,255,255,.96)!important;border-top:1px solid #d9e3f1!important;box-shadow:0 -8px 24px #0b285512!important;backdrop-filter:blur(16px)}
+.social-mobile-nav button{transition:color .18s ease,transform .18s ease}
+.social-mobile-nav button.active,.social-mobile-nav button[aria-current=page]{color:#155eef!important}
+.social-mobile-nav button.active .mobile-nav-icon{filter:drop-shadow(0 2px 5px #155eef35)}
+.mobile-profile-nav img{border:2px solid #d6ad58!important;box-shadow:0 2px 9px #0b285526}
+.profile-viewer-card{border:1px solid #d6ad58!important;box-shadow:0 24px 80px #06163155!important}
+.profile-viewer-cover{background:linear-gradient(125deg,#071a3b,#155eef 55%,#7657d6)!important}
+.post-menu,.profile-viewer-menu,.suhas-create-menu{border:1px solid #dbe5f2!important;box-shadow:0 16px 38px #071a3b24!important;border-radius:14px!important}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #38bdf899!important;outline-offset:2px}
+@media(max-width:760px){
+ .site-header{box-shadow:0 3px 16px #071a3b25!important}
+ .nav-wrap{min-height:58px;padding-inline:10px}
+ .brand-name{font-size:17px!important}
+ .brand img{width:38px!important;height:38px!important}
+ .brand-tag{font-size:8px!important;letter-spacing:1px}
+ .home-feed-panel{border-radius:0!important}
+ .social-mobile-nav{padding-top:7px!important}
+}
+@media(prefers-reduced-motion:reduce){.home-story-card,.home-reel-card,.post-card .social-actions .action,.social-mobile-nav button{transition:none!important}}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
