@@ -3488,28 +3488,51 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
  const menu=document.getElementById('suhas-create-menu');
  if(!trigger||!menu)return;
  const close=()=>{menu.hidden=true;trigger.setAttribute('aria-expanded','false');};
+ function chooseFromGallery(accept,multiple,onChosen){
+  const picker=document.createElement('input');
+  picker.type='file';picker.accept=accept;picker.multiple=!!multiple;
+  picker.setAttribute('aria-label','Choose media from your device gallery');
+  picker.style.cssText='position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0';
+  document.body.appendChild(picker);
+  const cleanup=()=>picker.remove();
+  picker.addEventListener('change',()=>{
+   const files=[...picker.files];cleanup();
+   if(files.length)onChosen(files);
+  },{once:true});
+  picker.addEventListener('cancel',cleanup,{once:true});
+  // Must be called directly during the user's tap; delayed clicks lose browser user activation.
+  picker.click();
+ }
+ function assignFiles(id,files){
+  const target=document.getElementById(id);if(!target)throw new Error('The media upload control is unavailable. Reload the page and try again.');
+  const transfer=new DataTransfer();files.forEach(file=>transfer.items.add(file));
+  target.files=transfer.files;target.dispatchEvent(new Event('change',{bubbles:true}));
+ }
  trigger.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();menu.hidden=!menu.hidden;trigger.setAttribute('aria-expanded',String(!menu.hidden));});
- menu.addEventListener('click',async e=>{
+ menu.addEventListener('click',e=>{
   const item=e.target.closest('[data-create-action]');if(!item)return;
   const action=item.dataset.createAction;close();
   try{
    if(action==='story'){
-    await activateMaxTab('feed');
-    window.setTimeout(()=>{
-     if(typeof window.openSuhasStoryCreator==='function')window.openSuhasStoryCreator();
-     else document.getElementById('story-media')?.click();
-    },180);
+    chooseFromGallery('image/*,video/*',true,files=>{
+     try{
+      if(typeof window.openSuhasStoryCreator!=='function')throw new Error('Story creator is not ready. Reload and try again.');
+      window.openSuhasStoryCreator({skipPicker:true});
+      assignFiles('story-media',files);
+     }catch(error){if(typeof notice==='function')notice(error.message,true);else console.error(error);}
+    });
    }else if(action==='photo'){
-    await activateMaxTab('feed');
-    window.setTimeout(()=>document.getElementById('post-media')?.click(),180);
+    chooseFromGallery('image/*',true,async files=>{
+     try{await activateMaxTab('feed');assignFiles('post-media',files);}
+     catch(error){if(typeof notice==='function')notice(error.message,true);else console.error(error);}
+    });
    }else if(action==='video'||action==='reel'){
-    await activateMaxTab('reels');
-    window.setTimeout(()=>document.getElementById('reel-file')?.click(),180);
+    chooseFromGallery('video/*',false,async files=>{
+     try{await activateMaxTab('reels');assignFiles('reel-file',files);}
+     catch(error){if(typeof notice==='function')notice(error.message,true);else console.error(error);}
+    });
    }
-  }catch(error){
-   const message=error?.message||'Could not open the media picker. Please try again.';
-   if(typeof notice==='function')notice(message,true);else console.error(message,error);
-  }
+  }catch(error){if(typeof notice==='function')notice(error.message||'Could not open the media picker.',true);else console.error(error);}
  });
  document.addEventListener('click',e=>{if(!e.target.closest('.suhas-create-wrap'))close();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
@@ -3792,7 +3815,7 @@ body.suhas-composer-open{overflow:hidden!important}
  if(!dialog||!form)return;
  const host=document.getElementById('suhas-story-form-host');
  host.appendChild(form);
- const open=()=>{if(!dialog.open){dialog.showModal();setTimeout(()=>mediaInput.click(),180);}};
+ const open=(options={})=>{if(!dialog.open){dialog.showModal();if(!options.skipPicker)mediaInput.click();}};
  window.openSuhasStoryCreator=open;
  document.getElementById('suhas-story-create-close').addEventListener('click',()=>dialog.close());
  const mediaInput=document.getElementById('story-media');
