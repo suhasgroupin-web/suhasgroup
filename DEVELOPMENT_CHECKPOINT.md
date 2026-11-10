@@ -464,3 +464,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Post replacement clears the gallery metadata while preserving other metadata. Feed post deletion removes the owned Storage files after the row delete; failures are surfaced as a warning. Failed uploads are cleaned up when possible.
 - Source commit: `4b7fff09d8d05a06362ae6efef353819b0691044`.
 - Validation still pending: static JavaScript syntax checks, source assertions, Vercel Production READY confirmation, and authenticated Android multi-photo upload/render/delete testing. Do not claim the feature is fully verified until the authenticated test is complete.
+
+
+## 2026-11-10 — Multi-photo composer and Feed gallery (increment 3)
+- Confirmed the existing `social.html` composer now supports selecting up to 10 photo files, previews with per-file removal, one video as an alternative, and a 50 MB combined upload cap. Each upload uses the user's own `suhas-max-media` folder and existing Storage RLS. The primary image remains in `media_url` for old clients; additional image URLs/paths/types are stored additively in the already-existing `suhas_posts.metadata.media_gallery` JSONB field. No schema change or old-row rewrite is required.
+- Fixed a Feed renderer circular fallback (`:mediaMarkup`) by explicitly rendering a legacy single image, one video, or the new multi-image grid. Feed photo images keep the existing double-tap-to-like marker. The profile-viewer timeline already reads and renders `metadata.media_gallery` as a matching grid.
+- Existing one-file posts remain backward compatible. Partial multi-file uploads are best-effort removed if post insert fails; existing post data is not changed.
+- Source commit: `a4b36490fe71ae7d263542a2532076fa36343bc4`.
+- Next validation: parse every inline script, confirm old single-media fallback and multi-image grid are both present, confirm composer caps/metadata and no circular reference, then verify Vercel Production is READY. Authenticated Android gallery-upload/photo-grid and two-account verification remain pending because no signed-in device session is available.
