@@ -2359,6 +2359,33 @@ body.suhas-dark #messages .message-thread-name{color:#f0f2f5!important}
 <div class="right-card" style="margin:12px 0"><h3>🏅 SUHAS-MAX Championships</h3><p class="post-meta">Create or join free scheduled competitions. No entry fee, payment or cash prizes.</p><form id="tournament-create" class="post-form"><input id="tournament-title" class="search" maxlength="80" placeholder="Competition name" required><textarea id="tournament-description" maxlength="400" placeholder="Short description (optional)"></textarea><select id="tournament-game" class="search"><option value="tic_tac_toe">Tic-Tac-Toe</option><option value="rock_paper_scissors">Rock Paper Scissors</option></select><label class="post-meta">Start date &amp; time <input id="tournament-start" class="search" type="datetime-local" required></label><label class="post-meta">Maximum players <select id="tournament-capacity" class="search"><option value="4">4 players</option><option value="8" selected>8 players</option><option value="16">16 players</option><option value="32">32 players</option></select></label><button class="action primary" type="submit">Create Free Championship</button></form><div id="tournament-list" class="post-meta">Loading scheduled competitions…</div><div id="tournament-bracket" class="post-meta" style="margin-top:12px"></div></div><div class="right-card" style="margin:12px 0"><h3>My Game Scores</h3><div id="game-scores" class="post-meta">Loading your scores…</div></div><div class="right-card" style="margin:12px 0"><h3>🏆 Global Leaderboard</h3><p class="post-meta">Rankings use multiplayer RPS results and recorded game totals. Only searchable public profiles appear.</p><div class="social-actions" style="align-items:center;margin:10px 0"><select id="leaderboard-game" class="search" style="margin:0;max-width:220px"><option value="all">All Games</option><option value="tic_tac_toe">Tic-Tac-Toe</option><option value="rock_paper_scissors">Rock Paper Scissors</option></select><button id="leaderboard-refresh" class="action" type="button">Refresh</button></div><div id="leaderboard-list" class="post-meta">Loading rankings…</div></div><div class="right-card" style="margin:12px 0"><h3>My Player Statistics</h3><div id="player-statistics" class="post-meta">Loading your statistics…</div></div>
 
 </div>
+
+<div class="settings-group suhas-monetization-card" id="suhas-monetization">
+ <h3>Creator Monetization</h3>
+ <p class="post-meta">Apply to earn from eligible original videos. Earnings are shown only after verified advertising revenue is recorded.</p>
+ <div class="suhas-monetization-stats" id="suhas-monetization-stats">Loading creator account…</div>
+ <div id="suhas-monetization-application">
+  <label class="settings-row"><span><b>Channel / profile link (optional)</b><small>Share a public link for review</small></span><input id="suhas-monetization-link" type="url" placeholder="https://…" style="max-width:190px"></label>
+  <label class="settings-row"><span><b>Content category</b><small>What kind of videos do you publish?</small></span><select id="suhas-monetization-category"><option value="Lifestyle">Lifestyle</option><option value="Education">Education</option><option value="Entertainment">Entertainment</option><option value="Business">Business</option><option value="Technology">Technology</option><option value="Other">Other</option></select></label>
+  <button type="button" class="action primary" id="suhas-monetization-apply">Apply for Monetization</button>
+  <p class="post-meta" id="suhas-monetization-application-status" aria-live="polite"></p>
+ </div>
+ <div class="settings-group" id="suhas-payout-box" hidden>
+  <h3>Request a payout</h3>
+  <p class="post-meta">Requests are limited to your available verified earnings and require Admin review.</p>
+  <label class="settings-row"><span><b>Amount (BDT)</b></span><input id="suhas-payout-amount" type="number" min="1" step="0.01" placeholder="0.00" style="max-width:130px"></label>
+  <label class="settings-row"><span><b>Payment method</b></span><select id="suhas-payout-method"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="bank">Bank</option></select></label>
+  <label class="settings-row"><span><b>Account / destination</b></span><input id="suhas-payout-destination" maxlength="160" placeholder="Your payment details" style="max-width:190px"></label>
+  <button type="button" class="action primary" id="suhas-payout-submit">Submit payout request</button>
+  <p id="suhas-payout-message" class="post-meta" aria-live="polite"></p>
+ </div>
+ <div id="suhas-monetization-admin" class="settings-group" hidden>
+  <h3>Admin · Creator review</h3>
+  <div id="suhas-monetization-admin-apps">Loading applications…</div>
+  <h3>Admin · Payout review</h3>
+  <div id="suhas-monetization-admin-payouts">Loading payout requests…</div>
+ </div>
+</div>
 </section>
 <section id="saved" class="panel" hidden><h2>Saved posts</h2><p class="post-meta">Your saved posts are stored on this device.</p><div id="saved-list"><div class="empty">Loading saved posts…</div></div></section>
 <section id="settings" class="panel" hidden><h2>Settings & Privacy</h2><p class="post-meta">Search settings or manage your preferences, privacy and account security.</p><input id="settings-search" class="search" type="search" placeholder="Search settings…" aria-label="Search settings"><div class="settings-group" data-settings-category="Preferences"><h3>Preferences</h3><label class="settings-row"><span><b>Default post audience</b><small>Preselect who can see new posts</small></span><select id="setting-audience"><option value="public">Public</option><option value="friends">Friends</option><option value="only_me">Only me</option></select></label></div><div class="settings-group" data-settings-category="Appearance"><h3>Appearance</h3><label class="settings-row"><span><b>Theme</b><small>Choose light, dark or follow your device</small></span><select id="setting-theme"><option value="system">System default</option><option value="light">Light</option><option value="dark">Dark</option></select></label><label class="settings-row"><span><b>Text size</b><small>Adjust reading comfort</small></span><select id="setting-text"><option value="normal">Normal</option><option value="large">Large</option></select></label></div><div class="settings-group" data-settings-category="Feed & media"><h3>Feed & media</h3><label class="settings-row"><span><b>Autoplay videos</b><small>Allow feed videos to start automatically</small></span><input id="setting-autoplay" type="checkbox"></label><label class="settings-row"><span><b>Reduce animations</b><small>Use fewer motion effects</small></span><input id="setting-motion" type="checkbox"></label></div><div class="settings-group" data-settings-category="Privacy & account"><h3>Privacy & account</h3>
@@ -4486,4 +4513,69 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
 @media(max-width:760px){#messages .message-chat-panel{background:#fff!important}#messages .msg-list{max-height:calc(100dvh - 220px)!important}}
 </style>
 
+
+<style id="suhas-creator-monetization-style">
+.suhas-monetization-card{margin-top:18px}.suhas-monetization-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}.suhas-monetization-stat{padding:12px;border:1px solid #e4e6eb;border-radius:10px;background:#f7f8fa}.suhas-monetization-stat b{display:block;font-size:19px;color:#0866ff}.suhas-monetization-stat small{color:#65676b}.suhas-monetization-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #e4e6eb;font-size:13px}.suhas-monetization-row button{margin:3px;padding:7px 10px}.suhas-monetization-note{padding:10px;border-radius:8px;background:#fff8e6;color:#765300;font-size:12px;margin:10px 0}@media(max-width:520px){.suhas-monetization-stats{grid-template-columns:1fr 1fr}.suhas-monetization-card input,.suhas-monetization-card select{max-width:52vw!important}}
+</style>
+
+<script id="suhas-creator-monetization-actions">
+(async()=>{
+ const client=window.sb, $=id=>document.getElementById(id);
+ if(!client||!$('suhas-monetization'))return;
+ const session=(await client.auth.getSession()).data.session;
+ if(!session)return;
+ const user=session.user, me=user.id, isAdmin=user.app_metadata?.suhas_admin===true || user.app_metadata?.suhas_admin==='true';
+ const stats=$('suhas-monetization-stats'), appStatus=$('suhas-monetization-application-status');
+ const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+ const safe=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ async function load(){
+  const [app,ledger,videos,payouts]=await Promise.all([
+   client.from('suhas_monetization_applications').select('*').eq('user_id',me).maybeSingle(),
+   client.from('suhas_creator_earnings_ledger').select('amount,currency,entry_type,created_at').eq('creator_id',me).order('created_at',{ascending:false}).limit(100),
+   client.from('suhas_posts').select('id',{count:'exact',head:true}).eq('user_id',me).in('media_type',['video/mp4','video/webm']),
+   client.from('suhas_creator_payout_requests').select('id,amount,currency,method,status,created_at').eq('creator_id',me).order('created_at',{ascending:false}).limit(10)
+  ]);
+  if(app.error)throw app.error;if(ledger.error)throw ledger.error;if(videos.error)throw videos.error;if(payouts.error)throw payouts.error;
+  const entries=ledger.data||[], balance=entries.reduce((sum,x)=>sum+Number(x.amount||0),0);
+  stats.innerHTML='<div class="suhas-monetization-stat"><b>'+money(balance)+'</b><small>Verified balance · BDT</small></div><div class="suhas-monetization-stat"><b>'+Number(videos.count||0)+'</b><small>Your published videos</small></div>';
+  const a=app.data;
+  if(a){appStatus.textContent='Application status: '+a.status.toUpperCase()+(a.admin_note?' · Admin note: '+a.admin_note:'');$('suhas-monetization-apply').disabled=true;$('suhas-monetization-apply').textContent='Application submitted';}
+  else appStatus.textContent='No application submitted yet.';
+  $('suhas-payout-box').hidden=!(a&&a.status==='approved');
+  if(payouts.data?.length){const p=document.createElement('div');p.className='post-meta';p.textContent='Recent payout requests: '+payouts.data.map(x=>x.method.toUpperCase()+' '+money(x.amount)+' ('+x.status+')').join(' · ');$('suhas-payout-box').append(p);}
+  if(isAdmin){$('suhas-monetization-admin').hidden=false;await loadAdmin();}
+ }
+ async function loadAdmin(){
+  const [apps,payouts]=await Promise.all([
+   client.from('suhas_monetization_applications').select('id,user_id,channel_url,content_category,status,created_at').eq('status','pending').order('created_at'),
+   client.from('suhas_creator_payout_requests').select('id,creator_id,amount,currency,method,destination,status,created_at').eq('status','pending').order('created_at')
+  ]);
+  if(apps.error)throw apps.error;if(payouts.error)throw payouts.error;
+  $('suhas-monetization-admin-apps').innerHTML=apps.data?.length?apps.data.map(a=>'<div class="suhas-monetization-row"><span><b>'+safe(a.content_category)+'</b><br><small>'+safe(a.user_id)+'<br>'+(a.channel_url?'<a href="'+safe(a.channel_url)+'" target="_blank" rel="noopener">Open creator link</a>':'No link')+'</small></span><span><button type="button" data-app-review="'+a.id+'" data-status="approved">Approve</button><button type="button" data-app-review="'+a.id+'" data-status="rejected">Reject</button></span></div>').join(''):'No pending applications.';
+  $('suhas-monetization-admin-payouts').innerHTML=payouts.data?.length?payouts.data.map(p=>'<div class="suhas-monetization-row"><span><b>'+money(p.amount)+' · '+safe(p.method.toUpperCase())+'</b><br><small>'+safe(p.creator_id)+'<br>'+safe(p.destination)+'</small></span><span><button type="button" data-payout-review="'+p.id+'" data-status="approved">Approve</button><button type="button" data-payout-review="'+p.id+'" data-status="rejected">Reject</button></span></div>').join(''):'No pending payout requests.';
+ }
+ $('suhas-monetization-apply').addEventListener('click',async e=>{
+  const b=e.currentTarget;b.disabled=true;appStatus.textContent='Submitting…';
+  try{const {error}=await client.from('suhas_monetization_applications').insert({user_id:me,channel_url:$('suhas-monetization-link').value.trim()||null,content_category:$('suhas-monetization-category').value});if(error)throw error;appStatus.textContent='Application submitted for Admin review.';await load();}
+  catch(err){appStatus.textContent=err.message||'Could not submit application.';b.disabled=false;}
+ });
+ $('suhas-payout-submit').addEventListener('click',async()=>{
+  const msg=$('suhas-payout-message');msg.textContent='Submitting…';
+  try{const {error}=await client.rpc('suhas_request_creator_payout',{p_amount:Number($('suhas-payout-amount').value),p_method:$('suhas-payout-method').value,p_destination:$('suhas-payout-destination').value.trim()});if(error)throw error;msg.textContent='Payout request submitted for Admin review.';await load();}
+  catch(err){msg.textContent=err.message||'Could not submit payout request.';}
+ });
+ $('suhas-monetization-admin').addEventListener('click',async e=>{
+  const app=e.target.closest('[data-app-review]'), payout=e.target.closest('[data-payout-review]');
+  if(!app&&!payout)return;
+  const btn=app||payout;btn.disabled=true;
+  try{
+   const table=app?'suhas_monetization_applications':'suhas_creator_payout_requests', id=app?app.dataset.appReview:payout.dataset.payoutReview;
+   const update={status:btn.dataset.status,reviewed_by:me,reviewed_at:new Date().toISOString()};
+   const {error}=await client.from(table).update(update).eq('id',id);if(error)throw error;
+   await load();
+  }catch(err){btn.disabled=false;alert(err.message||'Admin review failed.');}
+ });
+ try{await load();}catch(e){stats.textContent=e.message||'Could not load monetization data.';console.error('Creator monetization:',e);}
+})();
+</script>
 </body></html>
