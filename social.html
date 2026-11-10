@@ -2021,7 +2021,101 @@ html body.suhas-dark header.site-header .nav-wrap{
 }
 </style>
 
-</head><body><header class="site-header"><div class="nav-wrap">
+<style id="suhas-max-navigation-row-repair-20261110">
+/* Regression guard: keep all six shortcuts in one compact horizontal Facebook-style bar. */
+.social-mobile-nav{
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-auto-flow:column!important;
+  align-items:stretch!important;
+  justify-content:stretch!important;
+  flex-direction:row!important;
+  gap:0!important;
+  width:100%!important;
+  height:64px!important;
+  min-height:64px!important;
+  padding:4px 4px max(4px,env(safe-area-inset-bottom))!important;
+  background:#fff!important;
+  background-image:none!important;
+  border-top:1px solid #e4e6eb!important;
+  box-shadow:0 -2px 8px #0000000d!important;
+}
+.social-mobile-nav button{
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex:initial!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:100%!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  margin:0!important;
+  padding:3px 1px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  color:#65676b!important;
+  font:700 10px/1.2 Arial,Helvetica,sans-serif!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.social-mobile-nav button.active,
+.social-mobile-nav button[aria-current="page"]{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  color:#0866ff!important;
+}
+.social-mobile-nav .mobile-nav-icon{
+  display:grid!important;
+  place-items:center!important;
+  width:27px!important;
+  height:27px!important;
+  flex:0 0 27px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:currentColor!important;
+}
+.social-mobile-nav .mobile-nav-icon svg{
+  display:block!important;
+  width:24px!important;
+  height:24px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.social-mobile-nav .mobile-profile-nav img{
+  display:block!important;
+  width:30px!important;
+  height:30px!important;
+  max-width:30px!important;
+  max-height:30px!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+}
+.social-mobile-nav button:active{transform:scale(.96)!important}
+body.suhas-desktop-mode .social-mobile-nav{display:none!important}
+@media(max-width:390px){
+  .social-mobile-nav{height:60px!important;min-height:60px!important}
+  .social-mobile-nav button{font-size:9px!important}
+  .social-mobile-nav .mobile-nav-icon{width:24px!important;height:24px!important;flex-basis:24px!important}
+  .social-mobile-nav .mobile-nav-icon svg{width:22px!important;height:22px!important}
+  .social-mobile-nav .mobile-profile-nav img{width:27px!important;height:27px!important}
+}
+</style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
 <button class="active" data-tab="feed" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></button>
