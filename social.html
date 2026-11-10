@@ -2409,7 +2409,7 @@ let selectedPostFiles=[],composerPreviewUrls=[];
 function revokeComposerPreviewUrls(){composerPreviewUrls.forEach(url=>URL.revokeObjectURL(url));composerPreviewUrls=[];}
 function clearPostMedia(){selectedPostFiles=[];postFile.value='';revokeComposerPreviewUrls();$('composer-file-name').textContent='';postPreview.hidden=true;postPreview.innerHTML='';postPreview.removeAttribute('data-count');}
 function renderSelectedPostMedia(){
- revokeComposerPreviewUrls();postPreview.innerHTML='';
+ postPreview.classList.add('suhas-composer-gallery-preview');revokeComposerPreviewUrls();postPreview.innerHTML='';
  if(!selectedPostFiles.length){postPreview.hidden=true;$('composer-file-name').textContent='';postPreview.removeAttribute('data-count');return;}
  const total=selectedPostFiles.reduce((sum,file)=>sum+file.size,0);
  $('composer-file-name').textContent=selectedPostFiles.length+' file(s) selected · '+(total/1048576).toFixed(1)+' MB';
