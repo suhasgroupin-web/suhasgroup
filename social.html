@@ -1762,7 +1762,7 @@ try{
 }catch(e){const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar'),bottomAvatar=document.getElementById('mobile-profile-nav-avatar');if(name)name.textContent=fallbackName;if(avatar)avatar.src=fallbackAvatar;if(bottomAvatar)bottomAvatar.src=fallbackAvatar;console.warn('Menu profile could not be loaded',e);}
 let members=[],activeConversation=null,channel=null,notificationChannel=null,activeGroup=null,presenceChannel=null,onlineMemberIds=new Set();
 async function uploadMedia(file){if(!file)return null;const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];if(!allowed.includes(file.type))throw new Error('Supported files: JPG, PNG, WebP, MP4 and WebM.');if(file.size>26214400)throw new Error('Media file must be 25 MB or smaller.');const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4','video/webm':'webm'})[file.type];const path=me+'/'+crypto.randomUUID()+'.'+ext;const r=await client.storage.from('suhas-max-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(r.error)throw r.error;return {path,url:client.storage.from('suhas-max-media').getPublicUrl(path).data.publicUrl,type:file.type};}
-async function loadHomeStories(){
+async async function loadHomeStories(){
  const host=$('home-stories-list');if(!host)return;
  const r=await client.from('suhas_stories').select('id,user_id,content,background_key,audience,created_at,expires_at,media_path,media_type,metadata').gt('expires_at',new Date().toISOString()).order('created_at',{ascending:false}).limit(60);
  if(r.error)throw r.error;
@@ -1819,7 +1819,7 @@ async function loadHomeStories(){
  }));
 }
 function bindStoryCreateCard(){document.querySelectorAll('[data-create-story-modal]').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',openSuhasStoryCreator);});}
-async function loadHomeReels(){
+async async function loadHomeReels(){
  const host=$('home-reels-list');if(!host)return;
  const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(12);
  if(r.error)throw r.error;
