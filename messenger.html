@@ -127,8 +127,12 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
 .messenger-settings-sheet{max-height:88dvh!important;overflow:auto!important}
 @media(max-width:600px){.messenger-bottom{height:76px!important;flex-basis:76px!important}.messenger-bottom button{height:60px!important}}
 </style><style id="suhas-messenger-search-icon-fix-20261111">
-.messenger-search-wrap .messenger-search-icon{width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;color:#b0b3b8}
+/* Use one real magnifying-glass icon; remove the old pseudo-element glyph. */
+.messenger-search-wrap{position:relative;gap:10px}
+.messenger-search-wrap:before{content:none!important;display:none!important}
+.messenger-search-wrap .messenger-search-icon{width:24px;height:24px;flex:0 0 24px;display:grid!important;place-items:center;color:#b0b3b8;position:relative;z-index:2}
 .messenger-search-wrap .messenger-search-icon svg{width:23px;height:23px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.messenger-search-wrap input{min-width:0;flex:1;padding-left:18px!important}
 </style></head>
 <body>
 <div class="messenger-app">
