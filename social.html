@@ -3960,3 +3960,49 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
 #feed-list .compose button,#reels-list .compose button{min-height:42px!important;border:0!important;border-radius:22px!important;background:#0866ff!important;color:#fff!important;padding:0 17px!important;font-weight:750!important}
 @media(max-width:390px){#feed-list .social-actions .suhas-feed-action,#reels-list .social-actions .suhas-feed-action{gap:4px!important;font-size:12px!important}.suhas-action-icon{width:18px!important;height:18px!important;flex-basis:18px!important}}
 </style>
+
+
+<script id="suhas-max-web-push-subscribe">
+(function(){
+  const VAPID_PUBLIC_KEY = 'BM4YQCDXywiGZ1qT-HM5OzfsIDm5VI10TnrEVi2RQPt8yHz86TD2K1JOYPTP6TyqWqkGlXCurqdw6xQGSZl5WQ4';
+  const FUNCTION_URL = 'https://ehvgxbifqtyajeersnvq.supabase.co/functions/v1/suhas-push-dispatch';
+  function urlBase64ToUint8Array(s){
+    const pad='='.repeat((4-s.length%4)%4), raw=atob((s+pad).replace(/-/g,'+').replace(/_/g,'/'));
+    return Uint8Array.from(raw,c=>c.charCodeAt(0));
+  }
+  async function enablePush(){
+    const client=window.sb;
+    if(!client) throw new Error('SUHAS-MAX connection is not ready. Reload and try again.');
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)) throw new Error('This browser does not support Web Push. Open SUHAS-MAX in Chrome.');
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted') throw new Error('Notification permission was not granted. Allow notifications in browser settings.');
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});
+    const keys=sub.toJSON().keys||{};
+    const {data:{session}}=await client.auth.getSession();
+    if(!session) throw new Error('Please sign in again.');
+    const {error}=await client.from('suhas_push_subscriptions').upsert({
+      user_id:session.user.id,endpoint:sub.endpoint,p256dh:keys.p256dh,auth:keys.auth,updated_at:new Date().toISOString()
+    },{onConflict:'endpoint'});
+    if(error) throw error;
+    return 'Notifications enabled on this device.';
+  }
+  function mount(){
+    const panel=document.getElementById('notifications');
+    if(!panel || panel.querySelector('#suhas-enable-push')) return;
+    const wrap=document.createElement('div');
+    wrap.style.cssText='padding:12px;margin:10px 0;background:#eef5ff;border:1px solid #cfe0ff;border-radius:12px;color:#183b70';
+    wrap.innerHTML='<strong>SUHAS-MAX Push Notifications</strong><p style="margin:5px 0 10px;font-size:13px">Enable notifications on this phone or computer to receive alerts when the browser is closed.</p><button id="suhas-enable-push" type="button" style="background:#0866ff;color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:700">Enable Notifications</button><span id="suhas-push-status" role="status" style="display:block;margin-top:8px;font-size:12px"></span>';
+    panel.prepend(wrap);
+    wrap.querySelector('button').addEventListener('click',async function(){
+      const b=this, status=wrap.querySelector('#suhas-push-status');
+      b.disabled=true;b.textContent='Enabling…';status.textContent='';
+      try{status.textContent=await enablePush();b.textContent='Enabled';}
+      catch(e){status.textContent=e.message||'Could not enable notifications.';b.disabled=false;b.textContent='Try Again';}
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+  const observer=new MutationObserver(mount);observer.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
