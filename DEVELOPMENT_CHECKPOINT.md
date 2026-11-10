@@ -434,3 +434,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 
 - Additional Supabase data check: `public.suhas_public_profiles` currently contains 2 rows, both `profile_complete=true`, and 0 profile names marked “demo”. The table has no demo/account-type column. Therefore the current Messenger member list can show these 2 real public profiles; there is no verified demo-account dataset to merge. Do not invent demo identities or create fake chat targets.
 - Presence implementation follows Supabase Realtime Presence's documented `sync` → `presenceState()` and `subscribe('SUBSCRIBED')` → `track()` pattern (Supabase Presence docs updated Aug 3, 2026).
+
+
+## 2026-11-10 — Restore Profile as the final mobile navigation tab
+- Removed the separate Menu button from the mobile bottom shortcut bar so the signed-in member's own profile photo is the rightmost control, matching the user's explicit navigation preference and Facebook's profile-tab pattern.
+- Kept Menu available from the top-left hamburger and desktop side navigation; no menu route or feature was deleted.
+- Set the mobile bottom bar to six equal columns: Home, Friends, Reels, Marketplace, Notifications, Profile. The existing profile-avatar loader and click handler continue to open the signed-in member's profile viewer; no database or storage changes were needed.
+- Source commit: 8d93fad6117aecada42e12bb0d102911ec3c43f2.
+- Static source verification: confirmed exactly six bottom-nav controls remain and the final control is `#mobile-profile-nav`; confirmed the top-left hamburger and side-menu `data-tab="maxmenu"` remain. No JavaScript was changed in this increment.
+- Live authenticated Android/desktop visual tap-through remains pending because the browser inspection session is not signed in to SUHAS-MAX. No user records, accounts, posts, media, routes, or corporate modules were changed.
+- Next step: compare the Home Feed and post composer against Facebook's current signed-in interface, then make and test one focused Home Feed increment.
