@@ -1,4 +1,4 @@
-const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v96';
+const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v97';
 const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
   'index.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
@@ -60,4 +60,34 @@ self.addEventListener('fetch', function(e){
       }
     })
   );
+});
+
+
+// SUHAS-MAX Web Push: display notifications even when the app tab is not open.
+self.addEventListener('push', function(event){
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; }
+  catch (_) { data = { body: event.data ? event.data.text() : 'You have a new SUHAS-MAX notification.' }; }
+  const title = data.title || 'SUHAS-MAX';
+  const options = {
+    body: data.body || 'You have a new notification.',
+    icon: data.icon || '/assets/icon-192.png',
+    badge: data.badge || '/assets/icon-192.png',
+    tag: data.tag || ('suhas-' + (data.kind || 'activity')),
+    renotify: true,
+    data: { url: data.url || '/social.html', notificationId: data.notificationId || null },
+    timestamp: data.timestamp || Date.now()
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event){
+  event.notification.close();
+  const target = new URL((event.notification.data && event.notification.data.url) || '/social.html', self.location.origin).href;
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(windows){
+    for (const client of windows) {
+      if (client.url === target && 'focus' in client) return client.focus();
+    }
+    if (self.clients.openWindow) return self.clients.openWindow(target);
+  }));
 });
