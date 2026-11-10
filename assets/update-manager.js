@@ -4,7 +4,7 @@
  if(!('serviceWorker' in navigator))return;
  var script=document.currentScript;
  var root=new URL('../',script&&script.src?script.src:location.href);
- var DAY=86400000,DELAY=15*DAY,release=null,registration=null,session=null,card=null,applying=false;
+ var DAY=86400000,release=null,registration=null,session=null,card=null,applying=false;
  function getInstalled(){try{return localStorage.getItem('suhas-installed-release')||'';}catch(e){return '';}}
  function setInstalled(v){try{localStorage.setItem('suhas-installed-release',v);}catch(e){}}
  function buildCard(){
@@ -26,8 +26,9 @@
   if(!release||!registration||!registration.waiting||!session)return;
   if(getInstalled()===release.version)return;
   var published=Date.parse(release.published_at||'');
-  if(!Number.isFinite(published)||Date.now()-published<DELAY)return;
-  buildCard();if(card){card.hidden=false;var copy=card.querySelector('#suhas-update-copy');if(copy)copy.textContent='Version '+release.version+' is ready. Install the update to get the latest SUHAS-MAX features and improvements.';}
+  var delayDays=Number(release.notify_after_days);if(!Number.isFinite(delayDays)||delayDays<0)delayDays=15;
+  if(!Number.isFinite(published)||Date.now()-published<delayDays*DAY)return;
+  buildCard();if(card){card.hidden=false;var copy=card.querySelector('#suhas-update-copy');if(copy)copy.textContent=release.update_message||('Version '+release.version+' is ready. Install the update to get the latest SUHAS-MAX features and improvements.');}
  }
  async function start(){
   try{
