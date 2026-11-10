@@ -754,3 +754,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static/source and database schema/RLS/Realtime checks completed. No authenticated end-to-end test was performed because no signed-in browser profile is connected. Production deployment status not verified; Vercel remains enabled and was not disabled or modified.
 - User's permanent project constraint: additive development only; preserve existing features and data; never turn off Vercel or delete/replace existing work without explicit permission.
 - Next verification: user should refresh `https://suhasgroup.vercel.app`, open Messenger, and test sending/receiving with a second signed-in account; confirm unread badge and Seen status.
+
+
+## 2026-11-10 — Dedicated Messenger inbox and send repair
+- Added a full-screen, in-app Messenger page overlay to `social.html`; it stays within SUHAS-MAX and does not navigate to an external Messenger site.
+- Added Back to SUHAS-MAX and Back to inbox controls; mobile layout shows the conversation list first and the selected chat as a separate view.
+- Fixed the one-conversation send path: if there is exactly one visible conversation and none is active, Send opens it before inserting the message. Multiple conversations still require an explicit selection.
+- Reused existing `suhas_conversations`, `suhas_conversation_members`, and `suhas_messages` tables and existing RLS/Realtime setup; no schema changes or data deletion.
+- Commit: `293f7edec732ca8fac236547e2f6106b159d05e9`.
+- Verification: re-fetched committed source and confirmed the page controller, inbox/back controls, single-thread send fallback, and existing message table references are present. Authenticated end-to-end send/receive testing and production deployment remain unverified.
