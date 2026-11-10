@@ -227,7 +227,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 
  const pop=document.getElementById('messenger-popover');
  document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
- document.getElementById('messenger-settings').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
+ document.getElementById('messenger-settings').addEventListener('click',()=>{pop.hidden=true;});
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
  document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
  document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.shortcut').forEach(x=>x.classList.toggle('active',x===b));const d=frame.contentDocument;if(!d)return;const threads=[...d.querySelectorAll('#threads .message-thread')];threads.forEach(t=>{const unread=t.querySelector('.message-thread-unread');t.style.display=b.dataset.filter==='unread'?(unread?'flex':'none'):'flex';if(b.dataset.filter==='groups'){const nav=d.querySelector('[data-tab="groups"]');if(nav)nav.click();}});}));
