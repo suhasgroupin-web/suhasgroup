@@ -2230,6 +2230,28 @@ body.suhas-high-contrast #settings{filter:contrast(1.18)}
 .max-menu-sections details[open] .max-menu-section-body{display:grid;gap:2px}
 .max-menu-sections summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 .max-menu-sheet button:focus-visible,.max-menu-sheet a:focus-visible{outline:3px solid #0866ff;outline-offset:2px}
+</style><style id="suhas-max-life-social-ui-phase02">
+/* Phase 02 — cleaner Facebook-inspired app chrome; keeps existing routes and handlers */
+:root{--fb-blue:#0866ff;--fb-ink:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
+.site-header{background:rgba(255,255,255,.97)!important;border-bottom:1px solid var(--fb-line)!important;box-shadow:0 1px 3px rgba(0,0,0,.06)!important;backdrop-filter:blur(14px)}
+.nav-wrap{min-height:58px!important}
+.social-topnav>button{border-radius:10px!important;transition:background .16s,color .16s}
+.social-topnav>button:hover{background:#f0f2f5!important}
+.social-topnav>button.active{color:var(--fb-blue)!important}
+.social-user-actions .mobile-head-action{border-radius:50%!important;background:#f0f2f5!important;color:var(--fb-ink)!important;transition:background .16s,transform .16s}
+.social-user-actions .mobile-head-action:hover{background:#e4e6eb!important;transform:translateY(-1px)}
+.social-mobile-nav{display:flex!important;position:fixed!important;z-index:1200!important;left:0!important;right:0!important;bottom:0!important;height:auto!important;min-height:64px!important;align-items:stretch!important;justify-content:space-around!important;gap:0!important;padding:5px 4px calc(5px + env(safe-area-inset-bottom))!important;background:#fff!important;border-top:1px solid var(--fb-line)!important;box-shadow:0 -2px 12px rgba(0,0,0,.08)!important}
+.social-mobile-nav button{flex:1 1 0!important;min-width:0!important;min-height:54px!important;height:54px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:3px 1px!important;border:0!important;border-radius:9px!important;background:transparent!important;box-shadow:none!important;color:#65676b!important;font-size:10px!important;font-weight:650!important;text-shadow:none!important}
+.social-mobile-nav button:before{display:none!important}
+.social-mobile-nav button .mobile-nav-icon{width:30px!important;height:29px!important;display:grid!important;place-items:center!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;filter:none!important;text-shadow:none!important;font-size:23px!important}
+.social-mobile-nav button .mobile-nav-icon svg{width:25px!important;height:25px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.social-mobile-nav button.active,.social-mobile-nav button[aria-current=page]{color:var(--fb-blue)!important;background:transparent!important}
+.social-mobile-nav button.active:after,.social-mobile-nav button[aria-current=page]:after{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;border-radius:0 0 3px 3px;background:var(--fb-blue)}
+.social-mobile-nav .mobile-profile-nav{flex:1 1 0!important}
+.social-mobile-nav .mobile-profile-nav img{width:27px!important;height:27px!important;border:2px solid #e4e6eb!important;border-radius:50%!important;object-fit:cover}
+@media(min-width:761px){.social-mobile-nav{display:none!important}}
+@media(max-width:760px){.social-shell{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}.site-header{position:sticky!important;top:0!important;z-index:1100!important}}
+@media(prefers-reduced-motion:reduce){.social-mobile-nav button,.social-user-actions .mobile-head-action{transition:none!important}}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
