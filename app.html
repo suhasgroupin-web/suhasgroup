@@ -325,7 +325,64 @@ html body.entry-locked #entryGate .entry-card{position:relative!important;z-inde
 .app-copy strong{font-size:14px;line-height:1.35;color:#142b4d}.app-copy small{font-size:12px;line-height:1.5;color:#718096}
 @media(max-width:760px){.workspace{padding:20px 14px 96px}.w-top{align-items:center;margin-bottom:10px}.w-brand img{width:54px;height:54px}.w-hero{padding:22px 4px 28px}.w-panel{padding:14px;border-radius:24px}.w-section summary{padding:16px 13px}.app-grid{padding:0 11px 16px;gap:12px}.app-tile{min-height:104px;padding:13px;gap:10px}}
 @media(max-width:390px){.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app-tile{align-items:flex-start;flex-direction:column;min-height:126px}.app-copy strong{font-size:13px}}
-</style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script></head><body class="entry-locked"><section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
+</style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script><style id="suhas-max-mobile-first-menu">
+/* Mobile-first main menu: readable single-column cards on phones and narrow tablets. */
+@media(max-width:760px){
+ body{font-size:15px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ .workspace{padding:12px 10px calc(88px + env(safe-area-inset-bottom,0px))!important;
+  background:radial-gradient(ellipse at 85% 0,#244b85 0,transparent 34%),linear-gradient(155deg,#07172e 0,#0c2b58 265px,#eef3fa 266px)!important}
+ .w-shell{width:100%;max-width:100%;margin:0 auto}
+ .w-top{align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+ .w-brand{gap:9px;min-width:0}
+ .w-brand img{width:40px;height:40px;border-radius:12px}
+ .w-brand strong{font-size:15px;line-height:1.2}
+ .w-brand small{font-size:9px}
+ .w-actions{width:100%;gap:7px}
+ .w-btn{min-height:42px;padding:10px 12px;font-size:13px}
+ .w-hero{padding:10px 2px 16px}
+ .w-hero .eyebrow{font-size:10px;letter-spacing:.16em}
+ .w-hero h1{font-size:clamp(25px,6vw,34px);line-height:1.12;margin:7px 0}
+ .w-hero p{font-size:13px;line-height:1.55}
+ .w-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;margin:14px 0 15px;max-width:none}
+ .w-search input{width:100%;min-height:46px;padding:12px;font-size:14px}
+ .w-search button{min-height:46px;padding:0 14px;font-size:13px}
+ .w-panel{padding:10px;border-radius:16px;box-shadow:0 12px 30px #07172e18}
+ .w-section{margin-bottom:12px}
+ .w-section details{margin:9px 0;border-radius:14px;box-shadow:0 3px 0 #d7e1f0,0 7px 14px #152d500c}
+ .w-section summary{gap:9px;padding:12px 10px;min-height:66px}
+ .folder-icon{width:36px;height:36px;flex:0 0 36px;border-radius:11px;font-size:18px}
+ .folder-title strong{font-size:14px;line-height:1.25}
+ .folder-title small{display:block;font-size:10px;line-height:1.35;margin-top:3px}
+ .folder-count{font-size:10px;padding:4px 7px;white-space:nowrap}
+ .app-grid{grid-template-columns:minmax(0,1fr)!important;gap:8px;padding:0 9px 11px}
+ .app-tile{min-height:66px;padding:10px;gap:10px;border-radius:12px;box-shadow:0 2px 0 #e3eaf4,0 5px 10px #142b4c0a}
+ .app-tile:hover{transform:none}
+ .app-ico{width:36px;height:36px;flex:0 0 36px;border-radius:10px;font-size:18px}
+ .app-copy strong{font-size:13px;line-height:1.3}
+ .app-copy small{font-size:11px;line-height:1.35}
+ .edit-app{right:6px;top:6px}
+ .editing .app-tile{padding-top:25px}
+ .folder-edit{font-size:10px;padding:5px 7px}
+ .w-foot{padding:13px 3px;font-size:11px;gap:8px}
+}
+@media(max-width:380px){
+ .workspace{padding-left:8px!important;padding-right:8px!important}
+ .w-search{grid-template-columns:minmax(0,1fr)}
+ .w-search button{width:100%}
+ .w-panel{padding:8px}
+ .w-section summary{padding:11px 8px;gap:7px}
+ .folder-title strong{font-size:13px}
+ .folder-title small{font-size:9px}
+ .folder-count{font-size:9px}
+ .app-grid{padding-left:7px;padding-right:7px}
+ .app-tile{min-height:62px;padding:9px}
+}
+@media(min-width:761px) and (max-width:1024px){
+ .app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .w-shell{max-width:900px}
+}
+</style>
+</head><body class="entry-locked"><section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn primary" href="social.html" style="text-decoration:none">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
 <section class="w-hero"><div class="eyebrow">SUHAS GROUP · MAIN MENU</div><h1>Main Menu</h1><p>All existing apps, departments, tools and services are organized here. Choose a category and open the tool you need.</p>
