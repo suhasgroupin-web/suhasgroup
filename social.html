@@ -2184,7 +2184,7 @@ $('profile-image-edit-panel').addEventListener('click',e=>{if(e.target===$('prof
 
 $('profile-viewer-menu-trigger').addEventListener('click',()=>{const m=$('profile-viewer-menu');m.classList.toggle('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');});
 $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.closest('[data-profile-action]');if(!b||!activeProfileId)return;const id=activeProfileId,p=profile(id)||{},url=location.origin+location.pathname+'?tab=feed&profile='+encodeURIComponent(id);const kind=b.dataset.profileAction;try{
- if(kind==='edit'){$('profile-edit-menu-item').click();return;}
+ if(kind==='edit'){return;}
  if(kind==='copy'){const copied=await copyToClipboard(url);notice(copied?'Profile link copied. You can paste it anywhere.':'Please copy the link shown in the box.',!copied);}
  if(kind==='qr'){const qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=320x320&data='+encodeURIComponent(url);window.open(qrUrl,'_blank','noopener');notice('Profile QR code opened in a new tab.');}
  if(kind==='share'){if(navigator.share)await navigator.share({title:(p.full_name||'SUHAS-MAX Member')+' · SUHAS-MAX',text:'View this SUHAS-MAX profile',url});else{const copied=await copyToClipboard(url);notice(copied?'Share is unavailable here. Profile link copied.':'Please copy the link shown in the box.',!copied);}}
