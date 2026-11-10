@@ -6,4 +6,6 @@ Disallow: /member-tools.html
 Disallow: /login.html
 Disallow: /signup.html
 Disallow: /reset.html
-Sitemap: https://suhasgroupin-web.github.io/suhasgroup/sitemap.xml
+Disallow: /edit-suhas.html
+
+Sitemap: https://suhasgroup.vercel.app/sitemap.xml
