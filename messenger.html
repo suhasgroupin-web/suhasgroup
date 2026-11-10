@@ -65,6 +65,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
+<script src="assets/auth.js"></script>
 <script>
 (function(){
  const frame=document.getElementById('messenger-frame');
@@ -77,21 +78,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
  document.querySelector('.messenger-app').appendChild(gate);
  async function start(){
   try{
-   const cfg=window.SUHAS_CONFIG;
-   if(!cfg||!window.supabase)throw new Error('Messenger authentication service did not load.');
-   const client=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_PUBLISHABLE_KEY,{
-    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storage:window.localStorage,storageKey:'suhas-group-auth-v2'}
-   });
+   const client=window.sb;
+   if(!client)throw new Error('Messenger authentication service did not load.');
    const result=await client.auth.getSession();
    const session=result.data&&result.data.session;
    if(result.error||!session){
     location.replace('login.html?next='+encodeURIComponent('messenger.html'));
-    return;
-   }
-   const profile=await client.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-   if(profile.error)throw profile.error;
-   if(!profile.data||profile.data.profile_complete!==true){
-    location.replace('profile.html?setup=1');
     return;
    }
    gate.remove();
