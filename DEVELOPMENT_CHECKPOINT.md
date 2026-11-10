@@ -472,3 +472,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Existing one-file posts remain backward compatible. Partial multi-file uploads are best-effort removed if post insert fails; existing post data is not changed.
 - Source commit: `a4b36490fe71ae7d263542a2532076fa36343bc4`.
 - Latest source validation: all 6 inline JavaScript blocks parse successfully; checks confirm the gallery metadata, 2-column grid, legacy single-image/video fallback, 10-photo/50-MB composer limits, and double-tap Like guard. Latest Production deployment `dpl_8S4ubXBYyrtY3HFReay271GznvSk` is READY and assigned to `suhasgroup.vercel.app`. Authenticated Android gallery-upload/photo-grid and two-account verification remain pending because no signed-in device session is available.
+
+
+## 2026-11-10 — Feed photo viewer and album navigation (increment 4)
+- Added an accessible full-screen Feed photo viewer in `social.html`. A single tap opens the viewer; previous/next controls, swipe navigation, Escape, backdrop click and Close button are supported. Multi-photo posts use the saved `metadata.media_gallery` URL list, and the selected photo opens at its matching index.
+- Double-tap behavior: an unliked post invokes the existing Like button; if the post is already liked, double-tap opens the photo viewer rather than removing the Like. Corrected the Like-state word-boundary regex so `Liked` is detected reliably.
+- Retained the existing mobile six-tab bar with Profile avatar at the final position and Menu in the header drawer.
+- Facebook public reference was revisited. Logged-out Facebook exposes a public Watch video-card grid, but the news Feed, photo albums, photo grid, and media viewer remain behind login. SUHAS-MAX `/social.html` was rechecked and redirects unauthenticated visitors to `/login.html?next=%2Fsocial.html`.
+- Static verification on the latest `social.html`: all 6 inline JavaScript blocks parse; the photo viewer, album URL/index handling, single-tap open, double-tap Like guard, previous/next and swipe handlers are present.
+- Latest Production deployment: `dpl_4whrKf6Cao1B5jkvLt2tsSDrD8NW`, source commit `d8e397bd98af48a0c72c413319eb1b77377c040b`, state `READY`, aliases include `https://suhasgroup.vercel.app`.
+- Authenticated Android testing of real user uploads, reactions, profile timeline and media interactions is still pending; do not claim full end-to-end verification until exercised in a signed-in session.
+- Next increment: inspect and refine the post reaction/comment/share controls one focused change at a time, then repeat the Facebook public-reference check.
