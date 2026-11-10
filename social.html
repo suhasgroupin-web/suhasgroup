@@ -1721,6 +1721,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .suhas-profile-editor-bar strong{font-size:17px!important}
 .suhas-profile-editor-bar button{width:36px!important;height:36px!important;border:0!important;border-radius:50%!important;background:#e4e6eb!important;font-size:25px!important;color:#1c1e21!important}
 .suhas-profile-editor iframe{display:block!important;width:100%!important;flex:1 1 auto!important;border:0!important;background:#f0f2f5!important}
+</style><style id="suhas-max-photo-control-final-fix">
+.profile-viewer-cover{position:relative!important}
+#profile-cover-change.profile-owner-cover-edit{display:grid!important;place-items:center!important;position:absolute!important;right:14px!important;left:auto!important;top:auto!important;bottom:14px!important;width:38px!important;height:38px!important;padding:0!important;border:3px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;color:#1c1e21!important;font-size:0!important;line-height:0!important;box-shadow:0 1px 5px #0003!important}
+#profile-cover-change svg,#profile-avatar-change svg{display:block!important;width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+#profile-avatar-change.profile-owner-avatar-edit{display:grid!important;place-items:center!important;position:absolute!important;left:calc(16px + 116px - 24px)!important;top:-22px!important;bottom:auto!important;width:32px!important;height:32px!important;padding:0!important;border:2px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;color:#1c1e21!important;font-size:0!important;line-height:0!important;box-shadow:0 1px 5px #0003!important}
+#profile-avatar-change svg{width:16px!important;height:16px!important}
+#profile-cover-change[hidden],#profile-avatar-change[hidden]{display:none!important}
+@media(max-width:560px){#profile-cover-change.profile-owner-cover-edit{right:12px!important;bottom:12px!important;width:36px!important;height:36px!important}#profile-avatar-change.profile-owner-avatar-edit{left:calc(16px + 116px - 24px)!important;top:-22px!important;width:30px!important;height:30px!important}}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -3404,7 +3412,7 @@ body.suhas-composer-open{overflow:hidden!important}
 body.suhas-photo-viewer-open{overflow:hidden!important}
 @media(max-width:560px){.suhas-photo-viewer{padding:50px 8px 38px;gap:8px}.suhas-photo-viewer-prev{left:8px}.suhas-photo-viewer-next{right:8px}.suhas-photo-viewer-prev,.suhas-photo-viewer-next{width:40px;height:40px;font-size:34px;background:#0008}.suhas-photo-viewer-image{max-width:100%;max-height:calc(100dvh - 112px)}}
 </style>
-</body></html>
+<script src="assets/update-manager.js?v=2026.11.10.11"></script></body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
 .suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
