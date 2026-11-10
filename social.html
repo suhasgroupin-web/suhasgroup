@@ -1917,9 +1917,9 @@ async function openMemberProfile(id){
   id===me?Promise.resolve({data:null,error:null}):client.from('suhas_friend_requests').select('id,sender_id,recipient_id,status').or('and(sender_id.eq.'+me+',recipient_id.eq.'+id+'),and(sender_id.eq.'+id+',recipient_id.eq.'+me+')').limit(1).maybeSingle(),
   id===me?Promise.resolve({data:null,error:null}):client.from('suhas_follows').select('follower_id').eq('follower_id',me).eq('following_id',id).maybeSingle()
  ]);
- for(const result of [friendCount,followers,following,relation,myFollow])if(result.error)throw result.error;
+ for(const result of [relation,myFollow])if(result.error)throw result.error;
  const compact=n=>{n=Number(n||0);if(n>=1000000)return (n/1000000).toFixed(n>=10000000?0:1).replace(/\.0$/,'')+'M';if(n>=1000)return (n/1000).toFixed(n>=100000?0:1).replace(/\.0$/,'')+'K';return String(n);};
- $('profile-viewer-stats').innerHTML='<div><strong>'+compact(friendCount.count)+'</strong><span>Friends</span></div><div><strong>'+compact(followers.count)+'</strong><span>Followers</span></div><div><strong>'+compact(following.count)+'</strong><span>Following</span></div>';
+ $('profile-viewer-stats').innerHTML='<div><strong>'+(friendCount.count==null?'—':compact(friendCount.count))+'</strong><span>Friends</span></div><div><strong>'+(followers.count==null?'—':compact(followers.count))+'</strong><span>Followers</span></div><div><strong>'+(following.count==null?'—':compact(following.count))+'</strong><span>Following</span></div>';
  const summary=[
   ['🎓','Education',[p.education_level,p.major,p.university||p.college||p.school,p.graduation_year?'Class of '+p.graduation_year:'',p.study_status].filter(Boolean).join(' · ')],
   ['💼','Work',[p.position,p.company].filter(Boolean).join(' at ')],
