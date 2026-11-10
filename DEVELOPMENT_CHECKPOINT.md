@@ -709,3 +709,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Escape closes the search. Mobile dropdown/input positioning and z-index/visibility were hardened.
 - UI commit: `79e7dd4bc346ef82f804a5e103620bb8e30a2ca3`; service worker cache bumped to v103 in `fb809644e6fdf535080674f636d13697ec2ab444`.
 - Pending: Production deployment and real-device visual verification.
+
+
+## 2026-11-10 — Header Create menu media picker routing
+- Audited the existing Create menu and media handlers in `social.html`; existing upload flows and Supabase storage/post/story tables were retained.
+- Fixed Story menu routing: it now opens the existing Story creator dialog and launches the native photo/video picker instead of only scrolling to and focusing the story text field.
+- Fixed Video menu routing: it now opens the Reels tab and launches the existing MP4/WebM Reel file picker, instead of sending the video into the ordinary feed-post photo/video picker.
+- Photo continues to open the feed photo picker; Reel continues to open the Reels video picker. Existing previews, upload handlers, publish buttons, and data flows are preserved.
+- Code commit: `41ab47d97007144a6ff030bc8f220b323caa9ef3`.
+- Static inspection confirms the four menu actions now point to their intended existing pickers. No authenticated Android gallery selection, media upload, or two-account viewing test was performed in this increment; those remain pending.
+- Production deployment/live verification: pending. The Vercel project API returned 403 Forbidden in this session; do not claim the live site is updated until deployment access is restored and the production URL is checked.
+- Recovery point: commit `41ab47d97007144a6ff030bc8f220b323caa9ef3`; next step is deploy the main branch and test Story, Photo, Video, and Reel on Android with an authenticated account.
