@@ -4536,23 +4536,23 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
    client.from('suhas_creator_payout_requests').select('id,amount,currency,method,status,created_at').eq('creator_id',me).order('created_at',{ascending:false}).limit(10)
   ]);
   if(app.error)throw app.error;if(ledger.error)throw ledger.error;if(videos.error)throw videos.error;if(payouts.error)throw payouts.error;
-  const entries=ledger.data||[], balance=entries.reduce((sum,x)=>sum+Number(x.amount||0),0);
-  stats.innerHTML='<div class="suhas-monetization-stat"><b>'+money(balance)+'</b><small>Verified balance · BDT</small></div><div class="suhas-monetization-stat"><b>'+Number(videos.count||0)+'</b><small>Your published videos</small></div>';
+  const entries=ledger.data||[], ledgerBalance=entries.reduce((sum,x)=>sum+Number(x.amount||0),0), reserved=(payouts.data||[]).filter(x=>['pending','approved'].includes(x.status)).reduce((sum,x)=>sum+Number(x.amount||0),0), balance=ledgerBalance-reserved;
+  stats.innerHTML='<div class="suhas-monetization-stat"><b>'+money(balance)+'</b><small>Available verified balance · BDT</small></div><div class="suhas-monetization-stat"><b>'+Number(videos.count||0)+'</b><small>Your published videos</small></div>';
   const a=app.data;
   if(a){appStatus.textContent='Application status: '+a.status.toUpperCase()+(a.admin_note?' · Admin note: '+a.admin_note:'');$('suhas-monetization-apply').disabled=true;$('suhas-monetization-apply').textContent='Application submitted';}
   else appStatus.textContent='No application submitted yet.';
   $('suhas-payout-box').hidden=!(a&&a.status==='approved');
-  if(payouts.data?.length){const p=document.createElement('div');p.className='post-meta';p.textContent='Recent payout requests: '+payouts.data.map(x=>x.method.toUpperCase()+' '+money(x.amount)+' ('+x.status+')').join(' · ');$('suhas-payout-box').append(p);}
+  let history=$('suhas-payout-history');if(!history){history=document.createElement('div');history.id='suhas-payout-history';history.className='post-meta';$('suhas-payout-box').append(history);}history.textContent=payouts.data?.length?'Recent payout requests: '+payouts.data.map(x=>x.method.toUpperCase()+' '+money(x.amount)+' ('+x.status+')').join(' · '):'No payout requests yet.';
   if(isAdmin){$('suhas-monetization-admin').hidden=false;await loadAdmin();}
  }
  async function loadAdmin(){
   const [apps,payouts]=await Promise.all([
    client.from('suhas_monetization_applications').select('id,user_id,channel_url,content_category,status,created_at').eq('status','pending').order('created_at'),
-   client.from('suhas_creator_payout_requests').select('id,creator_id,amount,currency,method,destination,status,created_at').eq('status','pending').order('created_at')
+   client.from('suhas_creator_payout_requests').select('id,creator_id,amount,currency,method,destination,status,created_at').in('status',['pending','approved']).order('created_at')
   ]);
   if(apps.error)throw apps.error;if(payouts.error)throw payouts.error;
   $('suhas-monetization-admin-apps').innerHTML=apps.data?.length?apps.data.map(a=>'<div class="suhas-monetization-row"><span><b>'+safe(a.content_category)+'</b><br><small>'+safe(a.user_id)+'<br>'+(a.channel_url?'<a href="'+safe(a.channel_url)+'" target="_blank" rel="noopener">Open creator link</a>':'No link')+'</small></span><span><button type="button" data-app-review="'+a.id+'" data-status="approved">Approve</button><button type="button" data-app-review="'+a.id+'" data-status="rejected">Reject</button></span></div>').join(''):'No pending applications.';
-  $('suhas-monetization-admin-payouts').innerHTML=payouts.data?.length?payouts.data.map(p=>'<div class="suhas-monetization-row"><span><b>'+money(p.amount)+' · '+safe(p.method.toUpperCase())+'</b><br><small>'+safe(p.creator_id)+'<br>'+safe(p.destination)+'</small></span><span><button type="button" data-payout-review="'+p.id+'" data-status="approved">Approve</button><button type="button" data-payout-review="'+p.id+'" data-status="rejected">Reject</button></span></div>').join(''):'No pending payout requests.';
+  $('suhas-monetization-admin-payouts').innerHTML=payouts.data?.length?payouts.data.map(p=>'<div class="suhas-monetization-row"><span><b>'+money(p.amount)+' · '+safe(p.method.toUpperCase())+'</b><br><small>'+safe(p.creator_id)+'<br>'+safe(p.destination)+'</small></span><span>'+(p.status==='approved'?'<button type="button" data-payout-review="'+p.id+'" data-status="paid">Mark paid</button>':'<button type="button" data-payout-review="'+p.id+'" data-status="approved">Approve</button><button type="button" data-payout-review="'+p.id+'" data-status="rejected">Reject</button>')+'</span></div>').join(''):'No pending payout requests.';
  }
  $('suhas-monetization-apply').addEventListener('click',async e=>{
   const b=e.currentTarget;b.disabled=true;appStatus.textContent='Submitting…';
