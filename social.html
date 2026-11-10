@@ -1745,7 +1745,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <button class="mobile-profile-nav" id="mobile-profile-nav" type="button" aria-label="My profile"><img id="mobile-profile-nav-avatar" src="assets/logo.png" alt="My profile"></button>
 
 </nav>
-<section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div><section class="profile-viewer-posts" id="profile-viewer-posts" aria-label="Member posts"><h3>Posts &amp; Reposts</h3><div class="profile-viewer-post-list"></div></section></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
+<section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-stats" id="profile-viewer-stats" aria-label="Profile connections"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div><section class="profile-viewer-posts" id="profile-viewer-posts" aria-label="Member posts"><h3>Posts &amp; Reposts</h3><div class="profile-viewer-post-list"></div></section></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
 <script>
 (async()=>{
 const $=id=>document.getElementById(id), client=window.sb;
@@ -1900,15 +1900,41 @@ async function loadMemberTimeline(id){
 }
 async function openMemberProfile(id){
  activeProfileId=id;$('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
- const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');$('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';
+ const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+ $('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';$('profile-viewer-stats').innerHTML='';$('profile-viewer-actions').innerHTML='';
  const r=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified,profile_complete').eq('user_id',id).maybeSingle();
  if(r.error)throw r.error;let profileData=r.data;if(!profileData){const fallback=await client.from('suhas_member_profiles').select('*').eq('user_id',id).maybeSingle();if(fallback.error)throw fallback.error;profileData=fallback.data;}if(!profileData){$('profile-viewer-name').textContent='Profile unavailable';$('profile-viewer-sub').textContent='This member profile is not available.';return;}
- const p=profileData;$('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);$('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';$('profile-viewer-cover').style.backgroundImage=p.cover_photo_url?'url("'+safe(p.cover_photo_url)+'")':'linear-gradient(135deg,#0b2347,#1e58a4)';
- $('profile-viewer-sub').textContent=[p.position,p.company].filter(Boolean).join(' at ')||'SUHAS-MAX Member';$('profile-viewer-bio').textContent=p.bio||'';
- const summary=[['🎓','Last Education',[p.education_level,p.university||p.college||p.school].filter(Boolean).join(' · ')],['💼','Last Job',[p.position,p.company].filter(Boolean).join(' at ')],['📍','Present Location',p.location]];
- $('profile-viewer-info').innerHTML='<div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+safe(x[2])+'</div></div></div>').join('')+'</div>';
+ const p=profileData;
+ $('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);
+ $('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';
+ $('profile-viewer-cover').style.backgroundImage=p.cover_photo_url?'url("'+safe(p.cover_photo_url)+'")':'linear-gradient(135deg,#0b2347,#1e58a4)';
+ $('profile-viewer-sub').textContent=[p.position,p.company].filter(Boolean).join(' at ')||'SUHAS-MAX Member';
+ $('profile-viewer-bio').textContent=p.bio||'';
+ const [friendCount,followers,following,relation,myFollow]=await Promise.all([
+  client.from('suhas_friend_requests').select('id',{count:'exact',head:true}).eq('status','accepted').or('sender_id.eq.'+id+',recipient_id.eq.'+id),
+  client.from('suhas_follows').select('follower_id',{count:'exact',head:true}).eq('following_id',id),
+  client.from('suhas_follows').select('following_id',{count:'exact',head:true}).eq('follower_id',id),
+  id===me?Promise.resolve({data:null,error:null}):client.from('suhas_friend_requests').select('id,sender_id,recipient_id,status').or('and(sender_id.eq.'+me+',recipient_id.eq.'+id+'),and(sender_id.eq.'+id+',recipient_id.eq.'+me+')').limit(1).maybeSingle(),
+  id===me?Promise.resolve({data:null,error:null}):client.from('suhas_follows').select('follower_id').eq('follower_id',me).eq('following_id',id).maybeSingle()
+ ]);
+ for(const result of [friendCount,followers,following,relation,myFollow])if(result.error)throw result.error;
+ const compact=n=>{n=Number(n||0);if(n>=1000000)return (n/1000000).toFixed(n>=10000000?0:1).replace(/\.0$/,'')+'M';if(n>=1000)return (n/1000).toFixed(n>=100000?0:1).replace(/\.0$/,'')+'K';return String(n);};
+ $('profile-viewer-stats').innerHTML='<div><strong>'+compact(friendCount.count)+'</strong><span>Friends</span></div><div><strong>'+compact(followers.count)+'</strong><span>Followers</span></div><div><strong>'+compact(following.count)+'</strong><span>Following</span></div>';
+ const summary=[
+  ['🎓','Education',[p.education_level,p.major,p.university||p.college||p.school,p.graduation_year?'Class of '+p.graduation_year:'',p.study_status].filter(Boolean).join(' · ')],
+  ['💼','Work',[p.position,p.company].filter(Boolean).join(' at ')],
+  ['📍','Current city',p.location],
+  ['✦','Skills',p.skills],
+  ['↗','LinkedIn',p.linkedin_url]
+ ];
+ $('profile-viewer-info').innerHTML='<section class="profile-info-card"><h3>About</h3><div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+(x[1]==='LinkedIn'?'<a href="'+safe(x[2])+'" target="_blank" rel="noopener noreferrer">View LinkedIn profile</a>':safe(x[2]))+'</div></div></div>').join('')+(summary.every(x=>!x[2])?'<div class="profile-summary-label">No additional public information added yet.</div>':'')+'</div></section>';
  await loadMemberTimeline(id);
- $('profile-viewer-actions').innerHTML=id===me?'':'<button class="action primary" data-profile-friend="'+id+'">Add Friend</button><button class="action" data-profile-message="'+id+'">Message</button>';$('profile-edit-menu-item').hidden=id!==me;
+ if(id===me){$('profile-viewer-actions').innerHTML='<button class="action primary" data-profile-edit-open="1">Edit profile</button>';}
+ else{
+  const rel=relation.data,friendAction=rel?(rel.status==='accepted'?'<button class="action" type="button" disabled>✓ Friends</button>':rel.status==='pending'?(rel.sender_id===me?'<button class="action" type="button" disabled>Request sent</button>':'<button class="action primary" type="button" data-profile-accept="'+safe(rel.id)+'">Confirm request</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>';
+  $('profile-viewer-actions').innerHTML=friendAction+'<button class="action" type="button" data-profile-follow="'+safe(id)+'">'+(myFollow.data?'Following':'Follow')+'</button><button class="action" type="button" data-profile-message="'+safe(id)+'">Message</button>';
+ }
+ $('profile-edit-menu-item').hidden=id!==me;
 }
 async function copyToClipboard(value){
  const textValue=String(value);
@@ -2146,6 +2172,8 @@ document.addEventListener('click',async e=>{
  }
  const profileFriend=e.target.closest('[data-profile-friend]');if(profileFriend){try{await sendFriendRequest(profileFriend.dataset.profileFriend,profileFriend);}catch(err){notice(err.message||'Friend request failed.',true);}return;}
  const profileMessage=e.target.closest('[data-profile-message]');if(profileMessage){try{$('profile-viewer-close').click();await startMessage(profileMessage.dataset.profileMessage);}catch(err){notice(err.message,true);}return;}
+ const profileAccept=e.target.closest('[data-profile-accept]');if(profileAccept){try{const result=await client.from('suhas_friend_requests').update({status:'accepted',updated_at:new Date().toISOString()}).eq('id',profileAccept.dataset.profileAccept);if(result.error)throw result.error;await openMemberProfile(activeProfileId);await Promise.all([loadRequests(),loadFriends(),renderPeople()]);notice('Friend request accepted.');}catch(err){notice(err.message||'Could not accept request.',true);}return;}
+ const profileFollow=e.target.closest('[data-profile-follow]');if(profileFollow){const id=profileFollow.dataset.profileFollow;profileFollow.disabled=true;try{const existing=await client.from('suhas_follows').select('follower_id').eq('follower_id',me).eq('following_id',id).maybeSingle();if(existing.error)throw existing.error;const result=existing.data?await client.from('suhas_follows').delete().eq('follower_id',me).eq('following_id',id):await client.from('suhas_follows').insert({follower_id:me,following_id:id});if(result.error)throw result.error;await openMemberProfile(id);notice(existing.data?'You unfollowed this member.':'You are now following this member.');}catch(err){profileFollow.disabled=false;notice(err.message||'Follow action failed.',true);}return;}
 
  const groupOpen=e.target.closest('[data-group-open]'),groupJoin=e.target.closest('[data-group-join]');
  if(groupOpen){try{await openGroup(groupOpen.dataset.groupOpen);}catch(err){notice(err.message,true);}return;}
@@ -2776,5 +2804,25 @@ body.suhas-composer-open{overflow:hidden!important}
 #home-composer-avatar:active{transform:scale(.95);box-shadow:0 0 0 4px #0866ff22}
 .profile-timeline-author [data-profile-open]{cursor:pointer}
 .profile-timeline-author [data-profile-open]:hover{text-decoration:underline}
+</style>
+<style id="suhas-facebook-profile-details-20261110">
+.profile-viewer-head{align-items:flex-start!important;flex-wrap:wrap!important;padding-top:0!important}
+.profile-viewer-head>div:first-of-type{min-width:0;flex:1 1 190px;padding-top:10px}
+.profile-viewer-stats{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:12px}
+.profile-viewer-stats>div{display:flex;align-items:baseline;gap:5px;color:#65676b;font-size:13px}
+.profile-viewer-stats strong{font-size:15px;color:#1c1e21;font-weight:800}
+.profile-viewer-stats span{font-weight:500}
+.profile-viewer-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:13px}
+.profile-viewer-actions .action{min-height:38px;border-radius:8px;padding:8px 14px;font-weight:700}
+.profile-info-card{margin-top:15px}
+.profile-info-card a{color:#0866ff;text-decoration:none}
+.profile-info-card a:hover{text-decoration:underline}
+@media(max-width:560px){
+ .profile-viewer-head{gap:8px!important;padding-left:15px!important;padding-right:15px!important}
+ .profile-viewer-head>div:first-of-type{flex-basis:calc(100% - 120px);padding-top:8px}
+ .profile-viewer-stats{gap:14px;margin-top:10px}
+ .profile-viewer-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .profile-viewer-actions .action{width:100%;padding:9px 6px;font-size:13px}
+}
 </style>
 </body></html>
