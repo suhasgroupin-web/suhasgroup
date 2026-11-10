@@ -2759,11 +2759,48 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
   </div>
  </div>
  <div class="suhas-new-post-footer">
-  <button type="button" id="suhas-post-audience" class="suhas-audience-pill">🌐 <span>Public</span> ▾</button>
-  <button type="button" class="suhas-share-toggle" data-share-target="instagram">◎ <span>Off</span></button>
-  <button type="button" class="suhas-share-toggle" data-share-target="threads">＠ <span>Off</span></button>
+  <button type="button" id="suhas-post-audience" class="suhas-audience-pill" aria-haspopup="dialog" aria-controls="suhas-audience-dialog" data-audience="public">🌐 <span>Public</span> ▾</button>
+  <button type="button" class="suhas-share-toggle" data-share-target="instagram">◎ <span>Unavailable</span></button>
+  <button type="button" class="suhas-share-toggle" data-share-target="threads">＠ <span>Unavailable</span></button>
  </div>
 </div>
+<dialog id="suhas-audience-dialog" class="suhas-audience-dialog" aria-labelledby="suhas-audience-title">
+ <div class="suhas-audience-dialog-head">
+  <div><h2 id="suhas-audience-title">Post audience</h2><p>Choose who can see this post</p></div>
+  <button type="button" id="suhas-audience-dialog-close" aria-label="Close audience options">×</button>
+ </div>
+ <div class="suhas-audience-options">
+  <button type="button" data-audience-choice="public">
+   <span class="suhas-audience-icon">🌐</span><span><b>Public</b><small>Anyone on SUHAS-MAX can see this post</small></span><span class="suhas-audience-check" aria-hidden="true">✓</span>
+  </button>
+  <button type="button" data-audience-choice="friends">
+   <span class="suhas-audience-icon">👥</span><span><b>Friends</b><small>Only your accepted friends can see this post</small></span><span class="suhas-audience-check" aria-hidden="true">✓</span>
+  </button>
+  <button type="button" data-audience-choice="only_me">
+   <span class="suhas-audience-icon">🔒</span><span><b>Only me</b><small>Only you can see this post</small></span><span class="suhas-audience-check" aria-hidden="true">✓</span>
+  </button>
+ </div>
+</dialog>
+
+<style id="suhas-facebook-audience-picker">
+.suhas-audience-dialog{width:min(92vw,430px);max-width:430px;border:0;border-radius:18px;padding:0;background:#fff;color:#1c1e21;box-shadow:0 18px 60px #0004}
+.suhas-audience-dialog::backdrop{background:rgba(15,23,42,.52)}
+.suhas-audience-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:19px 20px 14px;border-bottom:1px solid #e4e6eb}
+.suhas-audience-dialog-head h2{margin:0;font-size:20px;font-weight:800;color:#1c1e21}
+.suhas-audience-dialog-head p{margin:5px 0 0;color:#65676b;font-size:13px}
+.suhas-audience-dialog-head>button{flex:0 0 36px;width:36px;height:36px;border:0;border-radius:50%;background:#f0f2f5;color:#1c1e21;font-size:24px;line-height:1;cursor:pointer}
+.suhas-audience-options{display:grid;gap:5px;padding:10px}
+.suhas-audience-options>button{display:grid;grid-template-columns:42px minmax(0,1fr) 22px;align-items:center;gap:11px;width:100%;padding:12px;border:1px solid transparent;border-radius:12px;background:#fff;text-align:left;color:#1c1e21;cursor:pointer}
+.suhas-audience-options>button:hover{background:#f0f2f5}
+.suhas-audience-options>button[aria-pressed="true"]{background:#edf4ff;border-color:#b7d1ff}
+.suhas-audience-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#e4e6eb;font-size:19px}
+.suhas-audience-options b{display:block;font-size:15px}
+.suhas-audience-options small{display:block;margin-top:3px;color:#65676b;font-size:12px;line-height:1.4}
+.suhas-audience-check{visibility:hidden;color:#0866ff;font-size:19px;font-weight:900;text-align:center}
+.suhas-audience-options>button[aria-pressed="true"] .suhas-audience-check{visibility:visible}
+.suhas-audience-pill{border:1px solid #dadde1!important;background:#f0f2f5!important;color:#1c1e21!important}
+@media(min-width:761px){.suhas-audience-dialog{margin:auto}.suhas-audience-options>button{padding:14px}}
+</style>
 
 <style id="suhas-facebook-new-post-screen">
 .suhas-new-post-screen{position:fixed;inset:0;z-index:10050;background:#fff;color:#111;display:none;flex-direction:column;min-height:100dvh;height:100dvh}
@@ -2839,12 +2876,38 @@ body.suhas-composer-open{overflow:hidden!important}
  document.getElementById('suhas-composer-close').addEventListener('click',close);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&screen.classList.contains('open'))close();});
  document.getElementById('post-media').addEventListener('change',sync);
- document.getElementById('suhas-post-audience').addEventListener('click',()=>{
-  const current=audience.value;const choice=prompt('Who can see this post? Type: Public, Friends, or Only me',current==='only_me'?'Only me':current==='friends'?'Friends':'Public');
-  if(choice===null)return;const v=choice.trim().toLowerCase().replace(/\s+/g,'_');
-  if(['public','friends','only_me'].includes(v)){audience.value=v;document.querySelector('#suhas-post-audience span').textContent=v==='only_me'?'Only me':v[0].toUpperCase()+v.slice(1);}
-  else alert('Choose Public, Friends, or Only me.');
+ const audienceButton=document.getElementById('suhas-post-audience');
+ const audienceDialog=document.getElementById('suhas-audience-dialog');
+ const audienceOptions=[...audienceDialog.querySelectorAll('[data-audience-choice]')];
+ function syncAudienceChoice(){
+  audienceOptions.forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.audienceChoice===audience.value)));
+  const label=audience.value==='only_me'?'Only me':audience.value==='friends'?'Friends':'Public';
+  audienceButton.querySelector('span').textContent=label;
+  audienceButton.dataset.audience=audience.value||'public';
+ }
+ audienceButton.addEventListener('click',()=>{
+  syncAudienceChoice();
+  if(typeof audienceDialog.showModal==='function')audienceDialog.showModal();
+  else audienceDialog.setAttribute('open','');
  });
+ audienceDialog.addEventListener('click',event=>{
+  const option=event.target.closest('[data-audience-choice]');
+  if(!option)return;
+  const value=option.dataset.audienceChoice;
+  if(!['public','friends','only_me'].includes(value))return;
+  audience.value=value;
+  syncAudienceChoice();
+  if(typeof audienceDialog.close==='function')audienceDialog.close();
+  else audienceDialog.removeAttribute('open');
+ });
+ document.getElementById('suhas-audience-dialog-close').addEventListener('click',()=>{
+  if(typeof audienceDialog.close==='function')audienceDialog.close();
+  else audienceDialog.removeAttribute('open');
+ });
+ audienceDialog.addEventListener('click',event=>{
+  if(event.target===audienceDialog&&typeof audienceDialog.close==='function')audienceDialog.close();
+ });
+ syncAudienceChoice();
  window.suhasPostMetadata={};
  document.querySelectorAll('[data-share-target]').forEach(b=>{b.disabled=true;b.title='Connect the official platform integration before cross-posting';b.setAttribute('aria-label',b.dataset.shareTarget+' cross-posting is not connected');b.querySelector('span').textContent='Unavailable';});
  document.querySelectorAll('[data-compose-tool]').forEach(b=>b.addEventListener('click',async()=>{
