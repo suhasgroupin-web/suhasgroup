@@ -96,7 +96,20 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
  proceed.addEventListener('click',async function(){
   proceed.disabled=true;proceed.textContent='Opening...';
   var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-  location.replace(p.data&&p.data.profile_complete===true?'app.html':'profile.html?setup=1');
+  if(!p.data||p.data.profile_complete!==true){location.replace('profile.html?setup=1');return;}
+  // Preserve the protected destination that sent an already-authenticated user to Login.
+  var requestedNext=new URLSearchParams(location.search).get('next');
+  var allowedNext=['social.html','messenger.html','app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
+  if(requestedNext){
+   try{
+    var target=new URL(requestedNext,location.href);
+    var leaf=target.pathname.split('/').filter(Boolean).join('/');
+    var lastPart=leaf.split('/').pop()||'';
+    if(lastPart&&lastPart.indexOf('.')===-1)leaf+='.html';
+    if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){location.replace(leaf+target.search+target.hash);return;}
+   }catch(ignore){}
+  }
+  location.replace('app.html');
  });
  change.addEventListener('click',async function(){
   change.disabled=true;change.textContent='Switching...';
