@@ -605,3 +605,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit: `19887d8170dae7fc49d34f27232c3f2fa88bd620`.
 - Static checks: all 6 inline scripts parse without syntax errors; cover full-width override, close no-float positioning, cover camera, avatar camera, and cover upload input all remain present.
 - Pending: production deployment and Android visual verification that the right-side gap is gone and Close / cover-camera controls remain usable.
+
+
+## 2026-11-10 — Profile cover viewport-width correction v2
+- User reported the prior full-width cover CSS did not change the visible right-side gap.
+- Re-inspected the real markup: `#profile-viewer` contains `.profile-viewer-card`, then `#profile-viewer-close` and `#profile-viewer-cover`. Previous selector targeted the wrong card close-button relationship in part and did not force the mobile viewer/card to the viewport width.
+- Added a mobile-only v2 override forcing the open profile viewer, its direct card child, and cover element to `100vw`, with full-width flex basis, zero margins/padding, and no horizontal overflow. Close control is fixed to top-right safe-area position. Existing cover/avatar camera controls and photo editor/save inputs remain unchanged.
+- Source commit: `0d6acc339941a0cc6fea2ab504fe00cfc0412f00`.
+- Static validation: all 6 inline scripts parse; cover/avatar camera and image editor save controls remain present.
+- Pending: production deployment readiness and Android visual verification; prior fix was not visually verified and user reported it did not resolve the gap.
