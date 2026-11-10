@@ -3671,7 +3671,52 @@ body.suhas-composer-open{overflow:hidden!important}
 body.suhas-photo-viewer-open{overflow:hidden!important}
 @media(max-width:560px){.suhas-photo-viewer{padding:50px 8px 38px;gap:8px}.suhas-photo-viewer-prev{left:8px}.suhas-photo-viewer-next{right:8px}.suhas-photo-viewer-prev,.suhas-photo-viewer-next{width:40px;height:40px;font-size:34px;background:#0008}.suhas-photo-viewer-image{max-width:100%;max-height:calc(100dvh - 112px)}}
 </style>
-<script src="assets/update-manager.js?v=2026.11.10.11"></script></body></html>
+<script src="assets/update-manager.js?v=2026.11.10.11"></script>
+<style id="suhas-max-white-header-contrast-20261110">
+/* White SUHAS-MAX top bar: retain all existing navigation/actions, improve contrast only. */
+.site-header{
+ background:#fff!important;
+ background-image:none!important;
+ border-bottom:1px solid #e4e6eb!important;
+ box-shadow:0 2px 8px rgba(0,0,0,.08)!important;
+ color:#1c1e21!important;
+}
+.site-header .nav-wrap{background:#fff!important;color:#1c1e21!important}
+.site-header .brand-name,
+.site-header .brand .brand-name{
+ color:#092b60!important;
+ -webkit-text-fill-color:#092b60!important;
+ text-shadow:none!important;
+}
+.site-header .brand-tag{color:#52657d!important}
+.site-header .facebook-left-menu-trigger,
+.site-header .mobile-head-action,
+.site-header .suhas-premium-header-actions .mobile-head-action{
+ color:#1c1e21!important;
+}
+.site-header .facebook-left-menu-trigger svg,
+.site-header .mobile-head-action svg,
+.site-header .header-search-trigger svg{
+ color:#1c1e21!important;
+ stroke:#1c1e21!important;
+}
+.site-header .suhas-create-trigger:before{border-color:#1c1e21!important}
+.site-header .suhas-create-trigger:after{color:#1c1e21!important}
+.site-header .suhas-top-menu-trigger{
+ color:#1c1e21!important;
+ background:#f0f2f5!important;
+ border:1px solid #e4e6eb!important;
+ box-shadow:0 1px 2px rgba(0,0,0,.08)!important;
+}
+.site-header .messenger-head-action{color:#0866ff!important}
+.site-header .messenger-head-icon{filter:none!important}
+@media(max-width:760px){
+ .site-header,.site-header .nav-wrap{background:#fff!important}
+ .site-header .brand-name{color:#092b60!important;-webkit-text-fill-color:#092b60!important}
+}
+</style>
+
+</body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
 .suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
