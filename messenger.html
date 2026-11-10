@@ -30,7 +30,34 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 .messenger-popover[hidden]{display:none}.messenger-popover button{display:block;width:100%;border:0;background:transparent;color:#f0f2f5;text-align:left;padding:13px;border-radius:8px;font-size:15px}.messenger-popover button:active{background:#3a3b3c}
 @media(max-width:600px){.messenger-head{height:62px;flex-basis:62px;padding:0 15px}.messenger-brand{font-size:29px}.messenger-frame{min-height:180px}}
 </style>
-</head>
+
+<style id="messenger-screen-polish-20261111">
+.messenger-stories{height:142px;flex:0 0 142px;display:flex;gap:12px;padding:10px 16px 8px;overflow:hidden;background:#000}
+.story-card{width:108px;flex:0 0 108px;border:0;background:#000;color:#f0f2f5;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:7px;font-size:13px}
+.story-avatar{width:82px;height:82px;border-radius:50%;border:3px solid #0866ff;background:#242526;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:700;overflow:hidden}
+.story-card strong{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.story-track{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;align-items:flex-start;min-width:0}
+.story-track::-webkit-scrollbar{display:none}.story-contact{width:82px;flex:0 0 82px;border:0;background:none;color:#f0f2f5;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:13px}
+.story-contact img{width:78px;height:78px;object-fit:cover;border-radius:50%;border:3px solid #0866ff;background:#303030}
+.story-contact span{max-width:82px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.story-loading{color:#9a9da2;font-size:12px;align-self:center;max-width:180px}
+.messenger-shortcuts{gap:10px;padding-left:16px;padding-right:16px}
+.messenger-shortcuts .shortcut{height:42px;border-radius:24px}
+.messenger-settings-backdrop{position:fixed;inset:0;z-index:20;background:#000a;display:flex;align-items:flex-end;justify-content:center}
+.messenger-settings-backdrop[hidden]{display:none}
+.messenger-settings-sheet{width:min(100%,560px);max-height:88dvh;overflow:auto;background:#1c1c1e;color:#f0f2f5;border:1px solid #343638;border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px #0008}
+.messenger-settings-sheet header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.messenger-settings-sheet h2{font-size:24px;margin:0 0 5px}.messenger-settings-sheet header p{margin:0;color:#aeb0b5;font-size:13px}
+.messenger-settings-sheet header button{border:0;border-radius:50%;width:36px;height:36px;background:#343638;color:#fff;font-size:26px}
+.settings-group{border-top:1px solid #343638;padding:14px 0 5px}.settings-group h3{font-size:14px;color:#8ab4f8;margin:0 0 8px}
+.settings-group label{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0}
+.settings-group label span{display:flex;flex-direction:column;gap:4px}.settings-group label b{font-size:14px}.settings-group label small{font-size:12px;color:#aeb0b5}
+.settings-group input{appearance:none;width:44px;height:26px;border-radius:20px;background:#555;position:relative;flex:0 0 44px}
+.settings-group input:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:white;transition:transform .16s}
+.settings-group input:checked{background:#0866ff}.settings-group input:checked:before{transform:translateX(18px)}
+.settings-note{font-size:11px;line-height:1.5;color:#9a9da2;margin:12px 0 0}
+@media(max-width:600px){.messenger-stories{height:142px;flex-basis:142px;padding-left:14px}.messenger-bottom{height:70px;flex-basis:70px;padding-bottom:env(safe-area-inset-bottom)}}
+</style></head>
 <body>
 <div class="messenger-app">
 <header class="messenger-head">
@@ -43,6 +70,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 </header>
 <div class="messenger-notice" id="messenger-notice" role="button" tabindex="0">Notifications are currently off. Tap to turn on.</div>
 <div class="messenger-search-wrap"><span>⌕</span><input id="messenger-search" type="search" placeholder="Search Suhas Messenger" autocomplete="off" aria-label="Search messages and members"></div>
+<section class="messenger-stories" aria-label="Stories">
+ <button type="button" class="story-card story-create" id="messenger-create-story"><span class="story-avatar" id="messenger-self-avatar">+</span><strong>Create story</strong></button>
+ <div class="story-track" id="messenger-story-track"><span class="story-loading">Your contacts' stories will appear here</span></div>
+</section>
 <div class="messenger-shortcuts" aria-label="Messenger shortcuts">
 <button type="button" class="shortcut active" data-filter="all">All</button>
 <button type="button" class="shortcut" data-filter="unread">Unread</button>
@@ -55,6 +86,25 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 <button type="button" data-dest="notifications"><span>♢</span><small>Alerts</small></button>
 <button type="button" id="messenger-menu"><span>☰</span><small>Menu</small></button>
 </nav>
+<div class="messenger-settings-backdrop" id="messenger-settings-panel" hidden>
+ <section class="messenger-settings-sheet" role="dialog" aria-modal="true" aria-labelledby="messenger-settings-title">
+  <header><div><h2 id="messenger-settings-title">Settings</h2><p>Customize your Messenger experience</p></div><button type="button" id="messenger-settings-close" aria-label="Close settings">×</button></header>
+  <div class="settings-group"><h3>Notifications & sounds</h3>
+   <label><span><b>Message notifications</b><small>Allow browser notifications for new messages</small></span><input type="checkbox" data-pref="notifications"></label>
+   <label><span><b>Notification sounds</b><small>Play a sound for incoming messages</small></span><input type="checkbox" data-pref="sounds"></label>
+   <label><span><b>Message previews</b><small>Show message previews in notifications</small></span><input type="checkbox" data-pref="previews"></label>
+  </div>
+  <div class="settings-group"><h3>Privacy & presence</h3>
+   <label><span><b>Active status</b><small>Show when you are active</small></span><input type="checkbox" data-pref="active" checked></label>
+   <label><span><b>Read receipts</b><small>Let people know when you have seen messages</small></span><input type="checkbox" data-pref="readReceipts" checked></label>
+  </div>
+  <div class="settings-group"><h3>Chat preferences</h3>
+   <label><span><b>Enter to send</b><small>Use Enter to send a message</small></span><input type="checkbox" data-pref="enterToSend" checked></label>
+   <label><span><b>Reduce animations</b><small>Use fewer motion effects</small></span><input type="checkbox" data-pref="reduceMotion"></label>
+  </div>
+  <p class="settings-note">These preferences are saved on this device. Account-level privacy and notification delivery remain controlled by your signed-in account and browser permissions.</p>
+ </section>
+</div>
 <div class="messenger-popover" id="messenger-popover" hidden>
 <button type="button" data-setting="notifications">Notification settings</button>
 <button type="button" data-setting="sound">Sound &amp; alerts</button>
@@ -144,7 +194,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
    return;
   }
   styleMessenger();
-  setTimeout(styleMessenger,350);
+  populateStories();
+  setTimeout(()=>{styleMessenger();populateStories();},350);
  });
  // Cloudflare/browser frame failures do not always emit an error event.
  setTimeout(function(){
@@ -154,6 +205,26 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
   }catch(e){openInboxDirectly();}
  },10000);
  document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
+
+ const settingsPanel=document.getElementById('messenger-settings-panel');
+ const settingsKey='suhas-messenger-preferences-v1';
+ let prefs={notifications:false,sounds:true,previews:true,active:true,readReceipts:true,enterToSend:true,reduceMotion:false};
+ try{prefs={...prefs,...JSON.parse(localStorage.getItem(settingsKey)||'{}')}}catch(e){}
+ settingsPanel.querySelectorAll('[data-pref]').forEach(el=>{el.checked=!!prefs[el.dataset.pref];el.addEventListener('change',()=>{prefs[el.dataset.pref]=el.checked;localStorage.setItem(settingsKey,JSON.stringify(prefs));if(el.dataset.pref==='notifications'&&el.checked&&'Notification'in window&&Notification.permission==='default'){Notification.requestPermission().then(p=>{if(p!=='granted'){el.checked=false;prefs.notifications=false;localStorage.setItem(settingsKey,JSON.stringify(prefs));}});}});});
+ document.getElementById('messenger-settings').addEventListener('click',()=>{settingsPanel.hidden=false;});
+ document.getElementById('messenger-settings-close').addEventListener('click',()=>{settingsPanel.hidden=true;});
+ settingsPanel.addEventListener('click',e=>{if(e.target===settingsPanel)settingsPanel.hidden=true;});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){settingsPanel.hidden=true;pop.hidden=true;}});
+ function populateStories(){
+  try{const d=frame.contentDocument,track=document.getElementById('messenger-story-track');if(!d||!track)return;
+   const seen=new Set(),threads=[...d.querySelectorAll('#threads .message-thread')];track.innerHTML='';
+   threads.forEach(t=>{const name=t.querySelector('.message-thread-name')?.textContent?.trim();const img=t.querySelector('img');if(!name||seen.has(name)||!img?.src)return;seen.add(name);const b=document.createElement('button');b.type='button';b.className='story-contact';const photo=document.createElement('img');photo.src=img.src;photo.alt='';const label=document.createElement('span');label.textContent=name;b.append(photo,label);b.addEventListener('click',()=>t.click());track.appendChild(b);});
+   if(!track.children.length)track.innerHTML='<span class="story-loading">No stories yet. Start a conversation to connect with people.</span>';
+   const self=d.querySelector('#messages img');if(self?.src)document.getElementById('messenger-self-avatar').innerHTML='<img src="'+self.src+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  }catch(e){}
+ }
+ document.getElementById('messenger-create-story').addEventListener('click',()=>{try{const d=frame.contentDocument;const composer=d.querySelector('[data-tab="feed"]');if(composer)composer.click();else alert('Story creation will open from your SUHAS-MAX feed.');}catch(e){}});
+
  const pop=document.getElementById('messenger-popover');
  document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
  document.getElementById('messenger-settings').addEventListener('click',()=>{pop.hidden=!pop.hidden;});
