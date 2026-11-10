@@ -184,4 +184,10 @@
       if(event==='SIGNED_OUT') { document.documentElement.classList.remove('suhas-authenticated'); if(!isPublicAuthPage()) document.documentElement.classList.add('suhas-auth-pending'); }
     }
   });
+
+  // Load the staged PWA update and in-app release notification manager on every route.
+  var suhasUpdateManager=document.createElement('script');
+  suhasUpdateManager.src=appRootPath+'assets/update-manager.js?v=1';
+  suhasUpdateManager.async=true;
+  (document.head||document.documentElement).appendChild(suhasUpdateManager);
 })();
