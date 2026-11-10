@@ -118,7 +118,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
  const frame=document.getElementById('messenger-frame');
  // The embedded SUHAS-MAX page owns the single Supabase auth client.
  // Creating a second client in this shell can contend for the same session storage/refresh lock.
- frame.src='/social.html?tab=messages&messenger=1&shell=1';
+ frame.src=new URL('social.html?tab=messages&messenger=1&shell=1',document.baseURI).href;
  frame.style.visibility='visible';
  function styleMessenger(){
   try{
