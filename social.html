@@ -2055,7 +2055,23 @@ $('people-list').innerHTML=html||'<div class="empty">No matching members found.<
 members.filter(p=>p.user_id!==me&&(!q||[p.full_name,p.company,p.position,p.location,p.skills].join(' ').toLowerCase().includes(q))).forEach(p=>{const rel=friends.data.find(x=>(x.sender_id===me&&x.recipient_id===p.user_id)||(x.sender_id===p.user_id&&x.recipient_id===me));const follows=following.some(x=>x.following_id===p.user_id);const box=$('actions-'+p.user_id);if(!box)return;let friendButton=rel?(rel.status==='accepted'?'Friends ✓':rel.sender_id===me?'Request sent':'Accept in Requests'):'Add friend';let state=rel?(rel.status==='accepted'?'<span class="friend-state">Friends</span>':'<span class="friend-state pending">'+(rel.sender_id===me?'Request pending':'Received request')+'</span>'):'';box.innerHTML=state+'<button class="action '+(!rel?'primary':'')+'" data-friend="'+p.user_id+'" '+(rel?'disabled':'')+'>'+friendButton+'</button><button class="action" data-follow="'+p.user_id+'">'+(follows?'Following':'Follow')+'</button><button class="action" data-message="'+p.user_id+'">Message</button>';});
 }
 async function loadFriends(){const r=await client.from('suhas_friend_requests').select('sender_id,recipient_id').eq('status','accepted').or('sender_id.eq.'+me+',recipient_id.eq.'+me);if(r.error)throw r.error;const ids=[...new Set((r.data||[]).map(x=>x.sender_id===me?x.recipient_id:x.sender_id))];const list=members.filter(p=>ids.includes(p.user_id));$('friends-list').innerHTML=list.map(p=>memberCard(p,'friends')).join('')||'<div class="empty">You have no friends yet. Find members and send a friend request.</div>';list.forEach(p=>{const box=$('actions-'+p.user_id);if(box)box.innerHTML='<span class="friend-state">Friends ✓</span><button class="action" data-message="'+p.user_id+'">Message</button>';});}
-async function loadRequests(){const r=await client.from('suhas_friend_requests').select('*').or('sender_id.eq.'+me+',recipient_id.eq.'+me);if(r.error)throw r.error;const incoming=r.data.filter(x=>x.recipient_id===me&&x.status==='pending'),outgoing=r.data.filter(x=>x.sender_id===me&&x.status==='pending');$('incoming').innerHTML=incoming.map(x=>memberCard(profile(x.sender_id),'incoming')).join('')||'<div class="empty">No incoming requests.</div>';$('outgoing').innerHTML=outgoing.map(x=>memberCard(profile(x.recipient_id),'outgoing')).join('')||'<div class="empty">No pending sent requests.</div>';incoming.forEach(x=>{const box=$('actions-'+x.sender_id);if(box)box.innerHTML='<button class="action primary" data-accept="'+x.id+'">Accept</button><button class="action" data-decline="'+x.id+'">Decline</button>';});}
+async function loadRequests(){
+ const r=await client.from('suhas_friend_requests').select('id,sender_id,recipient_id,status,created_at').or('sender_id.eq.'+me+',recipient_id.eq.'+me).order('created_at',{ascending:false});
+ if(r.error)throw r.error;
+ const incoming=r.data.filter(x=>x.recipient_id===me&&x.status==='pending'),outgoing=r.data.filter(x=>x.sender_id===me&&x.status==='pending');
+ const ids=[...new Set([...incoming.map(x=>x.sender_id),...outgoing.map(x=>x.recipient_id)])];
+ let people=[];
+ if(ids.length){const pr=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,company,position,location,email_verified').in('user_id',ids);if(pr.error)throw pr.error;people=pr.data||[];}
+ const byId=new Map(people.map(p=>[p.user_id,p]));
+ const card=(request,person,received)=>{
+  const name=safe(person?.full_name||'SUHAS Member'),photo=person?.profile_photo_url?'<img src="'+safe(person.profile_photo_url)+'" alt="'+name+'" loading="lazy">':'<span>'+name.slice(0,1).toUpperCase()+'</span>';
+  return '<article class="suhas-friend-request-card"><button type="button" class="suhas-request-person" data-profile-open="'+safe(person?.user_id||'')+'"><span class="suhas-request-avatar">'+photo+'</span><span class="suhas-request-copy"><strong>'+name+'</strong><small>'+safe([person?.position,person?.company,person?.location].filter(Boolean).join(' · ')||'SUHAS-MAX member')+'</small><small>'+new Date(request.created_at).toLocaleDateString()+'</small></span></button><div class="suhas-request-actions">'+(received?'<button type="button" class="action primary" data-request-confirm="'+safe(request.id)+'">Confirm</button><button type="button" class="action" data-request-delete="'+safe(request.id)+'">Delete</button>':'<button type="button" class="action" data-request-cancel="'+safe(request.id)+'">Cancel request</button>')+'</div></article>';
+ };
+ $('incoming').innerHTML=incoming.map(x=>card(x,byId.get(x.sender_id),true)).join('')||'<div class="empty">No incoming requests.</div>';
+ $('outgoing').innerHTML=outgoing.map(x=>card(x,byId.get(x.recipient_id),false)).join('')||'<div class="empty">No pending sent requests.</div>';
+ const tab=document.querySelector('[data-tab="requests"]');
+ if(tab){let badge=tab.querySelector('.suhas-request-count');if(incoming.length){if(!badge){badge=document.createElement('span');badge.className='suhas-request-count';tab.appendChild(badge);}badge.textContent=incoming.length>99?'99+':String(incoming.length);}else badge?.remove();}
+}
 async function loadFollowing(){const r=await relationRows('suhas_follows','follower_id');$('following-list').innerHTML=r.map(x=>memberCard(profile(x.following_id))).join('')||'<div class="empty">You are not following anyone yet.</div>';r.forEach(x=>{const box=$('actions-'+x.following_id);if(box)box.innerHTML='<button class="action" data-unfollow="'+x.following_id+'">Unfollow</button><button class="action" data-message="'+x.following_id+'">Message</button>';});}
 async function loadGroups(){
  await loadGroupInvites();
@@ -2177,6 +2193,12 @@ document.addEventListener('input',function suhasCommentInputLiveContrast(e){
 });
 document.addEventListener('submit',async e=>{const form=e.target.closest('[data-comment-form]');if(!form)return;e.preventDefault();const input=form.querySelector('input'),content=input.value.trim();if(!content)return;const r=await client.from('suhas_post_comments').insert({post_id:Number(form.dataset.commentForm),user_id:me,content});if(r.error){notice(r.error.message,true);return;}await loadFeed();});
 document.addEventListener('click',async e=>{
+ const confirmRequest=e.target.closest('[data-request-confirm]');
+ if(confirmRequest){confirmRequest.disabled=true;try{const r=await client.from('suhas_friend_requests').update({status:'accepted',updated_at:new Date().toISOString()}).eq('id',confirmRequest.dataset.requestConfirm).eq('recipient_id',me).eq('status','pending');if(r.error)throw r.error;await Promise.all([loadRequests(),loadFriends(),renderPeople()]);notice('Friend request confirmed. You are now friends.');}catch(err){confirmRequest.disabled=false;notice(err.message||'Could not confirm request.',true);}return;}
+ const deleteRequest=e.target.closest('[data-request-delete]');
+ if(deleteRequest){deleteRequest.disabled=true;try{const r=await client.from('suhas_friend_requests').delete().eq('id',deleteRequest.dataset.requestDelete).eq('recipient_id',me).eq('status','pending');if(r.error)throw r.error;await loadRequests();notice('Friend request deleted.');}catch(err){deleteRequest.disabled=false;notice(err.message||'Could not delete request.',true);}return;}
+ const cancelRequest=e.target.closest('[data-request-cancel]');
+ if(cancelRequest){cancelRequest.disabled=true;try{const r=await client.from('suhas_friend_requests').delete().eq('id',cancelRequest.dataset.requestCancel).eq('sender_id',me).eq('status','pending');if(r.error)throw r.error;await loadRequests();notice('Sent request cancelled.');}catch(err){cancelRequest.disabled=false;notice(err.message||'Could not cancel request.',true);}return;}
  const profileTarget=e.target.closest('[data-profile-open],#mobile-profile-nav,#home-composer-avatar');
  if(profileTarget){
   const targetProfileId=profileTarget.dataset.profileOpen||(profileTarget.id==='mobile-profile-nav'||profileTarget.id==='home-composer-avatar'?me:null);
@@ -2846,3 +2868,19 @@ body.suhas-composer-open{overflow:hidden!important}
 .profile-viewer-menu button:active{background:#e7f0ff!important}
 @media(max-width:560px){.profile-viewer-menu-wrap{padding-top:9px!important}.profile-viewer-menu{right:0;top:50px;width:min(285px,calc(100vw - 28px))!important}.profile-viewer-head>div:first-of-type{flex:1 1 0;min-width:0}}
 </style></body></html>
+<style id="suhas-friend-requests-profile-refresh-20261110">
+#requests>h3{margin:18px 0 10px;font-size:16px}
+.suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
+.suhas-request-person{display:flex;align-items:center;gap:12px;min-width:0;flex:1;border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:inherit}
+.suhas-request-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#e8effb;color:#174b91;font-size:22px;font-weight:800}
+.suhas-request-avatar img{width:100%;height:100%;object-fit:cover}
+.suhas-request-copy{display:grid;gap:3px;min-width:0}
+.suhas-request-copy strong{font-size:15px;overflow-wrap:anywhere}
+.suhas-request-copy small{font-size:12px;color:#65676b;overflow-wrap:anywhere}
+.suhas-request-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.suhas-request-count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:20px;background:#e41e3f;color:white;font-size:11px;font-weight:800;margin-left:5px}
+.profile-viewer-cover{height:220px!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.profile-viewer-card{width:min(100%,820px)!important;max-height:96vh!important}
+.profile-viewer-body{padding-top:20px}
+@media(max-width:560px){.suhas-friend-request-card{align-items:flex-start;flex-direction:column}.suhas-request-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.suhas-request-actions .action{width:100%}.profile-viewer-cover{height:175px!important}.profile-viewer-card{max-height:96vh!important}}
+</style>
