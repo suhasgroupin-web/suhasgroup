@@ -633,3 +633,18 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit: `6b1cab7822122d4b0cc6c4bad5f2beb99bb54e44`.
 - Static validation: all inline scripts parse; cover/avatar camera controls and image Save button remain present.
 - Pending: production deployment readiness and visual confirmation on user's Android device. Do not claim device-level visual test completed.
+
+
+## 2026-11-10 — Friend requests, live message alerts and compact composer (increment)
+- Objective: make incoming friend requests actionable and visible by member name, add in-app live notification bubbles for friend requests/direct messages, preserve the existing reply-capable Messenger, and make post composer controls compact with white surfaces and black text.
+- Audited live Supabase schema and RLS before editing. Existing tables are retained: `suhas_friend_requests`, `suhas_notifications`, `suhas_conversations`, `suhas_conversation_members`, and `suhas_messages`. All have RLS enabled.
+- Verified the existing database triggers: friend-request INSERT creates a recipient notification; message INSERT creates a notification for the other conversation participant. Verified authenticated notification SELECT/UPDATE are recipient-only, friend-request SELECT/UPDATE/DELETE are participant/recipient scoped, and message reads/sends are conversation-member scoped.
+- Updated the incoming request card to show the sender's profile name/photo plus Confirm, Cancel (decline), and Delete. Confirm marks the request accepted; Cancel marks it declined; Delete removes that pending request using the already-existing participant DELETE policy. Each action reloads the request list, so the pending action controls disappear after completion. Outgoing requests retain Cancel request; this removes the sender's own pending request.
+- Added live in-app notification bubbles from the existing recipient-filtered Supabase Realtime subscription. Friend-request bubbles open Friend Requests; message bubbles open the relevant Messenger conversation. The notification center rows now mark read and route to the related request/chat/post. Existing message compose/send/reply flow is preserved.
+- Made post composer option controls compact, rounded, Facebook-style chips instead of large tiles; composer and writing fields remain white with black text. No composer tool, existing post action, or existing page section was intentionally removed.
+- Changed file: `social.html`. No database schema, policies, triggers, records, messages, friend requests, posts, media, routes, or existing feature records were changed.
+- Source commit: `eb108a0dd85fe2da64be0c0a932b059be1db82e5`.
+- Static verification: all 6 inline JavaScript blocks parse with zero syntax errors. Source checks confirm incoming Confirm/Cancel/Delete, outgoing Cancel, live friend/message notifications, notification-to-chat routing, existing Messenger compose/reply handler, compact composer CSS, and white/black composer colors.
+- Backend verification: live schema and policies inspected; notification triggers confirmed for friend request and direct message inserts. No SQL migration was required.
+- Not yet verified: two real authenticated accounts sending/receiving friend requests and messages on Android; push notifications when the app is closed/backgrounded are not implemented by this in-app bubble and require browser/PWA push subscription plus delivery infrastructure. The current increment provides live in-app alerts while SUHAS-MAX is open.
+- Next step: deploy this exact commit to Vercel Production, then perform two-account device testing. If a request/message event fails, inspect Supabase Realtime and RLS logs before changing schema.
