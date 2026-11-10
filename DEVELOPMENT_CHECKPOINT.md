@@ -657,3 +657,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit for UI repair: 597e860784a26cec8362c9bb0b28345dd2a4bd4e; service-worker/cache and checkpoint updates follow separately.
 - Static verification: source markup still contains exactly six navigation controls (Home, Friends, Reels, Marketplace, Notifications, Profile); existing data-tab targets and #mobile-profile-nav remain. CSS override is appended after previous navigation rules.
 - Pending: Vercel production build/live verification and user screenshot confirmation on the same laptop/browser. No account data, posts, messages, database schema, or existing social features were changed.
+
+
+## 2026-11-10 — Force Home navigation into one horizontal row
+- User clarified that Home, Friends, Reels, Market, Alerts and Profile must appear side by side, never vertically stacked.
+- Added a final high-specificity responsive override in `social.html` that forces the existing six controls into six equal horizontal columns, one row, across mobile/tablet/desktop and desktop-mode; keeps icon/label vertical within each tab, but all six tabs side by side.
+- Removed the desktop-mode CSS exception that hid the mobile six-tab bar; preserved the existing tab IDs, data-tab routes, click handlers, profile-avatar action and underlying features.
+- Bumped the service-worker cache fallback from v98 to v99 to prevent the prior cached layout from persisting.
+- Source commits: UI `30d0307c6a3c4684d57803bc505e75eb90b93a75`; service worker `9f7ab1da5acc82d6f1d499ac95cc23b85205b9bc`.
+- Static source checks: six existing destination controls retained; final override specifies six equal columns, row flow, fixed bottom placement and transparent active backgrounds.
+- Pending: Vercel Production deployment and real laptop/browser visual + tap verification. No user records, posts, messages, database objects or routes changed.
