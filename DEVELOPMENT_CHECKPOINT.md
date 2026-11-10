@@ -577,3 +577,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit: `835f92f425169d80947338ecfdf18c8da3c6829d`.
 - Static validation: all 6 inline scripts pass JavaScript syntax parsing; checks confirm likes/comments/reposts queries, visible engagement summary, liker/reposter name lists, 76px avatar and 30px camera control.
 - Pending: production deployment and authenticated Android verification of engagement visibility, avatar size, and photo upload/save.
+
+
+## 2026-11-10 — User-confirmed permanent no-regression rule
+- User explicitly reported that new implementations have been causing previously existing steps/features to disappear and instructed that this must not happen again.
+- Added mandatory Rule 10 to `DEVELOPMENT_RULES.md`: additive-only enhancements, preserve every existing feature/control/layout/route/data flow, inspect before edits, use minimal scoped patches, maintain regression checklist, test adjacent behavior, and never silently remove conflicting functionality.
+- This is a process safeguard, not a claim that the whole app has been regression-tested. Future increments must include before/after regression checks and record unverified items.
+- Rules commit: `997604a5abbb32a04e11130206270914c7afae31`.
+- Next work: before the next SUHAS-MAX feature edit, read the latest rules/checkpoint, inspect the current screen and existing handlers, write a control/regression checklist, then implement one small additive increment.
