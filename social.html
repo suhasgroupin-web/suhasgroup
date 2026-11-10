@@ -1898,6 +1898,20 @@ async function loadMemberTimeline(id){
   return '<article class="profile-timeline-card">'+attribution+'<div class="profile-timeline-author"><b class="profile-clickable" data-profile-open="'+safe(x.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+'<small>'+safe(new Date(x.created_at).toLocaleString())+'</small></div><p>'+safe(x.content)+'</p>'+media+'</article>';
  }).join('')||'<div class="empty">No posts or reposts yet.</div>';
 }
+async function loadMemberConnections(id){
+ const host=$('profile-viewer-info');if(!host)return;
+ const r=await client.from('suhas_friend_requests').select('sender_id,recipient_id').eq('status','accepted').or('sender_id.eq.'+id+',recipient_id.eq.'+id);
+ if(r.error)throw r.error;
+ const ids=[...new Set((r.data||[]).map(x=>x.sender_id===id?x.recipient_id:x.sender_id))];
+ if(!ids.length){host.insertAdjacentHTML('beforeend','<section class="profile-info-card"><h3>Friends · 0</h3><div class="profile-friends-empty">No friends to show yet.</div></section>');return;}
+ const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',ids);
+ if(p.error)throw p.error;
+ const mine=await client.from('suhas_friend_requests').select('sender_id,recipient_id').eq('status','accepted').or('sender_id.eq.'+me+',recipient_id.eq.'+me);
+ if(mine.error)throw mine.error;
+ const mineIds=new Set((mine.data||[]).map(x=>x.sender_id===me?x.recipient_id:x.sender_id));
+ const mutual=(p.data||[]).filter(x=>mineIds.has(x.user_id)).length;
+ host.insertAdjacentHTML('beforeend','<section class="profile-info-card"><h3>Friends · '+ids.length+(mutual?' · '+mutual+' mutual':'')+'</h3><div class="profile-friends-grid">'+(p.data||[]).slice(0,12).map(x=>'<button type="button" class="profile-friend-tile" data-profile-open="'+safe(x.user_id)+'">'+(x.profile_photo_url?'<img src="'+safe(x.profile_photo_url)+'" alt="">':'<span class="profile-friend-placeholder">'+safe((x.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<strong>'+safe(x.full_name||'SUHAS Member')+'</strong></button>').join('')+'</div></section>');
+}
 async function openMemberProfile(id){
  activeProfileId=id;$('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
  const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
@@ -1928,7 +1942,7 @@ async function openMemberProfile(id){
   ['↗','LinkedIn',p.linkedin_url]
  ];
  $('profile-viewer-info').innerHTML='<section class="profile-info-card"><h3>About</h3><div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+(x[1]==='LinkedIn'?'<a href="'+safe(x[2])+'" target="_blank" rel="noopener noreferrer">View LinkedIn profile</a>':safe(x[2]))+'</div></div></div>').join('')+(summary.every(x=>!x[2])?'<div class="profile-summary-label">No additional public information added yet.</div>':'')+'</div></section>';
- await loadMemberTimeline(id);
+ await loadMemberConnections(id);\n await loadMemberTimeline(id);
  if(id===me){$('profile-viewer-actions').innerHTML='<a class="action primary" href="profile.html">Edit profile</a>';}
  else{
   const rel=relation.data,friendAction=rel?(rel.status==='accepted'?'<button class="action" type="button" disabled>✓ Friends</button>':rel.status==='pending'?(rel.sender_id===me?'<button class="action" type="button" disabled>Request sent</button>':'<button class="action primary" type="button" data-profile-accept="'+safe(rel.id)+'">Confirm request</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>';
@@ -2883,4 +2897,13 @@ body.suhas-composer-open{overflow:hidden!important}
 .profile-viewer-card{width:min(100%,820px)!important;max-height:96vh!important}
 .profile-viewer-body{padding-top:20px}
 @media(max-width:560px){.suhas-friend-request-card{align-items:flex-start;flex-direction:column}.suhas-request-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.suhas-request-actions .action{width:100%}.profile-viewer-cover{height:175px!important}.profile-viewer-card{max-height:96vh!important}}
+</style>
+<style id="suhas-profile-friends-grid-20261110">
+.profile-friends-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.profile-friend-tile{display:grid;gap:6px;min-width:0;padding:0;border:0;background:transparent;text-align:left;color:#1c1e21;cursor:pointer}
+.profile-friend-tile img,.profile-friend-placeholder{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#e8effb}
+.profile-friend-placeholder{display:grid;place-items:center;color:#174b91;font-size:28px;font-weight:800}
+.profile-friend-tile strong{font-size:12px;overflow-wrap:anywhere}
+.profile-friends-empty{font-size:13px;color:#65676b}
+@media(max-width:560px){.profile-friends-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}}
 </style>
