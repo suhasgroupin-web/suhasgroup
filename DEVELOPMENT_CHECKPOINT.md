@@ -763,3 +763,11 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Reused existing `suhas_conversations`, `suhas_conversation_members`, and `suhas_messages` tables and existing RLS/Realtime setup; no schema changes or data deletion.
 - Commit: `293f7edec732ca8fac236547e2f6106b159d05e9`.
 - Verification: re-fetched committed source and confirmed the page controller, inbox/back controls, single-thread send fallback, and existing message table references are present. Authenticated end-to-end send/receive testing and production deployment remain unverified.
+
+
+## 2026-11-10 — Suhas Messenger home redesign
+- Added a Messenger-style black home shell to `messenger.html`: Messenger header, compose/settings controls, notification-permission banner, unified search, All/Unread/Groups shortcuts, and bottom Chats/People/Alerts/Menu navigation.
+- Restyled the existing authenticated SUHAS-MAX inbox inside the Messenger frame; kept the underlying Supabase conversations, message send/receive, realtime, and seen status implementation intact.
+- Inbox view now hides the chat pane until a conversation is selected; opening a conversation reveals the chat panel.
+- Repository commits: `8699763` (main redesign), `379b010` (filter and inbox-view polish).
+- Cloudflare Pages and Vercel production deployment status was not verified from this change; user must confirm the live page after deployment.
