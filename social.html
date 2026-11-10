@@ -1946,7 +1946,8 @@ async function loadFeed(){
   const galleryItems=Array.isArray(meta.media_gallery)?meta.media_gallery.filter(item=>item&&typeof item.url==='string'&&String(item.type||'').startsWith('image/')).slice(0,10):[];
   const isVideoMedia=!!x.media_url&&String(x.media_type||'').startsWith('video/');
   const legacyImageMarkup=x.media_url&&!isVideoMedia?'<img loading="lazy" data-feed-photo="'+x.id+'" title="Double-tap to like" style="width:100%;max-height:480px;object-fit:contain;border-radius:10px;touch-action:manipulation;cursor:pointer" src="'+safe(x.media_url)+'" alt="Post photo; double-tap to like">':'';
-  const mediaMarkup=galleryItems.length>1?'<div class="suhas-post-photo-grid suhas-post-photo-grid-'+Math.min(galleryItems.length,4)+'">'+galleryItems.slice(0,4).map((item,index)=>'<div class="suhas-post-photo-grid-item"><img loading="lazy" data-feed-photo="'+x.id+'" title="Double-tap to like" style="touch-action:manipulation;cursor:pointer" src="'+safe(item.url)+'" alt="Post photo '+(index+1)+'">'+(index===3&&galleryItems.length>4?'<span class="suhas-post-photo-grid-more">+'+(galleryItems.length-4)+'</span>':'')+'</div>').join('')+'</div>' : (isVideoMedia?'<video controls muted autoplay playsinline preload="metadata" data-feed-autoplay style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':legacyImageMarkup);
+  const galleryJson=safe(JSON.stringify(galleryItems.map(item=>item.url)));
+  const mediaMarkup=galleryItems.length>1?'<div class="suhas-post-photo-grid suhas-post-photo-grid-'+Math.min(galleryItems.length,4)+'" data-gallery-count="'+galleryItems.length+'">'+galleryItems.slice(0,4).map((item,index)=>'<div class="suhas-post-photo-grid-item"><img loading="lazy" data-feed-photo="'+x.id+'" data-gallery-urls="'+galleryJson+'" data-gallery-index="'+index+'" title="Tap to view · double-tap to like" style="touch-action:manipulation;cursor:pointer" src="'+safe(item.url)+'" alt="Post photo '+(index+1)+'">'+(index===3&&galleryItems.length>4?'<span class="suhas-post-photo-grid-more" data-feed-photo="'+x.id+'" data-gallery-urls="'+galleryJson+'" data-gallery-index="3">+'+(galleryItems.length-4)+'</span>':'')+'</div>').join('')+'</div>' : (isVideoMedia?'<video controls muted autoplay playsinline preload="metadata" data-feed-autoplay style="width:100%;max-height:420px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':(legacyImageMarkup?legacyImageMarkup.replace('data-feed-photo="'+x.id+'"','data-feed-photo="'+x.id+'" data-gallery-urls="'+safe(JSON.stringify([x.media_url]))+'" data-gallery-index="0"'):''));
 
   return attribution+'<article class="post-card" id="'+cardId+'"><div class="post-head">'+(p.profile_photo_url?'<img class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px" src="'+safe(p.profile_photo_url)+'" alt="">':'<div class="avatar profile-clickable" data-profile-open="'+x.user_id+'" style="width:42px;height:42px"></div>')+'<div class="post-meta post-author"><b class="profile-clickable" data-profile-open="'+x.user_id+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+(p.position||p.company?' · '+safe([p.position,p.company].filter(Boolean).join(', ')):'')+'<br>'+safe(new Date(x.created_at).toLocaleString())+'</div><div class="post-menu-wrap"><button class="post-menu-trigger" type="button" aria-label="Post options" aria-expanded="false" data-post-menu-toggle="'+safe(menuKey)+'">⋯</button><div class="post-menu" data-post-menu="'+safe(menuKey)+'"><button type="button" data-post-action="copy" data-post-id="'+x.id+'">🔗 Copy post link</button><button type="button" data-post-action="share" data-post-id="'+x.id+'">↗ Share post</button>'+repostAction+'<button type="button" data-post-action="save" data-post-id="'+x.id+'">🔖 Save post</button>'+(x.media_url?'<button type="button" data-post-action="download" data-post-id="'+x.id+'">⬇ Download photo/video</button>':'')+(x.user_id===me?'<button type="button" data-post-action="edit" data-post-id="'+x.id+'">✎ Edit post text</button>'+(x.media_url?'<button type="button" data-post-action="replace-media" data-post-id="'+x.id+'">▧ Change photo/video</button>':'<button type="button" data-post-action="add-media" data-post-id="'+x.id+'">▧ Add photo/video</button>')+'<button type="button" class="danger" data-post-action="delete" data-post-id="'+x.id+'">🗑 Delete post</button>':'')+'</div></div></div><p'+(meta.background?' style="background:'+safe(meta.background)+';padding:14px;border-radius:12px"':'')+'>'+safe(x.content)+'</p>'+(metaChips.length?'<div class="post-meta suhas-post-metadata">'+metaChips.map(safe).join(' · ')+'</div>':'')+mediaMarkup+'<div class="social-actions"><button class="action suhas-3d-action suhas-like-action" data-like="'+x.id+'">'+(pl.some(l=>l.user_id===me)?'♥ Liked':'♡ Like')+' · '+pl.length+'</button><button type="button" class="action suhas-3d-action suhas-comment-action" data-focus-comment="'+x.id+'">▢ Comment · '+pc.length+'</button><button type="button" class="action suhas-3d-action suhas-share-action" data-post-action="share" data-post-id="'+x.id+'">↗ Share</button></div><div class="comment-list">'+pc.map(z=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+z.user_id+'">'+safe(byId[z.user_id]?.full_name||'Member')+':</b> '+safe(z.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></article>';
  }).join('')||'<div class="empty">No posts yet. Be the first to share an update.</div>';
@@ -2346,24 +2347,101 @@ document.addEventListener('click',async e=>{
  const focusComment=e.target.closest('[data-focus-comment]');if(focusComment){const form=document.querySelector('[data-comment-form="'+focusComment.dataset.focusComment+'"]');const input=form?.querySelector('input,textarea');form?.scrollIntoView({behavior:'smooth',block:'center'});input?.focus({preventScroll:true});return;}
  const like=e.target.closest('[data-like],[data-reel-like]');if(like){const isReel=like.hasAttribute('data-reel-like');const postId=Number(isReel?like.dataset.reelLike:like.dataset.like);const existing=await client.from('suhas_post_likes').select('id').eq('post_id',postId).eq('user_id',me).maybeSingle();if(existing.error){notice(existing.error.message,true);return;}const r=existing.data?await client.from('suhas_post_likes').delete().eq('id',existing.data.id):await client.from('suhas_post_likes').insert({post_id:postId,user_id:me});if(r.error){notice(r.error.message,true);return;}await (isReel?loadReels():loadFeed());}});
 
-/* Facebook-inspired feed gesture: two quick taps on a post photo trigger the existing Like action. */
-const suhasFeedPhotoTap={target:null,time:0};
+/* Feed photo behavior: single tap opens an album viewer; a quick double-tap likes the post. */
+const suhasFeedPhotoTap={target:null,time:0,timer:null};
 const suhasFeedPhotoLikePending=new Set();
+let suhasPhotoViewer=null,suhasPhotoViewerState={urls:[],index:0,focusTarget:null};
+function ensureSuhasPhotoViewer(){
+ if(suhasPhotoViewer)return suhasPhotoViewer;
+ suhasPhotoViewer=document.createElement('div');
+ suhasPhotoViewer.className='suhas-photo-viewer';
+ suhasPhotoViewer.id='suhas-photo-viewer';
+ suhasPhotoViewer.hidden=true;
+ suhasPhotoViewer.setAttribute('role','dialog');
+ suhasPhotoViewer.setAttribute('aria-modal','true');
+ suhasPhotoViewer.setAttribute('aria-label','Photo viewer');
+ suhasPhotoViewer.tabIndex=-1;
+ suhasPhotoViewer.innerHTML='<button type="button" class="suhas-photo-viewer-close" aria-label="Close photo viewer">×</button><button type="button" class="suhas-photo-viewer-prev" aria-label="Previous photo">‹</button><figure class="suhas-photo-viewer-frame"><img class="suhas-photo-viewer-image" alt="Post photo"><figcaption class="suhas-photo-viewer-count" aria-live="polite"></figcaption></figure><button type="button" class="suhas-photo-viewer-next" aria-label="Next photo">›</button>';
+ document.body.appendChild(suhasPhotoViewer);
+ const image=suhasPhotoViewer.querySelector('.suhas-photo-viewer-image');
+ const count=suhasPhotoViewer.querySelector('.suhas-photo-viewer-count');
+ function render(){
+  const urls=suhasPhotoViewerState.urls,index=suhasPhotoViewerState.index;
+  image.src=urls[index]||'';image.alt='Photo '+(index+1)+' of '+urls.length;
+  count.textContent=(index+1)+' / '+urls.length;
+  const multi=urls.length>1;
+  suhasPhotoViewer.querySelector('.suhas-photo-viewer-prev').hidden=!multi;
+  suhasPhotoViewer.querySelector('.suhas-photo-viewer-next').hidden=!multi;
+ }
+ function close(){
+  suhasPhotoViewer.hidden=true;
+  document.body.classList.remove('suhas-photo-viewer-open');
+  const target=suhasPhotoViewerState.focusTarget;
+  suhasPhotoViewerState={urls:[],index:0,focusTarget:null};
+  image.removeAttribute('src');
+  if(target&&target.isConnected)target.focus({preventScroll:true});
+ }
+ function move(delta){
+  const n=suhasPhotoViewerState.urls.length;
+  if(n<2)return;
+  suhasPhotoViewerState.index=(suhasPhotoViewerState.index+delta+n)%n;
+  render();
+ }
+ suhasPhotoViewer.querySelector('.suhas-photo-viewer-close').addEventListener('click',close);
+ suhasPhotoViewer.querySelector('.suhas-photo-viewer-prev').addEventListener('click',()=>move(-1));
+ suhasPhotoViewer.querySelector('.suhas-photo-viewer-next').addEventListener('click',()=>move(1));
+ suhasPhotoViewer.addEventListener('click',e=>{if(e.target===suhasPhotoViewer)close();});
+ let swipeStart=null;
+ image.addEventListener('pointerdown',e=>{swipeStart=e.clientX;});
+ image.addEventListener('pointerup',e=>{if(swipeStart===null)return;const delta=e.clientX-swipeStart;swipeStart=null;if(Math.abs(delta)>48)move(delta<0?1:-1);});
+ document.addEventListener('keydown',e=>{
+  if(suhasPhotoViewer.hidden)return;
+  if(e.key==='Escape'){e.preventDefault();close();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();move(-1);}
+  else if(e.key==='ArrowRight'){e.preventDefault();move(1);}
+ });
+ suhasPhotoViewer._render=render;
+ return suhasPhotoViewer;
+}
+function openSuhasPhotoViewer(photo){
+ const viewer=ensureSuhasPhotoViewer();
+ let urls=[];
+ try{urls=JSON.parse(photo.getAttribute('data-gallery-urls')||'[]');}catch(e){urls=[];}
+ if(!Array.isArray(urls)||!urls.length)urls=[photo.currentSrc||photo.src];
+ urls=urls.filter(url=>typeof url==='string'&&/^https?:/i.test(url));
+ if(!urls.length)return;
+ const requested=Number(photo.getAttribute('data-gallery-index')||0);
+ suhasPhotoViewerState={urls,index:Math.max(0,Math.min(urls.length-1,Number.isFinite(requested)?requested:0)),focusTarget:photo};
+ viewer.hidden=false;
+ document.body.classList.add('suhas-photo-viewer-open');
+ viewer._render();
+ viewer.focus({preventScroll:true});
+}
 document.addEventListener('pointerup',function(e){
  const photo=e.target&&e.target.closest?e.target.closest('#feed-list [data-feed-photo]'):null;
  if(!photo)return;
  const now=Date.now();
  if(suhasFeedPhotoTap.target===photo&&now-suhasFeedPhotoTap.time<=360){
-  suhasFeedPhotoTap.target=null;suhasFeedPhotoTap.time=0;
+  if(suhasFeedPhotoTap.timer)window.clearTimeout(suhasFeedPhotoTap.timer);
+  suhasFeedPhotoTap.target=null;suhasFeedPhotoTap.time=0;suhasFeedPhotoTap.timer=null;
   const id=photo.getAttribute('data-feed-photo');
   if(!id||suhasFeedPhotoLikePending.has(id))return;
   const card=photo.closest('.post-card');
   const like=card&&card.querySelector('[data-like="'+id+'"]');
-  if(!like||/\bLiked\b/.test(like.textContent))return;
+  if(!like)return;
+  if(/\bLiked\b/.test(like.textContent)){openSuhasPhotoViewer(photo);return;}
   suhasFeedPhotoLikePending.add(id);
   like.click();
   window.setTimeout(function(){suhasFeedPhotoLikePending.delete(id);},1000);
- }else{suhasFeedPhotoTap.target=photo;suhasFeedPhotoTap.time=now;}
+ }else{
+  if(suhasFeedPhotoTap.timer)window.clearTimeout(suhasFeedPhotoTap.timer);
+  suhasFeedPhotoTap.target=photo;suhasFeedPhotoTap.time=now;
+  suhasFeedPhotoTap.timer=window.setTimeout(function(){
+   const target=suhasFeedPhotoTap.target;
+   suhasFeedPhotoTap.target=null;suhasFeedPhotoTap.time=0;suhasFeedPhotoTap.timer=null;
+   if(target===photo&&photo.isConnected)openSuhasPhotoViewer(photo);
+  },370);
+ }
 },{passive:true});
 $('reel-form').addEventListener('submit',async e=>{e.preventDefault();const file=$('reel-file').files[0];if(!file||!['video/mp4','video/webm'].includes(file.type)){notice('Choose an MP4 or WebM video.',true);return;}let media;try{media=await uploadMedia(file);}catch(err){notice(err.message,true);return;}const r=await client.from('suhas_posts').insert({user_id:me,content:$('reel-caption').value.trim()||'SUHAS-MAX Reel',media_url:media.url,media_path:media.path,media_type:media.type});if(r.error){notice(r.error.message,true);return;}e.target.reset();await loadReels();notice('Your Reel is now published.');});
 $('market-form').addEventListener('submit',async e=>{e.preventDefault();const title=$('market-title').value.trim(),price=Number($('market-price').value);if(title.length<3||!Number.isFinite(price)||price<0)return;let media=null;try{const file=$('market-image').files[0];if(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Marketplace photos must be JPG, PNG or WebP.');media=await uploadMedia(file);}}catch(err){notice(err.message,true);return;}const r=await client.from('suhas_marketplace_listings').insert({seller_id:me,title,description:$('market-description').value.trim(),category:$('market-category').value.trim()||'Other',price,condition:$('market-condition').value,status:'active',image_url:media?.url||null,image_path:media?.path||null});if(r.error){notice(r.error.message,true);return;}e.target.reset();await loadMarketplace();notice('Your item is now listed.');});
@@ -3190,6 +3268,20 @@ body.suhas-composer-open{overflow:hidden!important}
   .social-mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;}
   .social-mobile-nav .mobile-profile-nav{min-height:52px!important;}
 }
+</style>
+<style id="suhas-facebook-photo-viewer-20261110">
+.suhas-photo-viewer[hidden]{display:none!important}
+.suhas-photo-viewer{position:fixed;inset:0;z-index:1000000;display:flex;align-items:center;justify-content:center;gap:16px;padding:58px 18px 52px;background:rgba(0,0,0,.94);color:#fff}
+.suhas-photo-viewer:focus{outline:none}
+.suhas-photo-viewer-close,.suhas-photo-viewer-prev,.suhas-photo-viewer-next{position:absolute;display:grid;place-items:center;border:0;border-radius:50%;background:#ffffff24;color:#fff;cursor:pointer;z-index:2}
+.suhas-photo-viewer-close{top:14px;right:14px;width:44px;height:44px;font-size:32px;line-height:1}
+.suhas-photo-viewer-prev,.suhas-photo-viewer-next{top:50%;transform:translateY(-50%);width:48px;height:48px;font-size:42px;line-height:1}
+.suhas-photo-viewer-prev{left:18px}.suhas-photo-viewer-next{right:18px}
+.suhas-photo-viewer-frame{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;height:100%;min-width:0;margin:0}
+.suhas-photo-viewer-image{display:block;max-width:min(100%,1200px);max-height:calc(100vh - 130px);max-height:calc(100dvh - 130px);width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none;touch-action:pan-y}
+.suhas-photo-viewer-count{font-size:13px;color:#e4e6eb;text-align:center}
+body.suhas-photo-viewer-open{overflow:hidden!important}
+@media(max-width:560px){.suhas-photo-viewer{padding:50px 8px 38px;gap:8px}.suhas-photo-viewer-prev{left:8px}.suhas-photo-viewer-next{right:8px}.suhas-photo-viewer-prev,.suhas-photo-viewer-next{width:40px;height:40px;font-size:34px;background:#0008}.suhas-photo-viewer-image{max-width:100%;max-height:calc(100dvh - 112px)}}
 </style>
 </body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
