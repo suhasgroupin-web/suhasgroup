@@ -566,3 +566,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit: `2cfbb41cf39b8545be70bef074228c98a00a474a`.
 - Static validation: 6 inline scripts; syntax errors: 0.
 - Pending: wait for Production deployment and confirm visual placement on the user's Android device.
+
+
+## 2026-11-10 — Feed engagement visibility and larger profile photo
+- User reported that post engagement was not visible and the profile avatar was too small; the corner camera control still needed refinement.
+- Updated `social.html` feed rendering to show a Facebook-style engagement summary below each post: first liker plus additional liker count, comment count, and repost count. Expanding the summary shows the names and profile photos of people who liked and reposted.
+- Existing comment list remains rendered below action buttons with commenter names; engagement profile lookup now includes likers and reposters as well as commenters.
+- Increased the Profile viewer avatar and its containing wrapper from 58px to 76px on mobile and desktop; increased the attached camera control to 30px and kept it anchored to the avatar's bottom-right corner.
+- No database schema or existing post/like/comment/repost records were changed. The current app supports Like reactions only; external share events are not persisted in a share table, so the visible share-related count is explicitly labelled Reposts and does not pretend to count external shares.
+- Source commit: `835f92f425169d80947338ecfdf18c8da3c6829d`.
+- Static validation: all 6 inline scripts pass JavaScript syntax parsing; checks confirm likes/comments/reposts queries, visible engagement summary, liker/reposter name lists, 76px avatar and 30px camera control.
+- Pending: production deployment and authenticated Android verification of engagement visibility, avatar size, and photo upload/save.
