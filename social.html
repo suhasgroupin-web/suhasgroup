@@ -1803,6 +1803,16 @@ html body.suhas-dark #feed-list .suhas-comments-panel,html body.suhas-dark #feed
 html body.suhas-dark #feed-list .suhas-comments-panel .comment-list p{background:#f0f2f5!important;color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important}
 html body.suhas-dark #feed-list .suhas-comments-panel .comment-list p b{color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important}
 html body.suhas-dark #feed-list .suhas-comments-panel .compose input{background:#f0f2f5!important;color:#1c1e21!important;-webkit-text-fill-color:#1c1e21!important}
+</style><style id="suhas-profile-cover-full-width-fix-20261110">
+/* Keep the close control out of document flow so it cannot squeeze the cover beside its float. */
+#profile-viewer .profile-viewer-card{position:relative!important;overflow-x:hidden!important}
+#profile-viewer #profile-viewer-close{position:absolute!important;top:12px!important;right:12px!important;left:auto!important;float:none!important;margin:0!important;z-index:20!important}
+#profile-viewer #profile-viewer-cover{display:block!important;position:relative!important;float:none!important;clear:both!important;width:100%!important;max-width:100%!important;min-width:100%!important;box-sizing:border-box!important}
+@media(max-width:560px){
+ #profile-viewer .profile-viewer-card{width:100%!important;max-width:100%!important}
+ #profile-viewer #profile-viewer-cover{width:100%!important;max-width:100%!important;min-width:100%!important}
+ #profile-viewer #profile-cover-change.profile-owner-cover-edit{right:12px!important;left:auto!important;bottom:12px!important}
+}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
