@@ -1929,7 +1929,7 @@ async function openMemberProfile(id){
  ];
  $('profile-viewer-info').innerHTML='<section class="profile-info-card"><h3>About</h3><div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+(x[1]==='LinkedIn'?'<a href="'+safe(x[2])+'" target="_blank" rel="noopener noreferrer">View LinkedIn profile</a>':safe(x[2]))+'</div></div></div>').join('')+(summary.every(x=>!x[2])?'<div class="profile-summary-label">No additional public information added yet.</div>':'')+'</div></section>';
  await loadMemberTimeline(id);
- if(id===me){$('profile-viewer-actions').innerHTML='<button class="action primary" data-profile-edit-open="1">Edit profile</button>';}
+ if(id===me){$('profile-viewer-actions').innerHTML='<a class="action primary" href="profile.html">Edit profile</a>';}
  else{
   const rel=relation.data,friendAction=rel?(rel.status==='accepted'?'<button class="action" type="button" disabled>✓ Friends</button>':rel.status==='pending'?(rel.sender_id===me?'<button class="action" type="button" disabled>Request sent</button>':'<button class="action primary" type="button" data-profile-accept="'+safe(rel.id)+'">Confirm request</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>';
   $('profile-viewer-actions').innerHTML=friendAction+'<button class="action" type="button" data-profile-follow="'+safe(id)+'">'+(myFollow.data?'Following':'Follow')+'</button><button class="action" type="button" data-profile-message="'+safe(id)+'">Message</button>';
@@ -1949,6 +1949,7 @@ async function copyToClipboard(value){
 let activeProfileId=null;
 $('profile-viewer-menu-trigger').addEventListener('click',()=>{const m=$('profile-viewer-menu');m.classList.toggle('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');});
 $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.closest('[data-profile-action]');if(!b||!activeProfileId)return;const id=activeProfileId,p=profile(id)||{},url=location.origin+location.pathname+'?profile='+encodeURIComponent(id);const kind=b.dataset.profileAction;try{
+ if(kind==='edit'){location.href='profile.html';return;}
  if(kind==='copy'){const copied=await copyToClipboard(url);notice(copied?'Profile link copied. You can paste it anywhere.':'Please copy the link shown in the box.',!copied);}
  if(kind==='qr'){const qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=320x320&data='+encodeURIComponent(url);window.open(qrUrl,'_blank','noopener');notice('Profile QR code opened in a new tab.');}
  if(kind==='share'){if(navigator.share)await navigator.share({title:(p.full_name||'SUHAS-MAX Member')+' · SUHAS-MAX',text:'View this SUHAS-MAX profile',url});else{const copied=await copyToClipboard(url);notice(copied?'Share is unavailable here. Profile link copied.':'Please copy the link shown in the box.',!copied);}}
