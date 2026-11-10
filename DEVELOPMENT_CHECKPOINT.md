@@ -720,3 +720,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static inspection confirms the four menu actions now point to their intended existing pickers. No authenticated Android gallery selection, media upload, or two-account viewing test was performed in this increment; those remain pending.
 - Production deployment/live verification: pending. The Vercel project API returned 403 Forbidden in this session; do not claim the live site is updated until deployment access is restored and the production URL is checked.
 - Recovery point: commit `41ab47d97007144a6ff030bc8f220b323caa9ef3`; next step is deploy the main branch and test Story, Photo, Video, and Reel on Android with an authenticated account.
+
+
+## 2026-11-10 — Create menu native-picker activation correction
+- Follow-up review identified an important mobile-browser constraint: calling a file input after an awaited tab switch or timer can lose the direct user activation required to open Android's native picker.
+- Updated the Create menu to open a temporary native file picker synchronously in the original menu-item tap. Once the user chooses files, the files are passed to the existing hidden Story, Post, or Reel file input and its existing preview/upload handler is triggered.
+- Story opens its existing creator dialog without launching a second picker. Photo selects images for the existing multi-image post composer. Video and Reel select a video for the existing Reels composer.
+- This is an additive routing fix; existing Supabase storage, table writes, and publish actions remain unchanged.
+- Corrected implementation commit: `c4574ad63a7e504858b2c80baf4962f6e24ca1df`.
+- Static source review completed. Real Android picker, preview, upload, and publish verification remains pending.
+- Deployment remains blocked/unverified: Vercel project and deployment reads returned 403 Forbidden in this session. Do not tell the user the production site is updated until an authorized deployment succeeds and the live site is checked.
+- Recovery point: `c4574ad63a7e504858b2c80baf4962f6e24ca1df`; deploy main and exercise all four Create actions on Android.
