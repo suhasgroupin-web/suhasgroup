@@ -399,4 +399,6 @@ alert('Select a row or column first.');
 },true);
 })();
 </script>
-</body></html>
+<script id="suhas-page-state-restore-20261110">
+(function(){const key='suhas-page-state:'+location.pathname+location.search;const save=()=>{try{const openDetails=[...document.querySelectorAll('details[open]')].map((x,i)=>x.id||x.getAttribute('data-state-key')||String(i));const openControls=[...document.querySelectorAll('[aria-expanded="true"]')].map(x=>({id:x.id||'',label:x.getAttribute('aria-label')||'',controls:x.getAttribute('aria-controls')||''}));sessionStorage.setItem(key,JSON.stringify({openDetails,openControls,scroll:{x:scrollX,y:scrollY}}));}catch(_){}};document.addEventListener('click',()=>setTimeout(save,0),true);document.addEventListener('toggle',save,true);window.addEventListener('pagehide',save);window.addEventListener('DOMContentLoaded',()=>{try{const st=JSON.parse(sessionStorage.getItem(key)||'null');if(!st)return;(st.openDetails||[]).forEach(id=>{const el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;});(st.openControls||[]).forEach(x=>{const el=(x.id&&document.getElementById(x.id))||(x.label&&[...document.querySelectorAll('[aria-label]')].find(y=>y.getAttribute('aria-label')===x.label));if(el){el.setAttribute('aria-expanded','true');const t=x.controls&&document.getElementById(x.controls);if(t)t.hidden=false;}});if(st.scroll)setTimeout(()=>scrollTo(st.scroll.x,st.scroll.y),80);}catch(_){}});})();
+</script></body></html>
