@@ -2512,7 +2512,24 @@ const q=await client.from('suhas_public_profiles').select('user_id,full_name,com
 presenceChannel=client.channel('suhas-global-presence',{config:{presence:{key:me}}});
 presenceChannel.on('presence',{event:'sync'},()=>{const state=presenceChannel.presenceState();onlineMemberIds=new Set(Object.keys(state).filter(id=>id!==me&&Array.isArray(state[id])&&state[id].length>0));renderMessageMembers();});
 presenceChannel.subscribe(async status=>{if(status==='SUBSCRIBED'){try{await presenceChannel.track({user_id:me,online_at:new Date().toISOString()});}catch(err){console.warn('Presence tracking unavailable',err);}}});
-$('post-audience').value=readMaxSettings().audience||'public';const own=profile(me);$('home-composer-avatar').dataset.fullName=own.full_name||'SUHAS-MAX Member';$('home-composer-avatar').style.backgroundImage=own.profile_photo_url?'url('+JSON.stringify(own.profile_photo_url)+')':'';$('home-composer-avatar').textContent=own.profile_photo_url?'':(own.full_name||'S').slice(0,1).toUpperCase();renderHomeDiscovery();await renderPeople();await loadFeed();await loadHomeStories();await loadHomeReels();const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile);
+$('post-audience').value=readMaxSettings().audience||'public';const own=profile(me);$('home-composer-avatar').dataset.fullName=own.full_name||'SUHAS-MAX Member';$('home-composer-avatar').style.backgroundImage=own.profile_photo_url?'url('+JSON.stringify(own.profile_photo_url)+')':'';$('home-composer-avatar').textContent=own.profile_photo_url?'':(own.full_name||'S').slice(0,1).toUpperCase();renderHomeDiscovery();
+const homeLoads=[
+ ['People',()=>renderPeople(),null],
+ ['Posts',()=>loadFeed(),'feed-list'],
+ ['Stories',()=>loadHomeStories(),'home-stories-list'],
+ ['Reels',()=>loadHomeReels(),'home-reels-list']
+];
+const homeResults=await Promise.allSettled(homeLoads.map(async([label,run,hostId])=>{
+ try{await run();return {label,ok:true};}
+ catch(error){
+  console.error('SUHAS-MAX '+label+' load failed:',error);
+  if(hostId){const host=$(hostId);if(host)host.innerHTML='<div class="empty suhas-load-error"><b>'+label+' could not be loaded.</b><br>'+safe(error?.message||'Please check your connection and try again.')+'<br><button type="button" class="action" data-retry-home="'+label.toLowerCase()+'">Try again</button></div>';}
+  return {label,ok:false,error};
+ }
+}));
+const failedLoads=homeResults.filter(x=>x.status==='rejected'||(x.status==='fulfilled'&&!x.value.ok));
+if(failedLoads.length)console.warn('SUHAS-MAX home sections failed:',failedLoads);
+const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile);
 let arcadeKind='bike',arcadeFrame=0,arcadeRunning=false,arcadeRAF=0,arcadeScore=0,arcadeBest=0,arcadeState={},arcadeKeys={};
 const arcadeNames={bike:'🏍️ Bike Ride',rickshaw:'🛺 Rickshaw Ride',hill:'⛰️ Hill Climb',city:'🚗 City Car Drive',mountain:'🚙 Mountain SUV',highway:'🏎️ Highway Racer'};
 function arcadeStoreKey(){return 'suhas-max-arcade-best-v1';}
