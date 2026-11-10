@@ -133,7 +133,27 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
 .messenger-search-wrap .messenger-search-icon{width:24px;height:24px;flex:0 0 24px;display:grid!important;place-items:center;color:#b0b3b8;position:relative;z-index:2}
 .messenger-search-wrap .messenger-search-icon svg{width:23px;height:23px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .messenger-search-wrap input{min-width:0;flex:1;padding-left:18px!important}
-</style></head>
+</style><style id="messenger-standalone-page-20261111">
+/* Messenger is a dedicated destination, not a tab inside the social home page. */
+.messenger-app{width:100%;max-width:none;margin:0;background:#08090b}
+.messenger-head{border-bottom:1px solid #24262b}
+.messenger-brand{letter-spacing:-1.1px}
+.messenger-frame{background:#08090b}
+.messenger-notice{font-weight:650}
+.messenger-search-wrap input:focus{outline:2px solid #0866ff;outline-offset:1px}
+.messenger-bottom{padding-bottom:max(8px,env(safe-area-inset-bottom))}
+@media(min-width:900px){
+ .messenger-app{max-width:1440px;margin:0 auto;border-left:1px solid #24262b;border-right:1px solid #24262b}
+ .messenger-frame{max-width:100%}
+}
+@media(max-width:600px){
+ .messenger-head{padding:0 14px}
+ .messenger-search-wrap{padding:7px 12px}
+ .messenger-stories{padding-left:12px;padding-right:12px}
+ .messenger-shortcuts{padding-left:12px;padding-right:12px}
+}
+</style>
+</head>
 <body>
 <div class="messenger-app">
 <header class="messenger-head">
@@ -260,7 +280,15 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
  function openInboxDirectly(){
   if(inboxFallbackStarted)return;
   inboxFallbackStarted=true;
-  location.replace('social.html?tab=messages&messenger=1');
+  const host=document.querySelector('.messenger-app');
+  const old=document.getElementById('messenger-load-error');if(old)old.remove();
+  const panel=document.createElement('section');
+  panel.id='messenger-load-error';
+  panel.setAttribute('role','alert');
+  panel.style.cssText='position:fixed;inset:0;z-index:50;display:grid;place-content:center;justify-items:center;gap:12px;padding:28px;background:#101114;color:#f0f2f5;text-align:center;font:15px Arial,sans-serif';
+  panel.innerHTML='<div style="font-size:42px">💬</div><h2 style="margin:0">Messenger could not load</h2><p style="max-width:340px;color:#b0b3b8;line-height:1.5">Your separate Messenger page is still open. Check your connection and try again.</p><button id="messenger-retry-load" type="button" style="border:0;border-radius:24px;background:#0866ff;color:#fff;padding:12px 24px;font-weight:700">Try again</button><a href="login.html?next=messenger.html" style="color:#8ab4ff">Sign in</a>';
+  (host||document.body).appendChild(panel);
+  document.getElementById('messenger-retry-load').addEventListener('click',()=>{location.reload();});
  }
  frame.addEventListener('error',openInboxDirectly);
  frame.addEventListener('load',function(){
