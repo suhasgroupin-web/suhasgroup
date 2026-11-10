@@ -2359,7 +2359,7 @@ document.addEventListener('pointerup',function(e){
   if(!id||suhasFeedPhotoLikePending.has(id))return;
   const card=photo.closest('.post-card');
   const like=card&&card.querySelector('[data-like="'+id+'"]');
-  if(!like||/\\bLiked\\b/.test(like.textContent))return;
+  if(!like||/\bLiked\b/.test(like.textContent))return;
   suhasFeedPhotoLikePending.add(id);
   like.click();
   window.setTimeout(function(){suhasFeedPhotoLikePending.delete(id);},1000);
