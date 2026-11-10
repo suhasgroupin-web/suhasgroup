@@ -677,3 +677,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - UI commit: `99cabecbeac1a143c3a980a580e4bf662ec04b9e`; cache commit: `6633381040491ecf6a3fef38f1ea9230dd8d38a1`.
 - No user profile data, cover object, other photos, or social features modified.
 - Pending: Vercel Production deployment and visual confirmation after refresh.
+
+
+## 2026-11-10 — Remove misplaced header pencil
+- User screenshot showed a pencil icon overlapping the SUHAS-MAX wordmark in the mobile header.
+- Confirmed it was the header-only `#header-profile-edit` button, separate from profile-page editing controls.
+- Added a scoped CSS rule to hide only `.site-header #header-profile-edit`; profile edit actions inside the profile page remain available.
+- Bumped service-worker cache fallback from v100 to v101.
+- UI commit: `c68c658541d2feb5cc3b2d3c94bf293b4e2bbaa6`; cache commit: `2920df093a499f389f5e424fc1f8aba5ba931b99`.
+- Pending: Production deployment and visual verification.
