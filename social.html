@@ -2527,7 +2527,7 @@ async function openMemberProfile(id){
  const p=profileData;
  $('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);
  $('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';
- $('profile-viewer-cover').style.backgroundImage=p.cover_photo_url?'url('+JSON.stringify(p.cover_photo_url)+')':'linear-gradient(135deg,#0b2347,#1e58a4)';
+ const coverBackground=p.cover_photo_url?'url('+JSON.stringify(p.cover_photo_url)+')':'linear-gradient(135deg,#0b2347,#1e58a4)';$('profile-viewer-cover').style.setProperty('background-image',coverBackground,'important');
  $('profile-viewer-sub').textContent=[p.position,p.company].filter(Boolean).join(' at ')||'SUHAS-MAX Member';
  $('profile-viewer-bio').textContent=p.bio||'';
  const [friendCount,followers,following,relation,myFollow]=await Promise.all([
@@ -2620,7 +2620,7 @@ async function saveOwnProfileImage(){
   ]);
   if(privateSave.error)throw privateSave.error;
   if(publicSave.error)throw publicSave.error;
-  if(kind==='cover')$('profile-viewer-cover').style.backgroundImage='url('+JSON.stringify(url)+')';
+  if(kind==='cover')$('profile-viewer-cover').style.setProperty('background-image','url('+JSON.stringify(url)+')','important');
   else{
    $('profile-viewer-avatar').src=url;
    const bottomAvatar=$('mobile-profile-nav-avatar');if(bottomAvatar)bottomAvatar.src=url;
