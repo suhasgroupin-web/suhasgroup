@@ -463,7 +463,7 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - The Home Feed and member Profile timeline now render a responsive 2-column photo grid (3-photo layout uses a wide final tile; 5–10 photos show a +N overlay). Each Feed photo retains the new double-tap Like gesture. Existing single image/video markup remains the fallback.
 - Post replacement clears the gallery metadata while preserving other metadata. Feed post deletion removes the owned Storage files after the row delete; failures are surfaced as a warning. Failed uploads are cleaned up when possible.
 - Source commit: `4b7fff09d8d05a06362ae6efef353819b0691044`.
-- Validation still pending: static JavaScript syntax checks, source assertions, Vercel Production READY confirmation, and authenticated Android multi-photo upload/render/delete testing. Do not claim the feature is fully verified until the authenticated test is complete.
+- Static validation: all 6 inline JavaScript blocks parse successfully; source assertions confirm multi-file input, 10-file/50-MB limits, video/photo exclusion, gallery metadata, legacy single-media fallback, Profile timeline grid, Storage cleanup code, and the existing double-tap handler. Vercel deployment `dpl_4S9LtQFLhAM13Gsnkn9JAffF4LCN` is READY for Production. Authenticated Android upload/render/delete testing remains pending, so do not claim full end-to-end verification.
 
 
 ## 2026-11-10 — Multi-photo composer and Feed gallery (increment 3)
