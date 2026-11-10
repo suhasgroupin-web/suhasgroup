@@ -2527,6 +2527,21 @@ const homeResults=await Promise.allSettled(homeLoads.map(async([label,run,hostId
   return {label,ok:false,error};
  }
 }));
+document.addEventListener('click',async e=>{
+ const retry=e.target.closest('[data-retry-home]');if(!retry)return;
+ const key=retry.dataset.retryHome;retry.disabled=true;retry.textContent='Loading…';
+ try{
+  if(key==='posts')await loadFeed();
+  else if(key==='stories')await loadHomeStories();
+  else if(key==='reels')await loadHomeReels();
+  else if(key==='people')await renderPeople();
+ }catch(error){
+  console.error('SUHAS-MAX retry failed:',error);
+  const hostId={posts:'feed-list',stories:'home-stories-list',reels:'home-reels-list'}[key];
+  const host=hostId&&$(hostId);
+  if(host)host.innerHTML='<div class="empty suhas-load-error"><b>Still unable to load.</b><br>'+safe(error?.message||'Please try again.')+'<br><button type="button" class="action" data-retry-home="'+key+'">Try again</button></div>';
+ }finally{if(retry.isConnected){retry.disabled=false;retry.textContent='Try again';}}
+});
 const failedLoads=homeResults.filter(x=>x.status==='rejected'||(x.status==='fulfilled'&&!x.value.ok));
 if(failedLoads.length)console.warn('SUHAS-MAX home sections failed:',failedLoads);
 const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile);
