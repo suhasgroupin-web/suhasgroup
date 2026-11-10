@@ -444,3 +444,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static source verification: confirmed exactly six bottom-nav controls remain and the final control is `#mobile-profile-nav`; confirmed the top-left hamburger and side-menu `data-tab="maxmenu"` remain. No JavaScript was changed in this increment.
 - Live authenticated Android/desktop visual tap-through remains pending because the browser inspection session is not signed in to SUHAS-MAX. No user records, accounts, posts, media, routes, or corporate modules were changed.
 - Next step: compare the Home Feed and post composer against Facebook's current signed-in interface, then make and test one focused Home Feed increment.
+
+
+## 2026-11-10 — Feed photo double-tap Like (increment 2)
+- Added a `data-feed-photo` identifier and accessible title to Feed post photo elements in `social.html`.
+- Added delegated Pointer Events handling: two quick taps/clicks on the same Feed photo within 360 ms activate the existing Like button. It checks for an existing “Liked” state first and uses a short per-post pending guard to avoid duplicate clicks while the existing Supabase Like request refreshes the feed.
+- Reuses the existing `suhas_post_likes` insert/delete handler and current RLS. No new tables, policies, storage objects, or user data were changed.
+- Source commit: `9507a4b1d4abbb4ed76139a73e7d8cbd17c6079c`.
+- Automated static verification: renderer marker and delegated pointer handler were confirmed in source; inline JavaScript syntax validation is recorded after the validation run below.
+- Pending: real two-account/member Android test of double-tap Like, unlike button behavior, and feed refresh. Do not claim full runtime verification until performed.
+- Next increment: recheck the Facebook public reference and inspect a separate Feed interaction (multi-photo grid/full-screen media) before implementation.
