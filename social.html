@@ -4579,4 +4579,16 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
  try{await load();}catch(e){stats.textContent=e.message||'Could not load monetization data.';console.error('Creator monetization:',e);}
 })();
 </script>
+
+<style id="suhas-max-hidden-state-navigation-fix-20261110">
+/* Critical: drawer has display:block!important, which overrides the browser's hidden attribute.
+   Keep closed drawer/sections hidden so its transparent scrim cannot intercept all navigation taps. */
+#maxmenu[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#maxmenu:not([hidden]){display:block!important;visibility:visible!important;pointer-events:auto!important}
+.max-menu-extra[hidden],.panel[hidden],#suhas-profile-editor[hidden]{display:none!important}
+.social-mobile-nav{pointer-events:auto!important;isolation:isolate}
+.social-mobile-nav>button{position:relative;z-index:1;pointer-events:auto!important;touch-action:manipulation}
+.facebook-left-menu-trigger{position:relative;z-index:2;pointer-events:auto!important;touch-action:manipulation}
+</style>
+
 </body></html>
