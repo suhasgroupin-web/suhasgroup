@@ -2481,7 +2481,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('button,a,[role="butt
  if(!postId)return;
  await activateMaxTab('feed');
  await loadFeed();
- const card=document.querySelector('#feed-list [id="post-'+CSS.escape(postId)+'"]');
+ const card=document.querySelector('#feed-list [id="post-'+CSS.escape(postId)+'"],#feed-list [id^="post-"][id$="'+CSS.escape(postId)+'"]');
  if(card){card.scrollIntoView({behavior:'auto',block:'center'});card.classList.add('suhas-post-permalink-focus');}
  else notice('This post is unavailable or you do not have permission to view it.',true);
 })();
@@ -2492,7 +2492,7 @@ document.addEventListener('click',async e=>{
  if(action){
   const id=action.dataset.postId,kind=action.dataset.postAction,post=await client.from('suhas_posts').select('id,user_id,content,media_url,media_path,media_type,audience').eq('id',id).maybeSingle();
   if(post.error){notice(post.error.message,true);return;}if(!post.data){notice('This post is no longer available.',true);return;}
-  const x=post.data,link=location.origin+location.pathname+'#post-'+encodeURIComponent(id);
+  const x=post.data,link=location.origin+location.pathname+'?tab=feed&post='+encodeURIComponent(id);
   try{
    if(kind==='copy'){const copied=await copyToClipboard(link);notice(copied?'Post link copied. You can paste it anywhere.':'Please copy the post link shown in the box.',!copied);}
    if(kind==='share'){await sharePostInApp(id,link,x);}if(kind==='repost'){const result=await client.from('suhas_post_reposts').insert({original_post_id:id,user_id:me});if(result.error&&result.error.code==='23505')throw new Error('You have already reposted this post.');if(result.error)throw result.error;await loadFeed();if($('profile-viewer')?.classList.contains('open')&&activeProfileId===me)await loadMemberTimeline(me);notice('Post reposted to your profile and feed.');}if(kind==='unrepost'){const result=await client.from('suhas_post_reposts').delete().eq('id',action.dataset.repostId).eq('user_id',me);if(result.error)throw result.error;await loadFeed();if($('profile-viewer')?.classList.contains('open')&&activeProfileId===me)await loadMemberTimeline(me);notice('Your repost was removed. The original post remains unchanged.');}
