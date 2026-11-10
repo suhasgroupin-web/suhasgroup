@@ -4186,6 +4186,69 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
  }
 })();
 </script>
+
+<style id="suhas-max-navigation-repair-20261110">
+/* Reliable mobile navigation repair; preserve the existing Facebook-style layout. */
+.facebook-left-menu-trigger{position:relative;z-index:110;display:grid!important;place-items:center;min-width:42px;min-height:42px;cursor:pointer;touch-action:manipulation}
+.facebook-left-menu-trigger svg{width:25px;height:25px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+.max-menu-drawer[hidden]{display:none!important}
+.max-menu-drawer:not([hidden]){display:block!important;position:fixed!important;inset:0!important;z-index:20000!important}
+.max-menu-drawer .max-menu-scrim{position:absolute;inset:0;background:rgba(0,0,0,.48)}
+.max-menu-drawer .max-menu-sheet{position:absolute;inset:0 auto 0 0;width:min(390px,88vw);max-height:100dvh;overflow:auto;background:var(--fb-card,#fff);color:var(--fb-text,#1c1e21);padding:16px 14px calc(24px + env(safe-area-inset-bottom));box-shadow:8px 0 30px #0002;overscroll-behavior:contain}
+.max-menu-drawer .max-menu-grid button,.max-menu-drawer [data-tab]{touch-action:manipulation;cursor:pointer}
+.social-mobile-nav{z-index:15000!important;pointer-events:auto!important;touch-action:manipulation!important}
+.social-mobile-nav button{min-height:52px;cursor:pointer;touch-action:manipulation}
+.social-mobile-nav button:focus-visible,.facebook-left-menu-trigger:focus-visible{outline:2px solid #0866ff;outline-offset:2px}
+.suhas-go-sg{position:fixed;z-index:14999;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid #0866ff;border-radius:18px;background:#0866ff;color:#fff;text-decoration:none;font:700 12px Arial,sans-serif;box-shadow:0 3px 12px #0002;white-space:nowrap;touch-action:manipulation}
+.suhas-go-sg:active{transform:scale(.97)}
+@media(min-width:761px){.suhas-go-sg{right:20px;bottom:20px}}
+</style>
+<a class="suhas-go-sg" href="https://suhasgroup.vercel.app/" aria-label="Go to Suhas Group main website" title="Go to Suhas Group">Go to SG</a>
+<script id="suhas-max-navigation-repair-controller-20261110">
+(function(){
+ if(window.__suhasMaxNavRepairInstalled)return;
+ window.__suhasMaxNavRepairInstalled=true;
+ function openMenu(){
+  const panel=document.getElementById('maxmenu');
+  if(!panel)return false;
+  panel.hidden=false;
+  document.body.classList.add('max-menu-open');
+  const close=panel.querySelector('.max-menu-close');
+  if(close)close.focus({preventScroll:true});
+  return true;
+ }
+ function closeMenu(){
+  const panel=document.getElementById('maxmenu');
+  if(panel)panel.hidden=true;
+  document.body.classList.remove('max-menu-open');
+ }
+ document.addEventListener('click',function(event){
+  const menuTrigger=event.target.closest('.facebook-left-menu-trigger,[data-tab="maxmenu"]');
+  if(menuTrigger){
+   event.preventDefault();event.stopPropagation();
+   if(typeof activateMaxTab==='function')activateMaxTab('maxmenu');else openMenu();
+   return;
+  }
+  const tabButton=event.target.closest('.social-mobile-nav [data-tab],#maxmenu [data-tab],.social-topnav [data-tab],.home-reels-section [data-tab],.home-discovery [data-tab]');
+  if(tabButton){
+   const tab=tabButton.getAttribute('data-tab');
+   if(!tab)return;
+   event.preventDefault();event.stopPropagation();
+   if(typeof activateMaxTab==='function')activateMaxTab(tab);
+   else if(tab==='maxmenu')openMenu();
+   return;
+  }
+  if(event.target.closest('[data-menu-close]'))closeMenu();
+ },true);
+ document.addEventListener('keydown',function(event){if(event.key==='Escape')closeMenu();});
+ document.querySelectorAll('.social-mobile-nav button').forEach(function(button){
+  button.type='button';
+  button.style.pointerEvents='auto';
+  button.addEventListener('touchend',function(){},{passive:true});
+ });
+})();
+</script>
+
 </body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
