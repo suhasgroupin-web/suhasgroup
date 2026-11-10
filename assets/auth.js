@@ -85,8 +85,7 @@
       var userResult = await sb.auth.getUser();
       if(userResult.error || !userResult.data.user) return false;
       var result = await sb.rpc('has_suhas_role', {
-        p_user_id: userResult.data.user.id,
-        p_roles: ['OWNER']
+        p_roles: ['OWNER', 'ADMIN']
       });
       if(!result.error && result.data === true) return true;
       // Secure fallback for the designated, verified SUHAS owner account.
