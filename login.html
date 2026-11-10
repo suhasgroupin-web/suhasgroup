@@ -123,8 +123,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
     var allowedNext = ['social.html','messenger.html','app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
     if(next){try{
       var target=new URL(next,location.href);
-      var leaf=target.pathname.replace(/^\\/+|\\/+$/g,'');
-      if(leaf && !/\\.[a-z0-9]+$/i.test(leaf)) leaf += '.html';
+      var leaf=target.pathname.split('/').filter(Boolean).join('/');
+      var lastPart=leaf.split('/').pop()||'';
+      if(lastPart && lastPart.indexOf('.')===-1) leaf += '.html';
       if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){window.location.href=leaf+target.search+target.hash;return;}
     }catch(ignore){}}
     window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'app.html';
