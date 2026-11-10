@@ -557,3 +557,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Commits: `3993069ea31164be92d92557047e3fd4dcbf9a98`, `8dcb116e9ec2c01f1760937a8168bd73aecf92b9`.
 - Static verification: 6/6 inline JavaScript blocks parse; static checks confirm both buttons are nested within their respective photo containers and existing preview/save handlers remain present.
 - Still required: verify visual placement and gallery/save behavior on an authenticated Android device after deployment.
+
+
+## 2026-11-10 — Runtime-enforced photo camera placement
+- Rechecked the user's latest screenshot and the full cascade of legacy CSS rules. Earlier static CSS was not sufficient because later profile-detail styles also target the same camera controls.
+- Added runtime positioning in `openMemberProfile()` after owner permissions are determined. It applies important inline styles to anchor the cover camera to the cover's bottom-right and the avatar camera to the avatar wrapper's bottom-right, and explicitly toggles display for owner/non-owner profiles.
+- Preserves existing camera button IDs, file inputs, image preview and upload/save handlers.
+- Source commit: `2cfbb41cf39b8545be70bef074228c98a00a474a`.
+- Static validation: 6 inline scripts; syntax errors: 0.
+- Pending: wait for Production deployment and confirm visual placement on the user's Android device.
