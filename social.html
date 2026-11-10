@@ -3385,6 +3385,18 @@ closeMenuOnHomeLoad();
 window.addEventListener('pageshow',closeMenuOnHomeLoad);
 window.addEventListener('DOMContentLoaded',closeMenuOnHomeLoad);
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){initSuhasArcade();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages'){await loadThreads();document.getElementById('messages')?.scrollIntoView({behavior:'smooth',block:'start'});}}catch(e){notice(e.message||'Could not open this section.',true);}}
+// Route every in-app navigation control through the same scoped tab controller.
+document.addEventListener('click',e=>{
+ const trigger=e.target.closest('.facebook-left-menu-trigger,[data-tab]');
+ if(!trigger)return;
+ const tab=trigger.getAttribute('data-tab');
+ if(!tab)return;
+ const allowed=['feed','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings','maxmenu'];
+ if(!allowed.includes(tab))return;
+ e.preventDefault();
+ e.stopPropagation();
+ activateMaxTab(tab);
+},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
 /* SUHAS-MAX has its own refresh-safe routes and a Back guard at the app boundary. */
 (function(){
@@ -4204,52 +4216,9 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
 @media(min-width:761px){.suhas-go-sg{right:20px;bottom:20px}}
 </style>
 <a class="suhas-go-sg" href="https://suhasgroup.vercel.app/" aria-label="Go to Suhas Group main website" title="Go to Suhas Group">Go to SG</a>
-<script id="suhas-max-navigation-repair-controller-20261110">
-(function(){
- if(window.__suhasMaxNavRepairInstalled)return;
- window.__suhasMaxNavRepairInstalled=true;
- function openMenu(){
-  const panel=document.getElementById('maxmenu');
-  if(!panel)return false;
-  panel.hidden=false;
-  document.body.classList.add('max-menu-open');
-  const close=panel.querySelector('.max-menu-close');
-  if(close)close.focus({preventScroll:true});
-  return true;
- }
- function closeMenu(){
-  const panel=document.getElementById('maxmenu');
-  if(panel)panel.hidden=true;
-  document.body.classList.remove('max-menu-open');
- }
- document.addEventListener('click',function(event){
-  const menuTrigger=event.target.closest('.facebook-left-menu-trigger,[data-tab="maxmenu"]');
-  if(menuTrigger){
-   event.preventDefault();event.stopPropagation();
-   if(typeof activateMaxTab==='function')activateMaxTab('maxmenu');else openMenu();
-   return;
-  }
-  const tabButton=event.target.closest('.social-mobile-nav [data-tab],#maxmenu [data-tab],.social-topnav [data-tab],.home-reels-section [data-tab],.home-discovery [data-tab]');
-  if(tabButton){
-   const tab=tabButton.getAttribute('data-tab');
-   if(!tab)return;
-   event.preventDefault();event.stopPropagation();
-   if(typeof activateMaxTab==='function')activateMaxTab(tab);
-   else if(tab==='maxmenu')openMenu();
-   return;
-  }
-  if(event.target.closest('[data-menu-close]'))closeMenu();
- },true);
- document.addEventListener('keydown',function(event){if(event.key==='Escape')closeMenu();});
- document.querySelectorAll('.social-mobile-nav button').forEach(function(button){
-  button.type='button';
-  button.style.pointerEvents='auto';
-  button.addEventListener('touchend',function(){},{passive:true});
- });
-})();
-</script>
 
-</body></html>
+
+
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
 .suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
@@ -4516,3 +4485,5 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
 #messages .empty{color:#65676b!important}
 @media(max-width:760px){#messages .message-chat-panel{background:#fff!important}#messages .msg-list{max-height:calc(100dvh - 220px)!important}}
 </style>
+
+</body></html>
