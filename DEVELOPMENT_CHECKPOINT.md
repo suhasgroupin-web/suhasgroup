@@ -535,3 +535,15 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static verification: 6/6 inline JavaScript blocks parse successfully; profile tab markup, anchors, delegated click handler and mobile full-screen CSS checks passed.
 - Not yet verified: real authenticated mobile/desktop rendering, profile image upload, and tab interaction on a live signed-in account. The supplied screenshots remain the visual reference; this increment does not claim a complete Facebook match.
 - Next step: inspect the new production deployment, then test own profile and another member profile with real authenticated accounts; adjust spacing from actual device screenshots before moving to the next screen.
+
+
+## 2026-11-10 — Keep Profile and Edit Profile inside SUHAS-MAX (navigation increment)
+- Objective: ensure profile entry points and the profile editor stay inside the SUHAS-MAX social app rather than navigating to the SUHAS GROUP main website.
+- Updated `social.html`: My Profile links are intercepted and open the existing in-app member Profile viewer; the Profile's Edit profile action and profile menu edit action open an in-app full-screen editor overlay.
+- The editor overlay embeds the existing `profile.html?embed=1` form, preserving its Supabase-backed profile fields and save flow; embedded mode hides the corporate site header and provides a Back to SUHAS-MAX link instead of Main website.
+- Updated browser route state to preserve the active SUHAS-MAX tab/profile and support the editor overlay in the URL/back-stack. Home/feed navigation remains on `social.html`.
+- Changed files: `social.html`, `profile.html`. No database schema, RLS policy, user records, media objects, or existing social features were changed.
+- Source commits: `e866da5c7cd1972b8e619a4cd38057da179bada5`, `ee10b64852c0e0e95640adb952981c07f5d4ec2e`, `f2d61f471ce1751987dd39d8956972ff83df8829`.
+- Static verification: all 6 inline scripts in `social.html` and all 3 inline scripts in `profile.html` pass JavaScript syntax parsing; static checks confirm in-app editor overlay, embedded editor mode, edit action, profile-link interception, and back navigation hooks.
+- Not yet verified: authenticated Android/desktop click-through, editor form save from inside iframe, image upload from real device, browser back/forward behavior on device, and live deployment. External third-party links (e.g. LinkedIn) and separate corporate modules are not converted into SUHAS-MAX screens by this increment.
+- Next step: inspect Vercel Production deployment for commit `f2d61f471ce1751987dd39d8956972ff83df8829`; then test Profile → Edit Profile → Save → Back and the bottom Profile/Home navigation using an authenticated account. Continue routing any remaining first-party social-app links to in-app screens without changing corporate modules.
