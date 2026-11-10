@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.10.10",
-  "published_at": "2026-11-10T05:16:30.000Z",
-  "notify_after_days": 15,
-  "update_message": "The post composer now has a clear Post action and honest unavailable states for unconnected tools.",
+  "version": "2026.11.10.11",
+  "published_at": "2026-11-10T06:10:00.000Z",
+  "notify_after_days": 0,
+  "update_message": "A SUHAS-MAX update is ready. Install now to refresh the profile photo camera controls and photo editor.",
   "mandatory": false
 }
