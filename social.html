@@ -1807,7 +1807,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 <button data-tab="reels" type="button" aria-label="Reels"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4zM3 8h18M8 3l4 5M15 3l4 5"/></svg></span><span>Reels</span></button>
 <button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.3 11H5.3zM3 9l2-5h14l2 5M9 9a3 3 0 0 0 6 0"/></svg></span><span>Market</span></button>
 <button data-tab="notifications" type="button" aria-label="Notifications"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></span><span>Alerts</span></button>
-<button data-tab="maxmenu" type="button" aria-label="Menu" title="Menu"><span class="mobile-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span><span>Menu</span></button>
 <button class="mobile-profile-nav" id="mobile-profile-nav" type="button" aria-label="My profile" title="My profile"><img id="mobile-profile-nav-avatar" src="assets/logo.png" alt="My profile"></button>
 </nav>
 <section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"></div><button type="button" id="profile-cover-change" class="profile-owner-cover-edit" hidden>📷 Change cover photo</button><input id="profile-cover-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div class="profile-viewer-head"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><button type="button" id="profile-avatar-change" class="profile-owner-avatar-edit" hidden aria-label="Change profile picture">📷</button><input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-stats" id="profile-viewer-stats" aria-label="Profile connections"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="messenger">✉ Send in Messenger</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><div id="profile-viewer-info"></div><section class="profile-viewer-posts" id="profile-viewer-posts" aria-label="Member posts"><h3>Posts &amp; Reposts</h3><div class="profile-viewer-post-list"></div></section></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script>
@@ -3035,7 +3034,15 @@ body.suhas-composer-open{overflow:hidden!important}
   if(state.scroll)setTimeout(()=>scrollTo(state.scroll.x,state.scroll.y),120);
  }catch(_){}});
 })();
-</script></body></html>
+</script>
+<style id="suhas-max-six-tab-profile-navigation-20261110">
+/* Facebook-style mobile shortcut bar: profile avatar is the final tab; Menu remains in the header/side drawer. */
+@media(max-width:760px){
+  .social-mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;}
+  .social-mobile-nav .mobile-profile-nav{min-height:52px!important;}
+}
+</style>
+</body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
 .suhas-friend-request-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin:10px 0;border:1px solid #e4e6eb;border-radius:14px;background:#fff;box-shadow:0 2px 7px #1018280a}
