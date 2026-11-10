@@ -882,3 +882,18 @@ Date: 2026-11-10 (Dhaka)
 - Important distinction: Vercel API now reports READY for the latest production deployment; earlier deployment-creation HTTP 402 remains an observed historical failure, but the latest deployment status should be checked again before any future release.
 - Automated authenticated UI/browser tests have not been run. Source inspection is not proof of click behavior in a signed-in browser. Phase 01 remains IN PROGRESS pending runtime testing and completion of contextual profile/post/comment/message menus and remaining settings workflows.
 - No destructive changes, no database writes/migrations, no hosting switch, and no user-data changes in this run.
+
+
+
+## Master prompt execution — fresh repository audit
+Date: 2026-11-10
+- Re-inspected the live main-branch social.html (blob SHA 0198d9dafb424160dc1bf91a6c348e0e73c8e616; 509,742 characters) and messenger.html (blob SHA 1c3588e1a7808875df9aecae46b11ba83d20a7ad; 14,419 characters).
+- Current static inventory in social.html: 20 section elements, 248 button elements, 17 anchor elements, 13 forms, 17 script tags. These are source counts, not unique tested controls.
+- Settings categories present: Preferences, Appearance, Feed & media, Privacy & account, Account security, Accounts Center, Privacy/Audience/Visibility/Blocking, Notifications, Feed Preferences, Language/Region, Media, Accessibility, Activity Log, Ads/Payments, Data/Permissions, Help/Support, Monetization.
+- Current routed destinations are feed, people, friends, saved, groups, marketplace, reels, gaming, requests, following, notifications, messages, settings, and maxmenu. Dedicated Video and Pages routes are absent; do not silently map these to unrelated features or mark them complete.
+- Menu "See more" fix from commit d8110b9598f072502c34e7ffa47ae5270b6da92d is present in main; source handler toggles #max-menu-extra and sets aria-expanded.
+- Current settings save routine writes only to the existing authenticated user's member_settings.preferences and suhas_account_preferences records. No schema change or user data mutation was made during this audit.
+- Vercel latest production deployment query returned READY records for project suhasgroup. The newest listed production deployment URL is https://suhasgroup-hvbe04vzg-suhas-max.vercel.app and its build commit is 534186253a299deffb4b705e9bd628b248558cf0. This is older than the latest main branch commits, so it does NOT prove the current main source is deployed. Do not claim latest code is live until Vercel's deployment commit matches main.
+- Facebook UX comparison reference: Meta's official guidance supports grouped searchable settings, Privacy Checkup, audience selection and tag/timeline review; feed preferences include Favorites, snooze/reconnect and show-more/less controls. Sources: https://www.meta.com/safety/topics/safety-basics/tools/privacy/ ; https://about.fb.com/news/2021/08/facebook-settings-redesign/ ; https://about.fb.com/news/2022/10/new-ways-to-customize-your-facebook-feed/
+- Phase 01 remains IN PROGRESS: static source review passed, but full authenticated browser QA is outstanding and some contextual menu destinations/settings are still incomplete.
+- Phase 02 has not started. No unsupported route was added, no fake data was introduced, no destructive code or database changes were made.
