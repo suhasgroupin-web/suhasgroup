@@ -731,3 +731,14 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Static source review completed. Real Android picker, preview, upload, and publish verification remains pending.
 - Deployment remains blocked/unverified: Vercel project and deployment reads returned 403 Forbidden in this session. Do not tell the user the production site is updated until an authorized deployment succeeds and the live site is checked.
 - Recovery point: `c4574ad63a7e504858b2c80baf4962f6e24ca1df`; deploy main and exercise all four Create actions on Android.
+
+
+## 2026-11-10 — Cloudflare Pages migration preparation
+- User requested migration from Vercel to Cloudflare Pages, with preference to retain the current site address.
+- Repository inspected: `suhasgroupin-web/suhasgroup`; this is a static multi-page HTML/PWA site with no root `package.json`, no `wrangler.toml`, and no `vercel.json`. Cloudflare Pages Git integration can deploy it without a build command; expected output directory is the repository root (`.`).
+- Added a Cloudflare Pages-compatible `_headers` file with conservative HTML revalidation, no-cache service worker/release metadata, one-hour asset caching, and basic response security headers. This file is ignored by Vercel as ordinary static content and does not alter existing app code.
+- Preparation commit: `39f8435f7e128c649d2e958ae3dc264aabd5108e`.
+- Cloudflare account is not yet created/connected. No Cloudflare Pages project or deployment exists yet.
+- Current public URL in repository metadata is `https://suhasgroup.vercel.app`. This is a Vercel-owned subdomain and cannot be reassigned to Cloudflare Pages. Prior conversation says ownership of `suhasgroup.in` was not established and user previously stated they do not own a custom domain. Do not alter canonical URLs, sitemap, DNS, or Vercel production while the replacement domain is unresolved.
+- Next required user actions: create a free Cloudflare account, authorize Cloudflare Workers & Pages GitHub App for repository `suhasgroupin-web/suhasgroup`, and choose a domain that the user owns for production. If no owned domain is available, use the temporary `*.pages.dev` hostname until a custom domain is registered.
+- After authorization: create a Pages Git-integrated project with production branch `main`, no build command, output directory `.`; deploy and verify all routes, PWA manifest/service worker, Supabase auth, media uploads, and realtime features before changing any DNS.
