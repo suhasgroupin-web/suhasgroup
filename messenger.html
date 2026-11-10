@@ -29,9 +29,46 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:
 </header>
 <iframe class="messenger-frame" id="messenger-frame" title="Suhas Messenger Inbox" src="social.html?tab=messages&messenger=1"></iframe>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
 <script>
 (function(){
  const frame=document.getElementById('messenger-frame');
+ frame.removeAttribute('src');
+ frame.style.visibility='hidden';
+ const gate=document.createElement('div');
+ gate.id='messenger-loading';
+ gate.textContent='Checking secure SUHAS-MAX access…';
+ gate.style.cssText='flex:1;display:grid;place-items:center;padding:24px;color:#b0b3b8;background:#000;text-align:center;font-size:15px';
+ document.querySelector('.messenger-app').appendChild(gate);
+ async function start(){
+  try{
+   const cfg=window.SUHAS_CONFIG;
+   if(!cfg||!window.supabase)throw new Error('Messenger authentication service did not load.');
+   const client=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_PUBLISHABLE_KEY,{
+    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storage:window.localStorage,storageKey:'suhas-group-auth-v2'}
+   });
+   const result=await client.auth.getSession();
+   const session=result.data&&result.data.session;
+   if(result.error||!session){
+    location.replace('login.html?next='+encodeURIComponent('messenger.html'));
+    return;
+   }
+   const profile=await client.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
+   if(profile.error)throw profile.error;
+   if(!profile.data||profile.data.profile_complete!==true){
+    location.replace('profile.html?setup=1');
+    return;
+   }
+   gate.remove();
+   frame.src='social.html?tab=messages&messenger=1';
+   frame.style.visibility='visible';
+  }catch(error){
+   gate.textContent='Messenger could not start: '+(error&&error.message?error.message:'Please refresh and try again.');
+   console.error('Suhas Messenger startup failed:',error);
+  }
+ }
+ start();
  function styleMessenger(){
   try{
    const doc=frame.contentDocument;
