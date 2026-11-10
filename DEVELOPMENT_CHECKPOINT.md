@@ -451,6 +451,6 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Added delegated Pointer Events handling: two quick taps/clicks on the same Feed photo within 360 ms activate the existing Like button. It checks for an existing “Liked” state first and uses a short per-post pending guard to avoid duplicate clicks while the existing Supabase Like request refreshes the feed.
 - Reuses the existing `suhas_post_likes` insert/delete handler and current RLS. No new tables, policies, storage objects, or user data were changed.
 - Source commit: `9507a4b1d4abbb4ed76139a73e7d8cbd17c6079c`.
-- Automated static verification: renderer marker and delegated pointer handler were confirmed in source; inline JavaScript syntax validation is recorded after the validation run below.
+- Automated static verification: the Feed renderer includes exactly one `data-feed-photo` marker and one delegated double-tap pointer handler; all 6 inline JavaScript blocks parse successfully via `new Function`. The mobile navigation markup has 6 buttons and no bottom Menu button (Menu remains in the header).
 - Pending: real two-account/member Android test of double-tap Like, unlike button behavior, and feed refresh. Do not claim full runtime verification until performed.
 - Next increment: recheck the Facebook public reference and inspect a separate Feed interaction (multi-photo grid/full-screen media) before implementation.
