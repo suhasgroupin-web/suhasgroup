@@ -667,3 +667,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commits: UI `30d0307c6a3c4684d57803bc505e75eb90b93a75`; service worker `9f7ab1da5acc82d6f1d499ac95cc23b85205b9bc`.
 - Static source checks: six existing destination controls retained; final override specifies six equal columns, row flow, fixed bottom placement and transparent active backgrounds.
 - Pending: Vercel Production deployment and real laptop/browser visual + tap verification. No user records, posts, messages, database objects or routes changed.
+
+
+## 2026-11-10 — Fix saved cover photo not rendering
+- Investigated the user's Hasnain Abir profile: the cover image object exists in the public `member-avatars` bucket (PNG, 2,789,626 bytes), and both `suhas_public_profiles.cover_photo_url` and `suhas_member_profiles.cover_photo_url` contain the same saved URL.
+- Root cause: later profile CSS declared a blue gradient with `!important`, which overrode the normal-priority inline `backgroundImage` set by profile loading and by the save handler. The saved photo was therefore hidden by CSS even though persistence succeeded.
+- Fixed both profile-load and immediate-save paths in `social.html` to set `background-image` with inline `!important`, ensuring the persisted URL takes precedence over gradient theme rules.
+- Bumped service worker cache fallback from v99 to v100.
+- UI commit: `99cabecbeac1a143c3a980a580e4bf662ec04b9e`; cache commit: `6633381040491ecf6a3fef38f1ea9230dd8d38a1`.
+- No user profile data, cover object, other photos, or social features modified.
+- Pending: Vercel Production deployment and visual confirmation after refresh.
