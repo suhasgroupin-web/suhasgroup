@@ -3820,6 +3820,83 @@ body.suhas-photo-viewer-open{overflow:hidden!important}
 }
 </style>
 
+
+<style id="suhas-max-mobile-default-desktop-toggle-20261110">
+/* Mobile is the default. Desktop layout is opt-in from the main menu only. */
+@media(max-width:760px){
+ html body:not(.suhas-desktop-mode){min-width:0!important;width:100%!important;overflow-x:hidden!important}
+ html body:not(.suhas-desktop-mode) .social-shell{display:block!important;width:100%!important;max-width:100%!important;margin:0!important}
+ html body:not(.suhas-desktop-mode) .social-left,
+ html body:not(.suhas-desktop-mode) .social-right{display:none!important}
+ html body:not(.suhas-desktop-mode) .social-topnav{display:none!important}
+ html body:not(.suhas-desktop-mode) .social-mobile-nav{display:grid!important}
+}
+.suhas-display-mode-option{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:48px!important;margin-top:8px!important;padding:11px 13px!important;border:1px solid #e4e6eb!important;border-radius:10px!important;background:#fff!important;color:#1c1e21!important;text-align:left!important;font:700 14px Arial,sans-serif!important;cursor:pointer!important}
+.suhas-display-mode-option:active{background:#e7f3ff!important}
+.suhas-display-mode-option .mode-icon{font-size:20px;width:25px;text-align:center}
+.suhas-display-mode-option .mode-copy{display:grid;gap:2px}
+.suhas-display-mode-option small{font-size:11px;font-weight:400;color:#65676b}
+body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;border-color:#0866ff!important}
+</style>
+<script id="suhas-max-mobile-default-desktop-toggle-20261110">
+(function(){
+ const modeKey='suhas-max-display-mode';
+ const body=document.body;
+ function applyMode(mode){
+   const desktop=mode==='desktop';
+   body.classList.toggle('suhas-desktop-mode',desktop);
+   try{localStorage.setItem(modeKey,desktop?'desktop':'mobile');}catch(_){}
+   const button=document.getElementById('suhas-display-mode-option');
+   if(button){
+     button.setAttribute('aria-pressed',String(desktop));
+     const label=button.querySelector('.mode-label');
+     const hint=button.querySelector('.mode-hint');
+     if(label)label.textContent=desktop?'Switch to Mobile mode':'Desktop mode';
+     if(hint)hint.textContent=desktop?'Return to the mobile layout':'Use the full desktop layout';
+     const icon=button.querySelector('.mode-icon');if(icon)icon.textContent=desktop?'📱':'🖥️';
+   }
+ }
+ function setup(){
+   let mode='mobile';
+   try{mode=localStorage.getItem(modeKey)==='desktop'?'desktop':'mobile';}catch(_){}
+   // Never infer desktop mode from device width, browser UA, or a previous browser setting.
+   applyMode(mode);
+   const extra=document.getElementById('max-menu-extra');
+   if(extra&&!document.getElementById('suhas-display-mode-option')){
+     const button=document.createElement('button');
+     button.type='button';button.id='suhas-display-mode-option';button.className='suhas-display-mode-option';
+     button.innerHTML='<span class="mode-icon" aria-hidden="true">🖥️</span><span class="mode-copy"><span class="mode-label">Desktop mode</span><small class="mode-hint">Use the full desktop layout</small></span>';
+     button.addEventListener('click',function(){
+       const next=body.classList.contains('suhas-desktop-mode')?'mobile':'desktop';
+       applyMode(next);
+       const drawer=document.getElementById('maxmenu');
+       if(drawer){drawer.hidden=true;body.classList.remove('max-menu-open');}
+     });
+     extra.appendChild(button);
+   }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
+ window.addEventListener('pageshow',function(){let mode='mobile';try{mode=localStorage.getItem(modeKey)==='desktop'?'desktop':'mobile';}catch(_){}applyMode(mode);});
+})();
+</script>
+<style id="suhas-max-comments-always-collapsed-20261110">
+#feed-list .suhas-comments-panel:not([open]){display:none!important}
+#feed-list .suhas-comments-panel[open]{display:block!important}
+</style>
+<script id="suhas-max-comments-default-closed-20261110">
+(function(){
+ function closeComments(){
+   document.querySelectorAll('#feed-list .suhas-comments-panel[open]').forEach(panel=>panel.open=false);
+   document.querySelectorAll('#feed-list [data-focus-comment][aria-expanded="true"]').forEach(button=>button.setAttribute('aria-expanded','false'));
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',closeComments,{once:true});else closeComments();
+ // Keep comment panels out of the generic UI-state restore list; they must open only on an explicit Comment click.
+ const stateScript=document.getElementById('suhas-max-refresh-ui-state-20261110');
+ if(stateScript&& !stateScript.dataset.commentsPatched){
+   stateScript.dataset.commentsPatched='true';
+ }
+})();
+</script>
 </body></html>
 <style id="suhas-friend-requests-profile-refresh-20261110">
 #requests>h3{margin:18px 0 10px;font-size:16px}
