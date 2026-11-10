@@ -1,11 +1,11 @@
 {
-  "id": "./index.html",
+  "id": "./social.html",
   "name": "SUHAS-MAX — Powered by SUHAS GROUP",
   "short_name": "SUHAS-MAX",
   "description": "SUHAS-MAX is the social and corporate community platform powered by SUHAS GROUP.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./index.html?source=pwa",
+  "start_url": "./social.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -49,34 +49,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Home",
+      "name": "SUHAS-MAX Home",
       "short_name": "Home",
-      "url": "./index.html"
-    },
-    {
-      "name": "Main Menu",
-      "short_name": "Menu",
-      "url": "./app.html"
-    },
-    {
-      "name": "Find Jobs",
-      "short_name": "Jobs",
-      "url": "./jobs.html"
-    },
-    {
-      "name": "For Employers",
-      "short_name": "Employers",
-      "url": "./employers.html"
-    },
-    {
-      "name": "Print Barcode (O5-Intl Desk)",
-      "short_name": "Barcode",
-      "url": "./barcode/"
-    },
-    {
-      "name": "Sign Up",
-      "short_name": "Sign Up",
-      "url": "./signup.html"
+      "url": "./social.html"
     }
   ]
 }
