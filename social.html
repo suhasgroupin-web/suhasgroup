@@ -4308,3 +4308,85 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
  document.getElementById('header-messenger-open')?.addEventListener('click',()=>{panel.classList.remove('chat-open');},true);
 })();
 </script>
+
+
+<style id="suhas-max-messenger-native-dark-20261110">
+/* SUHAS-MAX Messenger inbox inspired by the supplied reference; all data/actions remain first-party. */
+#messages:not([hidden]){background:#000!important;color:#e4e6eb!important;padding:0!important}
+#messages .suhas-messenger-pagebar{min-height:68px!important;padding:10px 18px!important;background:#000!important;border:0!important;box-shadow:none!important}
+#messages .suhas-messenger-pagebar strong{color:#fff!important;font-size:29px!important;letter-spacing:-1.2px!important;font-weight:800!important}
+#messages .suhas-messenger-back{background:#242526!important;color:#fff!important}
+#messages .suhas-messenger-pagebar:after{content:"";margin-left:auto}
+#messages .suhas-messenger-new{margin-left:auto;width:42px;height:42px;border:0;border-radius:50%;background:#242526;color:#fff;font-size:24px;cursor:pointer}
+#messages .message-start{display:none!important;margin:0!important;padding:0 18px 12px!important;background:#000!important;border:0!important}
+#messages.member-search-open .message-start{display:block!important}
+#messages .message-start h3{color:#fff!important}
+#messages #message-member-search,#messages #message-thread-search{width:100%!important;min-height:48px!important;border:0!important;border-radius:26px!important;background:#303030!important;color:#fff!important;padding:0 18px!important;font-size:16px!important;outline:none!important}
+#messages #message-member-search::placeholder,#messages #message-thread-search::placeholder{color:#b0b3b8!important}
+#messages .social-grid{display:block!important;max-width:100%!important;padding:0 18px 24px!important}
+#messages .social-grid>div:first-child{width:100%!important}
+#messages .message-subtitle{font-size:0!important;margin:0!important}
+#messages .message-subtitle:after{content:"Chats";font-size:21px;color:#fff;font-weight:750}
+#messages #message-thread-search{margin:12px 0 13px!important}
+#messages #threads{display:grid!important;gap:0!important;max-height:none!important;overflow:visible!important}
+#messages .message-thread{display:flex!important;align-items:center!important;gap:13px!important;width:100%!important;min-height:86px!important;padding:10px 5px!important;border:0!important;border-radius:0!important;border-bottom:1px solid #242526!important;background:#000!important;text-align:left!important}
+#messages .message-thread>img,#messages .message-thread>.message-member-avatar{width:60px!important;height:60px!important;flex:0 0 60px!important;border-radius:50%!important;object-fit:cover!important;background:#303030!important;color:#fff!important}
+#messages .message-thread-copy{display:flex!important;flex:1!important;min-width:0!important;flex-direction:column!important;gap:3px!important}
+#messages .message-thread-name{font-size:16px!important;color:#f5f5f5!important;font-weight:750!important}
+#messages .message-thread-preview{display:block!important;max-width:100%!important;color:#b0b3b8!important;font-size:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#messages .message-thread-unread{background:#0866ff!important}
+#messages .message-status-dot.is-online{width:12px!important;height:12px!important;border:2px solid #000!important;background:#31a24c!important}
+#messages .message-chat-panel{position:fixed!important;inset:0!important;z-index:8!important;display:none!important;flex-direction:column!important;min-height:100dvh!important;padding:0!important;border:0!important;border-radius:0!important;background:#000!important;color:#fff!important}
+#messages.chat-open .message-chat-panel{display:flex!important}
+#messages.chat-open .message-start,#messages.chat-open .social-grid>div:first-child{display:none!important}
+#messages #chat-title{display:flex!important;align-items:center!important;gap:9px!important;min-height:64px!important;padding:8px 14px!important;border:0!important;border-bottom:1px solid #303030!important;color:#fff!important;font-size:17px!important;font-weight:750!important}
+#messages .suhas-chat-back{display:inline-grid!important;place-items:center!important;background:#242526!important;color:#fff!important}
+#messages .msg-list{display:flex!important;flex:1!important;flex-direction:column!important;gap:8px!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:auto!important;padding:14px!important;border-radius:0!important;background:#000!important}
+#messages .msg-list .empty{align-self:center!important;margin:auto!important;color:#b0b3b8!important;background:#242526!important;border-radius:24px!important;padding:18px!important;text-align:center!important}
+#messages .bubble{max-width:82%!important;align-self:flex-start!important;padding:10px 14px!important;border-radius:20px 20px 20px 5px!important;background:#303030!important;color:#fff!important;font-size:15px!important;line-height:1.4!important;overflow-wrap:anywhere!important}
+#messages .bubble.mine{align-self:flex-end!important;border-radius:20px 20px 5px 20px!important;background:#0866ff!important;color:#fff!important}
+#messages .message-seen-status{display:block!important;margin-top:4px!important;text-align:right!important;color:#dbeafe!important;font-size:10px!important}
+#messages .compose{display:flex!important;gap:8px!important;padding:10px 12px calc(12px + env(safe-area-inset-bottom))!important;margin:0!important;background:#000!important;border-top:1px solid #242526!important}
+#messages .compose input{min-width:0!important;flex:1!important;min-height:48px!important;border:0!important;border-radius:25px!important;background:#303030!important;color:#fff!important;padding:0 17px!important;font-size:16px!important}
+#messages .compose input::placeholder{color:#b0b3b8!important}
+#messages .compose button{min-width:58px!important;min-height:48px!important;border:0!important;border-radius:24px!important;background:#0866ff!important;color:#fff!important;font-weight:750!important}
+#messages .empty{color:#b0b3b8!important}
+#messages .suhas-inbox-filters{display:flex;gap:9px;margin:12px 0 4px}
+#messages .suhas-inbox-filters button{flex:1;min-height:42px;border:0;border-radius:24px;background:#242526;color:#b0b3b8;font-weight:750;font-size:14px}
+#messages .suhas-inbox-filters button.active{background:#082b52;color:#70b5ff}
+#messages .suhas-online-rail{display:flex;gap:16px;overflow-x:auto;padding:12px 0 14px;scrollbar-width:none}
+#messages .suhas-online-person{display:grid;justify-items:center;gap:5px;flex:0 0 66px;max-width:66px;border:0;background:transparent;color:#e4e6eb;font-size:11px;cursor:pointer}
+#messages .suhas-online-person img,.suhas-online-person span.avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#303030;border:2px solid #31a24c}
+#messages .suhas-online-person small{max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e4e6eb}
+@media(min-width:761px){#messages .social-grid{max-width:820px!important;margin:0 auto!important}#messages .message-thread{min-height:78px!important}#messages .message-chat-panel{max-width:900px!important;margin:auto!important}}
+</style>
+<script id="suhas-max-messenger-native-controller-20261110">
+(function(){
+ const panel=document.getElementById('messages');if(!panel||panel.dataset.nativeMessengerReady)return;panel.dataset.nativeMessengerReady='1';
+ const bar=panel.querySelector('.suhas-messenger-pagebar');if(!bar)return;
+ const newButton=document.createElement('button');newButton.type='button';newButton.className='suhas-messenger-new';newButton.textContent='✎';newButton.setAttribute('aria-label','New message');bar.append(newButton);
+ const grid=panel.querySelector('.social-grid'),list=panel.querySelector('#threads'),search=panel.querySelector('#message-thread-search');
+ const filters=document.createElement('div');filters.className='suhas-inbox-filters';filters.innerHTML='<button type="button" class="active" data-filter="all">All</button><button type="button" data-filter="unread">Unread</button>'; 
+ const rail=document.createElement('div');rail.className='suhas-online-rail';rail.hidden=true;
+ const subtitle=panel.querySelector('.message-subtitle');if(subtitle)subtitle.after(rail,filters);
+ let filter='all';
+ function applyFilter(){
+  list?.querySelectorAll('[data-open]').forEach(row=>{const unread=!!row.querySelector('.message-thread-unread');row.hidden=filter==='unread'&&!unread;});
+  filters.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));
+ }
+ filters.addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;applyFilter();});
+ if(list)new MutationObserver(applyFilter).observe(list,{childList:true,subtree:true});
+ newButton.addEventListener('click',()=>{panel.classList.toggle('member-search-open');const input=panel.querySelector('#message-member-search');if(panel.classList.contains('member-search-open'))input?.focus();});
+ const memberList=panel.querySelector('#message-member-list');
+ function makeOnlineRail(){
+  if(!memberList||!rail)return;
+  const candidates=[...memberList.querySelectorAll('[data-message]')].filter(x=>x.classList.contains('is-online')).slice(0,18);
+  rail.innerHTML=candidates.map(x=>{const img=x.querySelector('img'),name=x.querySelector('b')?.textContent||'Member';return '<button type="button" class="suhas-online-person" data-message="'+x.dataset.message+'">'+(img?'<img src="'+img.src+'" alt="">':'<span class="avatar">'+name.slice(0,1)+'</span>')+'<small>'+name.replace(/[&<>"]/g,'')+'</small></button>';}).join('');
+  rail.hidden=!candidates.length;
+ }
+ if(memberList)new MutationObserver(makeOnlineRail).observe(memberList,{childList:true,subtree:true});
+ panel.addEventListener('click',e=>{const online=e.target.closest('.suhas-online-person[data-message]');if(online){panel.querySelector('#message-member-list [data-message="'+online.dataset.message+'"]')?.click();}});
+ document.getElementById('message-member-search')?.addEventListener('input',()=>setTimeout(makeOnlineRail,0));
+ panel.addEventListener('click',e=>{if(e.target.closest('[data-open]'))panel.classList.remove('member-search-open');});
+})();
+</script>
