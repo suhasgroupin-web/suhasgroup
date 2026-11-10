@@ -2,8 +2,14 @@
   var authScriptUrl=document.currentScript&&document.currentScript.src?document.currentScript.src:location.href;
   var appRootPath=new URL('../',authScriptUrl).pathname;
   var routeParts=location.pathname.split('/').filter(Boolean);
-  var routeEarly=(routeParts[routeParts.length-1]||'index.html').toLowerCase();
-  var isRootAuthRoute=routeParts.length<=2;
+  function canonicalPageName(value){
+    var name=(value||'index.html').toLowerCase();
+    if(name && name.indexOf('.')===-1) name += '.html';
+    return name || 'index.html';
+  }
+  var routeEarly=canonicalPageName(routeParts[routeParts.length-1]||'index.html');
+  // Public authentication pages live only at the site root.
+  var isRootAuthRoute=routeParts.length<=1;
   var publicEarly=['index.html','login.html','signup.html','reset.html'];
   if(!(isRootAuthRoute&&publicEarly.indexOf(routeEarly)!==-1)){
     document.documentElement.classList.add('suhas-auth-pending');
@@ -45,7 +51,7 @@
     }
   });
 
-  var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var page = canonicalPageName(routeParts[routeParts.length-1] || 'index.html');
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Only authentication screens are public. Every other route, including the home route, requires a real session.
   var route = page;
