@@ -1895,7 +1895,7 @@ async function loadMemberTimeline(id){
  host.innerHTML=entries.map(entry=>{
   const x=entry.post,p=byId[x.user_id]||{},attribution=entry.repost?'<div class="profile-repost-label">↻ '+safe((members.find(m=>m.user_id===id)||{}).full_name||'This member')+' reposted</div>':'';
   const media=x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" src="'+safe(x.media_url)+'" alt="Post media">'):'';
-  return '<article class="profile-timeline-card">'+attribution+'<div class="profile-timeline-author"><b>'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+'<small>'+safe(new Date(x.created_at).toLocaleString())+'</small></div><p>'+safe(x.content)+'</p>'+media+'</article>';
+  return '<article class="profile-timeline-card">'+attribution+'<div class="profile-timeline-author"><b class="profile-clickable" data-profile-open="'+safe(x.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+'<small>'+safe(new Date(x.created_at).toLocaleString())+'</small></div><p>'+safe(x.content)+'</p>'+media+'</article>';
  }).join('')||'<div class="empty">No posts or reposts yet.</div>';
 }
 async function openMemberProfile(id){
@@ -2139,7 +2139,11 @@ document.addEventListener('input',function suhasCommentInputLiveContrast(e){
 });
 document.addEventListener('submit',async e=>{const form=e.target.closest('[data-comment-form]');if(!form)return;e.preventDefault();const input=form.querySelector('input'),content=input.value.trim();if(!content)return;const r=await client.from('suhas_post_comments').insert({post_id:Number(form.dataset.commentForm),user_id:me,content});if(r.error){notice(r.error.message,true);return;}await loadFeed();});
 document.addEventListener('click',async e=>{
- const profileTarget=e.target.closest('[data-profile-open]');if(profileTarget){try{await openMemberProfile(profileTarget.dataset.profileOpen);}catch(err){notice(err.message||'Could not load profile.',true);}return;}
+ const profileTarget=e.target.closest('[data-profile-open],#mobile-profile-nav,#home-composer-avatar');
+ if(profileTarget){
+  const targetProfileId=profileTarget.dataset.profileOpen||(profileTarget.id==='mobile-profile-nav'||profileTarget.id==='home-composer-avatar'?me:null);
+  if(targetProfileId){try{await openMemberProfile(targetProfileId);}catch(err){notice(err.message||'Could not load profile.',true);}return;}
+ }
  const profileFriend=e.target.closest('[data-profile-friend]');if(profileFriend){try{await sendFriendRequest(profileFriend.dataset.profileFriend,profileFriend);}catch(err){notice(err.message||'Friend request failed.',true);}return;}
  const profileMessage=e.target.closest('[data-profile-message]');if(profileMessage){try{$('profile-viewer-close').click();await startMessage(profileMessage.dataset.profileMessage);}catch(err){notice(err.message,true);}return;}
 
@@ -2764,4 +2768,13 @@ body.suhas-composer-open{overflow:hidden!important}
 }
 </style>
 
+<style id="suhas-max-universal-profile-click-20261110">
+/* Make the signed-in member avatar and profile timeline identities open the same detailed profile viewer. */
+#mobile-profile-nav,#home-composer-avatar{cursor:pointer!important}
+#mobile-profile-nav img{pointer-events:none}
+#home-composer-avatar{transition:transform .15s ease,box-shadow .15s ease}
+#home-composer-avatar:active{transform:scale(.95);box-shadow:0 0 0 4px #0866ff22}
+.profile-timeline-author [data-profile-open]{cursor:pointer}
+.profile-timeline-author [data-profile-open]:hover{text-decoration:underline}
+</style>
 </body></html>
