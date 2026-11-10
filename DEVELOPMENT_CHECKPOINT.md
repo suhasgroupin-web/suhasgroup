@@ -511,3 +511,16 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Cache/release follow-up: added the new composer stylesheet to the service-worker precache list, bumped service-worker cache key to `v96`, and published release `2026.11.10.10` so installed clients can receive the increment. Commits: `d40d14d9f94b43bbc97656e213692df0e367ce0f` and `5ed06d6a2346a22bd1e34ff84189c4579d618c13`.
 - Production deployment for the latest commit: `dpl_JBwDeLNRBXFT7FCzPLLbhW59Rqii`, state `READY`, aliases include `https://suhasgroup.vercel.app`.
 - Live verification: production `social.html` contains the composer stylesheet link and Post label; `release.json` returns `2026.11.10.10`; `sw.js` returns cache key `v96` and includes the new CSS in its core assets. This confirms source/deployment delivery, not signed-in user interaction.
+
+
+## 2026-11-10 — Facebook-style post time and audience status (increment 6)
+- Continued from the Home Feed/post experience audit; no full-app completion claim is made.
+- Updated the Home Feed and member Profile timeline post queries to include the existing `audience` field, including fallback fetches for reposted posts. No database schema or records were changed.
+- Added a shared relative post-time formatter: new posts show “Just now”, then minutes/hours/days, and older posts show a localized date. The exact timestamp remains available as the accessible/native time tooltip and `datetime` value.
+- Added explicit audience status beside the post time: Public, Friends, or Only me, with distinct familiar icons. Existing audience selection, share restrictions, Supabase queries, and RLS remain unchanged.
+- Changed file: `social.html` only.
+- Source commit: `4d0e4dabf9f285b552e17905b716bd09e75cff28`.
+- Static verification: all 6 inline JavaScript blocks passed syntax parsing; source checks confirmed the formatter and audience label are used in both Feed and Profile timeline, and audience is selected in all matching post fetches.
+- Not yet verified: signed-in Android/desktop rendering, actual audience enforcement for different accounts, and live Production deployment for this commit. No authenticated browser session is available in this workflow.
+- No tables, policies, user records, posts, media, pages, routes, or existing features were deleted or replaced.
+- Next increment: audit the full post card and profile controls, then test the Feed/Composer/Profile flows with a real authenticated member session. Continue screen-by-screen through Stories, Friends, Reels, Notifications, Marketplace, Menu/Search, and Messenger; external integrations (Live, calls, third-party cross-posting, licensed music/GIF providers) remain separate dependencies.
