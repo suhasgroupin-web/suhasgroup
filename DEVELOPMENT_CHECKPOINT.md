@@ -624,3 +624,12 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - CSS source commits: `5d512b09470438a60b842fd405749424eaf83840`, `a0759a6f8eb58a4ab3fbd2cdd3628957dca5659c`.
 - Static validation on latest source: all 6 inline scripts parse; dynamic cover image assignment, cover/avatar camera buttons, larger avatar sizing, bottom-right camera placement, identity row selector, image save control, and both file inputs are present.
 - Pending: Production deployment readiness and visual/functional verification on Android with an authenticated profile. CSS-only appearance has not yet been confirmed on a real device.
+
+
+## 2026-11-10 — Android full-screen profile viewer v3
+- User screenshot showed the profile viewer rendered as a centered narrow modal (~80% of visible width), not a full-screen mobile profile. The CSS viewport in the Android custom tab evidently did not match the 760px breakpoint; additionally later legacy avatar-image rules were overriding the larger avatar image.
+- Added final high-specificity override targeting both `max-width:1100px` and coarse-pointer devices. The open profile viewer/card now fills 100vw × 100dvh, with scrolling inside the card and no modal side gutters.
+- Explicitly sized the avatar wrapper AND its child image to 112px, attached the profile camera at the lower-right, and set the cover camera as a circular 3D control at the cover's lower-right. Kept cover at top, image upload inputs, preview and Save workflow, and all profile sections.
+- Source commit: `6b1cab7822122d4b0cc6c4bad5f2beb99bb54e44`.
+- Static validation: all inline scripts parse; cover/avatar camera controls and image Save button remain present.
+- Pending: production deployment readiness and visual confirmation on user's Android device. Do not claim device-level visual test completed.
