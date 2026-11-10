@@ -116,7 +116,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
       showMsg('msg','Account created successfully. Please log in manually with your email and password.', true);
       btn.textContent='Account created';
       document.getElementById('signup-form').reset();
-      setTimeout(function(){ location.href='login.html?next=social.html'; }, 1800);
+      setTimeout(function(){ location.href='login.html?next=app.html'; }, 1800);
     } else {
       showMsg('msg','Almost done! Confirm your email using the link sent by SUHAS GROUP. After confirmation, return to Login and sign in manually. Check Spam if needed.', true);
       reset();
