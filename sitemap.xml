@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/group.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/jobs.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/contact.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/employers.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/job-portals.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://suhasgroupin-web.github.io/suhasgroup/apply-for-job.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/group.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/jobs.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/contact.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/employers.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/job-portals.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://suhasgroup.vercel.app/apply-for-job.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
