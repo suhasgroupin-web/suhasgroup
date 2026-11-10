@@ -1902,6 +1902,76 @@ html body.suhas-dark #feed-list .suhas-comments-panel .compose input{background:
  #profile-viewer .profile-viewer-menu-wrap{flex:0 0 36px!important;margin-top:8px!important}
  #profile-viewer .profile-viewer-menu-trigger{width:36px!important;height:36px!important}
 }
+</style><style id="suhas-profile-viewer-fullscreen-mobile-v3">
+/* Treat tablet-sized CSS viewports on Android/custom tabs as mobile too. */
+@media (max-width:1100px), (pointer:coarse) {
+ html body #profile-viewer.profile-viewer.open{
+  position:fixed!important;inset:0!important;z-index:99999!important;
+  display:flex!important;align-items:stretch!important;justify-content:stretch!important;
+  width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  background:rgba(24,35,52,.58)!important;box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open>.profile-viewer-card{
+  display:block!important;position:relative!important;flex:1 1 100%!important;
+  width:100vw!important;min-width:100vw!important;max-width:none!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+  overflow-x:hidden!important;overflow-y:auto!important;box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-cover{
+  display:block!important;width:100%!important;min-width:100%!important;max-width:none!important;
+  height:220px!important;min-height:220px!important;margin:0!important;
+  border-radius:0!important;box-sizing:border-box!important;background-size:cover!important;background-position:center!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head{
+  display:flex!important;align-items:flex-start!important;flex-wrap:nowrap!important;
+  gap:12px!important;padding:0 14px 16px!important;min-height:0!important;
+  background:#fff!important;box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
+  position:relative!important;z-index:3!important;flex:0 0 112px!important;
+  width:112px!important;min-width:112px!important;height:112px!important;
+  margin:-48px 0 0 2px!important;padding:0!important;
+  border:4px solid #fff!important;border-radius:50%!important;
+  background:#e8eef8!important;box-shadow:0 8px 22px rgba(9,30,66,.25)!important;
+  box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap .profile-viewer-avatar{
+  position:static!important;display:block!important;inset:auto!important;
+  width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+  margin:0!important;border:0!important;border-radius:50%!important;object-fit:cover!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-avatar-change.profile-owner-avatar-edit{
+  position:absolute!important;left:auto!important;right:-4px!important;top:auto!important;bottom:-3px!important;
+  display:grid!important;place-items:center!important;width:40px!important;height:40px!important;
+  border:3px solid #fff!important;border-radius:50%!important;
+  background:linear-gradient(145deg,#fff,#dce8ff)!important;color:#123d83!important;
+  box-shadow:0 5px 14px rgba(4,20,50,.34)!important;z-index:8!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-avatar-change svg,
+ html body #profile-viewer.profile-viewer.open #profile-cover-change svg{
+  width:21px!important;height:21px!important;stroke:#123d83!important;stroke-width:2!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-cover-change.profile-owner-cover-edit{
+  position:absolute!important;left:auto!important;right:14px!important;top:auto!important;bottom:14px!important;
+  display:grid!important;place-items:center!important;width:42px!important;height:42px!important;
+  padding:0!important;border:3px solid #fff!important;border-radius:50%!important;
+  background:linear-gradient(145deg,#fff,#dce8ff)!important;color:#123d83!important;
+  box-shadow:0 5px 14px rgba(4,20,50,.34)!important;z-index:8!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>#profile-image-edit-panel+div{
+  flex:1 1 auto!important;min-width:0!important;padding:10px 0 0!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-name{font-size:20px!important;line-height:1.2!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-menu-wrap{
+  flex:0 0 40px!important;margin:8px 0 0!important;padding:0!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-close{
+  position:fixed!important;top:calc(env(safe-area-inset-top,0px) + 12px)!important;
+  right:12px!important;left:auto!important;z-index:100010!important;
+ }
+}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
