@@ -858,3 +858,13 @@ Date: 2026-11-10
 - Static verification after commit: confirm latest source SHA, settings search control, settings categories, both cloud upsert calls, monetization presence, password update flow, and section/button counts. This is source-level verification only; no authenticated browser/device QA has yet been performed.
 - Deployment: not verified; Vercel deployment API previously returned HTTP 402 rate-limit. Do not call this production-live.
 - Phase 01 is IN PROGRESS, not complete. Remaining: finish contextual three-dot menu destinations, validate all settings with authenticated sessions, test settings save/load across devices and verify menu controls in mobile/desktop browser.
+
+
+
+## Phase 01 — live menu defect fix (2026-11-10)
+- User requested the full master prompt to be run step by step on the existing SUHAS-MAX application.
+- Inspected the existing menu drawer and click handler. Found a concrete defect: the “See more” handler was toggling `.max-menu-grid` instead of the actual `#max-menu-extra` element. The shortcut directory therefore could not expand as intended.
+- Fixed the handler to toggle the correct `#max-menu-extra` element and update its accessible expanded state and arrow glyph. Added focus-visible styling and explicit hidden/expanded display rules.
+- Commit: d8110b9598f072502c34e7ffa47ae5270b6da92d (main).
+- Existing app, Vercel project, Supabase project and user data were not deleted or replaced. No database schema change.
+- Next: verify the Git-triggered Vercel production deployment for this commit, then test menu open/close, See more/See less and every shortcut destination in authenticated mobile and desktop sessions. Continue Phase 01 before Phase 02.
