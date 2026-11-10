@@ -3500,15 +3500,11 @@ window.addEventListener('DOMContentLoaded',closeMenuOnHomeLoad);
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){initSuhasArcade();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages'){await loadThreads();document.getElementById('messages')?.scrollIntoView({behavior:'smooth',block:'start'});}}catch(e){notice(e.message||'Could not open this section.',true);}}
 // Route every in-app navigation control through the same scoped tab controller.
 document.addEventListener('click',e=>{
- const trigger=e.target.closest('.facebook-left-menu-trigger,[data-tab]');
+ const trigger=e.target.closest('.facebook-left-menu-trigger[data-tab="maxmenu"]');
  if(!trigger)return;
- const tab=trigger.getAttribute('data-tab');
- if(!tab)return;
- const allowed=['feed','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings','maxmenu'];
- if(!allowed.includes(tab))return;
  e.preventDefault();
  e.stopPropagation();
- activateMaxTab(tab);
+ activateMaxTab('maxmenu');
 },true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
 /* SUHAS-MAX has its own refresh-safe routes and a Back guard at the app boundary. */
@@ -3530,7 +3526,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
   if(profileLink){e.preventDefault();const state={suhasMax:true,tab:current.tab,profile:me,editor:false,guard:false};current=state;history.pushState(state,'',makeUrl(state.tab,state.profile,false));openMemberProfile(me).catch(err=>notice(err.message||'Could not open profile.',true));return;}
   if(e.target.closest('[data-profile-edit-open]')||e.target.closest('#profile-edit-menu-item')){e.preventDefault();const state={suhasMax:true,tab:current.tab,profile:me,editor:true,guard:false};current=state;history.pushState(state,'',makeUrl(state.tab,state.profile,true));render(state).catch(err=>notice(err.message||'Could not open profile editor.',true));return;}
   if(e.target.closest('#suhas-profile-editor-close')){e.preventDefault();history.back();return;}
-  const b=e.target.closest('button[data-tab]');if(!b)return;const tab=b.dataset.tab;if(!allowed.includes(tab))return;e.preventDefault();current={suhasMax:true,tab,profile:null,editor:false,guard:false};history.pushState(current,'',makeUrl(tab,null,false));activateMaxTab(tab);
+  const b=e.target.closest('button[data-tab]');if(!b)return;const tab=b.dataset.tab;if(!allowed.includes(tab))return;e.preventDefault();e.stopPropagation();current={suhasMax:true,tab,profile:null,editor:false,guard:false};history.pushState(current,'',makeUrl(tab,null,false));activateMaxTab(tab).catch(err=>notice(err.message||'Could not open this section.',true));
  },true);
  window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){await render({...state,profile:null});history.pushState({...state,guard:true},'',makeUrl(state.tab,null,false));return;}await render(state);return;}await render(current);history.pushState({...current,profile:null,editor:false,guard:true},'',makeUrl(current.tab,null,false));});
  window.addEventListener('pagehide',()=>{try{localStorage.setItem('suhas-max-last-route',JSON.stringify({tab:current.tab,profile:current.profile,editor:current.editor}));}catch(_){}});
@@ -4329,6 +4325,10 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
 @media(min-width:761px){.suhas-go-sg{right:20px;bottom:20px}}
 </style>
 <a class="suhas-go-sg" href="https://suhasgroup.vercel.app/" aria-label="Go to Suhas Group main website" title="Go to Suhas Group">Go to SG</a>
+<style id="suhas-max-nav-single-handler-20261111">
+/* All mobile destinations use one route handler; avoid duplicate click dispatch. */
+.social-mobile-nav>button[data-tab]{pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+</style>
 <style id="suhas-go-sg-profile-only-20261111">
 /* Go to SG is available only while the Profile viewer is the active screen. */
 .suhas-go-sg{display:none!important}
