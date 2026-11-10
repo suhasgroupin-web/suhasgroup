@@ -1749,7 +1749,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <script>
 (async()=>{
 const $=id=>document.getElementById(id), client=window.sb;
-const session=(await client.auth.getSession()).data.session;if(!session){location.replace('login.html?next='+encodeURIComponent('social.html'));return;}
+const session=(await client.auth.getSession()).data.session;if(!session){location.replace('login.html?next='+encodeURIComponent('app.html'));return;}
 const me=session.user.id;
 try{const profile=await client.from('suhas_public_profiles').select('full_name,profile_photo_url').eq('user_id',me).maybeSingle();if(!profile.error&&profile.data){const name=document.getElementById('max-menu-name'),avatar=document.getElementById('max-menu-avatar'),bottomAvatar=document.getElementById('mobile-profile-nav-avatar');if(name)name.textContent=profile.data.full_name||session.user.email||'SUHAS Member';if(avatar&&profile.data.profile_photo_url)avatar.src=profile.data.profile_photo_url;if(bottomAvatar&&profile.data.profile_photo_url)bottomAvatar.src=profile.data.profile_photo_url;}}catch(e){console.warn('Menu profile could not be loaded',e);}
 // Bottom profile avatar is placed here; its click behavior is intentionally reserved for the user's next instruction.
@@ -1962,7 +1962,7 @@ async function copyToClipboard(value){
 }
 let activeProfileId=null;
 $('profile-viewer-menu-trigger').addEventListener('click',()=>{const m=$('profile-viewer-menu');m.classList.toggle('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');});
-$('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.closest('[data-profile-action]');if(!b||!activeProfileId)return;const id=activeProfileId,p=profile(id)||{},url=location.origin+location.pathname+'?profile='+encodeURIComponent(id);const kind=b.dataset.profileAction;try{
+$('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.closest('[data-profile-action]');if(!b||!activeProfileId)return;const id=activeProfileId,p=profile(id)||{},url=location.origin+location.pathname+'?tab=feed&profile='+encodeURIComponent(id);const kind=b.dataset.profileAction;try{
  if(kind==='edit'){location.href='profile.html';return;}
  if(kind==='copy'){const copied=await copyToClipboard(url);notice(copied?'Profile link copied. You can paste it anywhere.':'Please copy the link shown in the box.',!copied);}
  if(kind==='qr'){const qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=320x320&data='+encodeURIComponent(url);window.open(qrUrl,'_blank','noopener');notice('Profile QR code opened in a new tab.');}
@@ -1983,7 +1983,7 @@ $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.clo
  if(kind==='block'){if(confirm('Hide this profile on this device? Its profile viewer will close.')){const a=JSON.parse(localStorage.getItem('suhas-max-blocked-profiles')||'[]');if(!a.includes(id))a.push(id);localStorage.setItem('suhas-max-blocked-profiles',JSON.stringify(a));notice('Profile hidden on this device. For now, this does not block the member account-wide.');$('profile-viewer-close').click();}}
  }catch(err){if(err.name!=='AbortError')notice(err.message||'Profile action failed.',true);} $('profile-viewer-menu').classList.remove('open');
 });
-$('profile-viewer-close').addEventListener('click',()=>{$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;});
+$('profile-viewer-close').addEventListener('click',()=>{if(history.state&&history.state.suhasMax&&history.state.profile){const st={...history.state,profile:null,guard:false};const q=new URLSearchParams(location.search);q.delete('profile');history.pushState(st,'',location.pathname+'?'+q.toString());} $('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;});
 $('profile-viewer').addEventListener('click',e=>{if(e.target===$('profile-viewer'))$('profile-viewer-close').click();});
 async function loadSavedPosts(){const ids=JSON.parse(localStorage.getItem('suhas-max-saved-posts')||'[]');if(!ids.length){$('saved-list').innerHTML='<div class="empty">No saved posts yet. Save a post from its 3-dot menu.</div>';return;}const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type').in('id',ids);if(r.error)throw r.error;const rows=(r.data||[]).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));const users=[...new Set(rows.map(x=>x.user_id))];let names={};if(users.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url').in('user_id',users);if(p.error)throw p.error;names=Object.fromEntries((p.data||[]).map(x=>[x.user_id,x]));}$('saved-list').innerHTML=rows.map(x=>{const p=names[x.user_id]||{};return '<article class="post-card"><div class="post-head"><b>'+safe(p.full_name||'SUHAS Member')+'</b><span class="post-meta">'+safe(new Date(x.created_at).toLocaleString())+'</span></div><p>'+safe(x.content||'')+'</p>'+(x.media_url?(String(x.media_type||'').startsWith('video/')?'<video controls playsinline preload="metadata" style="width:100%;max-height:360px;border-radius:10px" src="'+safe(x.media_url)+'"></video>':'<img loading="lazy" style="width:100%;max-height:360px;object-fit:contain;border-radius:10px" src="'+safe(x.media_url)+'" alt="Saved post media">'):'')+'<div class="social-actions"><button class="action" type="button" data-unsave-post="'+x.id+'">Remove from saved</button><button class="action" type="button" data-open-saved-post="'+x.id+'">Open in feed</button></div></article>';}).join('')||'<div class="empty">Saved posts are no longer available.</div>';}
 
@@ -2216,7 +2216,7 @@ document.addEventListener('click',async e=>{
  const profileTarget=e.target.closest('[data-profile-open],#mobile-profile-nav,#home-composer-avatar');
  if(profileTarget){
   const targetProfileId=profileTarget.dataset.profileOpen||(profileTarget.id==='mobile-profile-nav'||profileTarget.id==='home-composer-avatar'?me:null);
-  if(targetProfileId){try{await openMemberProfile(targetProfileId);}catch(err){notice(err.message||'Could not load profile.',true);}return;}
+  if(targetProfileId){try{const tab=history.state?.tab||new URLSearchParams(location.search).get('tab')||'feed';const q=new URLSearchParams(location.search);q.set('tab',tab);q.set('profile',targetProfileId);history.pushState({suhasMax:true,tab,profile:targetProfileId,guard:false},'',location.pathname+'?'+q.toString());await openMemberProfile(targetProfileId);}catch(err){notice(err.message||'Could not load profile.',true);}return;}
  }
  const profileFriend=e.target.closest('[data-profile-friend]');if(profileFriend){try{await sendFriendRequest(profileFriend.dataset.profileFriend,profileFriend);}catch(err){notice(err.message||'Friend request failed.',true);}return;}
  const profileMessage=e.target.closest('[data-profile-message]');if(profileMessage){try{$('profile-viewer-close').click();await startMessage(profileMessage.dataset.profileMessage);}catch(err){notice(err.message,true);}return;}
@@ -2440,31 +2440,22 @@ closeMenuOnHomeLoad();
 window.addEventListener('pageshow',closeMenuOnHomeLoad);
 window.addEventListener('DOMContentLoaded',closeMenuOnHomeLoad);
 async function activateMaxTab(tab){if(tab==='maxmenu'){const menu=document.getElementById('maxmenu');if(menu){menu.hidden=false;document.body.classList.add('max-menu-open');}return;}document.body.classList.remove('max-menu-open');const menuPanel=document.getElementById('maxmenu');if(menuPanel)menuPanel.hidden=true;const ids=['feed','maxmenu','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];if(!ids.includes(tab))return;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));ids.forEach(id=>{const panel=$(id);if(panel)panel.hidden=id!==tab;});try{if(tab==='feed')await loadFeed();if(tab==='friends')await loadFriends();if(tab==='saved')await loadSavedPosts();if(tab==='groups')await loadGroups();if(tab==='marketplace')await loadMarketplace();if(tab==='reels')await loadReels();if(tab==='gaming'){initSuhasArcade();}if(tab==='requests')await loadRequests();if(tab==='following')await loadFollowing();if(tab==='notifications')await loadNotifications();if(tab==='messages')await loadThreads();}catch(e){notice(e.message||'Could not open this section.',true);}}
-document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;e.preventDefault();const tab=b.dataset.tab;if(tab!=='maxmenu'){try{sessionStorage.setItem('suhas-max-active-section:'+location.pathname,tab);}catch(_){}history.pushState({suhasMax:true,tab},'',location.pathname+location.search+location.hash);}activateMaxTab(tab);},true);
 document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='button';b.style.pointerEvents='auto';});
-/* SUHAS-MAX owns its navigation history: Back never falls through to the SUHAS Group site. */
+/* SUHAS-MAX has its own refresh-safe routes and a Back guard at the app boundary. */
 (function(){
- const key='suhas-max-active-section:'+location.pathname;
- let tab='feed';
- try{tab=localStorage.getItem(key)||'feed';}catch(_){}
  const allowed=['feed','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];
- if(!allowed.includes(tab))tab='feed';
- history.replaceState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
- history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
- window.addEventListener('popstate',function(event){
-  const state=event.state;
-  if(state&&state.suhasMax&&allowed.includes(state.tab)){
-   tab=state.tab;try{localStorage.setItem(key,tab);}catch(_){}
-   activateMaxTab(tab);
-   if(state.guard)history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
-   return;
-  }
-  // Re-enter the app instead of navigating to a parent SUHAS Group page.
-  history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
-  activateMaxTab(tab);
- });
- window.addEventListener('pagehide',function(){try{localStorage.setItem(key,tab);}catch(_){}});
- document.addEventListener('click',function(e){const b=e.target.closest('button[data-tab]');if(b&&b.dataset.tab!=='maxmenu'&&allowed.includes(b.dataset.tab))tab=b.dataset.tab;},true);
+ const readRoute=()=>{const q=new URLSearchParams(location.search);const t=q.get('tab')||'feed';return {suhasMax:true,tab:allowed.includes(t)?t:'feed',profile:q.get('profile')||null,guard:false};};
+ const makeUrl=(tab,profile)=>{const q=new URLSearchParams(location.search);q.set('tab',tab);if(profile)q.set('profile',profile);else q.delete('profile');return location.pathname+'?'+q.toString();};
+ let current=readRoute();
+ const render=async state=>{current={...state};await activateMaxTab(current.tab);if(current.profile)await openMemberProfile(current.profile);else if($('profile-viewer').classList.contains('open')){$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;}};
+ history.replaceState({...current,guard:true},'',location.pathname+location.search+location.hash);
+ history.pushState({...current,guard:true},'',location.pathname+location.search+location.hash);
+ document.addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;const tab=b.dataset.tab;if(!allowed.includes(tab))return;e.preventDefault();current={suhasMax:true,tab,profile:null,guard:false};history.pushState(current,'',makeUrl(tab,null));activateMaxTab(tab);},true);
+ window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){history.pushState({...current,guard:true},'',makeUrl(current.tab,current.profile));return;}await render(state);return;}history.pushState({...current,guard:true},'',makeUrl(current.tab,current.profile));await render(current);});
+ window.addEventListener('pagehide',()=>{try{localStorage.setItem('suhas-max-last-route',JSON.stringify({tab:current.tab,profile:current.profile}));}catch(_){}});
+ const q=new URLSearchParams(location.search);
+ if(!q.has('tab')&&!q.has('profile')){try{const saved=JSON.parse(localStorage.getItem('suhas-max-last-route')||'null');if(saved&&allowed.includes(saved.tab)){current={...current,tab:saved.tab,profile:saved.profile||null};history.replaceState(current,'',makeUrl(current.tab,current.profile));}}catch(_){}}
+ render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
@@ -2524,39 +2515,6 @@ function arcadeTick(){
 }
 function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeReady=true;document.querySelectorAll('[data-arcade]').forEach(b=>b.addEventListener('click',()=>arcadeStart(b.dataset.arcade)));$('arcade-close').addEventListener('click',()=>{arcadeRunning=false;cancelAnimationFrame(arcadeRAF);$('arcade-stage').hidden=true;arcadeShowBest();});document.querySelectorAll('[data-control]').forEach(b=>{const k=b.dataset.control;if(k==='restart'){b.addEventListener('click',()=>arcadeStart(arcadeKind));return;}const down=e=>{e.preventDefault();arcadeKeys[k]=true;};const up=e=>{e.preventDefault();arcadeKeys[k]=false;};b.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,up));});window.addEventListener('keydown',e=>{const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',Space:'jump',ArrowDown:'brake'};if(map[e.code]){arcadeKeys[map[e.code]]=true;e.preventDefault();}});window.addEventListener('keyup',e=>{const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'jump',Space:'jump',ArrowDown:'brake'};if(map[e.code])arcadeKeys[map[e.code]]=false;});arcadeShowBest();}
 })().catch(e=>{const n=document.getElementById('notice');if(n){n.textContent=e.message||'Could not connect.';n.style.display='block';}});
-</script><script>
-/* Preserve the active SUHAS-MAX section across refreshes on this page. */
-(function(){
-  const key='suhas-max-active-section:'+location.pathname;
-  function remember(tab){
-    // The menu is an overlay, not a page section; never persist it across refresh.
-    if(!tab || tab==='maxmenu')return;
-    try{localStorage.setItem(key,tab);}catch(_){}
-  }
-  document.addEventListener('click',function(e){
-    const button=e.target.closest('[data-tab]');
-    if(button) remember(button.dataset.tab);
-  },true);
-  function restore(){
-    let tab='';
-    try{tab=localStorage.getItem(key)||'';}catch(_){}
-    // Clear stale menu state saved by older versions before restoring a section.
-    if(tab==='maxmenu'){try{localStorage.removeItem(key);}catch(_){}return;}
-    if(!tab || tab==='feed')return;
-    const started=Date.now();
-    const timer=setInterval(function(){
-      const button=document.querySelector('[data-tab="'+CSS.escape(tab)+'"]');
-      if(button && document.documentElement.classList.contains('suhas-auth-pending')===false){
-        clearInterval(timer);
-        button.click();
-      }else if(Date.now()-started>15000){
-        clearInterval(timer);
-      }
-    },300);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
-  else setTimeout(restore,900);
-})();
 </script><script src="assets/display-mode.js?v=6"></script><dialog id="story-viewer" class="story-viewer"><div class="story-viewer-top"><strong id="story-viewer-author">Story</strong><button type="button" class="action" onclick="document.getElementById('story-viewer').close()">✕</button></div><div id="story-viewer-content" class="story-viewer-content"></div><small id="story-viewer-time" class="story-viewer-time"></small></dialog>
 <style id="suhas-top-create-menu-20261109">
 .suhas-create-wrap{position:relative;display:flex;align-items:center;flex:0 0 auto}
