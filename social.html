@@ -4522,6 +4522,7 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
 (async()=>{
  const client=window.sb, $=id=>document.getElementById(id);
  if(!client||!$('suhas-monetization'))return;
+ await client.auth.refreshSession().catch(()=>null);
  const session=(await client.auth.getSession()).data.session;
  if(!session)return;
  const user=session.user, me=user.id, isAdmin=user.app_metadata?.suhas_admin===true || user.app_metadata?.suhas_admin==='true';
