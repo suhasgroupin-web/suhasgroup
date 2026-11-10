@@ -1,11 +1,11 @@
 {
-  "id": "./social.html",
+  "id": "./",
   "name": "SUHAS-MAX — Powered by SUHAS GROUP",
   "short_name": "SUHAS-MAX",
   "description": "SUHAS-MAX is the social and corporate community platform powered by SUHAS GROUP.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./social.html?source=pwa",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -47,11 +47,5 @@
       "purpose": "maskable"
     }
   ],
-  "shortcuts": [
-    {
-      "name": "SUHAS-MAX Home",
-      "short_name": "Home",
-      "url": "./social.html"
-    }
-  ]
+  "shortcuts": []
 }
