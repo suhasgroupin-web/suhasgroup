@@ -4881,6 +4881,16 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
  const actions=document.getElementById('profile-viewer-actions');
  if(!actions||actions.dataset.inviteReady)return;
  actions.dataset.inviteReady='1';
+ const addInvite=()=>{
+  if(actions.querySelector('[data-profile-friend]')&&!actions.querySelector('[data-profile-invite]')){
+   const friend=actions.querySelector('[data-profile-friend]');
+   const invite=document.createElement('button');invite.type='button';invite.className='action';
+   invite.dataset.profileInvite=friend.dataset.profileFriend;invite.textContent='Invite';
+   actions.append(invite);
+  }
+ };
+ new MutationObserver(addInvite).observe(actions,{childList:true,subtree:true});
+ addInvite();
  actions.addEventListener('click',async function(event){
   const button=event.target.closest('[data-profile-invite]');
   if(!button)return;
