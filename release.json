@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.10.7",
-  "published_at": "2026-11-10T04:10:00Z",
+  "version": "2026.11.10.8",
+  "published_at": "2026-11-10T05:10:00Z",
   "notify_after_days": 15,
-  "update_message": "A new SUHAS-MAX version is ready. Install it to use the latest features and improvements.",
+  "update_message": "Saved posts now sync with your SUHAS-MAX account, and member discovery shows real registered members only.",
   "mandatory": false
 }
