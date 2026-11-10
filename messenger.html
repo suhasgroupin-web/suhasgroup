@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Suhas Messenger | SUHAS-MAX</title>
+<style>
+:root{color-scheme:dark;--blue:#0866ff}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#f0f2f5;font-family:Arial,Helvetica,sans-serif}
+.messenger-app{height:100dvh;display:flex;flex-direction:column;background:#000}
+.messenger-head{height:66px;flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #242526;background:#000}
+.messenger-brand{font-size:30px;font-weight:800;letter-spacing:-1.2px;color:#fff}
+.messenger-head-actions{display:flex;align-items:center;gap:10px}
+.messenger-head button{width:42px;height:42px;border:0;border-radius:50%;background:#242526;color:#fff;font-size:21px;cursor:pointer}
+.messenger-head button:hover{background:#343638}
+.messenger-frame{border:0;display:block;width:100%;flex:1;min-height:0;background:#000}
+@media(max-width:600px){.messenger-head{height:62px;flex-basis:62px;padding:0 15px}.messenger-brand{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="messenger-app">
+<header class="messenger-head">
+<div class="messenger-brand">Suhas Messenger</div>
+<div class="messenger-head-actions">
+<button type="button" id="messenger-back" aria-label="Back to SUHAS-MAX" title="Back to SUHAS-MAX">←</button>
+</div>
+</header>
+<iframe class="messenger-frame" id="messenger-frame" title="Suhas Messenger Inbox" src="social.html?tab=messages&messenger=1"></iframe>
+</div>
+<script>
+(function(){
+ const frame=document.getElementById('messenger-frame');
+ function styleMessenger(){
+  try{
+   const doc=frame.contentDocument;
+   if(!doc||!doc.head)return;
+   if(doc.getElementById('suhas-messenger-standalone-style'))return;
+   const style=doc.createElement('style');style.id='suhas-messenger-standalone-style';
+   style.textContent=`
+    html,body{background:#000!important;color:#f0f2f5!important}
+    .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading{display:none!important}
+    .social-shell{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 14px 18px!important;background:#000!important}
+    .social-center{width:100%!important;max-width:none!important}
+    #messages{display:block!important;min-height:100%;padding:10px 14px 16px!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important;color:#f0f2f5!important}
+    #messages h2,#messages h3,.message-subtitle{color:#f0f2f5!important}
+    #messages .message-start{padding:0 0 12px!important;border-bottom:1px solid #303030!important}
+    #messages .message-start h3{font-size:15px!important}
+    #messages .search{background:#242526!important;color:#f0f2f5!important;border:0!important;border-radius:24px!important;padding:13px 16px!important}
+    #messages .social-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+    #messages .message-subtitle{margin:14px 0 6px!important}
+    #threads{display:flex!important;flex-direction:column!important;gap:0!important;max-height:34vh!important;overflow:auto!important}
+    #messages .message-thread{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:78px!important;padding:10px 2px!important;border:0!important;border-bottom:1px solid #242526!important;border-radius:0!important;background:#000!important;text-align:left!important}
+    #messages .message-thread-name{color:#f0f2f5!important;font-size:16px!important;font-weight:750!important}
+    #messages .message-thread-preview{color:#b0b3b8!important;font-size:13px!important}
+    #messages .message-chat-panel{display:flex!important;flex-direction:column!important;min-height:48vh!important;border:1px solid #303030!important;border-radius:16px!important;background:#000!important;padding:12px!important}
+    #chat-title{color:#f0f2f5!important;font-size:18px!important;font-weight:750!important;padding:2px 0 12px!important;border-bottom:1px solid #303030!important}
+    .msg-list{height:38vh!important;min-height:250px!important;overflow:auto!important;border:0!important;border-radius:0!important;padding:12px 0!important;background:#000!important}
+    .bubble{background:#303136!important;color:#fff!important;border-radius:20px!important;padding:11px 15px!important;font-size:15px!important}
+    .bubble.mine{background:#0866ff!important;color:#fff!important}
+    .message-seen-status{color:#dce8ff!important}
+    #compose{display:flex!important;gap:9px!important;margin-top:8px!important}
+    #compose input{background:#303136!important;color:#fff!important;border:0!important;border-radius:28px!important;padding:15px 18px!important;font-size:16px!important}
+    #compose button{background:#0866ff!important;color:#fff!important;border:0!important;border-radius:12px!important;padding:12px 19px!important;font-size:15px!important}
+    #messages .empty{color:#b0b3b8!important}
+    #messages .message-member{background:#171717!important;color:#fff!important;border-color:#303030!important}
+    #messages .message-member small{color:#b0b3b8!important}
+    @media(max-width:600px){.social-shell{padding:0 8px 10px!important}#messages{padding:8px 8px 12px!important}#threads{max-height:30vh!important}.msg-list{height:34vh!important;min-height:220px!important}#messages .message-chat-panel{min-height:44vh!important}}
+   `;
+   doc.head.appendChild(style);
+  }catch(e){console.warn('Messenger style could not be applied:',e);}
+ }
+ frame.addEventListener('load',function(){styleMessenger();setTimeout(styleMessenger,350);});
+ document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
+})();
+</script>
+</body>
+</html>
