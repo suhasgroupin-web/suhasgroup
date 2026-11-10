@@ -614,3 +614,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commit: `0d6acc339941a0cc6fea2ab504fe00cfc0412f00`.
 - Static validation: all 6 inline scripts parse; cover/avatar camera and image editor save controls remain present.
 - Pending: production deployment readiness and Android visual verification; prior fix was not visually verified and user reported it did not resolve the gap.
+
+
+## 2026-11-10 — Profile cover/avatar 3D visual polish
+- User supplied two visual references: a cover/header treatment and a large circular profile portrait with a camera control attached at the lower-right.
+- Kept the existing dynamic cover photo source and upload/save behavior. Refined the cover as the top banner with image-cover sizing, subtle dark lower gradient, and a raised blue/silver camera control at bottom-right.
+- Increased the profile avatar to 116px desktop / 104px mobile and made it overlap the cover's lower edge. Added a white raised rim, soft 3D shadow, and attached metallic-blue camera button at the avatar's bottom-right. Kept existing owner-only hidden behavior, gallery input, preview, cancel, and save workflow.
+- Refined the profile name/subtitle row with restrained dark-blue/grey colors. No routes, sections, buttons, DB records, or existing profile functions were removed.
+- CSS source commits: `5d512b09470438a60b842fd405749424eaf83840`, `a0759a6f8eb58a4ab3fbd2cdd3628957dca5659c`.
+- Static validation on latest source: all 6 inline scripts parse; dynamic cover image assignment, cover/avatar camera buttons, larger avatar sizing, bottom-right camera placement, identity row selector, image save control, and both file inputs are present.
+- Pending: Production deployment readiness and visual/functional verification on Android with an authenticated profile. CSS-only appearance has not yet been confirmed on a real device.
