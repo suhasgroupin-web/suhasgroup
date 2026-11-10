@@ -842,3 +842,19 @@ Project: existing SUHAS-MAX application (preserve; no replacement)
 - Begin Phase 01 by implementing a searchable, grouped Settings dashboard using existing owner-scoped preferences where possible; do not label unsupported controls active.
 - Build a control register and test each implemented settings/menu action.
 - Deploy only after Vercel rate-limit clears or an authorized native deployment path is available; verify live behavior before marking complete.
+
+
+
+## Phase 01 progress update — Settings foundation
+Date: 2026-11-10
+- Expanded the existing Settings & Privacy screen with searchable, grouped sections: Accounts Center, Privacy & audience, Notifications, Feed preferences, Language & region, Media, Accessibility, Activity log, Ads & payments, Data & permissions, Help & support. Existing Appearance, Feed & media, Privacy & account, Account security and Creator Monetization sections retained.
+- Connected preferences to the existing owner-scoped Supabase member_settings.preferences JSONB record and existing suhas_account_preferences table. Uses the signed-in user ID and upsert; no service-role key or new migration used.
+- Account preferences written only to existing schema fields: profile_searchable, show_company, show_location, show_skills, allow_friend_requests, allow_messages, email_notifications.
+- Cloud settings load merges the suhas_max preference object and privacy fields; the UI reports success only after both upserts succeed.
+- Retained secure Supabase auth.updateUser password update flow and Creator Monetization UI/application/payout/admin components.
+- Added explicit notes where full workflows are not implemented (deactivation/deletion, full activity log, ads controls, payments, data export, push/SMS provider delivery). These are not presented as working features.
+- Added responsive Settings group styling and accessible search input.
+- GitHub commit: f2d7f35983bed28c92285ce9917ef638501d3582.
+- Static verification after commit: confirm latest source SHA, settings search control, settings categories, both cloud upsert calls, monetization presence, password update flow, and section/button counts. This is source-level verification only; no authenticated browser/device QA has yet been performed.
+- Deployment: not verified; Vercel deployment API previously returned HTTP 402 rate-limit. Do not call this production-live.
+- Phase 01 is IN PROGRESS, not complete. Remaining: finish contextual three-dot menu destinations, validate all settings with authenticated sessions, test settings save/load across devices and verify menu controls in mobile/desktop browser.
