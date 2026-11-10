@@ -454,3 +454,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Automated static verification: the Feed renderer includes exactly one `data-feed-photo` marker and one delegated double-tap pointer handler; all 6 inline JavaScript blocks parse successfully via `new Function`. The mobile navigation markup has 6 buttons and no bottom Menu button (Menu remains in the header).
 - Pending: real two-account/member Android test of double-tap Like, unlike button behavior, and feed refresh. Do not claim full runtime verification until performed.
 - Next increment: recheck the Facebook public reference and inspect a separate Feed interaction (multi-photo grid/full-screen media) before implementation.
+
+
+## 2026-11-10 — Multi-photo post composer and Feed grid (increment 3)
+- Extended the existing Home composer photo picker to support up to 10 images per post (50 MB total) or one video; mixed image/video selections are rejected with an explanatory message. Users can preview and remove individual selections before publishing.
+- Uses the existing `uploadMedia()` helper and existing owner-folder Storage policies in the `suhas-max-media` bucket. No new bucket, table, policy, secret, or service-role access was introduced.
+- For multi-image posts, the first image remains in the legacy `media_url`, `media_path`, and `media_type` fields. All images are additionally stored in the existing `suhas_posts.metadata.media_gallery` JSONB field; existing single-media posts and existing metadata keys remain intact.
+- The Home Feed and member Profile timeline now render a responsive 2-column photo grid (3-photo layout uses a wide final tile; 5–10 photos show a +N overlay). Each Feed photo retains the new double-tap Like gesture. Existing single image/video markup remains the fallback.
+- Post replacement clears the gallery metadata while preserving other metadata. Feed post deletion removes the owned Storage files after the row delete; failures are surfaced as a warning. Failed uploads are cleaned up when possible.
+- Source commit: `4b7fff09d8d05a06362ae6efef353819b0691044`.
+- Validation still pending: static JavaScript syntax checks, source assertions, Vercel Production READY confirmation, and authenticated Android multi-photo upload/render/delete testing. Do not claim the feature is fully verified until the authenticated test is complete.
