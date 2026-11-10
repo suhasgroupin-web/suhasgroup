@@ -483,3 +483,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Latest Production deployment: `dpl_4whrKf6Cao1B5jkvLt2tsSDrD8NW`, source commit `d8e397bd98af48a0c72c413319eb1b77377c040b`, state `READY`, aliases include `https://suhasgroup.vercel.app`.
 - Authenticated Android testing of real user uploads, reactions, profile timeline and media interactions is still pending; do not claim full end-to-end verification until exercised in a signed-in session.
 - Next increment: inspect and refine the post reaction/comment/share controls one focused change at a time, then repeat the Facebook public-reference check.
+
+
+## 2026-11-10 — Feed post action controls visual and accessibility refinement (increment 5)
+- Revisited Meta's official Facebook Feed interaction guidance and compared the current SUHAS-MAX mobile Feed against the supplied Android screenshot.
+- Replaced the visually heavy 3D Like/Comment/Share controls in the Home Feed and Reels with a flat, high-contrast, touch-friendly action row: recognizable inline SVG icons, readable labels, visible counts, blue selected Like state, hover/pressed states, and accessible labels/pressed state.
+- Preserved the existing delegated handlers and Supabase data operations: Like toggles rows in `suhas_post_likes`; Comment focuses the existing composer and inserts into `suhas_post_comments`; Share continues through the existing SUHAS-MAX share/repost dialog flow. Save remains available from the existing post-options menu and writes to `suhas_saved_posts`.
+- Updated the comment composer sizing and post-options menu tap targets for mobile. No tables, policies, storage objects, records, routes, or other app pages were changed.
+- Static verification: all 6 inline JavaScript blocks parsed successfully with `new Function`; source assertions confirmed Like/Comment/Share selectors and existing save handler are retained. Authenticated real-account mobile/desktop action tests are still pending; do not claim full end-to-end verification until exercised.
+- Source commit: pending; production deployment and live verification: pending.
+- Next step: commit this increment with the release metadata and verify Vercel Production READY plus the live asset version; then perform authenticated Like/Comment/Share/Save tests.

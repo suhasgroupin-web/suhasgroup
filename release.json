@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.10.8",
-  "published_at": "2026-11-10T05:10:00Z",
+  "version": "2026.11.10.9",
+  "published_at": "2026-11-10T05:09:56.805Z",
   "notify_after_days": 15,
-  "update_message": "Saved posts now sync with your SUHAS-MAX account, and member discovery shows real registered members only.",
+  "update_message": "Feed actions now use accessible Facebook-inspired controls with clearer Like, Comment and Share states.",
   "mandatory": false
 }
