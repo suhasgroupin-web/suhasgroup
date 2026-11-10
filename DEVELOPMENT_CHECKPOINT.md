@@ -595,3 +595,13 @@ No destructive schema operations, record deletions, storage cleanup or existing 
 - Source commits: `c20e4f96c8d9607fa43f30b1969183286a2ee269`, `5b74fc8f58e3ce99132b2caf3080924ffacf9b90`.
 - Static validation after the change: all 6 inline scripts parse without syntax errors; static checks confirm closed details wrapper, toggle handler, comment form, Like, Share, and existing engagement summary are present.
 - Pending: Production deployment and authenticated Android interaction/visual verification (tap to open, tap again to close, submit comment, refresh, dark/light mode).
+
+
+## 2026-11-10 — Profile cover full-width gap fix
+- User screenshot showed the profile cover ending early with an empty white strip on the right.
+- Root cause from current markup/CSS: the profile close button was floated right before the cover block, allowing the cover block to flow beside the float and shrink in width.
+- Added a narrowly scoped style override: close button is now absolutely positioned at the top-right (removed from normal flow); cover block is explicitly full-width with 100% width/min/max and border-box sizing. Kept the existing cover height/background, cover camera position, profile avatar camera, and upload inputs unchanged.
+- No existing controls, features, routes, or data were removed or rewritten.
+- Source commit: `19887d8170dae7fc49d34f27232c3f2fa88bd620`.
+- Static checks: all 6 inline scripts parse without syntax errors; cover full-width override, close no-float positioning, cover camera, avatar camera, and cover upload input all remain present.
+- Pending: production deployment and Android visual verification that the right-side gap is gone and Close / cover-camera controls remain usable.
