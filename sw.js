@@ -1,4 +1,4 @@
-const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v98';
+const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v99';
 const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
   'index.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
