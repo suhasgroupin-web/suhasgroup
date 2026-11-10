@@ -2,8 +2,8 @@ const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v9
 const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
   'index.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
-  'login.html','signup.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
-  'assets/styles.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
+  'login.html','signup.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','factories.html','factory-profile.html','job-portals.html','privacy-policy.html','religion.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
+  'assets/styles.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/hrm.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
   'barcode/','assets/logo.png','assets/icon-192.png','assets/icon-512.png','manifest.json'
 ];
 
@@ -26,19 +26,24 @@ self.addEventListener('activate', function(e){
 
 self.addEventListener('fetch', function(e){
   var url = e.request.url;
-  // Never cache Supabase API/auth calls or admin page - always fresh
-  if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1 || url.indexOf('edit-suhas.html') > -1) {
-    return;
-  }
   if (e.request.method !== 'GET') return;
+  // Never cache Supabase API/auth calls or privileged pages.
+  if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1 || url.indexOf('edit-suhas.html') > -1) return;
+  var requestUrl = new URL(url);
+  if (requestUrl.origin !== self.location.origin) return;
 
+  // Keep the currently installed app version until the member installs a waiting worker.
   e.respondWith(
-    fetch(e.request).then(function(res){
-      var copy = res.clone();
-      caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
-      return res;
-    }).catch(function(){
-      return caches.match(e.request).then(function(cached){ return cached || caches.match('index.html'); });
+    caches.open(CACHE).then(async function(cache){
+      var cached = await cache.match(e.request, { ignoreSearch: true });
+      if (cached) return cached;
+      try {
+        var response = await fetch(e.request);
+        if (response && response.ok) await cache.put(e.request, response.clone());
+        return response;
+      } catch (error) {
+        return (await cache.match('index.html', { ignoreSearch: true })) || Response.error();
+      }
     })
   );
 });
