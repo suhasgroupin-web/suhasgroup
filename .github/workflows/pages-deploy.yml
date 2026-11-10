@@ -1,4 +1,5 @@
 name: Deploy GitHub Pages
+# Redeploy latest main-branch site contents
 
 on:
   push:
