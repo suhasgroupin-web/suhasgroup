@@ -38,12 +38,13 @@
 <div class="brand">SUHAS GROUP</div>
 <h1>Download & Install SUHAS-MAX</h1>
 <p><strong>SUHAS-MAX</strong> is the official social, professional and business community app from SUHAS GROUP. Use it on Android phones, iPhone, tablets and computers.</p>
-<a class="cta" href="/">Open the official SUHAS-MAX app</a>
-<h2>Install on Android (Chrome)</h2>
+<a class="cta" href="/">Open SUHAS-MAX</a> <button class="cta" id="pwa-install" type="button" hidden>Install SUHAS-MAX</button>
+<p id="install-status" role="status" aria-live="polite"></p>
+<h2>Install on Android (Chrome / Samsung Internet)</h2>
 <ol><li>Open the official website using Google Chrome.</li><li>Tap the Chrome menu (⋮).</li><li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>, if shown.</li><li>Confirm the installation. The SUHAS-MAX icon will appear on your home screen.</li></ol>
 <h2>Install on iPhone or iPad</h2>
 <ol><li>Open the official website in Safari.</li><li>Tap Share, then choose <strong>Add to Home Screen</strong>.</li><li>Tap Add.</li></ol>
-<h2>Install on a computer</h2>
+<h2>Install on a computer (Microsoft Edge / Chrome)</h2>
 <p>Open the website in a supported browser such as Chrome or Edge, then use the browser's Install app option when available.</p>
 <h2>Is an APK file available?</h2>
 <p class="note">SUHAS-MAX is currently provided as an installable Progressive Web App (PWA). An official standalone Android APK file is not currently published on this website. Avoid unofficial APK downloads claiming to be SUHAS-MAX. Use the official website and the browser's install option.</p>
@@ -51,6 +52,17 @@
 <p>SUHAS-MAX হলো SUHAS GROUP-এর অফিসিয়াল কমিউনিটি অ্যাপ। Android ফোনে Chrome দিয়ে অফিসিয়াল ওয়েবসাইট খুলে উপরের ⋮ মেনু থেকে <strong>Install app</strong> অথবা <strong>Add to Home screen</strong> নির্বাচন করুন। বর্তমানে আলাদা APK ফাইল প্রকাশ করা হয়নি; এটি PWA হিসেবে ইনস্টল করা যায়। অননুমোদিত APK ডাউনলোড করবেন না।</p>
 <p class="links"><a href="/">Official SUHAS-MAX website</a> · <a href="/about.html">About SUHAS GROUP</a> · <a href="/contact.html">Contact</a></p>
 <footer>© SUHAS GROUP · Official SUHAS-MAX install information</footer>
+<script>
+(function(){
+  var installEvent=null,button=document.getElementById("pwa-install"),status=document.getElementById("install-status");
+  window.addEventListener("beforeinstallprompt",function(event){event.preventDefault();installEvent=event;button.hidden=false;});
+  button.addEventListener("click",async function(){
+    if(!installEvent){status.textContent="যদি Install prompt না আসে, Chrome-এর ⋮ মেনু থেকে Install app নির্বাচন করুন। iPhone-এ Safari-এর Share → Add to Home Screen ব্যবহার করুন।";return;}
+    installEvent.prompt();var choice=await installEvent.userChoice;status.textContent=choice.outcome==="accepted"?"SUHAS-MAX install শুরু হয়েছে।":"Install বাতিল করা হয়েছে।";installEvent=null;button.hidden=true;
+  });
+  window.addEventListener("appinstalled",function(){status.textContent="SUHAS-MAX সফলভাবে ইনস্টল হয়েছে।";button.hidden=true;});
+})();
+</script>
 </main>
 </body>
 </html>
