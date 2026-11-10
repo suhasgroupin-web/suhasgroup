@@ -3482,7 +3482,7 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
 .suhas-create-symbol.story{background:#fce8ef;color:#d63384}.suhas-create-symbol.photo{background:#e4f5e9;color:#168b45}.suhas-create-symbol.video{background:#fff0df;color:#e87518}.suhas-create-symbol.reel{background:#eee8ff;color:#7048c8}
 @media(max-width:760px){.mobile-head-action.suhas-create-trigger{flex-basis:36px;width:36px;height:36px}.suhas-create-menu{left:-4px}}
 </style>
-<script id="suhas-top-create-menu-actions-20261109">
+<script id="suhas-top-create-menu-actions-20261110">
 (()=>{
  const trigger=document.querySelector('.suhas-create-trigger');
  const menu=document.getElementById('suhas-create-menu');
@@ -3492,15 +3492,23 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
  menu.addEventListener('click',async e=>{
   const item=e.target.closest('[data-create-action]');if(!item)return;
   const action=item.dataset.createAction;close();
-  if(action==='story'){
-   await activateMaxTab('feed');
-   setTimeout(()=>{const form=document.getElementById('story-create-form');form?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('story-content')?.focus({preventScroll:true});},120);
-  }else if(action==='photo'||action==='video'){
-   await activateMaxTab('feed');
-   setTimeout(()=>{const input=document.getElementById('post-media');if(input){input.accept=action==='photo'?'image/jpeg,image/png,image/webp':'video/mp4,video/webm';input.click();}},120);
-  }else if(action==='reel'){
-   await activateMaxTab('reels');
-   setTimeout(()=>{document.getElementById('reel-file')?.click();},120);
+  try{
+   if(action==='story'){
+    await activateMaxTab('feed');
+    window.setTimeout(()=>{
+     if(typeof window.openSuhasStoryCreator==='function')window.openSuhasStoryCreator();
+     else document.getElementById('story-media')?.click();
+    },180);
+   }else if(action==='photo'){
+    await activateMaxTab('feed');
+    window.setTimeout(()=>document.getElementById('post-media')?.click(),180);
+   }else if(action==='video'||action==='reel'){
+    await activateMaxTab('reels');
+    window.setTimeout(()=>document.getElementById('reel-file')?.click(),180);
+   }
+  }catch(error){
+   const message=error?.message||'Could not open the media picker. Please try again.';
+   if(typeof notice==='function')notice(message,true);else console.error(message,error);
   }
  });
  document.addEventListener('click',e=>{if(!e.target.closest('.suhas-create-wrap'))close();});
