@@ -1749,7 +1749,7 @@ html body.suhas-dark #reels-list form[data-comment-form] > input::placeholder {
 <script>
 (async()=>{
 const $=id=>document.getElementById(id), client=window.sb;
-const session=(await client.auth.getSession()).data.session;if(!session){location.replace('login.html?next='+encodeURIComponent('app.html'));return;}
+const session=(await client.auth.getSession()).data.session;if(!session){const requested='social.html'+location.search+location.hash;location.replace('login.html?next='+encodeURIComponent(requested));return;}
 const me=session.user.id;
 const userMeta=session.user.user_metadata||{},fallbackName=userMeta.full_name||userMeta.name||session.user.email||'SUHAS Member',fallbackAvatar=userMeta.avatar_url||userMeta.picture||'assets/logo.png';
 try{
