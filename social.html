@@ -2957,7 +2957,7 @@ async function loadThreads(){
 }
 document.getElementById('message-thread-search')?.addEventListener('input',()=>loadThreads().catch(error=>console.warn('Messenger search failed:',error)));
 async function openChat(id){activeConversation=id;if(channel)await client.removeChannel(channel);const mem=await client.from('suhas_conversation_members').select('user_id').eq('conversation_id',id).neq('user_id',me).maybeSingle();if(mem.error)throw mem.error;$('chat-title').textContent=profile(mem.data?.user_id).full_name||'Conversation';await loadMessages();channel=client.channel('suhas-chat-'+id).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_messages',filter:'conversation_id=eq.'+id},async payload=>{if(activeConversation!==id)return;appendMessage(payload.new);if(payload.new.sender_id!==me)await markIncomingMessagesRead(id);}).on('postgres_changes',{event:'UPDATE',schema:'public',table:'suhas_messages',filter:'conversation_id=eq.'+id},async payload=>{if(activeConversation===id)await loadMessages();}).subscribe();}
-function appendMessage(m){const p=profile(m.sender_id);const div=document.createElement('div');div.className='bubble'+(m.sender_id===me?' mine':'');div.dataset.messageId=m.id;const body=document.createElement('div');body.textContent=(m.sender_id===me?'You: ':((p.full_name||'Member')+': '))+m.body;div.appendChild(body);if(m.sender_id===me){const status=document.createElement('small');status.className='message-seen-status';status.textContent=m.read_at?'Seen':'Sent';div.appendChild(status);}$('chat').appendChild(div);$('chat').scrollTop=$('chat').scrollHeight;}
+function appendMessage(m){if(!m?.id)return;const chat=$('chat');if(chat.querySelector('[data-message-id="'+CSS.escape(String(m.id))+'"]'))return;const div=document.createElement('div');div.className='bubble'+(m.sender_id===me?' mine':'');div.dataset.messageId=m.id;const body=document.createElement('div');body.className='message-body';body.textContent=m.body||'';div.appendChild(body);if(m.sender_id===me){const status=document.createElement('small');status.className='message-seen-status';status.textContent=m.read_at?'Seen':'Sent';div.appendChild(status); }chat.appendChild(div);chat.scrollTop=chat.scrollHeight;}
 async function markIncomingMessagesRead(id=activeConversation){if(!id||id!==activeConversation)return;const r=await client.from('suhas_messages').update({read_at:new Date().toISOString()}).eq('conversation_id',id).neq('sender_id',me).is('read_at',null);if(r.error)console.warn('Could not mark messages as read:',r.error);else await refreshUnreadMessageBadge();}
 async function loadMessages(){const id=activeConversation;if(!id)return;const r=await client.from('suhas_messages').select('*').eq('conversation_id',id).order('created_at');if(r.error)throw r.error;if(activeConversation!==id)return;$('chat').innerHTML='';r.data.forEach(appendMessage);await markIncomingMessagesRead(id);}
 async function startMessage(other){const old=await client.from('suhas_conversation_members').select('conversation_id').eq('user_id',me);if(old.error)throw old.error;let found=null;if(old.data.length){const ids=old.data.map(x=>x.conversation_id);const m=await client.from('suhas_conversation_members').select('conversation_id,user_id').in('conversation_id',ids).eq('user_id',other);if(m.error)throw m.error;found=m.data[0]?.conversation_id||null;}if(!found){const c=await client.from('suhas_conversations').insert({created_by:me}).select('id').single();if(c.error)throw c.error;const add=await client.from('suhas_conversation_members').insert([{conversation_id:c.data.id,user_id:me},{conversation_id:c.data.id,user_id:other}]);if(add.error)throw add.error;found=c.data.id;}document.querySelector('[data-tab="messages"]').click();await loadThreads();await openChat(found);}
@@ -4396,3 +4396,29 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
  panel.addEventListener('click',e=>{if(e.target.closest('[data-open]'))panel.classList.remove('member-search-open');});
 })();
 </script>
+<style id="suhas-max-messenger-facebook-refresh-20261110">
+#messages:not([hidden]){background:#f0f2f5!important;color:#1c1e21!important}
+#messages .suhas-messenger-pagebar{background:#fff!important;border-bottom:1px solid #e4e6eb!important;box-shadow:0 1px 2px #0000000d!important}
+#messages .suhas-messenger-pagebar strong{color:#0866ff!important;font-size:25px!important;letter-spacing:-.5px!important}
+#messages .suhas-messenger-back,#messages .suhas-messenger-new{background:#e4e6eb!important;color:#1c1e21!important}
+#messages .message-subtitle:after{color:#1c1e21!important}
+#messages .message-thread{background:#fff!important;border-bottom:1px solid #e4e6eb!important;border-radius:12px!important;margin:4px 0!important;padding:10px!important}
+#messages .message-thread-name{color:#1c1e21!important}
+#messages .message-thread-preview{color:#65676b!important}
+#messages .message-status-dot.is-online{border-color:#fff!important}
+#messages .suhas-inbox-filters button{background:#e4e6eb!important;color:#65676b!important}
+#messages .suhas-inbox-filters button.active{background:#e7f3ff!important;color:#0866ff!important}
+#messages .message-chat-panel{background:#fff!important;color:#1c1e21!important}
+#messages #chat-title{background:#fff!important;color:#1c1e21!important;border-bottom:1px solid #e4e6eb!important}
+#messages .suhas-chat-back{background:#e4e6eb!important;color:#1c1e21!important}
+#messages .msg-list{background:#fff!important;padding:16px!important;gap:8px!important}
+#messages .bubble{max-width:78%!important;align-self:flex-start!important;background:#e4e6eb!important;color:#1c1e21!important;border-radius:18px!important;padding:10px 14px!important;font-size:15px!important;box-shadow:none!important}
+#messages .bubble.mine{align-self:flex-end!important;background:#0866ff!important;color:#fff!important;border-radius:18px!important}
+#messages .message-seen-status{color:#dbeafe!important;font-size:11px!important;font-weight:600!important}
+#messages .compose{background:#fff!important;border-top:1px solid #e4e6eb!important}
+#messages .compose input{background:#f0f2f5!important;color:#1c1e21!important;border:0!important}
+#messages .compose input::placeholder{color:#65676b!important}
+#messages .compose button{background:#0866ff!important;color:#fff!important;border-radius:22px!important}
+#messages .empty{color:#65676b!important}
+@media(max-width:760px){#messages .message-chat-panel{background:#fff!important}#messages .msg-list{max-height:calc(100dvh - 220px)!important}}
+</style>
