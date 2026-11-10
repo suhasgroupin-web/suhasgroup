@@ -153,6 +153,54 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
  .messenger-shortcuts{padding-left:12px;padding-right:12px}
 }
 </style>
+<style id="messenger-facebook-inbox-layout-20261111">
+/* Facebook Messenger-inspired inbox layout, branded for SUHAS-MAX. */
+html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
+.messenger-app{height:100dvh!important;min-height:0!important;max-width:none!important;overflow:hidden!important;background:#000!important}
+.messenger-head{height:76px!important;min-height:76px!important;flex:0 0 76px!important;padding:0 24px!important;background:#000!important}
+.messenger-brand{font-size:clamp(29px,8vw,37px)!important;letter-spacing:-1.5px!important;font-weight:850!important}
+.messenger-head-actions{gap:14px!important}
+.messenger-head button{width:42px!important;height:42px!important;background:transparent!important;color:#f0f2f5!important}
+.messenger-notice{height:36px!important;min-height:36px!important;flex:0 0 36px!important;background:#0866ff!important;color:#fff!important;font-size:15px!important;line-height:22px!important}
+.messenger-search-wrap{height:78px!important;min-height:78px!important;flex:0 0 78px!important;padding:8px 28px!important;background:#000!important}
+.messenger-search-wrap .messenger-search-icon{display:grid!important;width:25px!important;height:25px!important;flex:0 0 25px!important}
+.messenger-search-wrap input{height:60px!important;min-width:0!important;border:0!important;border-radius:34px!important;background:#303030!important;color:#fff!important;padding:0 18px!important;font-size:17px!important}
+.messenger-search-wrap input::placeholder{color:#b0b3b8!important;opacity:1}
+.messenger-stories{height:170px!important;min-height:170px!important;flex:0 0 170px!important;display:flex!important;overflow:hidden!important;padding:12px 14px 8px!important;gap:10px!important;background:#000!important}
+.story-card{width:126px!important;flex:0 0 126px!important;gap:8px!important;font-size:14px!important}
+.story-avatar{width:112px!important;height:112px!important;border:0!important;border-radius:50%!important;background:#242526!important}
+.story-contact{width:112px!important;flex:0 0 112px!important}
+.story-contact img{width:104px!important;height:104px!important;border:3px solid #0866ff!important;border-radius:50%!important;object-fit:cover!important}
+.story-contact span{font-size:14px!important}
+.messenger-shortcuts{height:64px!important;min-height:64px!important;flex:0 0 64px!important;display:flex!important;gap:12px!important;padding:5px 28px 12px!important;background:#000!important}
+.messenger-shortcuts .shortcut{height:44px!important;min-width:0!important;flex:1!important;border:0!important;border-radius:26px!important;background:#242526!important;color:#b0b3b8!important;font-size:16px!important;font-weight:750!important}
+.messenger-shortcuts .shortcut.active{background:#092b55!important;color:#68aaff!important}
+.messenger-frame{display:block!important;width:100%!important;flex:1 1 auto!important;min-height:0!important;background:#000!important;border:0!important}
+.messenger-bottom{height:78px!important;min-height:78px!important;flex:0 0 78px!important;display:flex!important;justify-content:space-around!important;align-items:center!important;padding:0 12px env(safe-area-inset-bottom)!important;background:#000!important;border-top:0!important}
+.messenger-bottom button{flex:1!important;max-width:94px!important;min-width:0!important;height:62px!important;color:#b0b3b8!important;background:transparent!important}
+.messenger-bottom button.selected{background:#202124!important;border-radius:36px!important;color:#0866ff!important}
+@media(max-width:600px){
+ .messenger-head{height:72px!important;min-height:72px!important;flex-basis:72px!important;padding:0 20px!important}
+ .messenger-brand{font-size:34px!important}
+ .messenger-search-wrap{height:74px!important;min-height:74px!important;flex-basis:74px!important;padding:7px 16px!important}
+ .messenger-search-wrap input{height:58px!important;font-size:16px!important}
+ .messenger-stories{height:160px!important;min-height:160px!important;flex-basis:160px!important;padding:10px 12px 7px!important}
+ .story-card{width:116px!important;flex-basis:116px!important}
+ .story-avatar{width:100px!important;height:100px!important}
+ .story-contact{width:100px!important;flex-basis:100px!important}
+ .story-contact img{width:94px!important;height:94px!important}
+ .messenger-shortcuts{height:60px!important;min-height:60px!important;flex-basis:60px!important;padding:4px 16px 10px!important;gap:10px!important}
+ .messenger-shortcuts .shortcut{height:42px!important;font-size:15px!important}
+ .messenger-bottom{height:72px!important;min-height:72px!important;flex-basis:72px!important}
+}
+@media(max-height:760px){
+ .messenger-stories{height:132px!important;min-height:132px!important;flex-basis:132px!important}
+ .story-avatar{width:82px!important;height:82px!important}
+ .story-contact img{width:78px!important;height:78px!important}
+ .messenger-search-wrap{height:64px!important;min-height:64px!important;flex-basis:64px!important}
+ .messenger-search-wrap input{height:50px!important}
+}
+</style>
 </head>
 <body>
 <div class="messenger-app">
@@ -165,7 +213,7 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
 </div>
 </header>
 <div class="messenger-notice" id="messenger-notice" role="button" tabindex="0">Notifications are currently off. Tap to turn on.</div>
-<div class="messenger-search-wrap"><span class="messenger-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span><input id="messenger-search" type="search" placeholder="Search Suhas Messenger" autocomplete="off" aria-label="Search messages and members"></div>
+<div class="messenger-search-wrap"><span class="messenger-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></span><input id="messenger-search" type="search" placeholder="Search messages and people" autocomplete="off" aria-label="Search messages and members"></div>
 <section class="messenger-stories" aria-label="Stories">
  <button type="button" class="story-card story-create" id="messenger-create-story"><span class="story-avatar" id="messenger-self-avatar">+</span><strong>Create story</strong></button>
  <div class="story-track" id="messenger-story-track"><span class="story-loading">Your contacts' stories will appear here</span></div>
