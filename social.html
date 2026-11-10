@@ -2281,6 +2281,16 @@ body.suhas-high-contrast #settings{filter:contrast(1.18)}
 @media(min-width:761px){.social-mobile-nav{display:none!important}}
 @media(max-width:760px){.social-shell{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}.site-header{position:sticky!important;top:0!important;z-index:1100!important}}
 @media(prefers-reduced-motion:reduce){.social-mobile-nav button,.social-user-actions .mobile-head-action{transition:none!important}}
+</style><style id="suhas-max-tools-organized-20261111">
+#maxmenu .max-menu-extra-heading{font-size:14px;font-weight:700;margin:8px 2px 12px}
+#maxmenu .max-menu-tool-group{margin:0 0 13px}
+#maxmenu .max-menu-tool-group h3{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#65676b;margin:0 2px 7px}
+#maxmenu .max-menu-tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+#maxmenu .max-menu-tool-grid>button{display:grid;grid-template-columns:25px minmax(0,1fr);align-items:center;gap:7px;text-align:left;min-width:0;width:100%;padding:9px 8px;border:1px solid var(--border-color,#ddd);border-radius:9px;background:var(--surface,#fff);color:inherit}
+#maxmenu .max-menu-tool-grid>button span{font-size:17px;text-align:center}
+#maxmenu .max-menu-tool-grid>button b{font-size:11px;line-height:1.25;overflow-wrap:anywhere}
+#maxmenu .max-menu-tool-grid>button small{grid-column:2;font-size:9px;line-height:1.25;color:#65676b}
+#maxmenu .max-menu-tool-grid>button:active{transform:scale(.98)}
 </style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation">
@@ -2351,20 +2361,11 @@ body.suhas-high-contrast #settings{filter:contrast(1.18)}
 </div>
 <button type="button" class="max-menu-see-more" id="max-menu-see-more" aria-expanded="false" aria-controls="max-menu-extra">See more <span aria-hidden="true">⌄</span></button>
 <div class="max-menu-extra" id="max-menu-extra" hidden>
-<div class="max-menu-extra-heading">All shortcuts</div>
-<button type="button" data-tab="feed"><span>⌂</span><b>Feeds · Home</b><small>View posts from your community</small></button>
-<button type="button" data-tab="friends"><span>♧</span><b>Friends · Friend list</b><small>Open your friends</small></button>
-<button type="button" data-tab="requests"><span>✉</span><b>Friend requests</b><small>Review incoming and sent requests</small></button>
-<button type="button" data-tab="people"><span>⌕</span><b>Find people</b><small>Discover community members</small></button>
-<button type="button" data-tab="groups"><span>▦</span><b>Groups and communities</b><small>Browse and join groups</small></button>
-<button type="button" data-tab="marketplace"><span>▣</span><b>Marketplace</b><small>Browse community listings</small></button>
-<button type="button" data-tab="reels"><span>▶</span><b>Video · Reels</b><small>Watch community videos</small></button>
-<button type="button" data-tab="gaming"><span>🎮</span><b>Gaming</b><small>Open games and challenges</small></button>
-<button type="button" data-tab="saved"><span>🔖</span><b>Saved items</b><small>View your saved posts</small></button>
-<button type="button" data-tab="messages"><span>✉</span><b>Messages</b><small>Open conversations</small></button>
-<button type="button" data-tab="notifications"><span>🔔</span><b>Notifications</b><small>View recent activity</small></button>
-<button type="button" data-tab="following"><span>☆</span><b>Following</b><small>View followed profiles</small></button>
-<button type="button" data-tab="settings"><span>⚙</span><b>Settings</b><small>Manage your account preferences</small></button>
+<div class="max-menu-extra-heading">All tools</div>
+<div class="max-menu-tool-group"><h3>Community</h3><div class="max-menu-tool-grid"><button type="button" data-tab="feed"><span>⌂</span><b>Feeds · Home</b><small>View posts from your community</small></button><button type="button" data-tab="friends"><span>♧</span><b>Friends · Friend list</b><small>Open your friends</small></button><button type="button" data-tab="requests"><span>✉</span><b>Friend requests</b><small>Review incoming and sent requests</small></button><button type="button" data-tab="people"><span>⌕</span><b>Find people</b><small>Discover community members</small></button><button type="button" data-tab="groups"><span>▦</span><b>Groups and communities</b><small>Browse and join groups</small></button><button type="button" data-tab="following"><span>☆</span><b>Following</b><small>View followed profiles</small></button></div></div>
+<div class="max-menu-tool-group"><h3>Discover & entertainment</h3><div class="max-menu-tool-grid"><button type="button" data-tab="reels"><span>▶</span><b>Video · Reels</b><small>Watch community videos</small></button><button type="button" data-tab="gaming"><span>🎮</span><b>Gaming</b><small>Open games and challenges</small></button><button type="button" data-tab="marketplace"><span>▣</span><b>Marketplace</b><small>Browse community listings</small></button></div></div>
+<div class="max-menu-tool-group"><h3>Your activity</h3><div class="max-menu-tool-grid"><button type="button" data-tab="saved"><span>🔖</span><b>Saved items</b><small>View your saved posts</small></button><button type="button" data-tab="messages"><span>✉</span><b>Messages</b><small>Open conversations</small></button><button type="button" data-tab="notifications"><span>🔔</span><b>Notifications</b><small>View recent activity</small></button></div></div>
+<div class="max-menu-tool-group"><h3>Account & controls</h3><div class="max-menu-tool-grid"><button type="button" data-tab="settings"><span>⚙</span><b>Settings</b><small>Manage your account preferences</small></button></div></div>
 </div>
 <div class="max-menu-sections">
 <details><summary>Help and support</summary><div class="max-menu-section-body"><a href="mailto:suhasgroup.in@gmail.com">Help Centre · Contact SUHAS support</a><a href="mailto:suhasgroup.in@gmail.com?subject=Report%20a%20problem">Report a problem</a></div></details>
