@@ -32,6 +32,20 @@ self.addEventListener('fetch', function(e){
   var requestUrl = new URL(url);
   if (requestUrl.origin !== self.location.origin) return;
 
+  // Release metadata must always be refreshed from the network so clients can detect new versions.
+  if (requestUrl.pathname.endsWith('/release.json') || requestUrl.pathname === '/release.json') {
+    e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
+      if (response && response.ok) {
+        var cache = await caches.open(CACHE);
+        await cache.put(e.request, response.clone());
+      }
+      return response;
+    }).catch(async function() {
+      return (await caches.open(CACHE)).match(e.request, { ignoreSearch: true }) || Response.error();
+    }));
+    return;
+  }
+
   // Keep the currently installed app version until the member installs a waiting worker.
   e.respondWith(
     caches.open(CACHE).then(async function(cache){
