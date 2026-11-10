@@ -2019,7 +2019,8 @@ async function openMemberProfile(id){
   ['↗','LinkedIn',p.linkedin_url]
  ];
  $('profile-viewer-info').innerHTML='<section class="profile-info-card"><h3>About</h3><div class="profile-summary">'+summary.filter(x=>x[2]).map(x=>'<div class="profile-summary-row"><span class="profile-summary-icon">'+x[0]+'</span><div><div class="profile-summary-label">'+x[1]+'</div><div class="profile-summary-value">'+(x[1]==='LinkedIn'?'<a href="'+safe(x[2])+'" target="_blank" rel="noopener noreferrer">View LinkedIn profile</a>':safe(x[2]))+'</div></div></div>').join('')+(summary.every(x=>!x[2])?'<div class="profile-summary-label">No additional public information added yet.</div>':'')+'</div></section>';
- await loadMemberConnections(id);\n await loadMemberTimeline(id);
+ await loadMemberConnections(id);
+ await loadMemberTimeline(id);
  if(id===me){$('profile-viewer-actions').innerHTML='<a class="action primary" href="profile.html">Edit profile</a>';}
  else{
   const rel=relation.data,friendAction=rel?(rel.status==='accepted'?'<button class="action" type="button" disabled>✓ Friends</button>':rel.status==='pending'?(rel.sender_id===me?'<button class="action" type="button" disabled>Request sent</button>':'<button class="action primary" type="button" data-profile-accept="'+safe(rel.id)+'">Confirm request</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>'):'<button class="action primary" data-profile-friend="'+safe(id)+'">Add Friend</button>';
