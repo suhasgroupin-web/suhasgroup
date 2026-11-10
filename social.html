@@ -2446,7 +2446,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
 (function(){
  const key='suhas-max-active-section:'+location.pathname;
  let tab='feed';
- try{tab=sessionStorage.getItem(key)||'feed';}catch(_){}
+ try{tab=localStorage.getItem(key)||'feed';}catch(_){}
  const allowed=['feed','people','friends','saved','groups','marketplace','reels','gaming','requests','following','notifications','messages','settings'];
  if(!allowed.includes(tab))tab='feed';
  history.replaceState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
@@ -2454,14 +2454,14 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  window.addEventListener('popstate',function(event){
   const state=event.state;
   if(state&&state.suhasMax&&!state.guard&&allowed.includes(state.tab)){
-   tab=state.tab;try{sessionStorage.setItem(key,tab);}catch(_){}
+   tab=state.tab;try{localStorage.setItem(key,tab);}catch(_){}
    activateMaxTab(tab);return;
   }
   // Re-enter the app instead of navigating to a parent SUHAS Group page.
   history.pushState({suhasMax:true,tab,guard:true},'',location.pathname+location.search+location.hash);
   activateMaxTab(tab);
  });
- window.addEventListener('pagehide',function(){try{sessionStorage.setItem(key,tab);}catch(_){}});
+ window.addEventListener('pagehide',function(){try{localStorage.setItem(key,tab);}catch(_){}});
  document.addEventListener('click',function(e){const b=e.target.closest('button[data-tab]');if(b&&b.dataset.tab!=='maxmenu'&&allowed.includes(b.dataset.tab))tab=b.dataset.tab;},true);
 })();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
@@ -2529,7 +2529,7 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
   function remember(tab){
     // The menu is an overlay, not a page section; never persist it across refresh.
     if(!tab || tab==='maxmenu')return;
-    try{sessionStorage.setItem(key,tab);}catch(_){}
+    try{localStorage.setItem(key,tab);}catch(_){}
   }
   document.addEventListener('click',function(e){
     const button=e.target.closest('[data-tab]');
@@ -2537,9 +2537,9 @@ function initSuhasArcade(){if(window.suhasArcadeReady)return;window.suhasArcadeR
   },true);
   function restore(){
     let tab='';
-    try{tab=sessionStorage.getItem(key)||'';}catch(_){}
+    try{tab=localStorage.getItem(key)||'';}catch(_){}
     // Clear stale menu state saved by older versions before restoring a section.
-    if(tab==='maxmenu'){try{sessionStorage.removeItem(key);}catch(_){}return;}
+    if(tab==='maxmenu'){try{localStorage.removeItem(key);}catch(_){}return;}
     if(!tab || tab==='feed')return;
     const started=Date.now();
     const timer=setInterval(function(){
