@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.2",
-  "published_at": "2026-11-11T11:15:00.000Z",
+  "version": "2026.11.11.3",
+  "published_at": "2026-11-11T12:30:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Cleaner Facebook-style mobile layout with compact header, full-width feed and fixed bottom navigation.",
+  "update_message": "Facebook-style phone home feed: icon tab bar, stories shelf, full-width posts and Home/Friends/Watch/Marketplace/Notifications/Menu bottom navigation.",
   "mandatory": false
 }

@@ -940,3 +940,18 @@ Date: 2026-11-10
 - Vercel is not deleted or disconnected until Cloudflare Pages is live and end-to-end tested. This protects the existing domain and recovery path. Supabase/Auth/database/storage and member data remain untouched.
 - Cloudflare currently documents the Pages Free plan at $0/month, with 500 builds/month, one concurrent build, 20,000 files/site, and 25 MiB per asset; static asset requests are free and unlimited. These are current limits, not a lifetime guarantee; other services may have separate charges.
 - Verification still pending: Cloudflare workflow secret setup, latest production deployment check, and Android/Desktop end-to-end tests.
+
+
+## 2026-11-11 — Phone home feed matched to the supplied Facebook-style sample (SUHAS-MAX)
+- Hosting note: Vercel is cancelled; production URL is https://suhasgroup.pages.dev (Cloudflare Pages). Canonical/sitemap/robots URLs were switched in commit `a6700b7`.
+- Added `assets/suhas-max-fb-mobile-v1.css` (phone width only, `@media (max-width:760px)`, skipped in desktop mode) and linked it at the end of `social.html`. Rollback: remove that one `<link>` line.
+- Header on phones: logo + SUHAS-MAX, round Search and Messenger buttons (existing unread badge). Hidden on phones only: left hamburger, My Profile pill, display-mode dots, create (+), edit-profile. Profile is still reachable at the top of the Menu sheet; the display-mode toggle is now a "Display mode · mobile / desktop" button in the Menu sheet that triggers the existing toggle.
+- New phone icon tab bar under the header: Home, Friends, Groups, Notifications, Menu (real `activateMaxTab` actions). Notification badge counts real unread rows (`suhas_notifications.read_at is null`) for the signed-in member; hidden when 0.
+- Bottom nav: Home, Friends, Watch (opens the existing Reels tab), Marketplace, Notifications, Menu. Groups moved from the bottom bar to the top tab bar.
+- Stories shelf restyled (Create story card, avatar ring top-left, name on gradient). The story card now also renders the author's profile photo ring when one exists.
+- Feed post card restyled: full-width media, like count row, Like / Comment / Share row with thumbs-up icon, and a real hide-post X button (uses the existing `data-post-action="hide"` handler). Desktop keeps its layout.
+- Hidden on phones only (still available): Reels shelf on Home (use the Watch tab) and per-button action counts.
+- Checks actually run: all inline scripts pass `node --check`; CSS braces balanced; Chrome render at 412px and 360px widths with mock content matches the sample layout; desktop width 1280px confirmed unaffected (phone tab bar and bottom nav hidden, desktop top nav shown).
+- NOT verified (pending, needs a signed-in account on a real phone): real feed/stories data rendering, like/comment/share/hide actions, notification badge count, Menu sheet display-mode button, search dropdown overlap with the new tab bar.
+- Release metadata `2026.11.11.3`; `assets/suhas-max-fb-mobile-v1.css` added to the service-worker core list.
+
