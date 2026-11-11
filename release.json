@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
   "version": "2026.11.11.12",
-  "published_at": "2026-11-11T14:35:50.385Z",
+  "published_at": "2026-11-11T14:39:47.748Z",
   "notify_after_days": 0,
-  "update_message": "Fixed owner mobile bottom navigation: Edit Suhas and five destinations stay on one single row.",
+  "update_message": "Owner navigation fix: all six bottom navigation buttons are locked to one equal-width row on mobile.",
   "mandatory": false
 }
