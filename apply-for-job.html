@@ -27,7 +27,7 @@
 <div class="career-hero"><span class="tag">SUHAS GROUP CAREERS</span><h1>Apply for Job</h1><p>Find opportunities, submit your application, follow your progress, or connect with our official career channels — all from one place.</p></div>
 <section id="create-link-job" class="career-note" style="margin:0 auto 22px;max-width:850px;display:none">
 <h2 style="margin:0 0 8px;color:#10264a;font-size:22px">Create Job by Link</h2>
-<p style="margin:0 0 14px">Paste only the public SUHAS Career PLC LinkedIn post URL. Once the approved LinkedIn connection is enabled, the system will import the post details, publish the job to SUHAS Jobs and send the channel update.</p>
+<p style="margin:0 0 14px">Paste only the public SUHAS Career PLC LinkedIn post URL. Paste the public post URL and its copied text to prepare a draft. Review the extracted details, then publish to SUHAS Jobs. LinkedIn auto-import and WhatsApp channel publishing require separate approved API access.</p>
 <div id="link-job-msg" class="msg"></div>\n<div style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px"><button class="btn btn-outline" id="linkedin-connect" type="button">Connect LinkedIn</button><span id="linkedin-status" style="align-self:center;font-size:13px;color:#5b6b85">Checking LinkedIn connection…</span></div>
 <form id="link-job-form">
 <div class="form-row"><label>Public LinkedIn post / job URL</label><input id="link-job-url" type="url" required placeholder="https://www.linkedin.com/posts/..."></div>
@@ -72,7 +72,7 @@
   var linkedinEndpoint=(window.SUHAS_CONFIG&&window.SUHAS_CONFIG.SUPABASE_URL||'').replace(/\/$/,'')+'/functions/v1/linkedin-oauth';
   async function linkedinRequest(action,method){
     var sessionResult=await sb.auth.getSession(),session=sessionResult.data.session;
-    if(!session)throw new Error('Sign in to SUHAS-MAX first.');
+    if(!session)throw new Error('Sign in to your SUHAS GROUP account first.');
     var response=await fetch(linkedinEndpoint+'?action='+encodeURIComponent(action),{method:method||'GET',headers:{'Authorization':'Bearer '+session.access_token,'apikey':window.SUHAS_CONFIG.SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'}});
     var data=await response.json().catch(function(){return {};});
     if(!response.ok)throw new Error(data.error||('LinkedIn request failed ('+response.status+').'));
@@ -91,7 +91,7 @@
     try{var data=await linkedinRequest('start','POST');if(!data.authorization_url)throw new Error('LinkedIn did not return an authorization URL.');location.href=data.authorization_url;}
     catch(e){message(e.message,false);b.disabled=false;b.textContent=old;}
   });
-  (async function(){try{var s=await sb.auth.getSession();if(!s.data.session)return;if(await window.checkIsAdmin()){panel.style.display='block';refreshLinkedInStatus();}}catch(e){}})();
+  (async function(){try{var s=await sb.auth.getSession();if(!s.data.session)return;if(await window.checkIsAdmin()){panel.style.display='block';refreshLinkedInStatus();if(location.hash==='#create-link-job')setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},250);}}catch(e){}})();
   document.getElementById('link-job-prepare').addEventListener('click',function(){
     var url=document.getElementById('link-job-url').value.trim(),raw=document.getElementById('link-job-text').value.trim();
     if(!validLinkedInUrl(url)){message('Please paste a valid public HTTPS LinkedIn post or job URL.',false);return;}
