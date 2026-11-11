@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.27",
-  "published_at": "2026-11-11T15:57:30.357Z",
+  "version": "2026.11.11.28",
+  "published_at": "2026-11-11T16:01:09.163Z",
   "notify_after_days": 0,
-  "update_message": "Profile and cover photo changes now require an explicit Save action after selecting an image; the selected image is applied immediately after successful save.",
+  "update_message": "Photo selection now opens an in-page preview confirmation with one Save button; saving applies the selected profile or cover image.",
   "mandatory": false
 }
