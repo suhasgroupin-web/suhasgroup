@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (page !== 'main-menu.html' && page !== 'app.html' && document.querySelector('.nav-wrap') && !document.getElementById('suhas-display-mode-loader')) {
     var displayLoader = document.createElement('script');
     displayLoader.id = 'suhas-display-mode-loader';
-    displayLoader.src = 'assets/display-mode.js?v=8';
+    displayLoader.src = 'assets/display-mode.js?v=9';
     displayLoader.defer = true;
     document.body.appendChild(displayLoader);
   }
