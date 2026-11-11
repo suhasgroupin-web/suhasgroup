@@ -1005,3 +1005,12 @@ Date: 2026-11-10
 - Added the dedicated stylesheet to the service-worker core asset list and bumped service-worker cache to `v106`; release metadata is `2026.11.11.6`.
 - Protection contract: future unrelated feature/layout tasks must not edit the locked stylesheet or the marked nav markup. Only an explicit owner request to change bottom navigation authorizes edits. This is a repository-level change-control lock, not a GitHub branch-protection/security lock.
 - Verification performed: confirmed the nav markup has exactly six ordered buttons and the dedicated stylesheet link is after the general mobile stylesheet; verified the new file is included in the service-worker precache list and release/cache versions are incremented. Signed-in Android visual QA and live Cloudflare deployment are still pending.
+
+
+## 2026-11-11 — Premium colorful 3D bottom navigation icons
+- Owner explicitly requested a premium, colorful 3D icon treatment while retaining the locked six-item layout.
+- Replaced only the six icon drawings in the locked nav markup: glossy blue Home, teal two-person Friends, orange 3D Video camera, magenta/purple Reels, gold Notification bell, and the signed-in member's actual profile photo in a metallic accent ring.
+- Profile image reuses the existing authenticated profile lookup and fallback logic via the `mobile-profile-nav-avatar` element ID; no new user data query or external asset dependency was added.
+- Added icon-only visual rules to the protected navigation stylesheet. The six buttons, labels, order, grid, fixed position, dimensions and tap destinations are unchanged.
+- Release metadata advanced to `2026.11.11.7`; service-worker cache advanced to `v107`.
+- Static source verification and signed-in Android rendering still require confirmation after deployment.

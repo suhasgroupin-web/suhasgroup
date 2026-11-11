@@ -87,3 +87,11 @@ html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-fb-badge {
   html body:not(.suhas-desktop-mode) .social-mobile-nav { display: none !important; }
 }
 html body.suhas-desktop-mode .social-mobile-nav { display: none !important; }
+
+/* ----- Premium 3D navigation icon skin (icons only; protected geometry untouched) ----- */
+html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-nav-3d-icon{display:block!important;width:29px!important;height:29px!important;overflow:visible!important;filter:drop-shadow(0 2px 1px rgba(20,35,70,.22)) drop-shadow(0 3px 4px rgba(20,35,70,.12));transition:transform .18s ease,filter .18s ease!important}
+html body:not(.suhas-desktop-mode) .social-mobile-nav button:active .suhas-nav-3d-icon{transform:translateY(1px) scale(.96)!important}
+html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-profile-nav-icon{width:31px!important;height:31px!important;border-radius:50%!important;padding:2px!important;background:linear-gradient(145deg,#ffd76c,#f5a623 42%,#b66a16)!important;box-shadow:0 2px 6px rgba(150,91,10,.28),inset 0 1px 1px rgba(255,255,255,.9)!important}
+html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-profile-nav-avatar{display:block!important;width:27px!important;height:27px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#e8edf5!important}
+html body:not(.suhas-desktop-mode) .social-mobile-nav button.active .mobile-profile-nav-icon{background:linear-gradient(145deg,#82c2ff,#0866ff 58%,#173caa)!important;box-shadow:0 2px 7px rgba(8,102,255,.35),inset 0 1px 1px rgba(255,255,255,.85)!important}
+@media(prefers-reduced-motion:reduce){html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-nav-3d-icon{transition:none!important}}
