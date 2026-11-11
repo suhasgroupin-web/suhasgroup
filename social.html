@@ -5001,4 +5001,10 @@ body.suhas-messenger-page-open>.site-header,body.suhas-messenger-page-open>.soci
 })();
 </script>
 
+<style id="suhas-max-authenticated-desktop-nav-final">
+/* This final cascade runs after auth.js inserts its navigation gate stylesheet. */
+html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:grid!important}
+html.suhas-authenticated .social-mobile-nav{display:grid!important}
+html.suhas-authenticated .tabbar{display:none!important}
+</style>
 </body></html>
