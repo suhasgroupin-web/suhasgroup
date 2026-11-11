@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ['main-menu.html', 'Main Menu', page === 'main-menu.html' || page === 'app.html', ic('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'), ''],
     ['jobs.html', 'Job', page === 'jobs.html' || page === 'job.html', ic('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), ''],
     ['o5-desk.html', "O5'Intl", page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon o5-international-icon" src="assets/icons/o5-international-logo.svg?v=6" alt="O5 International" />', 'o5-international'],
-    ['group.html#careers', 'Careers', page === 'group.html', ic('<path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>'), ''],
+    ['group.html#careers', 'Careers', page === 'group.html' || page === 'profile.html', ic('<path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>'), ''],
     ['home.html', 'SUHAS MAX', page === 'home.html' || page === 'social.html' || page === 'messenger.html', ic('<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/>'), '']
   ];  nav.innerHTML = tabs.map(function (t) {
     return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
