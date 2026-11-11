@@ -252,6 +252,7 @@ document.getElementById('export-csv').addEventListener('click', function(){
       a.profiles ? (a.profiles.full_name||'') : '',
       a.profiles ? (a.profiles.phone||'') : '',
       a.jobs ? (a.jobs.title||'') : '',
+      a.status||'new',
       String(a.created_at).slice(0,10)
     ]);
   });
