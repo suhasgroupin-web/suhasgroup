@@ -984,3 +984,15 @@ Date: 2026-11-10
 - Direct live fetch confirmed Cloudflare Pages serves `release.json` version `2026.11.11.4` and the updated `assets/suhas-max-fb-mobile-v1.css` content.
 - The latest GitHub Actions Cloudflare deployment attempt reported API Authentication error `10000`; configured Cloudflare token permissions/validity require owner correction in GitHub Actions secrets. The live release and CSS asset are available, but the workflow health is not green.
 - Next exact verification: owner signs in to SUHAS-MAX on Android, confirms the six-item bottom navigation is the only mobile app navigation row, taps each destination, verifies notification count and Menu, checks Search/Messenger, and refreshes a non-Home tab. Re-run Cloudflare deployment after correcting the token and confirm the workflow is green.
+
+
+## 2026-11-11 — Requested six-item Facebook-style mobile bottom navigation
+- User specified exact bottom navigation order and labels: Home · Friends · Video · Reels · Notification · Profile.
+- Updated `social.html` bottom bar to exactly those six destinations and matching SVG icons; removed Marketplace and Menu from this primary row (they remain available elsewhere in the app).
+- Added a dedicated Videos panel and `loadVideos()` loader for shared MP4/WebM posts; retained the separate Reels panel and loader. Updated the tab controller and refresh-safe route allow-list for `videos`. Profile bottom button opens existing `profile.html`.
+- Updated release metadata to `2026.11.11.5` and service-worker cache key to `v105`.
+- Main code commit: `4fd3059a197560c1d38a5b24b58f07d403d7aad1`; release/cache commit: `8155b27f7c503c307ad30b42af92b62870fab0d2`.
+- Static source verification: all six exact labels present, videos panel present, route allow-list includes videos.
+- Cloudflare deployment workflow for commit `8155b27f7c503c307ad30b42af92b62870fab0d2` is still in progress at the last check: https://github.com/suhasgroupin-web/suhasgroup/actions/runs/43021485703. Live Pages was still serving release `2026.11.11.11.4` during the check, so the latest release is not yet verified live.
+- User requested a one-time Cloudflare deployment check for 2026-11-12 10:00 Asia/Dhaka. Creation was rejected because the plan has 3 active scheduled tasks (limit 3). Do not claim a reminder/task exists; user must free a task slot or change plan before retry.
+- Pending: wait for deployment workflow result; verify live `release.json` is `2026.11.11.5`; perform signed-in Android visual and tap-through QA of all six destinations. Prior Cloudflare workflow failure code 10000 still needs investigation if it recurs.
