@@ -69,13 +69,62 @@ body{overflow-x:hidden}
 .handshake-person{display:none!important}.onboarding-scene{min-height:0}.handshake-stage{height:110px}.suhas-balloons{height:110px}.welcome-cta-wrap{width:min(25vw,190px);min-width:145px}.welcome-cta-wrap .create-profile-cta{min-height:48px;padding:7px 9px;gap:7px;border-radius:12px}.welcome-cta-wrap .cta-icon{width:28px;height:28px;flex-basis:28px;font-size:16px;border-radius:9px}.welcome-cta-wrap .create-profile-cta strong{font-size:10px}.welcome-cta-wrap .create-profile-cta small{font-size:8px}.welcome-cta-wrap .cta-arrow{font-size:18px}
 @media(max-width:600px){.ambient-showcase{height:clamp(170px,24vh,235px);border-radius:18px}.ambient-caption{left:12px;right:12px;bottom:12px}.ambient-scene-copy{left:12px;top:12px}.welcome-cta-wrap{width:min(42vw,165px);min-width:135px}}
 @media(prefers-reduced-motion:reduce){.ambient-live-dot,.ambient-scene-progress span{animation:none}}
+
+/* Free animated SUHAS brand-scene carousel (CSS motion; no paid video service) */
+.ambient-fallback{background:linear-gradient(155deg,#174b7b,#081a35 72%);perspective:800px}
+.ambient-scene{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .8s ease;isolation:isolate}
+.ambient-scene.active{opacity:1;visibility:visible}
+.scene-skyline{position:absolute;inset:13% 0 22%;display:flex;align-items:flex-end;justify-content:space-around;gap:5px}
+.scene-skyline i{width:15%;height:48%;border:1px solid #9dd7ff66;background:repeating-linear-gradient(0deg,transparent 0 14px,#8dd5ff55 15px 16px),linear-gradient(90deg,#081b35,#235987,#0b2442);box-shadow:0 0 22px #4bb6ff22}
+.scene-skyline i:nth-child(2){height:76%;width:18%}.scene-skyline i:nth-child(3){height:60%}.scene-skyline i:nth-child(4){height:88%;width:17%}.scene-skyline i:nth-child(5){height:55%}
+.scene-office-sign{position:absolute;top:14%;left:50%;transform:translateX(-50%);font-size:clamp(9px,1.6vw,14px);letter-spacing:.2em;color:#f5d68e;font-weight:900;text-shadow:0 2px 12px #000}
+.scene-office-sign small{display:block;text-align:center;font-size:8px;color:#d7e8ff;letter-spacing:.24em;margin-top:4px}
+.scene-road{position:absolute;left:-10%;right:-10%;bottom:-35%;height:67%;border-radius:50% 50% 0 0;border-top:2px solid #f3d58b99;background:linear-gradient(#142d4a,#020915 65%);transform:perspective(180px) rotateX(22deg)}
+.scene-road:after{content:"";position:absolute;left:50%;top:4%;height:80%;border-left:2px dashed #e9ca7c99}
+.scene-car,.scene-van{position:absolute;z-index:3;bottom:18%;left:-34%;width:104px;height:35px;border-radius:12px 18px 7px 7px;background:linear-gradient(#e8f1fb,#7798bb 48%,#193b67 52%,#071b36);border:1px solid #dcecff;box-shadow:0 7px 15px #0009;animation:brandCarPass 7s linear infinite}
+.scene-car:before,.scene-van:before{content:"";position:absolute;left:22px;top:-15px;width:48px;height:18px;border-radius:12px 12px 0 0;background:linear-gradient(135deg,#d9eaff,#456b95);border:1px solid #d7e9ff}
+.scene-car:after,.scene-van:after{content:"";position:absolute;left:13px;bottom:-6px;width:14px;height:14px;border-radius:50%;background:#10151c;border:3px solid #9eafc3;box-shadow:60px 0 #10151c,60px 0 0 3px #9eafc3}
+.scene-car b,.scene-van b{position:absolute;z-index:2;left:35px;top:12px;font-size:7px;color:#102b4b;letter-spacing:1px}
+@keyframes brandCarPass{0%{transform:translateX(0)}100%{transform:translateX(155vw)}}
+.scene-factory{background:linear-gradient(#163e68,#0b1b34)}
+.factory-building,.school-building,.visit-building{position:absolute;left:16%;right:16%;bottom:20%;height:55%;background:linear-gradient(90deg,#c3d3e5,#eff5fa 18%,#7899b8 19%,#d6e4f2 80%,#6889a9);border:2px solid #d8eaff;box-shadow:0 10px 25px #0008;clip-path:polygon(5% 12%,95% 12%,100% 100%,0 100%)}
+.factory-building span,.school-building span,.visit-building span{position:absolute;top:8%;left:0;right:0;text-align:center;color:#17385d;font-weight:950;font-size:clamp(8px,1.5vw,13px);letter-spacing:.12em}
+.factory-building i,.school-building i,.visit-building i{position:relative;display:inline-block;margin:22% 2% 0 7%;width:13%;height:29%;background:repeating-linear-gradient(0deg,#a8c9e8 0 5px,#315c83 6px 9px);border:2px solid #e7f2ff}
+.factory-building:after{content:"";position:absolute;left:8%;top:-24%;width:9%;height:32%;background:linear-gradient(90deg,#8ba9c7,#e1edf8);box-shadow:22px -8px 0 -4px #a9c2db}
+.factory-smoke{position:absolute;left:24%;top:6%;width:70px;height:55px;background:radial-gradient(ellipse,#c9e0f2aa,transparent 68%);filter:blur(8px);animation:smokeFloat 3s ease-in-out infinite alternate}
+@keyframes smokeFloat{to{transform:translate(10px,-12px) scale(1.3);opacity:.45}}
+.scene-van{width:116px;height:42px;bottom:16%;animation-duration:8s}
+.scene-hills{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 70%,#4a8b88 0 18%,transparent 19%),radial-gradient(ellipse at 80% 68%,#356c78 0 25%,transparent 26%),linear-gradient(#16466f,#b4d1df)}
+.scene-car-two{bottom:17%;animation-duration:6s}
+.scene-bike{position:absolute;z-index:4;bottom:17%;left:45%;width:64px;height:30px;animation:bikeCruise 6s ease-in-out infinite}
+.scene-bike:before,.scene-bike:after{content:"";position:absolute;bottom:0;width:20px;height:20px;border:3px solid #101820;border-radius:50%;background:#a7c4db}
+.scene-bike:before{left:0}.scene-bike:after{right:0}
+.scene-bike i{position:absolute;left:12px;top:2px;width:42px;height:4px;background:#d5e5f5;transform:rotate(-9deg)}
+.scene-bike b{position:absolute;left:24px;top:-12px;width:14px;height:16px;border-radius:8px 8px 4px 4px;background:#f0c87b}
+@keyframes bikeCruise{0%,100%{transform:translateX(-30px)}50%{transform:translateX(38px)}}
+.scene-school{background:linear-gradient(#224c76,#b6d4e5)}
+.school-building{left:24%;right:24%;height:48%;bottom:23%;background:linear-gradient(90deg,#f0dfb9,#fff1cf 50%,#c8a66f);clip-path:polygon(0 20%,50% 0,100% 20%,100% 100%,0 100%)}
+.school-building i{margin-top:23%;width:12%;height:30%;background:#8cb8d5}
+.school-child{position:absolute;z-index:4;bottom:17%;left:-10%;width:17px;height:42px;border-radius:9px 9px 3px 3px;background:#1d4e91;animation:childWalk 8s linear infinite}
+.school-child:before{content:"";position:absolute;top:-14px;left:3px;width:12px;height:13px;border-radius:50%;background:#b87955}
+.school-child:after{content:"";position:absolute;right:-8px;top:9px;width:11px;height:17px;border-radius:4px;background:#f0c96f;border:1px solid #fff}
+.school-child b{position:absolute;right:-8px;top:14px;font-size:4px;color:#102c4c}
+.child-two{animation-delay:2.4s;bottom:15%;background:#8d3e38}
+@keyframes childWalk{0%{transform:translateX(0) rotate(-4deg)}50%{transform:translateX(58vw) rotate(4deg)}100%{transform:translateX(115vw) rotate(-4deg)}}
+.visit-building{left:28%;right:28%;height:60%;bottom:20%;background:linear-gradient(90deg,#9db6cc,#edf5fc,#8aa9c5);clip-path:polygon(10% 0,90% 0,100% 100%,0 100%)}
+.visit-building i{margin-top:20%;height:38%;width:10%}
+.ambient-scene-copy{z-index:8}
+@media(prefers-reduced-motion:reduce){.scene-car,.scene-van,.factory-smoke,.scene-bike,.school-child{animation:none!important}}
 </style></head><body><main class="menu-wrap"><div class="welcome-stars"></div><section class="welcome-stage" aria-label="Welcome to SUHAS GROUP"><div class="welcome-orbit"></div><div class="logo-halo"><img src="assets/logo.png" alt="SUHAS GROUP logo"></div><div class="welcome-kicker">A world of opportunities</div><h1 class="welcome-title"><span>Welcome to</span>SUHAS GROUP</h1><div class="welcome-divider"></div><p class="welcome-subtitle">One vision. One community. Endless possibilities.<br>We are delighted to have you with us.</p><div class="welcome-values"><span>Careers</span><span>Quality</span><span>Design</span><span>Innovation</span></div>
 <section class="ambient-showcase" id="suhas-ambient-showcase" aria-label="SUHAS GROUP visual showcase">
   <video id="suhas-ambient-video" class="ambient-video" muted playsinline autoplay preload="none" aria-label="SUHAS GROUP cinematic showcase"></video>
   <div class="ambient-fallback" id="suhas-ambient-fallback">
-    <div class="ambient-city"><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="ambient-road"></div>
-    <div class="ambient-scene-copy"><span class="ambient-live-dot"></span><b id="ambient-scene-title">SUHAS GROUP · ONE VISION</b><small id="ambient-scene-subtitle">Corporate · Quality · Innovation · Community</small></div>
+    <div class="ambient-scene scene-city active" data-scene="0" aria-hidden="true"><div class="scene-skyline"><i></i><i></i><i></i><i></i><i></i></div><div class="scene-office-sign">SUHAS GROUP <small>CORPORATE OFFICE</small></div><div class="scene-road"></div><div class="scene-car"><b>SUHAS</b></div></div>
+    <div class="ambient-scene scene-factory" data-scene="1" aria-hidden="true"><div class="factory-building"><span>SUHAS GROUP</span><i></i><i></i><i></i></div><div class="factory-smoke"></div><div class="scene-road"></div><div class="scene-van"><b>SUHAS</b></div></div>
+    <div class="ambient-scene scene-vehicle" data-scene="2" aria-hidden="true"><div class="scene-hills"></div><div class="scene-road"></div><div class="scene-car scene-car-two"><b>SUHAS</b></div><div class="scene-bike"><i></i><b></b></div></div>
+    <div class="ambient-scene scene-school" data-scene="3" aria-hidden="true"><div class="school-building"><span>SUHAS SCHOOL</span><i></i><i></i><i></i></div><div class="scene-road"></div><div class="school-child child-one"><b>SUHAS</b></div><div class="school-child child-two"><b>SUHAS</b></div></div>
+    <div class="ambient-scene scene-visit" data-scene="4" aria-hidden="true"><div class="visit-building"><span>SUHAS GROUP</span><i></i><i></i><i></i><i></i></div><div class="scene-road"></div><div class="scene-car"><b>SUHAS</b></div></div>
+    <div class="ambient-scene-copy"><span class="ambient-live-dot"></span><b id="ambient-scene-title">SUHAS GROUP · CORPORATE</b><small id="ambient-scene-subtitle">A world of opportunities</small></div>
     <div class="ambient-scene-progress"><span></span></div>
   </div>
   <div class="ambient-caption" aria-live="polite"><span>SUHAS GROUP</span><b id="ambient-caption-title">A world of opportunities</b></div>
