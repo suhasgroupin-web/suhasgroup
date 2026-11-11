@@ -34,7 +34,7 @@
 </div></section>
 <footer class="menu-foot"><span>© 2026 SUHAS GROUP · One account, one platform</span><button id="menu-logout" type="button">Log out</button></footer>
 </div></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-main-menu-first"></script><script>
 (async function(){try{const u=await sb.auth.getUser();const user=u.data&&u.data.user;if(!user)return;const p=await sb.from('suhas_member_profiles').select('full_name,profile_complete').eq('user_id',user.id).maybeSingle();if(p.data&&p.data.full_name){document.getElementById('member-greeting').textContent='Welcome back, '+p.data.full_name+'. Choose a service to continue.';}if(!p.data||p.data.profile_complete!==true){document.getElementById('profile-welcome').classList.add('show');}}catch(e){console.warn('Welcome profile could not be loaded',e);}})();
 document.getElementById('menu-logout').addEventListener('click',async function(){if(!confirm('Log out from this device?'))return;this.disabled=true;this.textContent='Logging out…';const r=await sb.auth.signOut({scope:'local'});if(r.error){this.disabled=false;this.textContent='Log out';alert(r.error.message);return;}location.replace('login.html');});
-</script><script src="assets/script.js?v=20261111-admin-six-one-row"></script></body></html>
+</script><script src="assets/script.js?v=20261111-premium-welcome"></script></body></html>
