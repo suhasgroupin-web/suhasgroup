@@ -976,3 +976,11 @@ Date: 2026-11-10
 - GitHub Actions Site Quality check passed for code commit `27c8baa12ef5f42d7471685239aa227a4263814d`.
 - Pending: check Cloudflare live response after cache-bust commit; repair GitHub Actions Cloudflare token permission (owner action; do not request the token in chat); perform signed-in Android UI regression testing for bottom navigation, all six destinations, search, Messenger, post actions and desktop unaffected behavior.
 - No Supabase schema, accounts, posts, media, storage objects, or corporate modules were modified.
+
+
+## 2026-11-11 — Live browser QA result for mobile navigation
+- A live browser opened `https://suhasgroup.pages.dev/social.html` at an unauthenticated session. The app correctly redirected to `/login?next=%2Fsocial`; therefore authenticated SUHAS-MAX mobile layout and actual button behavior could not be inspected without a signed-in browser session.
+- The browser then inspected the login page's corporate bottom navigation, not the social app navigation. Its reported CSS/display values are not evidence about the signed-in social screen and must not be used to mark the social layout passed.
+- Direct live fetch confirmed Cloudflare Pages serves `release.json` version `2026.11.11.4` and the updated `assets/suhas-max-fb-mobile-v1.css` content.
+- The latest GitHub Actions Cloudflare deployment attempt reported API Authentication error `10000`; configured Cloudflare token permissions/validity require owner correction in GitHub Actions secrets. The live release and CSS asset are available, but the workflow health is not green.
+- Next exact verification: owner signs in to SUHAS-MAX on Android, confirms the six-item bottom navigation is the only mobile app navigation row, taps each destination, verifies notification count and Menu, checks Search/Messenger, and refreshes a non-Home tab. Re-run Cloudflare deployment after correcting the token and confirm the workflow is green.
