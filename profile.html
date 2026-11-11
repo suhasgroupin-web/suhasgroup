@@ -109,7 +109,7 @@ $('form').onsubmit=async e=>{e.preventDefault();const b=$('save');b.disabled=tru
 </script><script src="assets/display-mode.js?v=6"></script><script id="profile-device-logout">
 document.getElementById('profile-logout')?.addEventListener('click',async function(){
  const button=this;
- if(!confirm('Log out of SUHAS-MAX on this device?'))return;
+ if(!confirm('Log out of SUHAS GROUP on this device?'))return;
  button.disabled=true;button.textContent='Logging out…';
  try{const result=await sb.auth.signOut({scope:'local'});if(result.error)throw result.error;location.replace('login.html');}
  catch(error){button.disabled=false;button.textContent='Log out from this device';const msg=document.getElementById('msg');if(msg){msg.textContent='Could not log out: '+(error.message||'Please try again.');msg.style.display='block';msg.style.background='#FDECEA';msg.style.color='#A5321F';}}
