@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.33",
-  "published_at": "2026-11-11T17:02:27.301Z",
+  "version": "2026.11.11.34",
+  "published_at": "2026-11-11T17:02:59.466Z",
   "notify_after_days": 0,
-  "update_message": "Added free CSS animated corporate, factory, mobility, school and community scene carousel; new-member profile CTA remains gated by profile completion.",
+  "update_message": "Free animated Main Menu scenes updated; legacy cartoon SVG characters removed.",
   "mandatory": false
 }
