@@ -8,6 +8,6 @@
 <a class="app-card" href="social.html"><div class="app-icon" aria-hidden="true">⌂</div><h2>SUHAS-MAX</h2><p>Your independent social account — feed, friends, posts, stories, groups, reels and more.</p><span class="open-app">Open SUHAS-MAX&nbsp; →</span></a>
 <a class="app-card messenger" href="messenger.html"><div class="app-icon" aria-hidden="true">●</div><h2>SUHAS Messenger</h2><p>Private and group conversations, calls, media sharing and message settings.</p><span class="open-app">Open Messenger&nbsp; →</span></a>
 </section><div class="foot">© 2026 SUHAS GROUP · SUHAS GROUP identity · Separate SUHAS-MAX social profile</div></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-independent-max"></script><script>
 document.getElementById('logout').addEventListener('click',async function(e){e.preventDefault();if(!confirm('Log out of this device?'))return;this.textContent='Logging out…';this.style.pointerEvents='none';const r=await sb.auth.signOut({scope:'local'});if(r.error){this.textContent='Log out';this.style.pointerEvents='auto';alert(r.error.message);return;}location.replace('login.html');});
 </script></body></html>
