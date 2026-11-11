@@ -2314,6 +2314,9 @@ body.suhas-high-contrast #settings{filter:contrast(1.18)}
 .site-header .header-search-results:not([hidden]){top:calc(100% + 62px)!important;right:-42px!important;width:min(340px,calc(100vw - 14px))!important}
 }
 </style><style id="suhas-max-clean-desktop-navigation-20261111">
+/* Authenticated desktop-mode visibility override: keep the six tabs visible. */
+html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:grid!important}
+html.suhas-authenticated body.suhas-desktop-mode .tabbar{display:none!important}
 /* Keep the six main destinations clear, aligned and clickable on every screen size. */
 body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!important}
 body .tabbar{display:none!important}
