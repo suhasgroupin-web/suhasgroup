@@ -897,3 +897,14 @@ Date: 2026-11-10
 - Facebook UX comparison reference: Meta's official guidance supports grouped searchable settings, Privacy Checkup, audience selection and tag/timeline review; feed preferences include Favorites, snooze/reconnect and show-more/less controls. Sources: https://www.meta.com/safety/topics/safety-basics/tools/privacy/ ; https://about.fb.com/news/2021/08/facebook-settings-redesign/ ; https://about.fb.com/news/2022/10/new-ways-to-customize-your-facebook-feed/
 - Phase 01 remains IN PROGRESS: static source review passed, but full authenticated browser QA is outstanding and some contextual menu destinations/settings are still incomplete.
 - Phase 02 has not started. No unsupported route was added, no fake data was introduced, no destructive code or database changes were made.
+
+
+## 2026-11-11 — SUHAS GROUP + SUHAS-MAX integration registry baseline
+- Created `docs/INTEGRATION_REGISTRY.md` on isolated branch `chore/integration-registry-audit`.
+- Document defines the two-product architecture, integration security/acceptance rules, existing GitHub/Supabase/Vercel/Cloudflare/Pages/CodeQL/Datadog/Gemini/TinyFish/creative-tool baseline, and candidate technology license/hosting classifications.
+- Explicitly records that no VPS/server is currently available; self-hosted automation/ERP platforms are not deployable as always-on services until persistent compute is provided.
+- Identifies Activepieces MIT-covered Community core (with separately licensed enterprise/cloud areas), Node-RED Apache-2.0 core, Coolify Apache-2.0 requiring owned infrastructure, ERPNext GPLv3, and n8n Sustainable Use License restrictions. These are candidates, not installed or production-activated services.
+- No application code, Supabase schema, production settings, secrets, DNS, user data or live integrations were changed.
+- Registry commit: `53f49f0d9c14890ad6988df1eaf8e31557c451af`.
+- Verification: GitHub create-file API returned the commit SHA; branch is isolated from `main`. No deployment was triggered.
+- Next step: inspect workflow run outcomes and current deployment configuration, then prepare a portable adapter contract and only add non-production-safe improvements after review.
