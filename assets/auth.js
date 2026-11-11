@@ -30,14 +30,7 @@
   navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}html.suhas-authenticated body:has(#login-form) .tabbar,html.suhas-authenticated body:has(#signup-form) .tabbar{display:none!important}html.suhas-authenticated body:has(#login-form) .social-mobile-nav,html.suhas-authenticated body:has(#signup-form) .social-mobile-nav{display:none!important}';
   (document.head||document.documentElement).appendChild(navGateStyle);
 
-  function enableWebsiteDesktopMode(){
-    var standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;
-    if(!standalone){
-      try{localStorage.setItem('suhas-display-mode','desktop');}catch(e){}
-      if(document.body)document.body.classList.add('suhas-desktop-mode');
-    }
-  }
-  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=3';displayScript.defer=true;document.head.appendChild(displayScript);
+  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=4';displayScript.defer=true;document.head.appendChild(displayScript);
 
   var cfg = window.SUHAS_CONFIG;
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
@@ -193,7 +186,6 @@
     if(!requireWorkspaceSession(session)) return;
     if(!isPublicAuthPage()) paintNav(session);
     if(session){
-      enableWebsiteDesktopMode();
       var profileReady=await enforceMemberProfile(session);
       if(profileReady) revealAuthenticatedPage();
     }else if(isPublicAuthPage()){document.documentElement.classList.remove('suhas-auth-pending');}
@@ -216,7 +208,6 @@
       if(!requireWorkspaceSession(session)) return;
       if(!isPublicAuthPage()) paintNav(session);
       if((event==='SIGNED_IN' || event==='TOKEN_REFRESHED') && !isPublicAuthPage()){
-        enableWebsiteDesktopMode();
         enforceMemberProfile(session).then(function(ok){if(ok)revealAuthenticatedPage();});
       }
       if(event==='SIGNED_OUT') { document.documentElement.classList.remove('suhas-authenticated'); if(!isPublicAuthPage()) document.documentElement.classList.add('suhas-auth-pending'); }
