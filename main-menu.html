@@ -14,4 +14,4 @@
 </div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js"></script><script>
 document.getElementById('menu-logout').addEventListener('click',async function(){if(!confirm('Log out from this device?'))return;this.disabled=true;this.textContent='Logging out…';const r=await sb.auth.signOut({scope:'local'});if(r.error){this.disabled=false;this.textContent='Log out';alert(r.error.message);return;}location.replace('login.html');});
-</script><script src="assets/script.js?v=20261111-careers-profile"></script></body></html>
+</script><script src="assets/script.js?v=20261111-admin-six-one-row"></script></body></html>
