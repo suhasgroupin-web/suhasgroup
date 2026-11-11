@@ -2853,7 +2853,7 @@ async function openMemberProfile(id){
  const coverBackground=p.cover_photo_url?'url('+JSON.stringify(p.cover_photo_url)+')':'linear-gradient(135deg,#0b2347,#1e58a4)';$('profile-viewer-cover').style.setProperty('background-image',coverBackground,'important');
  $('profile-viewer-sub').textContent=[p.position,p.university||p.college||p.school,p.company].filter(Boolean).join('  |  ')||'SUHAS-MAX Member';
  $('profile-viewer-bio').textContent=p.bio||'';
- const profileHeadContent=$('profile-viewer-sub').parentElement;
+ const profileHeadContent=$('profile-viewer-sub').parentElement;profileHeadContent.classList.add('profile-viewer-copy');
  const profileBio=$('profile-viewer-bio'),profileBioMore=$('profile-bio-see-all');
  if(profileBio.parentElement!==profileHeadContent){profileHeadContent.insertBefore(profileBio, $('profile-viewer-stats'));profileHeadContent.insertBefore(profileBioMore, $('profile-viewer-stats'));}
  profileBio.hidden=!p.bio;
@@ -5040,7 +5040,7 @@ html.suhas-authenticated .tabbar{display:none!important}
 
 .profile-viewer-cover{height:270px!important;border-radius:18px 18px 0 0!important;background-size:cover!important;background-position:center!important}
 .profile-viewer-head{display:flex!important;align-items:flex-start!important;gap:18px!important;min-height:190px!important;padding:22px 22px 22px 218px!important;background:linear-gradient(115deg,#071b3b,#123e78 58%,#0b254b)!important;color:#fff!important;border-bottom:0!important}
-.profile-viewer-head>div:nth-of-type(2){min-width:0;flex:1}
+.profile-viewer-copy{min-width:0;flex:1}
 .profile-viewer-avatar{width:176px!important;height:176px!important;border-radius:50%!important;border:6px solid #fff!important;object-fit:cover!important;box-shadow:0 4px 18px #0004!important}
 .profile-viewer-name{color:#ffe08a!important;font-size:clamp(27px,4vw,38px)!important;font-weight:850!important;line-height:1.12!important;text-shadow:0 2px 8px #0005}
 .profile-viewer-sub{display:block!important;margin-top:9px!important;color:#a9e7ff!important;font-size:16px!important;font-weight:800!important;line-height:1.55!important;white-space:normal!important;overflow-wrap:anywhere}
@@ -5058,7 +5058,7 @@ html.suhas-authenticated .tabbar{display:none!important}
  .profile-viewer-cover{height:220px!important;border-radius:0!important}
  .profile-viewer-head{display:block!important;min-height:0!important;padding:62px 16px 18px!important;position:relative!important}
  .profile-viewer-avatar{left:16px!important;top:-68px!important;width:116px!important;height:116px!important;border-width:5px!important}
- .profile-viewer-head>div:nth-of-type(2){padding-top:0!important}
+ .profile-viewer-copy{padding-top:0!important}
  .profile-viewer-name{font-size:26px!important}
  .profile-viewer-sub{font-size:13px!important;line-height:1.5!important;margin-top:7px!important}
  .profile-viewer-bio{font-size:13px!important}
