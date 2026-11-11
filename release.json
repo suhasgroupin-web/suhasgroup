@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.34",
-  "published_at": "2026-11-11T17:02:59.466Z",
+  "version": "2026.11.11.35",
+  "published_at": "2026-11-11T17:12:23.375Z",
   "notify_after_days": 0,
-  "update_message": "Free animated Main Menu scenes updated; legacy cartoon SVG characters removed.",
+  "update_message": "Premium mobile Main Menu motion pass: fixed viewport, upward logo-bound balloons, compact profile CTA, perspective vehicles and moving pedestrians.",
   "mandatory": false
 }
