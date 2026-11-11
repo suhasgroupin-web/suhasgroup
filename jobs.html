@@ -33,6 +33,25 @@
 @media(max-width:760px){.job-search{grid-template-columns:1fr 1fr}.job-search .job-field:first-child{grid-column:1/-1}.job-search .job-3d{grid-column:1/-1;width:100%}.job-filters{grid-template-columns:1fr 1fr}.job-filters .job-field:first-child{grid-column:1/-1}}
 @media(max-width:430px){.job-shell{padding:14px 12px 40px}.job-hero{padding:19px 15px 17px;border-radius:20px}.job-search{padding:10px;gap:8px}.job-stats{gap:7px}.job-stat{padding:10px 8px}.job-stat strong{font-size:17px}.job-stat span{font-size:9px}.job-panel{padding:13px}.job-panel-head h2{font-size:16px}.job-card{padding:12px}.job-card-main{grid-template-columns:42px minmax(0,1fr)}.job-logo{width:42px;height:42px}.job-card-main>.job-3d{grid-column:2;justify-self:start;min-height:33px}.job-meta,.job-actions{margin-left:0}.job-title{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.job-3d{transition:none}}
+
+.career-toolkit{margin:17px 0;padding:16px;border:1px solid #dce5f1;border-radius:21px;background:linear-gradient(145deg,#fff,#f6f9ff);box-shadow:0 6px 0 #dce5f1,0 14px 28px #1a365b12}
+.career-toolkit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}.career-toolkit-head h2{margin:0;color:#142c50;font-size:18px}.career-toolkit-head p{margin:4px 0 0;color:#8290a5;font-size:11px}
+.career-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.career-action{min-width:0;display:flex;flex-direction:column;gap:5px;padding:12px 10px;border:1px solid #d8e2f0;border-radius:14px;background:linear-gradient(145deg,#fff,#edf3fc);box-shadow:0 3px 0 #cbd8e9;text-decoration:none;color:#19365f;transition:transform .15s,box-shadow .15s}
+.career-action:active{transform:translateY(3px);box-shadow:0 1px 0 #cbd8e9}
+.career-action .career-action-icon{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(145deg,#e7f0ff,#cbdcf6);color:#17499a;font-size:17px;font-weight:950}
+.career-action strong{font-size:11px;line-height:1.25}.career-action small{font-size:9px;line-height:1.35;color:#738198}
+.career-action.gold{background:linear-gradient(145deg,#fffdf5,#fff1c8);border-color:#ead49a;box-shadow:0 3px 0 #c9a04b}.career-action.green .career-action-icon{background:#e2f7eb;color:#16814b}
+.career-action.ai .career-action-icon{background:linear-gradient(145deg,#e9e4ff,#d6ccff);color:#5c43a5}
+.job-global-search{margin-top:13px;padding:13px;border-radius:15px;background:#edf3fa;border:1px solid #dfe7f2}
+.job-global-search label{display:block;margin-bottom:6px;font-size:9px;font-weight:900;letter-spacing:.13em;color:#61728d}
+.job-global-search-row{display:flex;gap:8px}.job-global-search-row input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid #d3deed;border-radius:10px;background:#fff;color:#1b304f;font:600 12px inherit}
+.job-global-search-row button{min-height:42px;padding:0 13px;border:1px solid #8cb8f8;border-radius:10px;background:linear-gradient(145deg,#4c8ef0,#17499a);color:#fff;font-size:11px;font-weight:900;box-shadow:0 3px 0 #0a2b63}
+.job-provider-links{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}.job-provider-links.open{display:grid}
+.job-provider-links a{display:flex;align-items:center;justify-content:center;min-height:36px;padding:7px;border:1px solid #d4dfed;border-radius:9px;background:#fff;color:#23416c;text-decoration:none;font-size:10px;font-weight:850}
+.owner-job-tools{display:none;margin-top:12px;padding:11px;border:1px dashed #c9a34e;border-radius:12px;background:#fff9e9}
+.owner-job-tools a{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border-radius:9px;background:linear-gradient(145deg,#f9df9b,#dca83e);color:#263750;text-decoration:none;font-size:11px;font-weight:900;box-shadow:0 3px 0 #98702a}
+@media(max-width:430px){.career-action-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.career-action{padding:10px 8px}.career-action small{font-size:8px}.career-action strong{font-size:10px}.job-global-search-row{flex-direction:column}.job-global-search-row button{width:100%}}
 </style>
 <script>(function(){document.documentElement.classList.add('suhas-auth-pending');document.write('<style>html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>')})();</script>
 </head>
@@ -85,7 +104,25 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function showMsg(t,ok){var el=$("msg");el.textContent=t;el.style.display="block";el.style.background=ok?"#e8f6ed":"#fff0ed";el.style.color=ok?"#17653a":"#a43b2c"}
 function sourceBadge(src){src=src||"SUHAS GROUP";return '<span class="job-badge">VIA '+esc(src)+'</span>'}
 function injectJsonLd(list){var items=list.slice(0,20).map(function(j){return{"@context":"https://schema.org/","@type":"JobPosting","title":j.title,"description":j.description||j.title,"datePosted":(j.created_at||"").slice(0,10),"validThrough":j.deadline,"employmentType":j.job_type,"hiringOrganization":{"@type":"Organization","name":j.company||"SUHAS GROUP"},"jobLocation":{"@type":"Place","address":j.location}}});$("jobs-jsonld").textContent=JSON.stringify(items)}
-function render(){
+
+function configureCareerTools(){
+ var input=$("job-global-query"),btn=$("job-global-search-btn"),links=$("job-provider-links");
+ function update(){
+  var q=input.value.trim();if(!q){input.focus();return;}
+  var bangla=q+" jobs Bangladesh";
+  $("job-google-link").href="https://www.google.com/search?q="+encodeURIComponent(bangla);
+  $("job-linkedin-link").href="https://www.linkedin.com/jobs/search/?keywords="+encodeURIComponent(q)+"&location=Bangladesh";
+  $("job-indeed-link").href="https://www.indeed.com/jobs?q="+encodeURIComponent(q)+"&l=Bangladesh";
+  $("job-bdjobs-link").href="https://www.google.com/search?q="+encodeURIComponent("site:bdjobs.com "+q+" jobs");
+  links.classList.add("open");
+ }
+ btn.addEventListener("click",update);
+ input.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();update();}});
+ configureCareerTools();\nvar params=new URLSearchParams(location.search);
+ if(params.get("q"))input.value=params.get("q");
+ if(window.checkIsAdmin){window.checkIsAdmin().then(function(ok){if(ok)$("owner-job-tools").style.display="block";});}
+}
+\nfunction render(){
 var q=$("filter-keyword").value.toLowerCase().trim(),c=$("filter-category").value,l=$("filter-location").value.toLowerCase(),jt=$("jobtype").value.toLowerCase(),wm=$("workmode").value.toLowerCase();
 var list=all.filter(function(j){return(!c||j.category===c)&&(!l||String(j.location||"").toLowerCase().indexOf(l)>-1)&&(!q||(j.title+" "+(j.description||"")+" "+(j.company||"")+" "+(j.requirements||"")).toLowerCase().indexOf(q)>-1)&&(!jt||String(j.job_type||"").toLowerCase().indexOf(jt)>-1)&&(!wm||String(j.work_mode||j.location||"").toLowerCase().indexOf(wm)>-1)&&(activeJobView==="all"||(activeJobView==="saved"&&savedIds[j.id])||(activeJobView==="applied"&&appliedIds[j.id]))});
 $("count").textContent=list.length+(activeJobView==="saved"?" saved":activeJobView==="applied"?" tracked":"")+" opportunity"+(list.length===1?"":"ies")+" found";
