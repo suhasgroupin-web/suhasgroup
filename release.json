@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.4",
-  "published_at": "2026-11-11T12:35:00.000Z",
+  "version": "2026.11.11.5",
+  "published_at": "2026-11-11T13:05:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Cleaner Facebook-style mobile app navigation: removed the duplicate top icon row and refined the fixed bottom app bar, touch targets and active states.",
+  "update_message": "Facebook-style six-item mobile bottom navigation: Home, Friends, Video, Reels, Notification and Profile, with a dedicated Videos feed and Profile shortcut.",
   "mandatory": false
 }
