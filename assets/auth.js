@@ -132,7 +132,7 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='profile.html' || isPublicAuthPage()) return true;
+    if(!session || page==='profile.html' || page==='main-menu.html' || isPublicAuthPage()) return true;
     try{
       // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
@@ -191,7 +191,7 @@
     }else if(isPublicAuthPage()){document.documentElement.classList.remove('suhas-auth-pending');}
     if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
       sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
-        location.replace(pr.data && pr.data.profile_complete === true ? 'main-menu.html' : 'profile.html?setup=1');
+        location.replace('main-menu.html');
       }).catch(function(){ location.replace('profile.html?setup=1'); });
     }
   }).catch(function(error){
