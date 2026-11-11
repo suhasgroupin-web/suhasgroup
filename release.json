@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.26",
-  "published_at": "2026-11-11T15:49:10.637Z",
+  "version": "2026.11.11.27",
+  "published_at": "2026-11-11T15:57:30.357Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS GROUP profile refined: camera-only photo controls in the requested positions, one profile editor with LinkedIn/Facebook/Instagram links, compact logout, and exact-page refresh behavior.",
+  "update_message": "Profile and cover photo changes now require an explicit Save action after selecting an image; the selected image is applied immediately after successful save.",
   "mandatory": false
 }
