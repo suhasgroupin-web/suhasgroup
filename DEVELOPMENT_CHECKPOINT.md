@@ -966,3 +966,13 @@ Date: 2026-11-10
 - Static verification: confirmed the new phone CSS hides `.suhas-fb-phone-tabs`, keeps the six existing bottom destinations, and applies only at phone widths; release version and service-worker cache version were updated. No HTML routes, feature handlers, Supabase schema, member records, storage objects, or corporate pages were changed.
 - Pending: Cloudflare Pages deployment for this commit and real signed-in Android visual/interaction QA. Source changes being committed do not by themselves prove the live page is updated.
 - Recovery point: `main` at `27c8baa12ef5f42d7471685239aa227a4263814d`.
+
+
+## 2026-11-11 — Mobile stylesheet cache-bust and deployment verification
+- Follow-up cache-safety change: updated the existing `social.html` stylesheet URL from `?v=20261111-1` to `?v=20261111-2`, ensuring mobile clients request the newly refined CSS instead of reusing a stale cached URL.
+- Cache-bust commit: `99b41d05e3ad5c25d6fe6823c1e35454760bc849`.
+- Live Cloudflare Pages checks returned `release.json` version `2026.11.11.4` and the updated phone stylesheet content from `https://suhasgroup.pages.dev`.
+- The GitHub Actions Cloudflare deploy job for checkpoint commit `0ee94821e85de144c4acc544e14e397d0810a48c` failed with Cloudflare API Authentication error code `10000` (the configured API token lacks required permission or is invalid for the Pages project). Despite that workflow failure, the Cloudflare Pages hostname was already serving release `2026.11.11.4` at the time of the live fetch; confirm the final cache-busted `social.html` request after the latest commit.
+- GitHub Actions Site Quality check passed for code commit `27c8baa12ef5f42d7471685239aa227a4263814d`.
+- Pending: check Cloudflare live response after cache-bust commit; repair GitHub Actions Cloudflare token permission (owner action; do not request the token in chat); perform signed-in Android UI regression testing for bottom navigation, all six destinations, search, Messenger, post actions and desktop unaffected behavior.
+- No Supabase schema, accounts, posts, media, storage objects, or corporate modules were modified.
