@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.11",
-  "published_at": "2026-11-11T14:33:14.318Z",
+  "version": "2026.11.11.12",
+  "published_at": "2026-11-11T14:35:50.385Z",
   "notify_after_days": 0,
-  "update_message": "Critical mobile fix: stop forcing Desktop Mode on phones; responsive layout is automatic on mobile and desktop remains available on large screens.",
+  "update_message": "Fixed owner mobile bottom navigation: Edit Suhas and five destinations stay on one single row.",
   "mandatory": false
 }
