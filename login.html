@@ -57,7 +57,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <div style="text-align:right;margin:-6px 0 16px"><a href="reset.html" style="font-size:13.5px;font-weight:700;color:var(--royal)">Forgot password?</a></div>
 <button class="btn btn-primary" id="sub" style="width:100%" type="submit">Login</button>
 </form>
-<p class="linkline">New here? <a href="signup.html?next=profile.html">Create an account</a></p>
+<p class="linkline">New here? <a href="signup.html?next=main-menu.html">Create an account</a></p>
 </div></div></div>
 <footer class="site-footer"><div class="container">
 <div class="footer-grid">
@@ -109,7 +109,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
     if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){location.replace(leaf+target.search+target.hash);return;}
    }catch(ignore){}
   }
-  location.replace('profile.html');
+  location.replace('main-menu.html');
  });
  change.addEventListener('click',async function(){
   change.disabled=true;change.textContent='Switching...';
@@ -141,7 +141,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
       if(lastPart && lastPart.indexOf('.')===-1) leaf += '.html';
       if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){window.location.href=leaf+target.search+target.hash;return;}
     }catch(ignore){}}
-    window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'profile.html';
+    window.location.href = 'main-menu.html';
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
