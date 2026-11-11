@@ -5146,4 +5146,77 @@ html.suhas-authenticated .tabbar{display:none!important}
  .profile-viewer-body{padding:16px!important}
 }
 </style>
+
+<style id="suhas-max-clean-mobile-app-layout-20261111">
+/* Clean native-app-like phone layout. Additive overrides only; desktop layout stays intact. */
+@media (max-width:760px){
+  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+  body:not(.suhas-desktop-mode){padding-top:0!important;padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
+  body.suhas-desktop-mode{min-width:0!important;width:100%!important;max-width:100%!important;overflow-x:hidden!important;padding-top:0!important;padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
+  body.suhas-desktop-mode .social-shell,
+  .social-shell{
+    display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+    margin:0!important;padding:8px 0 calc(82px + env(safe-area-inset-bottom))!important;
+    grid-template-columns:minmax(0,1fr)!important;gap:0!important;overflow:visible!important
+  }
+  body.suhas-desktop-mode .social-left,body.suhas-desktop-mode .social-right,
+  .social-left,.social-right{display:none!important}
+  .social-center,body.suhas-desktop-mode .social-center{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important}
+  .site-header{position:sticky!important;top:0!important;left:0!important;right:0!important;width:100%!important;z-index:10020!important;background:#fff!important;border-bottom:1px solid #e4e6eb!important;box-shadow:0 1px 5px #10182812!important}
+  .nav-wrap{display:flex!important;align-items:center!important;min-height:56px!important;height:56px!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;padding:0 10px!important;gap:8px!important}
+  .facebook-left-menu-trigger{width:32px!important;height:32px!important;min-width:32px!important;flex:0 0 32px!important;background:transparent!important}
+  .facebook-left-menu-trigger svg{width:20px!important;height:20px!important}
+  .brand{display:flex!important;align-items:center!important;flex:1 1 auto!important;min-width:0!important;gap:6px!important;overflow:hidden!important}
+  .brand img{width:32px!important;height:32px!important;min-width:32px!important;flex:0 0 32px!important;object-fit:contain!important}
+  .brand-name{font-size:clamp(15px,4.3vw,18px)!important;line-height:1.1!important;white-space:nowrap!important;letter-spacing:-.35px!important}
+  .brand-tag{display:none!important}
+  .social-topnav{display:none!important}
+  .social-user-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;flex:0 0 auto!important;gap:5px!important;margin:0!important}
+  .suhas-create-wrap,.site-header #header-profile-edit{display:none!important}
+  .header-search-wrap{display:flex!important;align-items:center!important;position:relative!important;flex:0 0 auto!important}
+  .mobile-head-action{display:flex!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;flex:0 0 34px!important;border-radius:50%!important;background:#f0f2f5!important;color:#1c1e21!important}
+  .header-search-trigger svg{width:20px!important;height:20px!important}
+  .messenger-head-action{display:flex!important;width:36px!important;height:36px!important;min-width:36px!important;flex:0 0 36px!important;background:transparent!important}
+  .messenger-head-icon{width:27px!important;height:27px!important}
+  .book-heading{display:none!important}
+  .home-feed-panel,#feed.panel{
+    display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+    box-sizing:border-box!important;margin:0 0 8px!important;padding:10px 12px!important;
+    border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important
+  }
+  .home-composer{margin:0 0 8px!important;padding:7px 0 11px!important;border-bottom:1px solid #e4e6eb!important}
+  .home-composer .composer-top{align-items:center!important;gap:9px!important}
+  .home-composer .composer-avatar{width:40px!important;height:40px!important;flex:0 0 40px!important}
+  .home-composer #post-content{min-width:0!important;min-height:46px!important;max-height:100px!important;padding:12px 15px!important;border:0!important;border-radius:24px!important;background:#f0f2f5!important;font-size:15px!important;resize:none!important}
+  .home-composer .composer-options{margin:8px 0 0 49px!important}
+  .home-composer .composer-meta-row{margin:4px 0 0 49px!important}
+  .home-stories-section{margin:8px -12px 10px!important;padding:0 12px 10px!important;border-bottom:1px solid #e4e6eb!important}
+  .home-stories-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;margin:0 0 9px!important}
+  .home-stories-heading strong{font-size:17px!important;font-weight:800!important}
+  .home-stories-heading span{font-size:11px!important;color:#65676b!important}
+  .home-stories-list,.home-story-list,.stories-list{max-width:100%!important;overflow-x:auto!important;overscroll-behavior-x:contain!important;scrollbar-width:none!important}
+  .home-stories-list::-webkit-scrollbar,.home-story-list::-webkit-scrollbar,.stories-list::-webkit-scrollbar{display:none!important}
+  #feed-list{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:9px!important;width:100%!important;min-width:0!important}
+  #feed-list .post-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:12px 12px 9px!important;border:1px solid #e4e6eb!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 2px #1018280d!important;overflow:hidden!important}
+  #feed-list .post-card>img,#feed-list .post-card>video{width:calc(100% + 24px)!important;max-width:none!important;margin:0 -12px!important;max-height:68vh!important;object-fit:cover!important}
+  #feed-list .post-card .social-actions{display:flex!important;gap:2px!important;justify-content:space-around!important;flex-wrap:nowrap!important}
+  #feed-list .post-card .social-actions .action{min-width:0!important;flex:1 1 0!important;padding:9px 4px!important;font-size:12px!important;white-space:nowrap!important}
+  .social-mobile-nav{display:grid!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:10030!important;width:100%!important;max-width:100%!important;height:66px!important;min-height:66px!important;box-sizing:border-box!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:0!important;padding:5px 3px calc(5px + env(safe-area-inset-bottom))!important;background:#fff!important;border-top:1px solid #e4e6eb!important;box-shadow:0 -2px 12px #10182812!important;backdrop-filter:blur(12px)!important}
+  .social-mobile-nav>button{display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;gap:3px!important;width:100%!important;min-width:0!important;height:55px!important;min-height:55px!important;padding:3px 1px!important;border:0!important;border-radius:8px!important;background:transparent!important;color:#65676b!important;font-size:10px!important;font-weight:700!important;line-height:1.1!important}
+  .social-mobile-nav>button.active,.social-mobile-nav>button[aria-current=page]{color:#0866ff!important;background:#f2f6ff!important}
+  .social-mobile-nav>button .mobile-nav-icon{display:grid!important;place-items:center!important;width:25px!important;height:25px!important;flex:0 0 25px!important;margin:0!important}
+  .social-mobile-nav>button .mobile-nav-icon svg{display:block!important;width:23px!important;height:23px!important}
+  .social-mobile-nav>button>span:last-child{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:10px!important}
+  body.suhas-desktop-mode .social-mobile-nav{display:grid!important}
+}
+@media(max-width:390px){
+  .nav-wrap{gap:5px!important;padding-inline:7px!important}
+  .facebook-left-menu-trigger{width:29px!important;height:29px!important;min-width:29px!important;flex-basis:29px!important}
+  .brand img{width:29px!important;height:29px!important;min-width:29px!important;flex-basis:29px!important}
+  .brand-name{font-size:15px!important}
+  .mobile-head-action{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;flex-basis:32px!important}
+  .messenger-head-action{width:34px!important;height:34px!important;min-width:34px!important;flex-basis:34px!important}
+  .social-mobile-nav>button>span:last-child{font-size:9px!important}
+}
+</style>
 </body></html>
