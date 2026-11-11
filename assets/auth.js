@@ -132,13 +132,24 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='profile.html' || page==='main-menu.html' || isPublicAuthPage()) return true;
+    if(!session || page==='profile.html' || page==='main-menu.html' || page==='max-profile.html' || isPublicAuthPage()) return true;
     try{
       // Every authenticated account, including OWNER/admin, must have the same completed member profile.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
       if(result.error || !result.data || result.data.profile_complete!==true){location.replace(appRootPath+'profile.html?setup=1');return false;}
+      // SUHAS-MAX is an independent platform: require its own profile only when opening its app launcher, feed, or Messenger.
+      if(['home.html','social.html','messenger.html'].indexOf(page)!==-1){
+        var maxProfile=await sb.from('suhas_public_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
+        if(maxProfile.error || !maxProfile.data || maxProfile.data.profile_complete!==true){
+          location.replace(appRootPath+'max-profile.html?setup=1');
+          return false;
+        }
+      }
       return true;
-    }catch(e){ location.replace('profile.html?setup=1');return false; }
+    }catch(e){
+      if(['home.html','social.html','messenger.html'].indexOf(page)!==-1){location.replace(appRootPath+'max-profile.html?setup=1');return false;}
+      location.replace('profile.html?setup=1');return false;
+    }
   }
 
   async function paintNav(session){
