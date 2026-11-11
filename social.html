@@ -3649,7 +3649,7 @@ document.addEventListener('click',e=>{
   if(target){target.scrollIntoView({behavior:'smooth',block:'start'});target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
  },500);
 });
-document.getElementById('max-menu-logout')?.addEventListener('click',async()=>{const button=document.getElementById('max-menu-logout');if(button){button.disabled=true;button.textContent='Logging out…';}try{const result=await client.auth.signOut();if(result.error)throw result.error;location.replace('login.html');}catch(error){if(button){button.disabled=false;button.textContent='Log out';}notice(error.message||'Could not log out. Please try again.',true);}});
+document.getElementById('max-menu-logout')?.addEventListener('click',async()=>{const button=document.getElementById('max-menu-logout');if(button){button.disabled=true;button.textContent='Logging out…';}try{const result=await client.auth.signOut({scope:'local'});if(result.error)throw result.error;location.replace('login.html');}catch(error){if(button){button.disabled=false;button.textContent='Log out';}notice(error.message||'Could not log out. Please try again.',true);}});
 // Always start/re-enter the Home page with the menu drawer closed.
 function closeMenuOnHomeLoad(){
  const panel=document.getElementById('maxmenu');
