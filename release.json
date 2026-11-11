@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.19",
-  "published_at": "2026-11-11T15:00:45.365Z",
+  "version": "2026.11.11.20",
+  "published_at": "2026-11-11T15:01:36.713Z",
   "notify_after_days": 0,
-  "update_message": "Added separate SUHAS-MAX social profile creation/edit form with private account gate, compact two-app launcher, and Messenger return navigation; SUHAS GROUP profile remains required first.",
+  "update_message": "Independent SUHAS-MAX profile onboarding is gated behind the completed SUHAS GROUP profile; app launcher shows MAX and Messenger side by side, and Messenger back returns to launcher.",
   "mandatory": false
 }
