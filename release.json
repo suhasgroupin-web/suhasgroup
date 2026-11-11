@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.8",
-  "published_at": "2026-11-11T14:20:19.928Z",
+  "version": "2026.11.11.9",
+  "published_at": "2026-11-11T14:26:20.744Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS GROUP six-item fixed bottom navigation: Main Menu, Job, O5'Intl, Careers, Profile and SUHAS MAX.",
+  "update_message": "SUHAS GROUP navigation updated: SUHAS MAX replaces the Profile tab; Profile is available from the Careers menu.",
   "mandatory": false
 }
