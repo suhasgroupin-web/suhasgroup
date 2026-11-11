@@ -53,28 +53,25 @@
     if(s){var sr=await sb.from('saved_jobs').select('job_id').eq('user_id',s.user.id).eq('job_id',job.id).maybeSingle();saved=!!sr.data;document.getElementById('save').textContent=saved?'Saved':'Save Job';}
   }
   document.getElementById('apply').addEventListener('click',async function(){
-    var b=this;
-    // Public visitors must be able to follow a LinkedIn source post without creating an account.
+    var b=this,s=(await sb.auth.getSession()).data.session;
     if(job.external_url){
-      try{
-        var target=new URL(job.external_url,location.href);
-        if(target.protocol!=='https:'){msg('This job link is not a secure HTTPS address.',false);return;}
-        // Navigate in the current tab: more reliable in Android/PWA than opening a popup.
-        window.location.assign(target.href);
-        return;
-      }catch(e){msg('The original job link is invalid.',false);return;}
-      msg('Original job post opened. Sign in if you also want to track your application in your SUHAS profile.',true);
+      var target;
+      try{target=new URL(job.external_url,location.href);if(target.protocol!=='https:')throw new Error('Only secure HTTPS job links are allowed.');}
+      catch(e){msg('The original job link is invalid or insecure.',false);return;}
+      if(s){
+        b.disabled=true;
+        var tracked=await sb.from('applications').insert({job_id:job.id,user_id:s.user.id});
+        if(tracked.error&&tracked.error.code!=='23505'){msg(tracked.error.message,false);b.disabled=false;return;}
+        msg(tracked.error?'This application is already tracked. Opening the original job post…':'Application tracking saved. Opening the original job post…',true);
+      }else{msg('Opening the original job post. Sign in first if you want to track this application.',true);}
+      setTimeout(function(){window.location.assign(target.href);},180);return;
     }
-    var s=(await sb.auth.getSession()).data.session;
-    if(!s){
-      if(!job.external_url) SG.loginThenReturn();
-      return;
-    }
+    if(!s){SG.loginThenReturn();return;}
     b.disabled=true;
     var r=await sb.from('applications').insert({job_id:job.id,user_id:s.user.id});
-    if(r.error && r.error.code==='23505'){msg(job.external_url?'Original post opened. Your application is already tracked.':'You have already applied for this job.',false);}
+    if(r.error&&r.error.code==='23505'){msg('You have already applied for this job.',false);}
     else if(r.error){msg(r.error.message,false);b.disabled=false;return;}
-    else{msg(job.external_url?'Original post opened and application tracking saved.':'Application submitted. You can track it from your profile.',true);b.textContent='Applied';}
+    else{msg('Application submitted. You can track it from My Applications.',true);b.textContent='Applied';}
     b.disabled=false;
   });
   document.getElementById('save').addEventListener('click',async function(){
