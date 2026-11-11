@@ -570,6 +570,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(8,102,255,.18);bo
   .w-actions .w-btn{width:100%}
   .tabbar{grid-template-columns:repeat(5,minmax(0,1fr))!important}
   .tabbar a,.tabbar button{min-height:54px;padding:5px 2px}
+  /* Owner/admin navigation has one extra Edit Suhas action: keep all six items on one row. */
+  .tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:column!important;grid-auto-columns:minmax(0,1fr)!important;align-items:stretch!important}
+  .tabbar.sg-admin-tabbar>a,.tabbar.sg-admin-tabbar>button{min-width:0!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important}
 }
 @media (max-width:480px){
   .container{padding-left:14px;padding-right:14px}
