@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.25",
-  "published_at": "2026-11-11T15:37:13.377Z",
+  "version": "2026.11.11.26",
+  "published_at": "2026-11-11T15:49:10.637Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS GROUP profile UI refined: minimal camera icons, expandable ordered Professional Profile Overview, and a compact independently scrollable right-side More Options drawer with SUHAS-MAX links excluded.",
+  "update_message": "SUHAS GROUP profile refined: camera-only photo controls in the requested positions, one profile editor with LinkedIn/Facebook/Instagram links, compact logout, and exact-page refresh behavior.",
   "mandatory": false
 }
