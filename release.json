@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.36",
-  "published_at": "2026-11-11T17:28:33.228Z",
+  "version": "2026.11.11.37",
+  "published_at": "2026-11-11T17:29:33.939Z",
   "notify_after_days": 0,
-  "update_message": "Profile fixes: user-selected salutation (no automatic Mr.), hide photo controls during new-member setup, prevent stale profile UI flash on refresh, replace phone-change shortcut with Professional Identity.",
+  "update_message": "Profile salutation fix: choose a title or no title, no automatic Mr.; setup photo controls hidden until profile completion; no stale profile flash on refresh; Professional Identity replaces Add/Change Number shortcut.",
   "mandatory": false
 }
