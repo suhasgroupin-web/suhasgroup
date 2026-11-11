@@ -8,4 +8,4 @@ Disallow: /signup.html
 Disallow: /reset.html
 Disallow: /edit-suhas.html
 
-Sitemap: https://suhasgroup.vercel.app/sitemap.xml
+Sitemap: https://suhasgroup.pages.dev/sitemap.xml
