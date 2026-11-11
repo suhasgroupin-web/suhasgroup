@@ -32,6 +32,21 @@ self.addEventListener('fetch', function(e){
   var requestUrl = new URL(url);
   if (requestUrl.origin !== self.location.origin) return;
 
+  // Page refreshes must stay on the exact requested URL and fetch the latest HTML.
+  // If the network is unavailable, fall back only to that same page (never index.html).
+  if (e.request.mode === 'navigate') {
+    e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
+      if (response && response.ok) {
+        var pageCache = await caches.open(CACHE);
+        await pageCache.put(e.request, response.clone());
+      }
+      return response;
+    }).catch(async function() {
+      return (await caches.open(CACHE)).match(e.request) || Response.error();
+    }));
+    return;
+  }
+
   // Release metadata must always be refreshed from the network so clients can detect new versions.
   if (requestUrl.pathname.endsWith('/release.json') || requestUrl.pathname === '/release.json') {
     e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
