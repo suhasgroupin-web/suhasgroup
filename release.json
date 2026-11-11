@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.31",
-  "published_at": "2026-11-11T16:56:45.834Z",
+  "version": "2026.11.11.32",
+  "published_at": "2026-11-11T16:57:30.066Z",
   "notify_after_days": 0,
-  "update_message": "Main Menu now retains a cinematic SUHAS showcase for all members; first-time profile onboarding remains gated to incomplete profiles.",
+  "update_message": "Persistent SUHAS Main Menu showcase shell and first-time profile onboarding behavior updated.",
   "mandatory": false
 }
