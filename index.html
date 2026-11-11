@@ -91,7 +91,7 @@
    if(r.error)throw r.error;
    if(r.data.user&&r.data.user.identities&&r.data.user.identities.length===0)throw new Error('This email is already registered. Please use Login.');
    if(r.data.session)await sb.auth.signOut({scope:'local'});
-   say('Signup completed. Please confirm your email using the link sent to your inbox. Then press Login on the Welcome Screen. After Login, you must create your SUHAS-MAX profile before the full app opens.',true);
+   say('Account created successfully. Email confirmation is disabled. Please log in with this same email and the password you just created. After login, complete your SUHAS-MAX profile.',true);
    form.reset();btn.textContent='Signup Completed';
   }catch(err){say(err.message||'Signup could not be completed. Please try again.',false);btn.disabled=false;btn.textContent='Create Account';}
  });
