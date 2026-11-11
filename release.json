@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.12",
-  "published_at": "2026-11-11T14:39:47.748Z",
+  "version": "2026.11.11.13",
+  "published_at": "2026-11-11T14:44:23.678Z",
   "notify_after_days": 0,
-  "update_message": "Owner navigation fix: all six bottom navigation buttons are locked to one equal-width row on mobile.",
+  "update_message": "New and returning members land on a premium 3D Main Menu welcome screen after sign-in; profile completion is offered from the welcome screen.",
   "mandatory": false
 }
