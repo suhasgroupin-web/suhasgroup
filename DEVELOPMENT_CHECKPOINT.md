@@ -908,3 +908,13 @@ Date: 2026-11-10
 - Registry commit: `53f49f0d9c14890ad6988df1eaf8e31557c451af`.
 - Verification: GitHub create-file API returned the commit SHA; branch is isolated from `main`. No deployment was triggered.
 - Next step: inspect workflow run outcomes and current deployment configuration, then prepare a portable adapter contract and only add non-production-safe improvements after review.
+
+
+## SUHAS-MAX responsive Facebook-style navigation — 2026-11-11
+- Replaced the empty desktop navigation placeholder with six real destinations: Home, Friends, Groups, Reels, Marketplace and Notifications. They use the existing `activateMaxTab` controller and existing page panels.
+- Mobile bottom navigation now uses the same six destinations with full, readable labels (Marketplace and Notifications are no longer shortened); Profile remains reachable from the existing header/menu profile controls.
+- Desktop (761px and wider) shows the six destinations horizontally in the header and hides the bottom bar. Mobile shows the six destinations in a fixed bottom bar and hides the desktop row.
+- Changed file: `social.html`.
+- Code commit: `3c729128b29deb59d40585a3a779da0362183e8c`.
+- Verification: confirmed the desktop nav placeholder was replaced, all six controls point to existing tab IDs, and the existing delegated navigation handler binds `.social-topnav` and `.social-mobile-nav` controls. No database schema, user records, assets or existing feature handlers were changed.
+- Pending: browser/device visual verification on Android and desktop; test all six destinations and verify there is no CSS/layout regression. Do not mark live visual behavior complete until tested.
