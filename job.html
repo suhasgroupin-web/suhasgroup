@@ -48,7 +48,7 @@
       (job.experience?'<p><strong>Experience:</strong> '+esc(job.experience)+'</p>':'')+
       (job.external_url?'<p><a href="'+esc(job.external_url)+'" target="_blank" rel="noopener">View original posting</a></p>':'');
     document.getElementById('apply').disabled=false;document.getElementById('save').disabled=false;
-    if(job.source === 'LinkedIn' && /^https:\/\/(www\\.)?linkedin\\.com\\//i.test(job.external_url||'')){var li=document.getElementById('linkedin-apply');li.href=job.external_url;li.target='_self';li.rel='noopener';li.hidden=false;}
+    var li=document.getElementById('linkedin-apply');if(li)li.hidden=true;
     var s=(await sb.auth.getSession()).data.session;
     if(s){var sr=await sb.from('saved_jobs').select('job_id').eq('user_id',s.user.id).eq('job_id',job.id).maybeSingle();saved=!!sr.data;document.getElementById('save').textContent=saved?'Saved':'Save Job';}
   }
