@@ -26,7 +26,7 @@
       var response=await fetch('assets/ambient-scenes/manifest.json?v=1',{cache:'no-store'});
       if(!response.ok)throw new Error('scene manifest unavailable');
       var manifest=await response.json();
-      activeVideos=Array.isArray(manifest.videos)?manifest.videos.filter(function(item){return item&&typeof item.src==='string'&&/^assets\\/ambient-scenes\\/[a-z0-9/_-]+\\.mp4$/i.test(item.src);}):[];
+      activeVideos=Array.isArray(manifest.videos)?manifest.videos.filter(function(item){return item&&typeof item.src==='string'&&item.src.indexOf('assets/ambient-scenes/')===0&&item.src.toLowerCase().slice(-4)==='.mp4';}):[];
       if(!activeVideos.length)return;
       function play(index){
         var item=activeVideos[index%activeVideos.length];
