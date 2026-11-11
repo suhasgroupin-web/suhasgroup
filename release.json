@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.21",
-  "published_at": "2026-11-11T15:15:15.840Z",
+  "version": "2026.11.11.22",
+  "published_at": "2026-11-11T15:15:44.468Z",
   "notify_after_days": 0,
-  "update_message": "Unified SUHAS GROUP profile header into one top-right three-dot menu containing navigation and Auto/Responsive and Desktop display options.",
+  "update_message": "Profile header now has one right-side three-dot menu with SUHAS GROUP navigation and Auto, Mobile and Laptop/Desktop display modes.",
   "mandatory": false
 }
