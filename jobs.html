@@ -141,7 +141,8 @@ function configureCareerTools(){
  }
  btn.addEventListener("click",update);
  input.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();update();}});
- configureCareerTools();\nvar params=new URLSearchParams(location.search);
+ configureCareerTools();
+var params=new URLSearchParams(location.search);
  if(params.get("q"))input.value=params.get("q");
  if(window.checkIsAdmin){window.checkIsAdmin().then(function(ok){if(ok)$("owner-job-tools").style.display="block";});}
 }
