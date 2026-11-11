@@ -124,3 +124,65 @@ html body:not(.suhas-desktop-mode) .site-header .brand-name{font-size:23px!impor
 @media (max-width:340px){
 html body:not(.suhas-desktop-mode) .social-mobile-nav button>span:not(.mobile-nav-icon):not(.suhas-fb-badge){font-size:9px!important}
 }
+
+
+/* 2026-11-11: one clear Facebook-inspired mobile navigation row.
+   The redundant icon strip above the feed is intentionally removed on phones;
+   all primary app destinations remain available in the fixed bottom bar. */
+@media (max-width:760px){
+  html body:not(.suhas-desktop-mode) .suhas-fb-phone-tabs{display:none!important}
+  html body:not(.suhas-desktop-mode) .social-mobile-nav{
+    position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:1200!important;
+    display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    align-items:stretch!important;justify-content:initial!important;gap:0!important;
+    min-height:60px!important;height:auto!important;
+    padding:4px 2px calc(4px + env(safe-area-inset-bottom))!important;
+    background:#fff!important;border-top:1px solid #dadde1!important;
+    box-shadow:0 -2px 8px rgba(0,0,0,.08)!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button{
+    position:relative!important;display:flex!important;flex:initial!important;
+    min-width:0!important;min-height:52px!important;height:52px!important;
+    flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    gap:3px!important;padding:3px 0!important;margin:0!important;
+    border:0!important;border-radius:0!important;background:transparent!important;
+    box-shadow:none!important;color:#65676b!important;font-size:10px!important;font-weight:600!important;
+    text-shadow:none!important;transform:none!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button::before{display:none!important}
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button .mobile-nav-icon{
+    display:grid!important;place-items:center!important;width:27px!important;height:27px!important;
+    border:0!important;border-radius:0!important;background:transparent!important;
+    box-shadow:none!important;transform:none!important;filter:none!important;
+    font-size:24px!important;text-shadow:none!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button .mobile-nav-icon svg{
+    display:block!important;width:25px!important;height:25px!important;
+    fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;
+    filter:none!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button>span:not(.mobile-nav-icon):not(.suhas-fb-badge){
+    display:block!important;max-width:100%!important;overflow:hidden!important;
+    text-overflow:clip!important;white-space:nowrap!important;
+    font-size:10px!important;line-height:13px!important;font-weight:600!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button.active,
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button[aria-current="page"]{
+    color:#0866ff!important;background:transparent!important;
+    border:0!important;box-shadow:none!important;transform:none!important;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button.active::after,
+  html body:not(.suhas-desktop-mode) .social-mobile-nav>button[aria-current="page"]::after{
+    content:"";position:absolute;top:-4px;left:12%;right:12%;height:3px;
+    border-radius:0 0 3px 3px;background:#0866ff;
+  }
+  html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-fb-badge{
+    top:0!important;left:calc(50% + 5px)!important;z-index:2;
+  }
+  html body:not(.suhas-desktop-mode) .social-shell{
+    padding-bottom:calc(72px + env(safe-area-inset-bottom))!important;
+  }
+}
+@media (min-width:761px){
+  .suhas-fb-phone-tabs{display:none!important}
+}
