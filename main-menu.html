@@ -115,13 +115,82 @@ body{overflow-x:hidden}
 .visit-building i{margin-top:20%;height:38%;width:10%}
 .ambient-scene-copy{z-index:8}
 @media(prefers-reduced-motion:reduce){.scene-car,.scene-van,.factory-smoke,.scene-bike,.school-child{animation:none!important}}
+
+/* SUHAS premium motion pass: locked viewport, perspective traffic and upward brand balloons */
+html,body{height:100%;min-height:0;overflow:hidden!important;overscroll-behavior:none;touch-action:pan-x}
+body{position:fixed;inset:0}
+.menu-wrap{height:100svh;min-height:0;max-height:100svh;overflow:hidden;padding: max(8px,env(safe-area-inset-top)) 14px calc(82px + env(safe-area-inset-bottom));align-items:stretch}
+.welcome-stage{height:100%;min-height:0;width:100%;max-width:980px;justify-content:space-evenly;gap:clamp(5px,1.1svh,12px);overflow:hidden}
+.logo-halo{width:clamp(76px,13svh,116px);flex:0 0 auto}
+.welcome-kicker{font-size:clamp(9px,1.25svh,12px);letter-spacing:.28em}
+.welcome-title{font-size:clamp(34px,7.2vw,70px)}
+.welcome-subtitle{font-size:clamp(11px,1.65svh,16px);line-height:1.45}
+.welcome-divider{margin:0}
+.welcome-values{font-size:clamp(8px,1.15svh,11px);gap:clamp(7px,2vw,18px)}
+.ambient-showcase{width:100%;height:clamp(220px,37svh,390px);flex:0 1 390px;min-height:190px;border-radius:22px;box-shadow:0 20px 55px #0009,inset 0 1px #fff5}
+.ambient-scene-copy{z-index:8;pointer-events:none}
+.ambient-scene-copy b{background:#061b36a8;padding:4px 7px;border-radius:6px;display:inline-block}
+.ambient-scene-copy small{background:#061b36a8;padding:3px 7px;border-radius:5px;display:inline-block;width:max-content}
+.ambient-caption{z-index:9}
+.ambient-road{left:8%;right:8%;bottom:-15%;height:62%;border-radius:50% 50% 0 0;transform:perspective(360px) rotateX(48deg);background:repeating-linear-gradient(90deg,transparent 0 48%,#f3d58b55 49% 49.5%,transparent 50%),linear-gradient(#172e49,#030a17 75%);box-shadow:0 -12px 36px #4eb7ff22}
+.ambient-road:after{left:50%;top:0;height:95%;border-left:2px dashed #f4d68b99}
+.scene-car,.scene-van{left:calc(50% - 31px);bottom:8%;width:62px;height:78px;border-radius:24px 24px 12px 12px;background:linear-gradient(90deg,#182c45,#e7f1fb 18%,#7898b9 50%,#e5eef7 82%,#172d48);border:2px solid #d9eaff;box-shadow:0 7px 20px #000b,inset 0 0 10px #fff8;animation:driveIntoOffice 7s cubic-bezier(.35,.05,.65,1) infinite;transform-origin:center bottom}
+.scene-car:before,.scene-van:before{left:9px;top:8px;width:40px;height:27px;border-radius:14px 14px 5px 5px;background:linear-gradient(145deg,#b9ddf5,#1c426a 65%,#0a1c31);border:1px solid #d8eaff}
+.scene-car:after,.scene-van:after{left:6px;bottom:5px;width:8px;height:16px;border-radius:3px;background:#f9e8bd;box-shadow:40px 0 #f9e8bd}
+.scene-car b,.scene-van b{left:0;right:0;top:42px;text-align:center;font-size:7px;color:#102b4b}
+.scene-car .wheel{position:absolute;z-index:3;bottom:8px;width:14px;height:14px;border:3px solid #111a26;border-radius:50%;background:radial-gradient(circle,#b8c8d8 0 25%,#263b51 30% 100%);animation:wheelSpin .55s linear infinite}
+.scene-car .wheel-a{left:-7px}.scene-car .wheel-b{right:-7px}
+@keyframes driveIntoOffice{0%{transform:translateY(105px) scale(1.25);opacity:0}14%{opacity:1}65%{transform:translateY(-85px) scale(.48);opacity:1}88%,100%{transform:translateY(-135px) scale(.16);opacity:0}}
+@keyframes wheelSpin{to{transform:rotate(360deg)}}
+.scene-van{width:68px;height:86px;animation:driveIntoOffice 8s ease-in-out infinite}
+.scene-van:before{width:48px;height:30px;left:8px}
+.scene-car-two{animation-duration:6.5s;animation-delay:-2s}
+.scene-pedestrians{position:absolute;z-index:4;inset:0;pointer-events:none}
+.scene-pedestrians i{position:absolute;bottom:12%;left:18%;width:9px;height:26px;border-radius:5px 5px 2px 2px;background:linear-gradient(90deg,#162d4d,#d4e1ef 50%,#18395f);animation:walkAcross 8s linear infinite}
+.scene-pedestrians i:before{content:"";position:absolute;top:-10px;left:1px;width:8px;height:9px;border-radius:50%;background:#c58d68}
+.scene-pedestrians i:after{content:"";position:absolute;top:10px;left:-4px;width:17px;height:15px;border-radius:4px;background:#c69b59}
+.scene-pedestrians i:nth-child(2){left:78%;bottom:15%;animation:walkAcrossReverse 10s linear infinite;animation-delay:-3s;background:#5d3540}
+.scene-pedestrians i:nth-child(3){left:34%;bottom:9%;animation:walkAcross 11s linear infinite;animation-delay:-5s;background:#d1d9e5}
+.scene-pedestrians i:nth-child(4){left:62%;bottom:10%;animation:walkAcrossReverse 9s linear infinite;animation-delay:-1s;background:#8a673c}
+@keyframes walkAcross{0%{transform:translate(-50px,0) scale(.75);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translate(260px,-8px) scale(.9);opacity:0}}
+@keyframes walkAcrossReverse{0%{transform:translate(150px,0) scale(.85);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translate(-180px,-6px) scale(.7);opacity:0}}
+.scene-bike{left:calc(50% - 30px);bottom:8%;width:60px;height:78px;animation:bikeIntoOffice 6s ease-in-out infinite;transform-origin:center bottom}
+.scene-bike:before,.scene-bike:after{bottom:7px;width:17px;height:17px;border:3px solid #121b27;background:radial-gradient(circle,#c5d5e6 0 18%,#283f58 22% 100%);animation:wheelSpin .45s linear infinite}
+.scene-bike:before{left:-2px}.scene-bike:after{right:-2px}
+.scene-bike i{left:12px;top:33px;width:38px;height:3px;background:#d9e7f7;transform:rotate(-8deg)}
+.scene-bike b{left:24px;top:8px;width:12px;height:17px;background:#f0c87b;border-radius:8px 8px 3px 3px}
+.scene-bike em{position:absolute;left:21px;top:23px;width:17px;height:18px;border-radius:6px;background:#244a73;transform:skew(-12deg)}
+.scene-bike strong{position:absolute;left:20px;top:17px;width:20px;height:5px;background:#e6d4b0;border-radius:5px}
+@keyframes bikeIntoOffice{0%{transform:translateY(115px) scale(1.3);opacity:0}15%{opacity:1}70%{transform:translateY(-95px) scale(.42);opacity:1}100%{transform:translateY(-145px) scale(.12);opacity:0}}
+/* New-member balloons travel over every headline and fly into the spinning logo */
+.onboarding-scene{display:none;position:absolute;inset:0;width:100%;height:100%;min-height:0;margin:0;z-index:12;overflow:visible;pointer-events:none}
+.onboarding-scene.active{display:block}
+.handshake-stage{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.suhas-balloons{position:absolute;inset:0;overflow:visible;z-index:15}
+.suhas-balloon{bottom:8%;width:clamp(34px,7vw,54px);height:clamp(42px,8vw,64px);z-index:20;animation:balloonToLogo 5.8s cubic-bezier(.25,.7,.3,1) 1.2s both;filter:drop-shadow(0 8px 10px #0008)}
+.suhas-balloon:after{top:100%;height:22px}
+.suhas-balloon:nth-child(1){left:18%}.suhas-balloon:nth-child(2){left:37%;animation-delay:1.45s}.suhas-balloon:nth-child(3){right:37%;animation-delay:1.3s}.suhas-balloon:nth-child(4){right:18%;animation-delay:1.6s}
+@keyframes balloonToLogo{0%{transform:translate3d(0,0,0) scale(.7);opacity:0}12%{opacity:1}50%{transform:translate3d(-10px,-42vh,0) scale(1.08)}78%{transform:translate3d(8px,-75vh,0) scale(.72);opacity:1}94%,100%{transform:translate3d(0,-86vh,0) scale(.04);opacity:0}}
+.welcome-cta-wrap{position:absolute;z-index:25;right:4%;bottom:7%;width:clamp(132px,37vw,176px);min-width:0;opacity:0;transform:translateY(-95vh) scale(.7);pointer-events:none;animation:ctaDropPremium 1.45s cubic-bezier(.18,.9,.25,1.22) 5.9s forwards}
+.welcome-cta-wrap .create-profile-cta{min-height:54px;width:100%;padding:9px 10px;gap:7px;border-radius:14px;box-shadow:0 5px 0 #76501e,0 14px 24px #0008,inset 0 1px 0 #fff;animation:ctaImpact .7s ease 7.1s 1}
+.welcome-cta-wrap .create-profile-cta strong{font-size:clamp(11px,2.8vw,13px);line-height:1.2}
+.welcome-cta-wrap .create-profile-cta small{display:none}
+.welcome-cta-wrap .cta-icon{width:27px;height:27px;flex-basis:27px;font-size:15px}
+.welcome-cta-wrap .cta-arrow{font-size:18px}
+.onboarding-scene.active .welcome-cta-wrap{pointer-events:auto}
+.onboarding-scene.welcome-departing .suhas-balloon{animation-play-state:paused}
+@keyframes ctaDropPremium{0%{opacity:0;transform:translateY(-95vh) scale(.65) rotateX(24deg)}72%{opacity:1;transform:translateY(12px) scale(1.04) rotateX(0)}84%{transform:translateY(-7px) scale(.99)}94%{transform:translateY(4px)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ctaImpact{0%,100%{transform:translateY(0)}25%{transform:translateY(4px)}50%{transform:translateY(-3px)}75%{transform:translateY(2px)}}
+@media(max-height:740px){.welcome-stage{gap:4px}.logo-halo{width:72px}.ambient-showcase{height:31svh;min-height:165px}.welcome-subtitle{font-size:11px}.welcome-values{font-size:8px}}
+@media(max-width:600px){.menu-wrap{padding-left:14px;padding-right:14px}.ambient-showcase{height:clamp(210px,36svh,310px);min-height:190px}.welcome-cta-wrap{right:2%;bottom:6%;width:clamp(128px,37vw,160px)}}
+@media(prefers-reduced-motion:reduce){.scene-car,.scene-van,.scene-bike,.scene-pedestrians i,.scene-car .wheel,.scene-bike:before,.scene-bike:after,.suhas-balloon,.welcome-cta-wrap{animation:none!important;opacity:1!important;transform:none!important}}
 </style></head><body><main class="menu-wrap"><div class="welcome-stars"></div><section class="welcome-stage" aria-label="Welcome to SUHAS GROUP"><div class="welcome-orbit"></div><div class="logo-halo"><img src="assets/logo.png" alt="SUHAS GROUP logo"></div><div class="welcome-kicker">A world of opportunities</div><h1 class="welcome-title"><span>Welcome to</span>SUHAS GROUP</h1><div class="welcome-divider"></div><p class="welcome-subtitle">One vision. One community. Endless possibilities.<br>We are delighted to have you with us.</p><div class="welcome-values"><span>Careers</span><span>Quality</span><span>Design</span><span>Innovation</span></div>
 <section class="ambient-showcase" id="suhas-ambient-showcase" aria-label="SUHAS GROUP visual showcase">
   <video id="suhas-ambient-video" class="ambient-video" muted playsinline autoplay preload="none" aria-label="SUHAS GROUP cinematic showcase"></video>
   <div class="ambient-fallback" id="suhas-ambient-fallback">
-    <div class="ambient-scene scene-city active" data-scene="0" aria-hidden="true"><div class="scene-skyline"><i></i><i></i><i></i><i></i><i></i></div><div class="scene-office-sign">SUHAS GROUP <small>CORPORATE OFFICE</small></div><div class="scene-road"></div><div class="scene-car"><b>SUHAS</b></div></div>
+    <div class="ambient-scene scene-city active" data-scene="0" aria-hidden="true"><div class="scene-skyline"><i></i><i></i><i></i><i></i><i></i></div><div class="scene-office-sign">SUHAS GROUP <small>CORPORATE OFFICE</small></div><div class="scene-road"></div><div class="scene-car"><b>SUHAS</b><i class="wheel wheel-a"></i><i class="wheel wheel-b"></i></div><div class="scene-pedestrians"><i></i><i></i><i></i><i></i></div></div>
     <div class="ambient-scene scene-factory" data-scene="1" aria-hidden="true"><div class="factory-building"><span>SUHAS GROUP</span><i></i><i></i><i></i></div><div class="factory-smoke"></div><div class="scene-road"></div><div class="scene-van"><b>SUHAS</b></div></div>
-    <div class="ambient-scene scene-vehicle" data-scene="2" aria-hidden="true"><div class="scene-hills"></div><div class="scene-road"></div><div class="scene-car scene-car-two"><b>SUHAS</b></div><div class="scene-bike"><i></i><b></b></div></div>
+    <div class="ambient-scene scene-vehicle" data-scene="2" aria-hidden="true"><div class="scene-hills"></div><div class="scene-road"></div><div class="scene-car scene-car-two"><b>SUHAS</b><i class="wheel wheel-a"></i><i class="wheel wheel-b"></i></div><div class="scene-bike"><i></i><b></b><em></em><strong></strong></div><div class="scene-pedestrians"><i></i><i></i><i></i><i></i></div></div>
     <div class="ambient-scene scene-school" data-scene="3" aria-hidden="true"><div class="school-building"><span>SUHAS SCHOOL</span><i></i><i></i><i></i></div><div class="scene-road"></div><div class="school-child child-one"><b>SUHAS</b></div><div class="school-child child-two"><b>SUHAS</b></div></div>
     <div class="ambient-scene scene-visit" data-scene="4" aria-hidden="true"><div class="visit-building"><span>SUHAS GROUP</span><i></i><i></i><i></i><i></i></div><div class="scene-road"></div><div class="scene-car"><b>SUHAS</b></div></div>
     <div class="ambient-scene-copy"><span class="ambient-live-dot"></span><b id="ambient-scene-title">SUHAS GROUP · CORPORATE</b><small id="ambient-scene-subtitle">A world of opportunities</small></div>
@@ -130,4 +199,4 @@ body{overflow-x:hidden}
   <div class="ambient-caption" aria-live="polite"><span>SUHAS GROUP</span><b id="ambient-caption-title">A world of opportunities</b></div>
 </section>
 <section class="onboarding-scene" id="new-member-onboarding" aria-label="New member welcome animation"><div class="handshake-stage">
-<div class="handshake-glow"></div><div class="suhas-balloons"><span class="suhas-balloon"><img src="assets/logo.png" alt="SUHAS"></span><span class="suhas-balloon gold">SUHAS</span><span class="suhas-balloon"><img src="assets/logo.png" alt="SUHAS"></span><span class="suhas-balloon gold">GROUP</span></div></div><div class="welcome-cta-wrap"><a class="create-profile-cta" href="profile.html?setup=1"><span class="cta-icon">✦</span><span><strong>Create Your SUHAS GROUP Profile</strong><small>Build your member identity · Add your details and photo</small></span><span class="cta-arrow">→</span></a></div></section></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-welcome-onboarding"></script><script src="assets/script.js?v=20261111-welcome-onboarding"></script><script src="assets/welcome-onboarding.js?v=5"></script></body>
+<div class="handshake-glow"></div><div class="suhas-balloons"><span class="suhas-balloon"><img src="assets/logo.png" alt="SUHAS"></span><span class="suhas-balloon gold">SUHAS</span><span class="suhas-balloon"><img src="assets/logo.png" alt="SUHAS"></span><span class="suhas-balloon gold">GROUP</span></div></div><div class="welcome-cta-wrap"><a class="create-profile-cta" href="profile.html?setup=1"><span class="cta-icon">✦</span><span><strong>Create SUHAS Profile</strong></span><span class="cta-arrow">→</span></a></div></section></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-welcome-onboarding"></script><script src="assets/script.js?v=20261111-welcome-onboarding"></script><script src="assets/welcome-onboarding.js?v=6"></script></body>
