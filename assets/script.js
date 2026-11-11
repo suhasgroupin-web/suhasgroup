@@ -141,6 +141,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
   }).join('');
   document.body.appendChild(nav); document.body.classList.add('has-tabbar');
+  // Load the shared SUHAS GROUP overflow menu on every destination except the Welcome Main Menu.
+  if (page !== 'main-menu.html' && page !== 'app.html' && document.querySelector('.nav-wrap') && !document.getElementById('suhas-display-mode-loader')) {
+    var displayLoader = document.createElement('script');
+    displayLoader.id = 'suhas-display-mode-loader';
+    displayLoader.src = 'assets/display-mode.js?v=8';
+    displayLoader.defer = true;
+    document.body.appendChild(displayLoader);
+  }
   // Careers opens a compact submenu so Profile remains accessible without taking a bottom-nav slot.
   var careersTab = Array.prototype.find.call(nav.querySelectorAll('a'), function (a) { return a.textContent.trim() === 'Careers'; });
   if (careersTab) {
