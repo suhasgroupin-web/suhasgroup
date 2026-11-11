@@ -76,7 +76,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <script src="assets/auth.js"></script>
 <script src="assets/script.js"></script>
 <script>
-(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',s.user.id).maybeSingle(); location.replace(p.data && p.data.profile_complete===true ? 'main-menu.html' : 'profile.html?setup=1'); } })();
+(async function(){ var s=(await sb.auth.getSession()).data.session; if(s){ var p=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',s.user.id).maybeSingle(); location.replace('main-menu.html'); } })();
 var installPromptEvent = null;
 window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); installPromptEvent = ev; document.getElementById('install-note').style.display='block'; });
 function checkO5Email(){
