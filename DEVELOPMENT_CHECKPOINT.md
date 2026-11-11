@@ -929,3 +929,14 @@ Date: 2026-11-10
 - Static checks actually run: new CSS block present; CSS braces balanced; style tag counts balanced; existing feed navigation handler, mobile navigation, and desktop-mode selectors still present. No database, storage, account data, social handlers, route or feature was changed.
 - Pending verification: Vercel production build/deployment status, served `release.json`, and real Android mobile + desktop visual/interaction checks. Do not claim the new layout is live until the deployment commit matches this release and the live page is inspected.
 - Recovery point: `main` after `37c2deacc530434aa5c74aa54bb30f8837949592`.
+
+
+## 2026-11-11 — No-cost hosting strategy added
+- User requested a lifetime-free hosting option for SUHAS-MAX.
+- Added a no-cost-first hosting strategy to `README.md` and updated `RELEASE-PROCESS.md`.
+- Cloudflare Pages is the preferred free static host after verification; project `suhasgroup`, output directory `.`, expected URL `https://suhasgroup.pages.dev`.
+- GitHub Pages is retained as an automatic free fallback via `.github/workflows/pages-deploy.yml`.
+- Existing Cloudflare deployment workflow is present but requires GitHub Actions repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The values must be added by the owner in GitHub Settings > Secrets and variables > Actions; never ask the user to paste secrets in chat.
+- Vercel is not deleted or disconnected until Cloudflare Pages is live and end-to-end tested. This protects the existing domain and recovery path. Supabase/Auth/database/storage and member data remain untouched.
+- Cloudflare currently documents the Pages Free plan at $0/month, with 500 builds/month, one concurrent build, 20,000 files/site, and 25 MiB per asset; static asset requests are free and unlimited. These are current limits, not a lifetime guarantee; other services may have separate charges.
+- Verification still pending: Cloudflare workflow secret setup, latest production deployment check, and Android/Desktop end-to-end tests.
