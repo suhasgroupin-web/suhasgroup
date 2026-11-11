@@ -152,7 +152,7 @@
     var isAdmin = session ? await window.checkIsAdmin() : false;
     var navs = document.querySelectorAll('.nav-links');
     navs.forEach(function(nav){
-      if(session){nav.querySelectorAll('a').forEach(function(link){if(link.textContent.trim().toLowerCase()==='home')link.href='social.html';});}
+      if(session){nav.querySelectorAll('a').forEach(function(link){if(link.textContent.trim().toLowerCase()==='home'){link.href='home.html';link.textContent='SUHAS MAX';}});}
       var old = nav.querySelector('.js-session-links');
       if(old) old.remove();
       var mobileAuth = nav.querySelector('.nav-cta-m');
@@ -160,7 +160,7 @@
         if(mobileAuth) mobileAuth.style.display='none';
         var box=document.createElement('div');
         box.className='js-session-links';
-        box.innerHTML='<a href="social.html" class="js-home-social">Home</a><a href="profile.html">My Profile</a><a href="#" class="js-logout">Logout</a>';
+        box.innerHTML='<a href="home.html" class="js-home-social">SUHAS MAX</a><a href="profile.html">My Profile</a><a href="#" class="js-logout">Logout</a>';
         if(isAdmin) box.innerHTML='<a href="admin.html">Owner Dashboard</a>'+box.innerHTML;
         nav.appendChild(box);
       }else if(mobileAuth){
@@ -199,7 +199,7 @@
     }else if(isPublicAuthPage()){document.documentElement.classList.remove('suhas-auth-pending');}
     if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
       sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
-        location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
+        location.replace(pr.data && pr.data.profile_complete === true ? 'profile.html' : 'profile.html?setup=1');
       }).catch(function(){ location.replace('profile.html?setup=1'); });
     }
   }).catch(function(error){

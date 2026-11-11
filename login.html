@@ -57,7 +57,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <div style="text-align:right;margin:-6px 0 16px"><a href="reset.html" style="font-size:13.5px;font-weight:700;color:var(--royal)">Forgot password?</a></div>
 <button class="btn btn-primary" id="sub" style="width:100%" type="submit">Login</button>
 </form>
-<p class="linkline">New here? <a href="signup.html?next=social.html">Create an account</a></p>
+<p class="linkline">New here? <a href="signup.html?next=profile.html">Create an account</a></p>
 </div></div></div>
 <footer class="site-footer"><div class="container">
 <div class="footer-grid">
@@ -99,7 +99,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
   if(!p.data||p.data.profile_complete!==true){location.replace('profile.html?setup=1');return;}
   // Preserve the protected destination that sent an already-authenticated user to Login.
   var requestedNext=new URLSearchParams(location.search).get('next');
-  var allowedNext=['social.html','messenger.html','app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
+  var allowedNext=['social.html','messenger.html','app.html','home.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
   if(requestedNext){
    try{
     var target=new URL(requestedNext,location.href);
@@ -109,7 +109,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
     if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){location.replace(leaf+target.search+target.hash);return;}
    }catch(ignore){}
   }
-  location.replace('app.html');
+  location.replace('profile.html');
  });
  change.addEventListener('click',async function(){
   change.disabled=true;change.textContent='Switching...';
@@ -133,7 +133,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     var pr = await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();
     if(!pr.data || pr.data.profile_complete !== true){window.location.replace('profile.html?setup=1');return;}
     var next = new URLSearchParams(location.search).get('next');
-    var allowedNext = ['social.html','messenger.html','app.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
+    var allowedNext = ['social.html','messenger.html','app.html','home.html','departments.html','hrm.html','admin.html','ai.html','o5-desk.html','measurement-studio.html','suhas-calculator.html','quality.html','technical.html','religion.html','related-apk.html','factories.html','apply-for-job.html','profile.html','member-tools.html','barcode/index.html'];
     if(next){try{
       var target=new URL(next,location.href);
       var leaf=target.pathname.split('/').filter(Boolean).join('/');
@@ -141,7 +141,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
       if(lastPart && lastPart.indexOf('.')===-1) leaf += '.html';
       if(target.origin===location.origin&&allowedNext.indexOf(leaf)!==-1){window.location.href=leaf+target.search+target.hash;return;}
     }catch(ignore){}}
-    window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'app.html';
+    window.location.href = r.data.user.email.toLowerCase().endsWith('@o5-intl.com') ? 'o5-desk.html' : 'profile.html';
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
