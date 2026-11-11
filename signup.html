@@ -118,7 +118,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
       document.getElementById('signup-form').reset();
       setTimeout(function(){ location.href='login.html?next=app.html'; }, 1800);
     } else {
-      showMsg('msg','Almost done! Confirm your email using the link sent by SUHAS GROUP. After confirmation, return to Login and sign in manually. Check Spam if needed.', true);
+      showMsg('msg','Account created. Email confirmation is currently disabled. You can now log in using this exact email and the password you just created.', true);
       reset();
     }
   }catch(err){ showMsg('msg','Error: '+err.message,false); reset(); }
