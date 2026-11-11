@@ -221,7 +221,7 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
 });
 
 async function loadApps(){
-  var r = await sb.from('applications').select('id, created_at, jobs(title), profiles(full_name, phone)').order('created_at',{ascending:false});
+  var r = await sb.from('applications').select('id, created_at, jobs(title), profiles:suhas_member_profiles!applications_member_profile_id_fkey(full_name, phone:mobile, email)').order('created_at',{ascending:false});
   var box = document.getElementById('apps-list');
   if(r.error){ box.innerHTML = '<p>'+esc(r.error.message)+'</p>'; return; }
   allApps = r.data;
