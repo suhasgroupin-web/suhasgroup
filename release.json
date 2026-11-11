@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.22",
-  "published_at": "2026-11-11T15:15:44.468Z",
+  "version": "2026.11.11.23",
+  "published_at": "2026-11-11T15:25:54.660Z",
   "notify_after_days": 0,
-  "update_message": "Profile header now has one right-side three-dot menu with SUHAS GROUP navigation and Auto, Mobile and Laptop/Desktop display modes.",
+  "update_message": "SUHAS GROUP profile: isolated scrollable More Options panel with fixed bottom navigation, removed MAX links from GROUP menu, added camera edit controls and corporate profile overview; MAX-to-GROUP uses Go to SG.",
   "mandatory": false
 }
