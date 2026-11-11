@@ -382,6 +382,49 @@ html body.entry-locked #entryGate .entry-card{position:relative!important;z-inde
  .w-shell{max-width:900px}
 }
 </style>
+<style id="suhas-main-menu-horizontal-nav">
+/* Keep the main navigation in one horizontal row on desktop and mobile. */
+body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!important}
+.tabbar{
+ display:grid!important;position:fixed!important;left:50%!important;right:auto!important;
+ bottom:0!important;transform:translateX(-50%)!important;
+ width:100%!important;max-width:1440px!important;z-index:1000!important;
+ grid-template-columns:repeat(5,minmax(0,1fr))!important;
+ grid-auto-flow:column!important;direction:ltr!important;
+ background:rgba(255,255,255,.98)!important;
+ border-top:1px solid #dce5f2!important;
+ box-shadow:0 -8px 28px rgba(7,20,43,.12)!important;
+ padding:7px 12px calc(7px + env(safe-area-inset-bottom,0px))!important;
+ gap:6px!important;box-sizing:border-box!important;
+}
+.tabbar a,.tabbar button{
+ display:flex!important;min-width:0!important;width:100%!important;
+ flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ gap:4px!important;padding:7px 4px!important;border-radius:12px!important;
+ white-space:nowrap!important;font-size:12px!important;font-weight:750!important;
+ color:#52617a!important;text-decoration:none!important;
+}
+.tabbar a span{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+.tabbar svg{width:23px!important;height:23px!important;flex:0 0 23px!important}
+.tabbar .brand-icon{width:30px!important;height:30px!important;max-width:30px!important;max-height:30px!important;object-fit:contain!important}
+.tabbar .o5-international{width:100%!important;height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:2px 0!important}
+.tabbar .o5-international-icon{width:34px!important;height:34px!important;object-fit:contain!important}
+.tabbar .on{color:#0866ff!important;background:#edf3ff!important}
+.tabbar .o5-international.on{background:transparent!important}
+@media(min-width:821px){
+ body.has-tabbar{padding-bottom:88px!important}
+ .tabbar{padding:9px 24px!important;gap:12px!important}
+ .tabbar a,.tabbar button{min-height:58px!important;font-size:13px!important}
+ .tabbar svg{width:25px!important;height:25px!important}
+ .tabbar .brand-icon{width:32px!important;height:32px!important;max-width:32px!important;max-height:32px!important}
+ .tabbar .o5-international-icon{width:36px!important;height:36px!important}
+}
+@media(max-width:380px){
+ .tabbar{padding-left:4px!important;padding-right:4px!important;gap:2px!important}
+ .tabbar a,.tabbar button{font-size:10px!important;padding-left:1px!important;padding-right:1px!important}
+ .tabbar .brand-icon{width:27px!important;height:27px!important;max-width:27px!important;max-height:27px!important}
+}
+</style>
 </head><body class="entry-locked"><section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
 <header class="w-top"><a class="w-brand" href="index.html"><img src="assets/logo.png" alt="SUHAS GROUP"><span><strong>SUHAS GROUP</strong><small>BUSINESS SUPER APP</small></span></a><div class="w-actions"><a class="w-btn primary" href="social.html" style="text-decoration:none">⌂ Home</a><button class="w-btn primary" id="editToggle" type="button" hidden>✎ Edit layout</button></div></header>
