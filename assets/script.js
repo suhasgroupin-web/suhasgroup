@@ -160,9 +160,14 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!isOwner || document.getElementById('sg-edit-suhas')) return;
       var style = document.createElement('style');
       style.id = 'sg-admin-tab-style';
-      style.textContent = '@media(max-width:820px){.tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr));direction:ltr;grid-auto-flow:row}.tabbar .sg-edit-suhas{order:-1;grid-column:1;color:#8a5a00;font-weight:900}.tabbar .sg-edit-suhas .sg-admin-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:8px;background:#fff1cc;font-size:18px;line-height:1}}';
+      style.textContent = '@media(max-width:820px){.tabbar.sg-admin-tabbar{grid-template-columns:repeat(6,minmax(0,1fr))!important;direction:ltr;grid-auto-flow:row!important}.tabbar .sg-edit-suhas{order:-1;grid-column:1;color:#8a5a00;font-weight:900}.tabbar .sg-edit-suhas .sg-admin-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:8px;background:#fff1cc;font-size:18px;line-height:1}}';
       document.head.appendChild(style);
       nav.classList.add('sg-admin-tabbar');
+       /* Lock the owner bar to exactly six equal tracks; inline !important wins over generic five-tab mobile rules. */
+       nav.style.setProperty('grid-template-columns','repeat(6,minmax(0,1fr))','important');
+       nav.style.setProperty('grid-auto-flow','row','important');
+       nav.style.setProperty('grid-auto-columns','auto','important');
+       nav.style.setProperty('grid-auto-rows','1fr','important');
       var edit = document.createElement('a');
       edit.id = 'sg-edit-suhas';
       edit.className = 'sg-edit-suhas';
