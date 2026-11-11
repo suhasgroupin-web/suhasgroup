@@ -130,10 +130,10 @@ function injectJsonLd(list){var items=list.slice(0,20).map(function(j){return{"@
 
 function configureCareerTools(){
  var input=$("job-global-query"),btn=$("job-global-search-btn"),links=$("job-provider-links");
+ if(!input||!btn||!links)return;
  function update(){
   var q=input.value.trim();if(!q){input.focus();return;}
-  var bangla=q+" jobs Bangladesh";
-  $("job-google-link").href="https://www.google.com/search?q="+encodeURIComponent(bangla);
+  $("job-google-link").href="https://www.google.com/search?q="+encodeURIComponent(q+" jobs Bangladesh");
   $("job-linkedin-link").href="https://www.linkedin.com/jobs/search/?keywords="+encodeURIComponent(q)+"&location=Bangladesh";
   $("job-indeed-link").href="https://www.indeed.com/jobs?q="+encodeURIComponent(q)+"&l=Bangladesh";
   $("job-bdjobs-link").href="https://www.google.com/search?q="+encodeURIComponent("site:bdjobs.com "+q+" jobs");
@@ -141,12 +141,9 @@ function configureCareerTools(){
  }
  btn.addEventListener("click",update);
  input.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();update();}});
- configureCareerTools();
-var params=new URLSearchParams(location.search);
- if(params.get("q"))input.value=params.get("q");
- if(window.checkIsAdmin){window.checkIsAdmin().then(function(ok){if(ok)$("owner-job-tools").style.display="block";});}
+ if(window.checkIsAdmin){window.checkIsAdmin().then(function(ok){if(ok&&$("owner-job-tools"))$("owner-job-tools").style.display="block";});}
 }
-\nfunction render(){
+function render(){
 var q=$("filter-keyword").value.toLowerCase().trim(),c=$("filter-category").value,l=$("filter-location").value.toLowerCase(),jt=$("jobtype").value.toLowerCase(),wm=$("workmode").value.toLowerCase();
 var list=all.filter(function(j){return(!c||j.category===c)&&(!l||String(j.location||"").toLowerCase().indexOf(l)>-1)&&(!q||(j.title+" "+(j.description||"")+" "+(j.company||"")+" "+(j.requirements||"")).toLowerCase().indexOf(q)>-1)&&(!jt||String(j.job_type||"").toLowerCase().indexOf(jt)>-1)&&(!wm||String(j.work_mode||j.location||"").toLowerCase().indexOf(wm)>-1)&&(activeJobView==="all"||(activeJobView==="saved"&&savedIds[j.id])||(activeJobView==="applied"&&appliedIds[j.id]))});
 $("count").textContent=list.length+(activeJobView==="saved"?" saved":activeJobView==="applied"?" tracked":"")+" opportunity"+(list.length===1?"":"ies")+" found";
@@ -179,6 +176,7 @@ function setView(view){activeJobView=view;document.querySelectorAll("[data-jobvi
 var params=new URLSearchParams(location.search);if(params.get("q"))$("filter-keyword").value=params.get("q");if(params.get("cat"))$("filter-category").value=params.get("cat");if(params.get("loc"))$("filter-location").value=params.get("loc");
 ["filter-keyword","filter-category","filter-location","jobtype","workmode"].forEach(function(id){$(id).addEventListener(id==="filter-keyword"?"input":"change",render)});
 document.querySelectorAll("[data-jobview]").forEach(function(b){b.addEventListener("click",function(){setView(b.getAttribute("data-jobview"))})});
+configureCareerTools();
 (async function(){try{var result=await sb.from("jobs").select("*").order("created_at",{ascending:false});if(result.error)throw result.error;all=result.data||[];await loadSaved();render()}catch(e){$("count").textContent="Job listings could not be loaded";$("job-list").innerHTML='<div class="job-empty">We could not load opportunities right now. Please refresh the page. <br><small>'+esc(e.message||"Connection error")+'</small></div>';}})();
 })();
 </script>
