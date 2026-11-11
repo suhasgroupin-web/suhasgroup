@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.15",
-  "published_at": "2026-11-11T14:46:00.140Z",
+  "version": "2026.11.11.16",
+  "published_at": "2026-11-11T14:51:56.187Z",
   "notify_after_days": 0,
-  "update_message": "Main Menu converted to a clean, premium SUHAS GROUP welcome-only screen; removed all content tiles and secondary controls while preserving bottom navigation.",
+  "update_message": "Added premium Create Your SUHAS Profile CTA below welcome screen, compacted profile editor spacing, and strengthened blue active bottom-navigation marker.",
   "mandatory": false
 }
