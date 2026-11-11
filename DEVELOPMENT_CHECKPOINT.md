@@ -918,3 +918,14 @@ Date: 2026-11-10
 - Code commit: `3c729128b29deb59d40585a3a779da0362183e8c`.
 - Verification: confirmed the desktop nav placeholder was replaced, all six controls point to existing tab IDs, and the existing delegated navigation handler binds `.social-topnav` and `.social-mobile-nav` controls. No database schema, user records, assets or existing feature handlers were changed.
 - Pending: browser/device visual verification on Android and desktop; test all six destinations and verify there is no CSS/layout regression. Do not mark live visual behavior complete until tested.
+
+## 2026-11-11 — Clean Facebook-style SUHAS-MAX mobile layout
+- User approved applying the supplied clean Facebook-style mobile reference inside the actual SUHAS-MAX app.
+- Added an additive, phone-width-only CSS layer in `social.html`: compact brand/search/Messenger header; removed excess create/header clutter on phones; full-width single-column feed; hidden desktop side columns on phone widths; horizontal story shelf; cleaner post cards/actions; fixed six-destination bottom navigation with safe-area spacing.
+- Explicitly overrides the forced desktop-width shell only at phone viewport widths, so mobile screens no longer render the desktop three-column layout squeezed into a narrow display. Desktop/tablet-wide rules and existing navigation handlers remain unchanged.
+- Changed files: `social.html`, `release.json`.
+- Code commit: `8e12cb640392a2d0ed35c61145a6c6886a13fa12`.
+- Release metadata commit: `37c2deacc530434aa5c74aa54bb30f8837949592`; version `2026.11.11.2`; service-worker version bump included so installed clients can detect the new release.
+- Static checks actually run: new CSS block present; CSS braces balanced; style tag counts balanced; existing feed navigation handler, mobile navigation, and desktop-mode selectors still present. No database, storage, account data, social handlers, route or feature was changed.
+- Pending verification: Vercel production build/deployment status, served `release.json`, and real Android mobile + desktop visual/interaction checks. Do not claim the new layout is live until the deployment commit matches this release and the live page is inspected.
+- Recovery point: `main` after `37c2deacc530434aa5c74aa54bb30f8837949592`.
