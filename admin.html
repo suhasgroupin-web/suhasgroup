@@ -221,7 +221,7 @@ document.getElementById('job-form').addEventListener('submit', async function(e)
 });
 
 async function loadApps(){
-  var r = await sb.from('applications').select('id, created_at, jobs(title), profiles:suhas_member_profiles!applications_member_profile_id_fkey(full_name, phone:mobile, email)').order('created_at',{ascending:false});
+  var r = await sb.from('applications').select('id, status, created_at, jobs(title), profiles:suhas_member_profiles!applications_member_profile_id_fkey(full_name, phone:mobile, email)').order('created_at',{ascending:false});
   var box = document.getElementById('apps-list');
   if(r.error){ box.innerHTML = '<p>'+esc(r.error.message)+'</p>'; return; }
   allApps = r.data;
@@ -230,11 +230,23 @@ async function loadApps(){
     var jt = a.jobs ? a.jobs.title : 'Job';
     var name = a.profiles ? (a.profiles.full_name || 'Unnamed') : 'Unnamed';
     var phone = a.profiles ? (a.profiles.phone || '') : '';
-    return '<div class="applied"><span><strong>'+esc(name)+'</strong> applied to <strong>'+esc(jt)+'</strong><br><small>'+esc(phone)+'</small></span><small>'+esc(String(a.created_at).slice(0,10))+'</small></div>';
+    var states = ['new','reviewing','shortlisted','rejected','hired'];
+    var opts = states.map(function(s){return '<option value="'+s+'"'+(s===(a.status||'new')?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('');
+    return '<div class="applied" style="gap:10px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:150px"><strong>'+esc(name)+'</strong> applied to <strong>'+esc(jt)+'</strong><br><small>'+esc(phone)+'</small><br><small>'+esc(String(a.created_at).slice(0,10))+'</small></span><div style="display:flex;gap:6px;align-items:center"><select data-app-status="'+esc(a.id)+'" style="max-width:130px;padding:8px;border:1px solid #d7e0ed;border-radius:8px;background:#fff">'+opts+'</select><button class="btn btn-primary btn-sm" data-save-app-status="'+esc(a.id)+'" type="button">Update</button></div></div>';
   }).join('');
+  box.querySelectorAll('[data-save-app-status]').forEach(function(btn){
+    btn.addEventListener('click',async function(){
+      var id=btn.getAttribute('data-save-app-status'),select=box.querySelector('[data-app-status="'+id+'"]');
+      btn.disabled=true;
+      var saved=await sb.from('applications').update({status:select.value,updated_at:new Date().toISOString()}).eq('id',id);
+      if(saved.error)showMsg('msg','Could not update application status: '+saved.error.message,false);
+      else showMsg('msg','Application status updated to '+select.value+'.',true);
+      btn.disabled=false;
+    });
+  });
 }
 document.getElementById('export-csv').addEventListener('click', function(){
-  var rows = [['Applicant','Phone','Job','Date']];
+  var rows = [['Applicant','Phone','Job','Application Status','Date']];
   allApps.forEach(function(a){
     rows.push([
       a.profiles ? (a.profiles.full_name||'') : '',
