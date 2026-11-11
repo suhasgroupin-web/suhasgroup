@@ -138,6 +138,41 @@ input,select,textarea{font-family:Arial,Helvetica,sans-serif}
 /* Dedicated SUHAS Messenger entry beside the Home navigation */
 .suhas-messenger-mobile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 1px;text-decoration:none;color:#0866ff;font-size:10px;font-weight:800;min-width:0}.suhas-messenger-mobile .mobile-nav-icon{font-size:22px;line-height:24px}.suhas-messenger-link{margin:0 6px}
 @media(max-width:760px){.social-mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))}.suhas-messenger-mobile{font-size:9px}}
+
+/* Profile header: Facebook-style identity row, clear name and details */
+.profile-viewer-head{display:grid!important;grid-template-columns:176px minmax(0,1fr) auto!important;column-gap:20px!important;align-items:start!important;padding:18px 24px!important;min-height:0!important}
+.profile-viewer-head>.profile-viewer-avatar-wrap{grid-column:1;grid-row:1;position:relative!important;width:176px!important;height:176px!important;flex:none!important;margin-top:-104px!important}
+.profile-viewer-head>.profile-viewer-avatar-wrap .profile-viewer-avatar{position:relative!important;left:auto!important;top:auto!important;width:176px!important;height:176px!important}
+.profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change{right:5px!important;bottom:5px!important}
+.profile-viewer-head>.profile-viewer-avatar-wrap~input,.profile-viewer-head>#profile-image-edit-panel{display:none}
+.profile-viewer-head>div:not(.profile-viewer-avatar-wrap):not(.profile-viewer-menu-wrap){grid-column:2;grid-row:1;min-width:0;padding-top:0!important}
+.profile-viewer-name{display:flex!important;align-items:center!important;gap:9px!important;flex-wrap:wrap!important;font-size:30px!important;font-weight:800!important;line-height:1.15!important;overflow-wrap:normal!important;word-break:normal!important}
+.profile-viewer-name .verified-badge{display:inline-flex!important;flex:0 0 24px!important;width:24px!important;height:24px!important;vertical-align:middle!important}
+.profile-viewer-name .verified-badge svg{width:24px!important;height:24px!important}
+.profile-viewer-sub{display:flex!important;flex-direction:column!important;gap:5px!important;margin-top:10px!important;color:#4b5563!important;font-size:15px!important}
+.profile-detail-line{display:flex!important;align-items:baseline!important;gap:8px!important;flex-wrap:wrap!important;line-height:1.35!important}
+.profile-detail-label{font-size:12px!important;color:#65676b!important;font-weight:600!important;min-width:75px!important}
+.profile-detail-line strong{font-size:14px!important;color:#343a40!important;font-weight:700!important}
+.profile-viewer-copy #profile-viewer-bio{margin:9px 0 0!important;font-size:14px!important;line-height:1.45!important}
+.profile-viewer-head>.profile-viewer-menu-wrap{grid-column:3;grid-row:1;margin:0!important;padding:0!important}
+.profile-viewer-stats{gap:16px!important;margin-top:12px!important}
+.profile-viewer-actions{margin-top:12px!important}
+@media(max-width:650px){
+ .profile-viewer-head{display:grid!important;grid-template-columns:104px minmax(0,1fr) auto!important;column-gap:12px!important;padding:16px!important;min-height:0!important}
+ .profile-viewer-head>.profile-viewer-avatar-wrap{width:104px!important;height:104px!important;margin-top:-68px!important}
+ .profile-viewer-head>.profile-viewer-avatar-wrap .profile-viewer-avatar{width:104px!important;height:104px!important;border-width:5px!important}
+ .profile-viewer-head>div:not(.profile-viewer-avatar-wrap):not(.profile-viewer-menu-wrap){grid-column:2;grid-row:1}
+ .profile-viewer-name{font-size:22px!important;gap:6px!important}
+ .profile-viewer-name .verified-badge,.profile-viewer-name .verified-badge svg{width:20px!important;height:20px!important;flex-basis:20px!important}
+ .profile-viewer-sub{font-size:13px!important;gap:4px!important;margin-top:7px!important}
+ .profile-detail-label{min-width:62px!important;font-size:11px!important}
+ .profile-detail-line strong{font-size:12px!important}
+ .profile-viewer-head>.profile-viewer-menu-wrap{grid-column:3;grid-row:1}
+ .profile-viewer-stats{gap:9px!important;flex-wrap:wrap!important}
+ .profile-viewer-stats strong{font-size:16px!important}.profile-viewer-stats span{font-size:12px!important}
+ .profile-viewer-actions{grid-column:1/-1!important;display:flex!important;flex-wrap:wrap!important}
+ .profile-viewer-actions .action{flex:1 1 30%!important;min-width:0!important;padding:0 8px!important;font-size:13px!important}
+}
 </style><script>document.documentElement.classList.add("suhas-auth-pending");</script><meta name="theme-color" content="#ffffff"><title>SUHAS-MAX | SUHAS GROUP</title><meta name="description" content="SUHAS-MAX — connect with the SUHAS GROUP professional community."><link rel="stylesheet" href="assets/styles.css?v=20261109-home-visibility5"><style>
 :root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
 *{box-sizing:border-box}
@@ -2874,7 +2909,7 @@ async function loadMemberConnections(id){
  host.insertAdjacentHTML('beforeend','<section class="profile-info-card" id="profile-friends"><h3>Friends · '+ids.length+(mutual?' · '+mutual+' mutual':'')+'</h3><div class="profile-friends-grid">'+(p.data||[]).slice(0,12).map(x=>'<button type="button" class="profile-friend-tile" data-profile-open="'+safe(x.user_id)+'">'+(x.profile_photo_url?'<img src="'+safe(x.profile_photo_url)+'" alt="">':'<span class="profile-friend-placeholder">'+safe((x.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<strong>'+safe(x.full_name||'SUHAS Member')+'</strong></button>').join('')+'</div></section>');
 }
 async function openMemberProfile(id){
- activeProfileId=id;$('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
+ activeProfileId=id;try{const q=new URLSearchParams(location.search);q.set('profile',id);history.replaceState({...history.state,suhasMax:true,profile:id},'',location.pathname+'?'+q.toString()+location.hash);}catch(e){} $('profile-viewer-menu').classList.remove('open');$('profile-viewer-menu-trigger').setAttribute('aria-expanded','false');
  const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
  $('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';$('profile-viewer-stats').innerHTML='';$('profile-viewer-actions').innerHTML='';
  const r=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified,profile_complete').eq('user_id',id).maybeSingle();
@@ -3033,7 +3068,7 @@ $('profile-viewer-menu').addEventListener('click',async e=>{const b=e.target.clo
  if(kind==='block'){if(confirm('Hide this profile on this device? Its profile viewer will close.')){const a=JSON.parse(localStorage.getItem('suhas-max-blocked-profiles')||'[]');if(!a.includes(id))a.push(id);localStorage.setItem('suhas-max-blocked-profiles',JSON.stringify(a));notice('Profile hidden on this device. For now, this does not block the member account-wide.');$('profile-viewer-close').click();}}
  }catch(err){if(err.name!=='AbortError')notice(err.message||'Profile action failed.',true);} $('profile-viewer-menu').classList.remove('open');
 });
-$('profile-viewer-close').addEventListener('click',()=>{if(history.state&&history.state.suhasMax&&history.state.profile){const st={...history.state,profile:null,guard:false};const q=new URLSearchParams(location.search);q.delete('profile');history.pushState(st,'',location.pathname+'?'+q.toString());} $('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;});
+$('profile-viewer-close').addEventListener('click',()=>{if(history.state&&history.state.suhasMax&&history.state.profile){const st={...history.state,profile:null,guard:false};const q=new URLSearchParams(location.search);q.delete('profile');history.replaceState(st,'',location.pathname+(q.toString()?'?'+q.toString():'')+location.hash);} $('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;});
 $('profile-viewer').addEventListener('click',e=>{if(e.target===$('profile-viewer'))$('profile-viewer-close').click();});
 async function loadSavedPosts(){
  const legacyIds=JSON.parse(localStorage.getItem('suhas-max-saved-posts')||'[]').map(Number).filter(Number.isSafeInteger);
@@ -3758,7 +3793,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  },true);
  window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){await render({...state,profile:null});history.pushState({...state,guard:true},'',makeUrl(state.tab,null,false));return;}await render(state);return;}await render(current);history.pushState({...current,profile:null,editor:false,guard:true},'',makeUrl(current.tab,null,false));});
  // Do not persist a non-Home tab as the next login landing page.
- render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
+ render(current).then(()=>{const profileId=new URLSearchParams(location.search).get('profile');if(profileId)openMemberProfile(profileId).catch(err=>notice(err.message||'Could not restore profile.',true));}).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
