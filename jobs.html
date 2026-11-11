@@ -131,7 +131,7 @@ if(!list.length){$("job-list").innerHTML='<div class="job-empty">'+(activeJobVie
 $("job-list").innerHTML=list.map(function(j){
 var saved=!!savedIds[j.id],external=!!j.external_url,thumb=j.image_url?'<img src="'+esc(j.image_url)+'" alt="">':esc(String(j.title||"SG").slice(0,2).toUpperCase());
 var applyLabel=external?"Open application":"Apply now";
-var applyAction=j.source==="LinkedIn"&&/^https:\/\/(www\.)?linkedin\.com\//i.test(j.external_url||"")?'<a class="job-3d blue" href="'+esc(j.external_url)+'" rel="noopener">Apply on LinkedIn</a>':'<button class="job-3d blue" type="button" data-id="'+esc(j.id)+'" data-url="'+esc(j.external_url||"")+'">'+applyLabel+'</button>';
+var applyAction='<button class="job-3d blue" type="button" data-id="'+esc(j.id)+'" data-url="'+esc(j.external_url||"")+'">'+(external?"Apply / Track":"Apply now")+'</button>';
 return '<article class="job-card"><div class="job-card-main"><div class="job-logo">'+thumb+'</div><div><div class="job-title">'+esc(j.title||"Career opportunity")+'</div><div class="job-company">'+esc(j.company||"SUHAS GROUP")+' · '+esc(j.category||"General")+'</div>'+sourceBadge(j.source)+'<div class="job-description">'+esc(j.description||"Explore this opportunity with SUHAS GROUP.")+'</div></div><a class="job-3d ghost" href="job.html?'+(j.job_code?'code='+encodeURIComponent(j.job_code):'id='+encodeURIComponent(j.id))+'">Details</a></div><div class="job-meta"><span>⌖ '+esc(j.location||"Location flexible")+'</span><span>◷ '+esc(j.job_type||"Employment type not specified")+'</span><span>Deadline: '+esc(j.deadline||"Open")+'</span></div><div class="job-actions"><button class="job-3d ghost job-save" type="button" data-save="'+esc(j.id)+'">'+(saved?"✓ Saved":"☆ Save job")+'</button>'+applyAction+'</div></article>';
 }).join("");
 $("job-list").querySelectorAll("[data-id]").forEach(function(b){b.addEventListener("click",function(){apply(b)})});
@@ -140,7 +140,17 @@ injectJsonLd(list)
 }
 async function loadSaved(){var sr=await sb.auth.getSession(),session=sr.data&&sr.data.session;if(!session)return;var pair=await Promise.all([sb.from("saved_jobs").select("job_id").eq("user_id",session.user.id),sb.from("applications").select("job_id").eq("user_id",session.user.id)]);if(!pair[0].error)(pair[0].data||[]).forEach(function(x){savedIds[x.job_id]=true});if(!pair[1].error)(pair[1].data||[]).forEach(function(x){appliedIds[x.job_id]=true})}
 async function toggleSave(btn){var sr=await sb.auth.getSession(),session=sr.data&&sr.data.session;if(!session){location.href="login.html";return}var id=Number(btn.getAttribute("data-save"));if(savedIds[id]){var d=await sb.from("saved_jobs").delete().eq("user_id",session.user.id).eq("job_id",id);if(d.error){showMsg(d.error.message,false);return}delete savedIds[id]}else{var a=await sb.from("saved_jobs").insert({user_id:session.user.id,job_id:id});if(a.error&&a.error.code!=="23505"){showMsg(a.error.message,false);return}savedIds[id]=true}render()}
-async function apply(btn){var url=btn.getAttribute("data-url");if(url){try{var target=new URL(url,location.href);if(target.protocol!=="https:"){showMsg("This job link is not a secure HTTPS address.",false);return}location.assign(target.href);return}catch(e){showMsg("The original job link is invalid.",false);return}}var sr=await sb.auth.getSession(),session=sr.data&&sr.data.session;if(!session){location.href="login.html";return}btn.disabled=true;var id=Number(btn.getAttribute("data-id"));var result=await sb.from("applications").insert({job_id:id,user_id:session.user.id});if(result.error&&result.error.code==="23505"){showMsg("You have already applied for this job.",false)}else if(result.error){showMsg(result.error.message,false);btn.disabled=false;return}else{appliedIds[id]=true;showMsg("Application submitted. Track it in My Applications.",true)}btn.disabled=false;render()}
+async function apply(btn){
+ var url=btn.getAttribute("data-url"),sr=await sb.auth.getSession(),session=sr.data&&sr.data.session;
+ if(!session){if(url){location.assign(url);return;}location.href="login.html";return;}
+ var id=Number(btn.getAttribute("data-id"));btn.disabled=true;
+ var result=await sb.from("applications").insert({job_id:id,user_id:session.user.id});
+ if(result.error&&result.error.code==="23505"){appliedIds[id]=true;showMsg("You have already tracked this job application.",true);}
+ else if(result.error){showMsg(result.error.message,false);btn.disabled=false;return;}
+ else{appliedIds[id]=true;showMsg(url?"Application tracking saved. Opening the original job post…":"Application submitted. Track it in My Applications.",true);}
+ if(url){setTimeout(function(){location.assign(url);},180);return;}
+ btn.disabled=false;render();
+}
 function setView(view){activeJobView=view;document.querySelectorAll("[data-jobview]").forEach(function(b){var active=b.getAttribute("data-jobview")===view;b.classList.toggle("active",active);b.setAttribute("aria-selected",active?"true":"false")});render()}
 var params=new URLSearchParams(location.search);if(params.get("q"))$("filter-keyword").value=params.get("q");if(params.get("cat"))$("filter-category").value=params.get("cat");if(params.get("loc"))$("filter-location").value=params.get("loc");
 ["filter-keyword","filter-category","filter-location","jobtype","workmode"].forEach(function(id){$(id).addEventListener(id==="filter-keyword"?"input":"change",render)});
