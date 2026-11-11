@@ -11,6 +11,9 @@
     function apply(){document.body.classList.toggle('suhas-desktop-mode',mode==='desktop' && !isPhone);}
     var nav=document.querySelector('.nav-wrap');
     if(!nav) return;
+    var profileMenu=nav.querySelector('#profile-more-menu');
+    var profileToggle=nav.querySelector('#profile-more-toggle');
+    if(profileToggle) profileToggle.remove();
     /* Keep existing navigation links in place. Appending the display control avoids fragile DOM re-parenting and insertBefore errors. */
     var actions=document.createElement('div');actions.className='suhas-nav-actions';
     nav.appendChild(actions);
@@ -20,8 +23,9 @@
     trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-expanded','false');
     actions.appendChild(trigger);
     var panel=document.createElement('section');
-    panel.className='suhas-display-panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Display settings');
-    panel.innerHTML='<h3>Display settings</h3><p>Choose how SUHAS appears on this device.</p><div class="suhas-display-options"><button type="button" data-mode="auto">Auto · Responsive layout</button><button type="button" data-mode="desktop">Desktop Mode · Wide layout</button></div><div class="suhas-display-note">Your choice is saved on this device. Desktop Mode may require horizontal scrolling on a small screen.</div>';
+    panel.className='suhas-display-panel'+(profileMenu?' profile-unified-panel':'');panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Display settings');
+    panel.innerHTML='<h3>More options</h3><p>Navigation, device layout and display preferences.</p><div class="suhas-display-options"><button type="button" data-mode="auto">Auto · Responsive layout</button><button type="button" data-mode="desktop">Desktop Mode · Wide layout</button></div><div class="suhas-display-note">Your choice is saved on this device. Desktop Mode may require horizontal scrolling on a small screen.</div>';
+    if(profileMenu){var section=document.createElement('div');section.className='suhas-display-section';section.textContent='SUHAS GROUP Navigation';panel.insertBefore(section,panel.firstChild);panel.appendChild(profileMenu);}
     function refresh(){apply();panel.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});trigger.textContent='⋮';}
     trigger.addEventListener('click',function(){var open=panel.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open));});
     panel.addEventListener('click',function(e){var b=e.target.closest('[data-mode]');if(!b)return;mode=isPhone?'auto':b.dataset.mode;try{localStorage.setItem(KEY,mode);}catch(err){}refresh();panel.classList.remove('open');trigger.setAttribute('aria-expanded','false');});
