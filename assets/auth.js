@@ -51,6 +51,30 @@
     }
   });
 
+  // Recover a still-valid browser session saved by an older SUHAS-MAX auth storage key.
+  // This is device-local only; no credentials are copied to a server or shared between devices.
+  async function getRestoredSession(){
+    var result=await sb.auth.getSession();
+    if(result.data&&result.data.session)return result;
+    try{
+      var keys=[];
+      for(var i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);
+        if(key && key!== 'suhas-group-auth-v2' && (key.indexOf('auth-token')!==-1 || key.indexOf('suhas-group-auth')!==-1))keys.push(key);
+      }
+      for(var k=0;k<keys.length;k++){
+        try{
+          var saved=JSON.parse(localStorage.getItem(keys[k])||'null');
+          var candidate=saved&&(saved.currentSession||saved.session||saved);
+          if(!candidate||!candidate.access_token||!candidate.refresh_token)continue;
+          var restored=await sb.auth.setSession({access_token:candidate.access_token,refresh_token:candidate.refresh_token});
+          if(!restored.error&&restored.data&&restored.data.session)return {data:{session:restored.data.session},error:null};
+        }catch(ignore){}
+      }
+    }catch(ignore){}
+    return result;
+  }
+
   var page = canonicalPageName(routeParts[routeParts.length-1] || 'index.html');
   function isO5Account(user){ return !!(user && user.email && user.email.toLowerCase().endsWith('@o5-intl.com')); }
   // Only authentication screens are public. Every other route, including the home route, requires a real session.
@@ -158,8 +182,14 @@
     });
   }
 
-  sb.auth.getSession().then(async function(r){
-    var session = r.data && r.data.session;
+  getRestoredSession().then(async function(r){
+    var session = r && r.data && r.data.session;
+    // A storage/network error is not treated as an intentional logout.
+    if(r && r.error && !session){
+      console.warn('SUHAS-MAX could not verify the saved login session yet:',r.error.message);
+      if(isPublicAuthPage())document.documentElement.classList.remove('suhas-auth-pending');
+      return;
+    }
     if(!requireWorkspaceSession(session)) return;
     if(!isPublicAuthPage()) paintNav(session);
     if(session){
@@ -172,6 +202,9 @@
         location.replace(pr.data && pr.data.profile_complete === true ? 'app.html' : 'profile.html?setup=1');
       }).catch(function(){ location.replace('profile.html?setup=1'); });
     }
+  }).catch(function(error){
+    console.warn('SUHAS-MAX session restoration failed:',error);
+    if(isPublicAuthPage())document.documentElement.classList.remove('suhas-auth-pending');
   });
 
   sb.auth.onAuthStateChange(function(event, session){
