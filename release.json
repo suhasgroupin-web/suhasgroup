@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.9",
-  "published_at": "2026-11-11T14:26:20.744Z",
+  "version": "2026.11.11.10",
+  "published_at": "2026-11-11T14:29:15.951Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS GROUP navigation updated: SUHAS MAX replaces the Profile tab; Profile is available from the Careers menu.",
+  "update_message": "Responsive mobile and desktop interaction fixes: touch-friendly buttons, mobile action layouts, and five-column navigation.",
   "mandatory": false
 }
