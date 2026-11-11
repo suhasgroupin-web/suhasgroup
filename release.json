@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.37",
-  "published_at": "2026-11-11T17:29:33.939Z",
+  "version": "2026.11.11.38",
+  "published_at": "2026-11-11T17:36:21.059Z",
   "notify_after_days": 0,
-  "update_message": "Profile salutation fix: choose a title or no title, no automatic Mr.; setup photo controls hidden until profile completion; no stale profile flash on refresh; Professional Identity replaces Add/Change Number shortcut.",
+  "update_message": "Job portal redesigned with mobile-first premium 3D corporate UI, one consolidated live filter area, clean All/Saved/Applications tabs, improved job cards and streamlined actions.",
   "mandatory": false
 }
