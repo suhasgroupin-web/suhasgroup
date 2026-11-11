@@ -343,6 +343,8 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
   try{
    const child=frame.contentWindow;
    const childPath=(child.location.pathname.split('/').pop()||'').toLowerCase();
+   if(childPath==='max-profile.html'||childPath==='max-profile'){location.replace('max-profile.html?setup=1');return;}
+   if(childPath==='profile.html'||childPath==='profile'){location.replace('profile.html?setup=1');return;}
    if(childPath==='login'||childPath==='login.html'||child.document.querySelector('#login-form')){
     const loginUrl=new URL('login.html?next=messenger.html',location.href);
     location.replace(loginUrl.href);
