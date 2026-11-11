@@ -151,7 +151,7 @@
       b.addEventListener('click', async function(e){
         e.preventDefault();
         b.textContent='Signing out...';
-        var result=await sb.auth.signOut({scope:'global'});
+        var result=await sb.auth.signOut({scope:'local'});
         if(result.error){b.textContent='Logout';window.showMsg('msg','Could not sign out. Please try again.',false);return;}
         location.replace('index.html');
       });
