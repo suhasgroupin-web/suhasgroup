@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.17",
-  "published_at": "2026-11-11T14:52:22.207Z",
+  "version": "2026.11.11.18",
+  "published_at": "2026-11-11T15:00:00.798Z",
   "notify_after_days": 0,
-  "update_message": "Profile submenu destination also highlights Careers navigation; profile CTA, compact editor, and blue active-tab indicator included.",
+  "update_message": "Separated SUHAS GROUP login/profile from SUHAS-MAX profile onboarding; added dedicated MAX profile setup gate and compact side-by-side MAX/Messenger launcher; Messenger back returns to app launcher.",
   "mandatory": false
 }
