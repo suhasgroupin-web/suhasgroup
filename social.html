@@ -75,6 +75,22 @@
  .post-card .post-card-media{max-height:65vh}
 }
 
+/* Home-first desktop/mobile polish with clear, tactile controls. */
+.social-center,.home-feed-panel{min-width:0}
+.home-feed-panel{box-shadow:0 2px 8px rgba(16,35,65,.07)!important}
+button,.action,.social-topnav a,.social-profile-link,.mobile-head-action{
+ transition:transform .14s ease,box-shadow .14s ease,background-color .14s ease!important;
+}
+button:not(:disabled):active,.action:not(:disabled):active,.mobile-head-action:active{
+ transform:translateY(2px)!important;box-shadow:inset 0 2px 5px rgba(0,0,0,.16)!important;
+}
+.social-topnav>button,.social-mobile-nav>button,.side-nav button,.max-menu-grid button{
+ box-shadow:0 1px 2px rgba(16,35,65,.08);
+}
+.social-topnav>button:hover,.social-mobile-nav>button:hover,.side-nav button:hover,.max-menu-grid button:hover{
+ transform:translateY(-1px);box-shadow:0 4px 12px rgba(16,35,65,.12);
+}
+#feed[hidden],#people[hidden],#friends[hidden],#saved[hidden],#groups[hidden],#marketplace[hidden],#reels[hidden],#gaming[hidden],#requests[hidden],#following[hidden],#notifications[hidden],#messages[hidden],#settings[hidden],#maxmenu[hidden]{display:none!important}
 /* SUHAS-MAX unified Facebook-inspired social UI system */
 :root{--fb-blue:#0866ff;--fb-bg:#f0f2f5;--fb-card:#fff;--fb-text:#1c1e21;--fb-muted:#65676b;--fb-line:#e4e6eb}
 body{background:var(--fb-bg);color:var(--fb-text);font-family:Arial,Helvetica,sans-serif}
@@ -567,7 +583,7 @@ button:focus-visible,a:focus-visible,.action:focus-visible,input:focus-visible,t
 </style>
 <style>
 /* Facebook-inspired slide-in menu drawer */
-<style id="suhas-max-compact-menu-and-creator-tools-20261111">/* Compact SUHAS-MAX menu sizing for phones */
+/* Compact SUHAS-MAX menu sizing for phones *//* Compact SUHAS-MAX menu sizing for phones */
 #maxmenu .max-menu-sheet{
  width:min( min(82vw, 330px), 360px)!important;
  max-width:360px!important;
@@ -594,7 +610,6 @@ button:focus-visible,a:focus-visible,.action:focus-visible,input:focus-visible,t
 #maxmenu .max-menu-footer{padding:12px 3px 3px!important;font-size:10px!important}
 #maxmenu .max-menu-tools-note{margin:5px 2px 7px;color:#65676b;font-size:10px;line-height:1.35}
 @media(min-width:761px){#maxmenu .max-menu-sheet{width:min(330px,34vw)!important}}
-</style>
 
 .max-menu-drawer[hidden]{display:none!important}
 .max-menu-drawer{position:fixed;inset:0;z-index:1000;display:block!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
