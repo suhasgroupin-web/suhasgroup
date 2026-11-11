@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.11.24",
-  "published_at": "2026-11-11T15:36:25.935Z",
+  "version": "2026.11.11.25",
+  "published_at": "2026-11-11T15:37:13.377Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS GROUP profile polish: icon-only photo controls, expandable ordered professional overview, and compact independently scrolling right-side options drawer without SUHAS-MAX links.",
+  "update_message": "SUHAS GROUP profile UI refined: minimal camera icons, expandable ordered Professional Profile Overview, and a compact independently scrollable right-side More Options drawer with SUHAS-MAX links excluded.",
   "mandatory": false
 }
