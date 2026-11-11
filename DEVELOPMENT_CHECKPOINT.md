@@ -955,3 +955,14 @@ Date: 2026-11-10
 - NOT verified (pending, needs a signed-in account on a real phone): real feed/stories data rendering, like/comment/share/hide actions, notification badge count, Menu sheet display-mode button, search dropdown overlap with the new tab bar.
 - Release metadata `2026.11.11.3`; `assets/suhas-max-fb-mobile-v1.css` added to the service-worker core list.
 
+
+
+## 2026-11-11 — Mobile navigation moved to the app bottom bar
+- User requested Facebook-style app navigation with primary buttons at the bottom, not a second row above the feed.
+- Reviewed the current SUHAS-MAX source and found a duplicate phone-only icon tab strip above the Home feed plus the existing six-item bottom navigation.
+- Updated `assets/suhas-max-fb-mobile-v1.css` additively: hid the redundant top phone tab strip; retained the existing bottom destinations Home, Friends, Watch, Marketplace, Notifications and Menu; refined the bottom bar into a clean fixed app navigation with consistent touch targets, active blue indicator, notification badge position and Android safe-area spacing. Desktop navigation is unchanged.
+- Bumped release metadata to `2026.11.11.4` and service-worker cache key to `v104` so installed clients can detect the update.
+- Code/release commit: `27c8baa12ef5f42d7471685239aa227a4263814d`.
+- Static verification: confirmed the new phone CSS hides `.suhas-fb-phone-tabs`, keeps the six existing bottom destinations, and applies only at phone widths; release version and service-worker cache version were updated. No HTML routes, feature handlers, Supabase schema, member records, storage objects, or corporate pages were changed.
+- Pending: Cloudflare Pages deployment for this commit and real signed-in Android visual/interaction QA. Source changes being committed do not by themselves prove the live page is updated.
+- Recovery point: `main` at `27c8baa12ef5f42d7471685239aa227a4263814d`.
