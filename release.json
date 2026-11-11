@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
   "version": "2026.11.11.21",
-  "published_at": "2026-11-11T15:08:44.309Z",
+  "published_at": "2026-11-11T15:15:15.840Z",
   "notify_after_days": 0,
-  "update_message": "Cleaned SUHAS GROUP profile: removed the SUHAS-MAX app launcher block, removed the hamburger, moved header navigation links into a three-dot menu, and brought the member profile to the top.",
+  "update_message": "Unified SUHAS GROUP profile header into one top-right three-dot menu containing navigation and Auto/Responsive and Desktop display options.",
   "mandatory": false
 }
