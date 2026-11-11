@@ -38,33 +38,20 @@ body{background:#f2f5fa;color:#14233d}.wrap{max-width:920px;margin:30px auto;pad
  .member-tools{margin-top:8px!important;padding:10px!important;border-radius:13px!important}
  .card{margin-top:8px!important;padding:14px!important;border-radius:13px!important}
 }
+
+/* Profile page navigation: remove hamburger and app launcher; keep navigation in the three-dot menu. */
+.profile-more-toggle{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border:1px solid #dce5ef;border-radius:50%;background:linear-gradient(145deg,#fff,#edf3fb);color:#17365f;font-size:31px;line-height:1;box-shadow:0 5px 12px #17365f1c;cursor:pointer}
+#profile-more-menu{display:none}
+#profile-more-menu.open{display:flex;position:absolute;z-index:90;top:calc(100% + 6px);right:14px;left:auto;width:min(260px,calc(100vw - 28px));max-height:none;overflow:visible;flex-direction:column;align-items:stretch;gap:0;padding:7px;background:#fff;border:1px solid #dce5f0;border-radius:16px;box-shadow:0 16px 38px #102c5740}
+#profile-more-menu.open a{padding:12px 13px;border:0;border-radius:10px;font-size:14px}
+#profile-more-menu.open a+a{border-top:1px solid #edf1f7}
+@media(max-width:980px){.nav-wrap{padding:10px 14px}.profile-more-toggle{display:grid}.nav-links#profile-more-menu{position:absolute;top:100%;left:auto;right:12px;width:min(260px,calc(100vw - 24px));max-height:none;overflow:visible}.nav-links#profile-more-menu.open{display:flex}}
 </style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script><style id="suhas-max-embedded-profile-editor">
 body.suhas-max-embedded .site-header{display:none!important}
 body.suhas-max-embedded .wrap{max-width:920px!important;margin:0 auto!important;padding:12px!important}
 body.suhas-max-embedded .actions a[href="index.html"]{display:none!important}
 body.suhas-max-embedded .actions a[href="index.html"]::after{content:"Back to SUHAS-MAX"}
-</style></head><body><script>if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("suhas-max-embedded");</script><header class="site-header"><div class="nav-wrap"><a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a><nav class="nav-links"><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="group.html">Our Companies</a><div class="nav-cta nav-cta-m"></div></nav><div class="nav-cta"></div><button class="menu-toggle" aria-label="Menu">&#9776;</button></div></header>
-<section class="suhas-app-access" aria-label="SUHAS GROUP apps">
-<style>
-.suhas-app-access{max-width:920px;margin:12px auto 0;padding:0 12px;font-family:Arial,Helvetica,sans-serif}
-.suhas-app-access .app-access-inner{padding:14px;background:#fff;border:1px solid #dce5f0;border-radius:16px;box-shadow:0 3px 12px #18345c0b}
-.suhas-app-access h2{margin:0 0 4px;color:#173d75;font-size:16px;font-weight:850}
-.suhas-app-access p{margin:0 0 12px;color:#68778d;font-size:12px;line-height:1.45}
-.suhas-app-access .app-access-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.suhas-app-access a{display:flex;align-items:center;justify-content:center;min-height:46px;padding:10px 8px;border-radius:10px;background:#0866ff;color:#fff;text-align:center;text-decoration:none;font-size:13px;font-weight:800;line-height:1.25}
-.suhas-app-access a:nth-child(2){background:#174a9c}.suhas-app-access a:nth-child(3){background:#087cff}
-@media(max-width:560px){.suhas-app-access{margin-top:8px;padding:0 8px}.suhas-app-access .app-access-inner{padding:11px}.suhas-app-access .app-access-grid{grid-template-columns:1fr}.suhas-app-access a{min-height:44px;font-size:14px}}
-</style>
-<div class="app-access-inner">
-<h2>SUHAS GROUP Apps</h2>
-<p>Your account is ready to use both apps. Choose where you want to go.</p>
-<div class="app-access-grid">
-<a href="home.html">All Apps</a>
-<a href="social.html">Open SUHAS-MAX</a>
-<a href="messenger.html">Open Messenger</a>
-</div>
-</div>
-</section>
+</style></head><body><script>if(new URLSearchParams(location.search).get("embed")==="1")document.body.classList.add("suhas-max-embedded");</script><header class="site-header"><div class="nav-wrap"><a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a><nav class="nav-links" id="profile-more-menu"><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="group.html">Our Companies</a><a href="main-menu.html">Main Menu</a></nav><div class="nav-cta"></div><button class="profile-more-toggle" id="profile-more-toggle" type="button" aria-label="More options" aria-expanded="false" aria-controls="profile-more-menu">&#8942;</button></div></header>
 <main class="wrap"><section class="hero"><div id="cover-banner" class="cover-banner"></div><div class="avatar-wrap"><img id="avatar" class="avatar" src="assets/logo.png" alt="Profile photo"><button id="photo-btn" type="button" class="btn btn-gold btn-sm photo-btn">Change photo</button><input id="photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><button id="cover-btn" type="button" class="btn btn-gold btn-sm photo-btn">Change cover</button><input id="cover-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden></div><div class="profile-summary"><h1 id="profile-name" class="profile-name">Your Name</h1><div class="profile-meta-window" aria-label="Company and university"><div id="profile-meta-track" class="profile-meta-track"><span id="profile-company" class="profile-meta profile-company"></span><span class="profile-separator">|</span><span id="profile-university" class="profile-meta profile-university"></span><span class="profile-separator">|</span><span id="profile-company-copy" class="profile-meta profile-company" aria-hidden="true"></span><span class="profile-separator" aria-hidden="true">|</span><span id="profile-university-copy" class="profile-meta profile-university" aria-hidden="true"></span></div></div><p id="profile-bio" class="profile-bio"></p></div></section>
 <nav class="member-tools" aria-label="Member profile tools">
  <div class="tools-heading"><span>MY ACCOUNT</span><small>Personal control centre</small></div>
@@ -103,6 +90,18 @@ body.suhas-max-embedded .actions a[href="index.html"]::after{content:"Back to SU
 <button type="button" id="profile-logout" class="btn" style="width:100%;background:#fff1f1;color:#a12626;border:1px solid #efcaca;font-weight:800">Log out from this device</button>
 </section>
 </main>
+
+<script>
+(function(){
+ var button=document.getElementById('profile-more-toggle');
+ var menu=document.getElementById('profile-more-menu');
+ if(!button||!menu)return;
+ button.addEventListener('click',function(e){e.stopPropagation();var open=menu.classList.toggle('open');button.setAttribute('aria-expanded',String(open));});
+ document.addEventListener('click',function(e){if(!menu.contains(e.target)&&!button.contains(e.target)){menu.classList.remove('open');button.setAttribute('aria-expanded','false');}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'){menu.classList.remove('open');button.setAttribute('aria-expanded','false');}});
+ menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){menu.classList.remove('open');button.setAttribute('aria-expanded','false');});});
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-independent-max"></script><script src="assets/script.js"></script><script>
 (async()=>{const sessionResult=await sb.auth.getSession();const session=sessionResult.data&&sessionResult.data.session;const user=session&&session.user;if(!user){location.replace('login.html?next='+encodeURIComponent('profile.html'));return;}const $=id=>document.getElementById(id),fields=['full_name','mobile','gender','dob','location','company','position','education_level','major','school','college','university','graduation_year','study_status','bio','skills','linkedin_url'];function say(t,ok){$('msg').textContent=t;$('msg').style.display='block';$('msg').style.background=ok?'#e8f7ed':'#fff0ef';$('msg').style.color=ok?'#17633a':'#a53225';}
 /* Admin users use the same personal profile page as every other member. */$('email').value=user.email||'';$('dob').max=new Date().toISOString().slice(0,10);
