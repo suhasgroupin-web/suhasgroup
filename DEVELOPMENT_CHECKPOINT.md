@@ -996,3 +996,12 @@ Date: 2026-11-10
 - Cloudflare deployment workflow for commit `8155b27f7c503c307ad30b42af92b62870fab0d2` is still in progress at the last check: https://github.com/suhasgroupin-web/suhasgroup/actions/runs/43021485703. Live Pages was still serving release `2026.11.11.11.4` during the check, so the latest release is not yet verified live.
 - User requested a one-time Cloudflare deployment check for 2026-11-12 10:00 Asia/Dhaka. Creation was rejected because the plan has 3 active scheduled tasks (limit 3). Do not claim a reminder/task exists; user must free a task slot or change plan before retry.
 - Pending: wait for deployment workflow result; verify live `release.json` is `2026.11.11.5`; perform signed-in Android visual and tap-through QA of all six destinations. Prior Cloudflare workflow failure code 10000 still needs investigation if it recurs.
+
+
+## 2026-11-11 — Bottom navigation isolated and protected
+- User requested the approved bottom navigation layout be separated and locked so unrelated future work cannot change it.
+- Added dedicated protected stylesheet: `assets/suhas-max-bottom-nav-locked-v1.css`. It owns the mobile bottom bar geometry, six-column grid, icon/label styling, active state, notification badge, fixed positioning and Android safe-area inset. It loads after the general mobile stylesheet so later general CSS cannot casually override it.
+- Marked the existing six-button `social-mobile-nav` markup in `social.html` with explicit LOCKED boundary comments. Exact order remains Home · Friends · Video · Reels · Notification · Profile; the existing tab handlers and destinations are unchanged.
+- Added the dedicated stylesheet to the service-worker core asset list and bumped service-worker cache to `v106`; release metadata is `2026.11.11.6`.
+- Protection contract: future unrelated feature/layout tasks must not edit the locked stylesheet or the marked nav markup. Only an explicit owner request to change bottom navigation authorizes edits. This is a repository-level change-control lock, not a GitHub branch-protection/security lock.
+- Verification performed: confirmed the nav markup has exactly six ordered buttons and the dedicated stylesheet link is after the general mobile stylesheet; verified the new file is included in the service-worker precache list and release/cache versions are incremented. Signed-in Android visual QA and live Cloudflare deployment are still pending.

@@ -1,0 +1,89 @@
+/* ==========================================================================
+   SUHAS-MAX LOCKED MOBILE BOTTOM NAVIGATION — v1
+   PROTECTED COMPONENT: keep this file separate from general page styling.
+   Exact order: Home · Friends · Video · Reels · Notification · Profile.
+   Do not restyle, reorder, rename, resize, or replace destinations during
+   unrelated work. Change only when the owner explicitly requests it.
+   Loaded after all other stylesheets so this component owns its layout.
+   ========================================================================== */
+
+html body:not(.suhas-desktop-mode) .social-mobile-nav {
+  position: fixed !important;
+  inset: auto 0 0 0 !important;
+  z-index: 1200 !important;
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  width: 100% !important;
+  min-height: 62px !important;
+  height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+  padding: 4px 3px env(safe-area-inset-bottom, 0px) !important;
+  margin: 0 !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-top: 1px solid #d8dce3 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 -2px 10px rgba(20, 35, 60, .08) !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button {
+  display: flex !important;
+  flex: 1 1 0 !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  margin: 0 !important;
+  padding: 4px 1px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #65676b !important;
+  box-shadow: none !important;
+  font: 500 10px/1.15 Arial, Helvetica, sans-serif !important;
+  white-space: nowrap !important;
+  -webkit-tap-highlight-color: transparent;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button.active,
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button[aria-current="page"] {
+  color: #0866ff !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-nav-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 25px !important;
+  height: 25px !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-nav-icon svg {
+  display: block !important;
+  width: 23px !important;
+  height: 23px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-fb-badge {
+  position: absolute !important;
+  top: 1px !important;
+  left: calc(50% + 3px) !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  padding: 0 4px !important;
+  border-radius: 9px !important;
+  background: #e41e3f !important;
+  color: #fff !important;
+  font: 700 10px/16px Arial, sans-serif !important;
+  text-align: center !important;
+}
+@media (min-width: 761px) {
+  html body:not(.suhas-desktop-mode) .social-mobile-nav { display: none !important; }
+}
+html body.suhas-desktop-mode .social-mobile-nav { display: none !important; }
