@@ -102,7 +102,7 @@
  #friends #friends-list .member .actions{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
  #friends #friends-list .member .action{min-height:34px!important;padding:7px 11px!important;border-radius:8px!important;font-size:12px!important}
  #friends .messenger-people-active-count{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:9px 14px!important;border-radius:22px!important;background:#f0f2f5!important;color:#1c1e21!important;font-size:14px!important;font-weight:700!important}
- #friends .messenger-people-active-count:before{content:""!important;width:9px!important;height:9px!important;border-radius:50%!important;background:#31a24c!important}
+ #friends .messenger-people-active-count{font-weight:700!important}
  @media(max-width:600px){#friends{padding:0 18px 26px!important}#friends>h2{font-size:30px!important;padding-top:16px!important}}
  `;
  function installPeopleView(){
@@ -122,7 +122,7 @@
     if(source){source.querySelectorAll('.home-story-card').forEach(card=>{const clone=card.cloneNode(true);clone.classList.add('messenger-people-story');clone.addEventListener('click',()=>card.click());storyWrap.append(clone);});}
     panel.insertBefore(storyWrap,panel.querySelector('#friends-list'));
     const tabs=d.createElement('div');tabs.className='messenger-people-tabs';
-    tabs.innerHTML='<span class="messenger-people-active-count">Active members</span><button type="button" data-people-view="requests">Friend requests</button><button type="button" class="active" data-people-view="all">All</button>';
+    tabs.innerHTML='<span class="messenger-people-active-count">Friends</span><button type="button" data-people-view="requests">Friend requests</button><button type="button" class="active" data-people-view="all">All</button>';
     panel.insertBefore(tabs,panel.querySelector('#friends-list'));
     tabs.querySelector('[data-people-view="requests"]').addEventListener('click',()=>{const w=frame.contentWindow;if(w?.activateMaxTab)w.activateMaxTab('requests');});
     tabs.querySelector('[data-people-view="all"]').addEventListener('click',()=>{tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.peopleView==='all'));});
