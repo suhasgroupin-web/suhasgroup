@@ -95,3 +95,21 @@ html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-profile-nav-icon{w
 html body:not(.suhas-desktop-mode) .social-mobile-nav .mobile-profile-nav-avatar{display:block!important;width:27px!important;height:27px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid #fff!important;background:#e8edf5!important}
 html body:not(.suhas-desktop-mode) .social-mobile-nav button.active .mobile-profile-nav-icon{background:linear-gradient(145deg,#82c2ff,#0866ff 58%,#173caa)!important;box-shadow:0 2px 7px rgba(8,102,255,.35),inset 0 1px 1px rgba(255,255,255,.85)!important}
 @media(prefers-reduced-motion:reduce){html body:not(.suhas-desktop-mode) .social-mobile-nav .suhas-nav-3d-icon{transition:none!important}}
+
+
+/* Interaction repair: keep every destination a full, reliable touch target. */
+html body:not(.suhas-desktop-mode) .social-mobile-nav,
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button {
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button {
+  position: relative !important;
+  cursor: pointer !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+html body:not(.suhas-desktop-mode) .social-mobile-nav > button:disabled {
+  pointer-events: none !important;
+  opacity: .55 !important;
+}
