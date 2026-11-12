@@ -1054,3 +1054,13 @@ Date: 2026-11-10
 - GitHub commits: frontend `470f66ef97b3230c0a89c3fd50065608d664b50e`; backend `0fdbb72e65f4493bcc4189f0bcb4018374d82fb8`.
 - Supabase Edge Function `ai-assistant` deployed successfully; Supabase read-back confirmed ACTIVE version 56 with JWT verification enabled.
 - Authenticated Android end-to-end testing and true realtime full-duplex voice API integration remain pending.
+
+
+## 2026-11-12 — SUHAS AI streaming replies and persistent chat history
+- Added dedicated per-user AI chat persistence using new public tables `suhas_ai_conversations` and `suhas_ai_messages`; both have RLS enabled. Conversation CRUD is owner-scoped; messages can be inserted/read only when the parent conversation belongs to the authenticated user. Verified the policies in `pg_policies` after applying the schema.
+- Updated `ai.html` with a ChatGPT-style **New Chat** action and **Chat History** list. Conversations are created on first message, user/assistant messages are stored, and selecting an old conversation restores the visible transcript and model context. Refresh/login history retrieval is scoped to the signed-in user.
+- Improved microphone permission handling: the live voice flow now explicitly requests `getUserMedia`, reports a clear Android site-permission instruction on denial, closes the overlay on permission failure, and uses Bangla speech recognition as the default recognition locale.
+- Added Gemini Server-Sent Events streaming in `supabase/functions/ai-assistant/index.ts`; `ai.html` incrementally renders streamed text instead of waiting for a complete JSON response. Local greetings/small-talk remain immediate. Browser request timeout reduced to 25 seconds.
+- Commits: database + UI/history + voice permission `34c3be4f3af2919ea7d9bfb378e6b230a5c9ad0e`; Edge Function streaming source `61de1a79401fde9d669c77e6f224a1919175e8a5`; frontend streaming `a22f9954f30f77e4aaedfe0aff18d3483ceb0057`; SSE newline parser correction `624960d18a8afdf607bcf5cd5b815ceab099f73e`.
+- Supabase Edge Function `ai-assistant` deployed and read back ACTIVE at version 57 with JWT verification enabled.
+- Pending: authenticated Android test of microphone permission and spoken turn-taking; send/stream test against the live Gemini provider; create/open a new chat and verify persistence after refresh/logout-login; confirm latest Cloudflare Pages deployment. The combined GitHub status for the latest frontend commit reports Vercel build-rate-limit failure; this is not proof that Cloudflare Pages deployed the new frontend. Do not mark the frontend live until Cloudflare's deployed release is confirmed.
