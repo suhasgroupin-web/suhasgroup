@@ -115,11 +115,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 <script>
 (function(){
-var sb=window.sb,activeId=null,user=null,photoData='',segmentation=null,processing=false;
+var sb=window.sb,activeId=null,user=null,photoData='',signatureData='',segmentation=null,processing=false;
 var keys=['title','name','role','company','phone','email','location','linkedin','competencies','languages','training','technical','personal','address','reference','summary','experience','achievements','expertise','employment','buyers','education','declaration','signature','skills'];
 function el(id){return document.getElementById(id)}function val(k){var n=el('cv-'+k);return n?n.value.trim():''}
 function say(message,ok){var s=el('cv-status');s.textContent=message;s.style.display='block';s.style.background=ok?'#e7f6ec':'#fdecea';s.style.color=ok?'#17643b':'#a33220'}
-function data(){var x={};keys.forEach(function(k){x[k]=val(k)});x.photo=photoData;return x}
+function syncStructured(){var parts=['village','post','district','division','country'].map(function(k){var n=el('addr-'+k);return n?n.value.trim():''}).filter(Boolean);el('cv-address').value=parts.join(', ');function rows(id){return Array.from(el(id).querySelectorAll('.cv-repeat-row')).map(function(row){return Array.from(row.querySelectorAll('input')).map(function(n){return n.value.trim()}).filter(Boolean).join(' — ')}).filter(Boolean).join('\n')}el('cv-education').value=rows('cv-education-rows');el('cv-reference').value=rows('cv-reference-rows')}
+function data(){syncStructured();var x={};keys.forEach(function(k){x[k]=val(k)});x.photo=photoData;x.signatureImage=signatureData;return x}
 function setText(id,value,fallback){var n=el(id);if(n)n.textContent=value||fallback||''}
 function list(id,value,fallback){var box=el(id);box.innerHTML='';var lines=(value||'').split(/\n|•/).map(function(s){return s.trim().replace(/^[-*]\s*/, '')}).filter(Boolean);if(!lines.length)lines=[fallback];lines.forEach(function(s){var li=document.createElement('li');li.textContent=s;box.appendChild(li)})}
 function showPhoto(){var thumb=el('photo-thumb'),preview=el('p-photo');thumb.innerHTML='';preview.innerHTML='';if(photoData){var a=new Image();a.src=photoData;a.alt='CV photo';thumb.appendChild(a);var b=new Image();b.src=photoData;b.alt='CV photo';preview.appendChild(b)}else{thumb.textContent='CV Photo';preview.textContent='PHOTO'}}
