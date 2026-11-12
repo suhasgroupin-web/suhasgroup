@@ -71,3 +71,26 @@ html,body{width:100%!important;max-width:100%!important;min-width:0!important;he
  .story-contact img{width:72px!important;height:72px!important}
  .story-contact:after{top:54px!important}
 }
+
+/* Corrective pass: ensure the outer shell owns the viewport and avoid nested duplicate filters. */
+html,body{background:#fff!important;color:#050505!important}
+.messenger-app{height:100dvh!important;min-height:0!important;overflow:hidden!important}
+.messenger-frame{flex:1 1 0!important;min-height:0!important;height:0!important;overflow:hidden!important}
+.messenger-bottom{position:relative!important;z-index:5!important;flex:0 0 calc(66px + env(safe-area-inset-bottom))!important;height:calc(66px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom)!important}
+#messages{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+#messages .social-grid{display:flex!important;flex:1 1 0!important;min-height:0!important;overflow:hidden!important}
+#messages .social-grid>div:first-child{display:flex!important;flex:1 1 0!important;flex-direction:column!important;min-height:0!important;overflow:hidden!important}
+#messages .message-start{flex:0 0 auto!important}
+#message-member-list{display:none!important}
+#threads{display:flex!important;flex:1 1 0!important;flex-direction:column!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important}
+#messages .message-chat-panel{position:absolute!important;inset:0!important;display:none;flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;background:#fff!important}
+#messages .msg-list{flex:1 1 0!important;height:auto!important;min-height:0!important;overflow-y:auto!important}
+@media(max-width:600px){
+ .messenger-head{flex-basis:62px!important;height:62px!important}
+ .messenger-search-wrap{flex-basis:66px!important;height:66px!important}
+ .messenger-stories{flex-basis:132px!important;height:132px!important}
+ .story-avatar{width:88px!important;height:88px!important}
+ .story-contact img{width:82px!important;height:82px!important}
+ .story-contact:after{top:63px!important}
+ .messenger-shortcuts{flex-basis:54px!important;height:54px!important}
+}
