@@ -225,10 +225,10 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
         const model = models[modelIndex];
         const attempts = 1;
         for (let attempt = 0; attempt < attempts; attempt++) {
-          const modelEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
+          const modelEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":streamGenerateContent?alt=sse";
           try {
-            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(7000) });
-            const candidateData = await candidate.json().catch(() => ({}));
+            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(12000) });
+            const candidateData = candidate.ok ? {} : await candidate.json().catch(() => ({}));
             response = candidate;
             data = candidateData;
             activeModel = model;
@@ -253,6 +253,10 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
     }
     if (!response) {
       return json({ error: networkFailure ? "AI connection is temporarily unavailable. Please try again shortly." : "AI provider did not return a response." }, 502);
+    }
+    if (AI_PROVIDER === "gemini" && response.ok && response.body && response.headers.get("content-type")?.includes("text/event-stream")) {
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: activeModel, status: "stream_started", usage_data: { transport: "server_sent_events" } });
+      return new Response(response.body, { status: 200, headers: { ...cors, "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no" } });
     }
     if (!response.ok) {
       const providerMessage = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
