@@ -30,7 +30,7 @@ The Facebook links above were supplied by the owner for publication. SUHAS AI ma
 - **SUHAS GROUP logo:** `assets/logo.png` — public URL: https://suhasgroup.pages.dev/assets/logo.png
 - **Published owner portrait:** `assets/owner.jpg` — public URL: https://suhasgroup.pages.dev/assets/owner.jpg
 
-The website already references these two image assets. Additional owner photos uploaded in the current conversation are not yet committed as separate repository image files; do not claim that every uploaded photo has been stored until those binary assets are added.
+The website already references the published owner portrait and logo above. The owner has also explicitly authorized SUHAS AI to use the owner photos supplied for this project as visual references. The currently saved ChatGPT reference-image library contains the SUHAS GROUP logo only; the additional owner photos are not yet registered as persistent reference-image assets or committed as separate repository image files. Do not claim those additional binary photos are stored. Until the owner photos are added to the app's approved image storage, the original published portrait above is the verified image to share.
 
 ## SUHAS product navigation
 - SUHAS MAX: https://suhasgroup.pages.dev/app.html
