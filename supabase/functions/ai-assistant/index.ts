@@ -70,11 +70,11 @@ function localSmallTalk(prompt: string) {
 
 
 function localCareerIntent(prompt: string) {
-  const p = prompt.trim().toLowerCase().replace(/[!?.,،]+$/g, "").replace(/\\s+/g, " ");
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،]+$/g, "").replace(/\s+/g, " ");
   const lang = detectReplyLanguage(prompt);
   const bangla = lang.startsWith("Bangla in");
   const banglish = lang.startsWith("Banglish");
-  const asksPortalLink = /\\b(job portal link|job portals link|career portal link|suhas career.*linkedin.*link|linkedin.*company.*jobs.*link)\\b/.test(p)
+  const asksPortalLink = /\b(job portal link|job portals link|career portal link|suhas career.*linkedin.*link|linkedin.*company.*jobs.*link)\b/.test(p)
     || /(জব পোর্টাল.*লিংক|চাকরির পোর্টাল.*লিংক|ক্যারিয়ার পোর্টাল.*লিংক|লিংকডইন.*কোম্পানি.*লিংক)/.test(p);
   if (asksPortalLink) {
     const url = "https://www.linkedin.com/company/suhasgroup/jobs/";
@@ -82,7 +82,7 @@ function localCareerIntent(prompt: string) {
     if (banglish) return "SUHAS GROUP-er LinkedIn Jobs page: " + url;
     return "Here is the SUHAS GROUP LinkedIn Jobs page: " + url;
   }
-  const linkedinIntent = /\\blinkedin\\b/.test(p) && /\\b(job|jobs|search|find|apply|career)\\b/.test(p)
+  const linkedinIntent = /\blinkedin\b/.test(p) && /\b(job|jobs|search|find|apply|career)\b/.test(p)
     || /লিংকডইন/.test(p) && /(চাকরি|জব|খুঁজ|আবেদন)/.test(p);
   if (linkedinIntent) {
     if (bangla) return "LinkedIn-এ চাকরি খুঁজতে পারেন। কোন ধরনের কাজ বা কোন সেক্টরে চাকরি চান?";
