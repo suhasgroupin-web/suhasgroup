@@ -26,6 +26,7 @@
 <div class="messenger-brand">messenger</div>
 <div class="messenger-head-actions">
 <button type="button" id="messenger-compose" aria-label="New message" title="New message">✎</button>
+<button type="button" id="messenger-more" aria-label="More options" title="More options">⋮</button>
 
 <button type="button" id="messenger-back" aria-label="Open SUHAS-MAX home" title="Open SUHAS-MAX home"><img src="assets/logo.png" alt="SUHAS GROUP logo"></button>
 </div>
@@ -190,6 +191,7 @@
 
  const pop=document.getElementById('messenger-popover');
  document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=true;openMessengerMenu();});
+ document.getElementById('messenger-more')?.addEventListener('click',()=>{pop.hidden=!pop.hidden;});
  document.getElementById('messenger-settings')?.addEventListener('click',()=>{pop.hidden=true;});
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
  document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
@@ -197,7 +199,17 @@
  const menuScreen=document.getElementById('messenger-menu-screen');
  function openMessengerMenu(){
   if(!menuScreen)return;
-  try{const d=frame.contentDocument;const avatar=d?.querySelector('#max-menu-avatar, #home-composer-avatar, #messages img');const name=d?.querySelector('#max-menu-name, #profile-name, .profile-name');const img=document.getElementById('messenger-menu-avatar');if(avatar?.src){img.src=avatar.src;img.hidden=false;}else img.hidden=true;if(name?.textContent?.trim())document.getElementById('messenger-menu-name').textContent=name.textContent.trim();}catch(e){}
+  try{
+   const d=frame.contentDocument;
+   const avatar=d?.querySelector('#max-menu-avatar') || d?.querySelector('#home-composer-avatar img') || d?.querySelector('#profile-avatar') || d?.querySelector('.profile-viewer-avatar');
+   const name=d?.querySelector('#max-menu-name') || d?.querySelector('#profile-name') || d?.querySelector('.profile-name');
+   const img=document.getElementById('messenger-menu-avatar');
+   if(avatar?.currentSrc || avatar?.src){img.src=avatar.currentSrc||avatar.src;img.hidden=false;}
+   else {img.removeAttribute('src');img.hidden=true;}
+   const label=name?.textContent?.trim();
+   if(label)document.getElementById('messenger-menu-name').textContent=label;
+   document.getElementById('messenger-menu-handle').textContent='View your SUHAS-MAX profile';
+  }catch(e){}
   menuScreen.hidden=false;document.body.classList.add('messenger-menu-open');
  }
  function closeMessengerMenu(){menuScreen.hidden=true;document.body.classList.remove('messenger-menu-open');}
@@ -206,8 +218,8 @@
   const action=b.dataset.menuAction;const map={communities:'groups',friends:'requests',requests:'requests',marketplace:'marketplace',reels:'reels',saved:'saved',following:'following',gaming:'gaming'};
   if(action==='settings'){closeMessengerMenu();settingsPanel.hidden=false;return;}
   if(action==='profile'){closeMessengerMenu();location.href='profile.html';return;}
-  if(action==='support'){closeMessengerMenu();location.href='contact.html';return;}
-  if(action==='max'){closeMessengerMenu();location.href='social.html?tab=feed';return;}
+  if(action==='support'){closeMessengerMenu();activateChildTab('settings');return;}
+  
   if(action==='archive'){closeMessengerMenu();alert('Archive is not available yet. Your existing conversations have not been changed or deleted.');return;}
   if(map[action]){closeMessengerMenu();if(!activateChildTab(map[action])){const d=frame.contentDocument;const tab=d?.querySelector('[data-tab="'+map[action]+'"]');if(tab)tab.click();}return;}
  }));
@@ -222,7 +234,7 @@
  document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{if(activateChildTab(b.dataset.dest))setActiveBottom(b);}));
  document.getElementById('messenger-menu')?.addEventListener('click',()=>{setActiveBottom(document.getElementById('messenger-menu'));pop.hidden=true;openMessengerMenu();});
 
- settingsPanel.querySelectorAll('[data-mnav]').forEach(b=>b.addEventListener('click',()=>{const d=frame.contentDocument;const key=b.dataset.mnav;settingsPanel.hidden=true;if(key==='requests'){const n=d?.querySelector('[data-tab="requests"]');if(n)n.click();else location.href='social.html?tab=requests';}else if(key==='account'){location.href='profile.html';}else if(key==='privacy'||key==='active'){const n=d?.querySelector('[data-tab="settings"]');if(n)n.click();else alert('Open SUHAS-MAX Settings to manage account privacy and presence.');}else if(key==='contacts'){if('contacts'in navigator&&navigator.contacts?.select){navigator.contacts.select(['name','tel'],{multiple:true}).catch(()=>{});}else alert('Contact picker is not supported by this browser.');}else if(key==='media'){alert('Photos and media permissions are managed by your device and browser.');}else if(key==='story'){document.getElementById('messenger-create-story').click();}else if(key==='report'||key==='help'||key==='legal'){location.href='contact.html';}}));
+ settingsPanel.querySelectorAll('[data-mnav]').forEach(b=>b.addEventListener('click',()=>{const d=frame.contentDocument;const key=b.dataset.mnav;settingsPanel.hidden=true;if(key==='requests'){const n=d?.querySelector('[data-tab="requests"]');if(n)n.click();else location.href='social.html?tab=requests';}else if(key==='account'){location.href='profile.html';}else if(key==='privacy'||key==='active'){const n=d?.querySelector('[data-tab="settings"]');if(n)n.click();else alert('Open SUHAS-MAX Settings to manage account privacy and presence.');}else if(key==='contacts'){if('contacts'in navigator&&navigator.contacts?.select){navigator.contacts.select(['name','tel'],{multiple:true}).catch(()=>{});}else alert('Contact picker is not supported by this browser.');}else if(key==='media'){alert('Photos and media permissions are managed by your device and browser.');}else if(key==='story'){document.getElementById('messenger-create-story').click();}else if(key==='report'||key==='help'||key==='legal'){const n=d?.querySelector('[data-tab="settings"]');if(n)n.click();else alert('Support options are not available in this session.');}}));
  document.getElementById('messenger-notice').addEventListener('click',async()=>{if(!('Notification'in window)){alert('This browser does not support notifications.');return;}const permission=await Notification.requestPermission();document.getElementById('messenger-notice').textContent=permission==='granted'?'Notifications are on.':'Notifications are still off.';});
  document.getElementById('messenger-notice').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.currentTarget.click();}});
  pop.querySelectorAll('[data-setting]').forEach(b=>b.addEventListener('click',()=>{const action=b.dataset.setting;pop.hidden=true;if(action==='home'){location.href='social.html?tab=feed';return;}if(action==='notifications'){document.getElementById('messenger-notice').click();return;}if(action==='sound'){alert('Sound and alert preferences will be available here.');return;}if(action==='privacy'){const d=frame.contentDocument;d?.querySelector('[data-tab="settings"]')?.click();return;}if(action==='account'){location.href='profile.html';}}));
