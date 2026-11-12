@@ -1093,3 +1093,16 @@ Date: 2026-11-10
 - Source files were read back and verified on GitHub main. Latest commit: `c597332bea7615eef9782aef56c3f4ee6df3f9a0`.
 - Deployment is NOT confirmed. Latest combined commit status reports Vercel failure due to build-rate-limit. No Cloudflare Pages deployment tool is connected in this session, and direct live-site opens for the new directory/sitemap were inaccessible. Do not claim these SEO changes are live until Cloudflare Pages production deployment is verified.
 - Google Search Console/Bing Webmaster sitemap submission and URL indexing requests remain pending; no search engine can guarantee immediate indexing or first-place ranking. Google documents that sitemaps are hints and indexing is not guaranteed.
+
+
+## 2026-11-13 — SUHAS AI reusable-module boundary (in progress)
+- User requirement: the AI automation/chat button currently inside Job must retain the exact name **SUHAS AI** and all existing behavior. SUHAS AI is a special reusable independent module that may be exposed from multiple locations, including the future SUHAS-MAX four-button menu. Every placement must behave identically.
+- Confirmed current canonical frontend: `ai.html` (39,344 characters; source SHA `6d9d1a899a3732a9935c1668aa57568d4e4d564a`). Existing placements found: `jobs.html` → `ai.html?mode=jobs`; `app.html` → `ai.html`.
+- Confirmed protected dependencies/behaviors in current implementation: Supabase auth/config, `ai-assistant` Edge Function, streaming responses, per-user `suhas_ai_conversations` / `suhas_ai_messages` history, file/image attachments and document extraction, microphone recording, browser speech recognition/synthesis, live voice turn-taking, and current career/job guidance. Existing backend and database behavior must remain unchanged during module-boundary work.
+- Created `modules/suhas-ai/README.md` defining the canonical single-source reuse contract and completion gates. Commit: `3b0e3c13dee7317ddfa363e03ec3b9a3d2d9f6d9`.
+- Working branch: `fix/suhas-group-modular-buttons-20261113` (single unified project branch; no separate Git branch for each button). The per-button branches created earlier remain untouched and are not used.
+- In progress: inspect full entry-point/dependency graph and decide the safest canonical module extraction. Keep `/ai.html` backward-compatible. Do not duplicate/fork AI code for SUHAS-MAX; its future tile should open the same canonical runtime.
+- Files changed in this increment: `modules/suhas-ai/README.md`; this checkpoint update.
+- Tests: GitHub read-back verified the existing `ai.html` SHA is identical on `main` and the working branch; source inspection confirmed the two current entry points above. No code/runtime changes, syntax tests, authenticated browser tests, or deployment performed in this increment.
+- Deployment: not deployed. Live behavior of this increment is not applicable because it only adds module documentation.
+- Next exact step: inspect the AI page's complete dependency and route contract, then implement a minimal canonical module entry without changing its UI/API behavior; run static checks and authenticated acceptance tests before adding the SUHAS-MAX tile.
