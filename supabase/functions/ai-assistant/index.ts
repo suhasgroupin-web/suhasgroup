@@ -77,6 +77,26 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     const requestType = cleanText(body.request_type, 80) || "career_assistant";
     if (!prompt) return json({ error: "Please enter a message." }, 400);
 
+    const rawAttachments = Array.isArray(body.attachments) ? body.attachments.slice(0, 4) : [];
+    const attachmentParts: Array<{ inlineData: { mimeType: string; data: string } }> = [];
+    let totalAttachmentBytes = 0;
+    for (const item of rawAttachments as any[]) {
+      const dataUrl = cleanText(item?.dataUrl, 9_000_000);
+      const match = dataUrl.match(/^data:(image\/(?:jpeg|png|webp)|audio\/(?:webm|ogg|mp4|wav|mpeg));base64,([A-Za-z0-9+/=]+)$/i);
+      if (!match) return json({ error: "Unsupported attachment. Please use JPG, PNG, WEBP images or a supported audio recording." }, 415);
+      const mimeType = match[1].toLowerCase();
+      const encoded = match[2];
+      const byteLength = Math.floor(encoded.length * 0.75);
+      totalAttachmentBytes += byteLength;
+      if (byteLength > 6 * 1024 * 1024 || totalAttachmentBytes > 8 * 1024 * 1024) {
+        return json({ error: "Attachments are too large. Keep each file under 6 MB and the total under 8 MB." }, 413);
+      }
+      attachmentParts.push({ inlineData: { mimeType, data: encoded } });
+    }
+    if (attachmentParts.length && AI_PROVIDER !== "gemini") {
+      return json({ error: "Photo and voice attachments currently require the configured Gemini AI provider." }, 415);
+    }
+
     // Answer short greetings locally in the same language/script as the user.
     const greeting = localGreeting(prompt);
     if (greeting) {
@@ -153,7 +173,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
         systemInstruction: { parts: [{ text: systemWithJobs }] },
         contents: [
           ...history.map((m: any) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
-          { role: "user", parts: [{ text: prompt }] },
+          { role: "user", parts: [{ text: prompt }, ...attachmentParts] },
         ],
         generationConfig: { maxOutputTokens: 800, temperature: 0.5 },
       };
