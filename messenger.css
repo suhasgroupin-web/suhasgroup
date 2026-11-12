@@ -120,3 +120,24 @@ html,body{width:100%!important;max-width:100%!important;min-width:0!important;ov
 .messenger-app{width:100vw!important;max-width:100vw!important;min-width:0!important;margin:0!important;overflow:hidden!important}
 .messenger-app>*{min-width:0!important;max-width:100%!important}
 .messenger-frame{display:block!important;align-self:stretch!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:1 1 0!important}
+
+/* Unified white Messenger screen: override obsolete dark-shell declarations. */
+:root{color-scheme:light!important}
+html,body,.messenger-app{width:100%!important;min-width:0!important;max-width:100%!important;background:#fff!important;color:#050505!important}
+html,body{height:100%!important;margin:0!important;overflow:hidden!important}
+.messenger-app{width:100vw!important;max-width:100vw!important;height:100dvh!important;min-height:0!important;margin:0!important;overflow:hidden!important;background:#fff!important}
+.messenger-head,.messenger-search-wrap,.messenger-stories,.messenger-shortcuts,.messenger-bottom{background:#fff!important;color:#050505!important}
+.messenger-brand{color:#0866ff!important}
+.messenger-notice{display:none!important}
+.messenger-search-wrap input{background:#f0f2f5!important;color:#050505!important}
+.messenger-search-wrap input::placeholder{color:#65676b!important}
+.story-card,.story-contact{background:#fff!important;color:#050505!important}
+.story-avatar{background:#e4e6eb!important;color:#050505!important}
+.story-create .story-avatar:after{background:#e4e6eb!important;color:#050505!important;border-color:#fff!important}
+.story-contact:after{border-color:#fff!important}
+.messenger-shortcuts .shortcut{background:#e4e6eb!important;color:#65676b!important}
+.messenger-shortcuts .shortcut.active{background:#e7f3ff!important;color:#0866ff!important}
+.messenger-frame{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:1 1 0!important;align-self:stretch!important;background:#fff!important;border:0!important}
+.messenger-bottom{border-top:1px solid #e4e6eb!important}
+.messenger-bottom button{color:#65676b!important}
+.messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
