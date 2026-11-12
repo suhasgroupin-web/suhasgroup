@@ -69,7 +69,7 @@ function localSmallTalk(prompt: string) {
 
 
 
-function localCareerIntent(prompt: string) {
+function localCareerIntent(prompt: string, priorHistory: any[] = []) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،]+$/g, "").replace(/\s+/g, " ");
   const lang = detectReplyLanguage(prompt);
   const bangla = lang.startsWith("Bangla in");
@@ -78,7 +78,7 @@ function localCareerIntent(prompt: string) {
   const explicitLink = /\b(link|url|website|page|profile|post)\b/.test(p) && /\b(job|jobs|career|careers|linkedin|recruit|recruitment|suhas)\b/.test(p)
     || /(লিংক|লিংকটা|লিংকটি|ওয়েবসাইট|ওয়েবসাইট|পেজটা|পোস্টটা).*(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস)/.test(p)
     || /(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস).*(লিংক|ওয়েবসাইট|ওয়েবসাইট|পেজ|পোস্ট)/.test(p);
-  const acceptsOffer = /^(yes|yes please|sure|okay|ok|please|send it|share it|give me the link|show me|হ্যাঁ|জি|দাও|দিন|লিংক দাও|পাঠাও|শেয়ার করো|হ্যাঁ দাও|হ্যাঁ দিন|হ্যাঁ পাঠাও)$/.test(p);
+  const lastAssistant = [...priorHistory].reverse().find((m: any) => m?.role === "assistant")?.content || "";\n  const priorOfferedCareerLink = /SUHAS Career PLC|recruiting page|recruiting-page|relevant job post|লিংক শেয়ার|লিংক বা প্রাসঙ্গিক পোস্ট/i.test(String(lastAssistant));\n  const acceptsOffer = priorOfferedCareerLink && /^(yes|yes please|sure|okay|ok|please|send it|share it|give me the link|show me|হ্যাঁ|জি|দাও|দিন|লিংক দাও|পাঠাও|শেয়ার করো|হ্যাঁ দাও|হ্যাঁ দিন|হ্যাঁ পাঠাও)$/.test(p);
   if (explicitLink || acceptsOffer) {
     if (bangla) return "এখানে SUHAS GROUP-এর LinkedIn Jobs পেজটি দেওয়া হলো: " + link;
     if (banglish) return "Ekhane SUHAS GROUP-er LinkedIn Jobs page: " + link;
@@ -168,7 +168,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
       return json({ output: smallTalk, provider: "local", model: "instant-smalltalk" });
     }
-    const careerReply = localCareerIntent(prompt);
+    const careerReply = localCareerIntent(prompt, Array.isArray(body.history) ? body.history.slice(-6) : []);
     if (careerReply) {
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-career-clarification", status: "success", usage_data: { source: "short_job_navigation_reply" } });
       return json({ output: careerReply, provider: "local", model: "local-career-clarification" });
