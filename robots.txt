@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /profile.html
+Disallow: /member-tools.html
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /reset.html
+Disallow: /edit-suhas.html
+
+Sitemap: https://suhasgroup.pages.dev/sitemap.xml

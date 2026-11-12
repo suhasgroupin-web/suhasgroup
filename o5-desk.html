@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07172e">
+<title>O5'Intl | O5 Desk</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/logo.png">
+<style>
+:root{--navy:#07172e;--gold:#efc66a;--muted:#b8c8df}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 8%,#244c83 0,transparent 34%),linear-gradient(155deg,#07172e 0%,#0b2a55 55%,#07172e 100%);color:#f8fbff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+.site-header{background:#f8fbff;color:#10213d;position:relative;z-index:2;border-bottom:1px solid #dce5f1;box-shadow:0 5px 18px #06162b12}.o5-topbar{max-width:1180px;margin:auto;padding:10px 18px 12px;display:block}.o5-brand-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:10px;border-bottom:1px solid #e7edf5}.o5-brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#10213d;min-width:0}.o5-brand img{width:49px;height:49px;object-fit:contain;background:#fff;border-radius:50%;padding:2px;box-shadow:0 2px 9px #10213d18}.o5-brand strong{display:block;font-size:20px;font-weight:950;letter-spacing:-.035em;white-space:nowrap}.o5-brand small{display:block;font-size:9px;letter-spacing:.17em;color:#71809a;font-weight:800;margin-top:2px}.o5-brand-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:0 0 auto}.o5-mini-title{font-size:10px;font-weight:950;letter-spacing:.15em;color:#b17b19;white-space:nowrap}.member-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px}.member-actions .btn{white-space:nowrap}.member-row{display:flex;align-items:center;gap:13px;padding:12px 2px 0;min-width:0;text-decoration:none;color:inherit}.member-avatar{width:68px;height:68px;flex:0 0 68px;object-fit:cover;border-radius:50%;border:3px solid #fff;box-shadow:0 3px 13px #0a2b5940;background:#e7edf6}.member-copy{min-width:0;overflow:hidden;flex:1}.member-name{font-size:clamp(20px,3vw,27px);font-weight:950;line-height:1.08;letter-spacing:-.035em;color:#12366e;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.member-position{font-size:11px;font-weight:750;color:#53647d;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.member-meta-window{overflow:hidden;white-space:nowrap;margin-top:7px;max-width:100%;mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}.member-meta-track{display:inline-flex;align-items:center;gap:18px;width:max-content;animation:memberTicker 20s linear infinite}.member-company{font-size:12px;font-weight:900;color:#b47a12}.member-university{font-size:12px;font-weight:900;color:#167a9f}.member-separator{color:#8b9ab0;font-weight:800}.member-bio{font-size:10px;line-height:1.35;color:#65748b;margin-top:3px;max-width:700px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@keyframes memberTicker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.o5-shell{max-width:980px;margin:auto;padding:30px 18px 70px}
+.o5-hero{position:relative;overflow:hidden;padding:30px 24px 28px;border:1px solid #ffffff28;border-radius:28px;background:linear-gradient(135deg,#ffffff18,#ffffff08);box-shadow:inset 0 1px #ffffff38,0 24px 50px #020b1c55}
+.o5-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,#07172eaa,transparent 75%);pointer-events:none}
+.ny-skyline{position:absolute;inset:auto 0 0;height:120px;opacity:.22;display:flex;align-items:end;gap:7px;padding:0 20px;pointer-events:none}
+.ny-skyline i{display:block;flex:1;min-width:8px;background:linear-gradient(#9fc7f7,#315889);border:1px solid #b9d7ff55;border-bottom:0;border-radius:4px 4px 0 0}
+.ny-skyline i:nth-child(1){height:38%}.ny-skyline i:nth-child(2){height:62%}.ny-skyline i:nth-child(3){height:48%}.ny-skyline i:nth-child(4){height:82%}.ny-skyline i:nth-child(5){height:57%}.ny-skyline i:nth-child(6){height:100%}.ny-skyline i:nth-child(7){height:68%}.ny-skyline i:nth-child(8){height:45%}.ny-skyline i:nth-child(9){height:73%}.ny-skyline i:nth-child(10){height:52%}.ny-skyline i:nth-child(11){height:36%}
+.hero-content{position:relative;z-index:1}
+.eyebrow{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:.24em;text-transform:uppercase}
+.o5-hero h1{font-size:clamp(34px,7vw,54px);letter-spacing:-.045em;margin:10px 0 5px;line-height:1}
+.o5-hero h1 span{color:#f1c96b}
+.o5-hero p{margin:12px 0 0;color:#d2e0f4;max-width:540px;line-height:1.6;font-size:14px}
+.ny-mark{position:absolute;right:24px;top:22px;color:#fff;opacity:.10;font-size:clamp(50px,13vw,110px);font-weight:950;letter-spacing:-.08em;line-height:.8}
+.section-label{display:flex;align-items:center;gap:12px;margin:28px 2px 15px;color:#eaf2ff;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.section-label:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,#ffffff55,transparent)}
+.apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.app-card{--c1:#f0c66b;--c2:#bd8128;--shadow:#775019;position:relative;isolation:isolate;display:flex;align-items:center;gap:15px;min-height:112px;padding:17px 18px;border:1px solid #ffffff70;border-radius:19px;background:linear-gradient(145deg,var(--c1),var(--c2));color:#13223c;text-decoration:none;box-shadow:inset 0 2px 1px #ffffffb8,inset 0 -3px 1px #0000001a,0 6px 0 var(--shadow),0 13px 22px #020b1c55;transition:transform .16s,box-shadow .16s;cursor:pointer;text-align:left}
+.app-card:before{content:"";position:absolute;inset:1px;border-radius:17px;background:linear-gradient(115deg,#ffffff55,transparent 48%);z-index:-1;pointer-events:none}
+.app-card:hover{transform:translateY(-3px);box-shadow:inset 0 2px 1px #ffffffc8,inset 0 -3px 1px #0000001a,0 8px 0 var(--shadow),0 18px 27px #020b1c66}
+.app-card:active{transform:translateY(4px);box-shadow:inset 0 2px 1px #ffffff88,0 2px 0 var(--shadow),0 5px 10px #020b1c44}
+.app-card:nth-child(2){--c1:#b9d8ff;--c2:#5486c7;--shadow:#294d7e}
+.app-card:nth-child(3){--c1:#b5eadb;--c2:#4b9c88;--shadow:#286254}
+.app-card:nth-child(4){--c1:#d9c7ff;--c2:#8666c5;--shadow:#4e397c}
+.app-card:nth-child(5){--c1:#ffd2b5;--c2:#d77f52;--shadow:#874a2d}
+.app-card:nth-child(6){--c1:#c7d6f5;--c2:#687eae;--shadow:#3b4c75}
+.app-card:nth-child(7){--c1:#b7e2f5;--c2:#4b91b7;--shadow:#2c5d79}
+.app-card:nth-child(8){--c1:#f2d6a0;--c2:#c18d43;--shadow:#785522}
+.app-ico{width:55px;height:55px;flex:0 0 55px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#ffffffb8,#ffffff30);border:1px solid #ffffffa8;box-shadow:inset 0 2px 3px #fff9,0 4px 7px #13213b30;font-size:27px}
+.app-copy{min-width:0;flex:1}
+.app-copy strong{display:block;font-size:15px;line-height:1.25;font-weight:850}
+.app-copy small{display:block;margin-top:5px;font-size:11px;line-height:1.35;color:#172d4a;opacity:.82}
+.arrow{font-size:22px;font-weight:900;opacity:.65}
+.footer-note{text-align:center;margin:26px 0 0;color:#a9bdd8;font-size:11px;letter-spacing:.1em}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);padding:12px 17px;border:1px solid #ffffff30;border-radius:12px;background:#07172e;color:#fff;box-shadow:0 12px 28px #0007;opacity:0;pointer-events:none;transition:.2s;z-index:20;font-size:13px;text-align:center;width:max-content;max-width:calc(100% - 30px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:620px){.o5-topbar{padding:9px 10px 10px}.o5-brand img{width:43px;height:43px}.o5-brand strong{font-size:17px}.o5-brand small{font-size:8px}.o5-brand-row{gap:8px}.o5-mini-title{font-size:9px}.member-actions{gap:5px}.member-actions .btn{padding:8px 9px!important;font-size:10px!important;min-height:34px!important;border-radius:10px!important}.member-row{gap:9px;padding-top:10px}.member-avatar{width:58px;height:58px;flex-basis:58px;border-width:3px}.member-name{font-size:19px}.member-position{font-size:10px}.member-company,.member-university{font-size:10px}.member-meta-track{gap:13px}.member-bio{font-size:9px}}@media(max-width:390px){.o5-brand strong{font-size:15px}.o5-brand-right{gap:5px}.o5-mini-title{font-size:8px}.member-actions .btn{padding:7px 6px!important;font-size:9px!important}.o5-brand-row{align-items:flex-start}.member-avatar{width:54px;height:54px;flex-basis:54px}.member-name{font-size:17px}}@media(max-width:540px){.o5-shell{padding:17px 12px 55px}.o5-hero{padding:25px 18px 26px;border-radius:22px}.apps{gap:12px}.app-card{min-height:120px;padding:13px 11px;gap:10px;flex-direction:column;align-items:flex-start;justify-content:center;border-radius:16px}.app-ico{width:43px;height:43px;flex-basis:43px;border-radius:13px;font-size:22px}.app-copy strong{font-size:13px}.app-copy small{font-size:10px}.arrow{position:absolute;right:12px;top:12px;font-size:17px}.ny-mark{right:14px;top:17px}}
+@media(max-width:350px){.app-card{padding:11px 9px}.app-copy strong{font-size:12px}}
+
+/* premium polish */
+.o5-hero{border-color:#efc66b55;background:linear-gradient(135deg,#ffffff1f,#ffffff08)}
+.o5-hero:after{content:"";position:absolute;left:24px;right:24px;top:0;height:2px;background:linear-gradient(90deg,transparent,#efc66b,transparent)}
+.section-label{color:#efc66b}
+.apps{gap:18px}
+.app-card{min-height:124px;border-radius:22px;padding:20px 22px}
+.app-copy strong{font-size:16px;letter-spacing:-.01em}
+.app-copy small{font-size:12px}
+.app-ico{width:60px;height:60px;flex-basis:60px;font-size:29px}
+@media(max-width:540px){.app-card{min-height:132px}}
+.member-header-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:12px}.member-header-bottom .member-row{flex:1;min-width:0;padding:0}.member-header-bottom .member-actions{flex:0 0 auto;flex-direction:column;align-items:stretch;min-width:120px}.member-header-bottom .member-actions .btn{text-align:center;justify-content:center}@media(max-width:620px){.member-header-bottom{gap:8px;align-items:center}.member-header-bottom .member-actions{min-width:92px;gap:5px}.member-header-bottom .member-actions .btn{padding:7px 8px!important;font-size:10px!important;min-height:32px!important}.member-header-bottom .member-avatar{width:64px;height:64px;flex-basis:64px}.member-header-bottom .member-name{font-size:20px}.member-header-bottom .member-bio{white-space:normal;max-height:2.7em;overflow:hidden}} .app-ico.suhas-r-logo{overflow:hidden;padding:4px;background:#fff}.app-ico.suhas-r-logo img{width:100%;height:100%;object-fit:contain;border-radius:12px} </style>
+<script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script></head>
+<body>
+<header class="site-header"><div class="o5-topbar"><div class="o5-brand-row"><a class="o5-brand" href="app.html" aria-label="SUHAS GROUP Home"><img src="assets/logo.png" alt="SUHAS GROUP logo"><span><strong>SUHAS GROUP</strong><small>GLOBAL BUSINESS WORKSPACE</small></span></a><div class="o5-brand-right"><div class="o5-mini-title">O5 INTERNATIONAL</div></div></div><div class="member-header-bottom"><a class="member-row" href="profile.html" aria-label="Open my profile"><img id="member-avatar" class="member-avatar" src="assets/logo.png" alt="Profile photo"><div class="member-copy"><div id="member-name" class="member-name">My Profile</div><div id="member-position" class="member-position">O5 International Member</div><div class="member-meta-window"><div class="member-meta-track"><span id="member-company" class="member-company"></span><span class="member-separator">|</span><span id="member-university" class="member-university"></span><span class="member-separator">|</span><span id="member-company-copy" class="member-company" aria-hidden="true"></span><span class="member-separator" aria-hidden="true">|</span><span id="member-university-copy" class="member-university" aria-hidden="true"></span></div></div><div id="member-bio" class="member-bio"></div></div></a><div class="member-actions"><a class="btn btn-outline btn-sm" href="app.html" aria-label="Back to Main Menu">← Main Menu</a><a class="btn btn-gold btn-sm" href="o5-desk.html">O5 Main</a><a class="btn btn-primary btn-sm js-logout" href="#">Logout</a></div></div></div></header>
+<main class="o5-shell">
+<section class="o5-hero"><div class="ny-mark">O5<br>NY</div><div class="ny-skyline" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="hero-content"><div class="eyebrow">New York · Bangladesh</div><h1>O5 <span>International</span></h1><p>O5'Intl company workspace — procedures, work methods, inspection resources and team tools in one place.</p></div></section>
+<div class="section-label">O5'Intl Workspace</div>
+<section class="apps" aria-label="O5 International tools">
+
+<a class="app-card" href="related-apk.html"><span class="app-ico">📱</span><span class="app-copy"><strong>Related Apk</strong><small>All O5 apps in one place</small></span><span class="arrow">›</span></a>
+<a class="app-card" href="suhas-calculator.html"><span class="app-ico suhas-r-logo"><img src="assets/logo.png" alt="SUHAS R logo"></span><span class="app-copy"><strong>SUHAS Calculator</strong><small>Open SUHAS Calculator</small></span><span class="arrow">›</span></a>
+</section>
+<p class="footer-note">O5 INTERNATIONAL · NEW YORK</p>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="install-modal" style="display:none;position:fixed;inset:0;background:#020b1ccc;z-index:50;align-items:center;justify-content:center;padding:22px">
+ <div style="width:min(420px,100%);padding:25px;border-radius:22px;background:#fff;color:#10213d;box-shadow:0 20px 60px #0008">
+  <div style="font-size:30px">📲</div><h2 style="margin:8px 0">Install O5 Workspace</h2>
+  <p style="line-height:1.55;color:#53647d">Install the app on your phone for faster access to O5 tools. Your account remains a standard User; installation never grants Employee-admin or Admin permissions.</p>
+  <button id="install-confirm" class="btn btn-primary" style="width:100%">Install App</button>
+  <button id="install-later" class="btn btn-outline" style="width:100%;margin-top:9px">Maybe later</button>
+ </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/auth.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}</script>
+<script>
+(async function(){
+ const user=await window.requireAuth();
+ if(!user)return;
+ const email=(user.email||'').toLowerCase();
+ const roleCheck=await sb.rpc('has_suhas_role',{p_roles:['OWNER','ADMIN']});
+ const hasAdminAccess=!roleCheck.error && roleCheck.data===true;
+ const hasO5CompanyAccess=email.endsWith('@o5-intl.com');
+ if(!hasAdminAccess && !hasO5CompanyAccess){location.replace('app.html?notice=o5-access');return;}
+ const profile=await sb.from('suhas_member_profiles').select('full_name,company,position,university,bio,skills,profile_photo_url').eq('user_id',user.id).maybeSingle();
+ if(!profile.error && profile.data){const p=profile.data;const $=id=>document.getElementById(id);$('member-name').textContent=p.full_name||user.user_metadata?.full_name||'O5 Member';$('member-position').textContent=p.position||'O5 International Member';const company=p.company||'Company not added',university=p.university||'University not added';$('member-company').textContent=company;$('member-company-copy').textContent=company;$('member-university').textContent=university;$('member-university-copy').textContent=university;$('member-bio').textContent=p.bio||p.skills||'';if(p.profile_photo_url)$('member-avatar').src=p.profile_photo_url;}
+ const modal=document.getElementById('install-modal');
+ let promptEvent=null;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();promptEvent=e;if(new URLSearchParams(location.search).get('welcome')==='1')modal.style.display='flex';});
+ if(new URLSearchParams(location.search).get('welcome')==='1')setTimeout(function(){modal.style.display='flex';},900);
+ document.getElementById('install-confirm').addEventListener('click',async function(){
+   if(!promptEvent){alert('To install: open your browser menu (⋮) and choose Install app or Add to Home screen.');return;}
+   promptEvent.prompt();await promptEvent.userChoice;promptEvent=null;modal.style.display='none';
+ });
+ document.getElementById('install-later').addEventListener('click',function(){modal.style.display='none';});
+})();
+</script>
+<script id="suhas-page-state-restore-20261110">
+(function(){
+ const key='suhas-page-state:'+location.pathname+location.search;
+ const save=()=>{
+  try{
+   const openDetails=[...document.querySelectorAll('details[open]')].map((x,i)=>x.id||x.getAttribute('data-state-key')||String(i));
+   const openControls=[...document.querySelectorAll('[aria-expanded="true"]')].map(x=>({id:x.id||'',label:x.getAttribute('aria-label')||'',controls:x.getAttribute('aria-controls')||''}));
+   const openMenus=[...document.querySelectorAll('.post-menu.open,.dropdown-menu.open,[role="menu"]:not([hidden])')].map(x=>({id:x.id||'',key:x.getAttribute('data-post-menu')||''}));
+   sessionStorage.setItem(key,JSON.stringify({openDetails,openControls,openMenus,scroll:{x:window.scrollX,y:window.scrollY}}));
+  }catch(_){}
+ };
+ document.addEventListener('click',()=>setTimeout(save,0),true);
+ document.addEventListener('toggle',save,true);
+ window.addEventListener('pagehide',save);
+ window.addEventListener('DOMContentLoaded',()=>{
+  try{
+   const state=JSON.parse(sessionStorage.getItem(key)||'null');if(!state)return;
+   (state.openDetails||[]).forEach(id=>{const el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;});
+   (state.openControls||[]).forEach(x=>{
+    const el=(x.id&&document.getElementById(x.id))||(x.label&&[...document.querySelectorAll('[aria-label]')].find(y=>y.getAttribute('aria-label')===x.label));
+    if(el){el.setAttribute('aria-expanded','true');const target=x.controls&&document.getElementById(x.controls);if(target)target.hidden=false;}
+   });
+   (state.openMenus||[]).forEach(x=>{const el=(x.id&&document.getElementById(x.id))||(x.key&&document.querySelector('[data-post-menu="'+CSS.escape(x.key)+'"]'));if(el){el.hidden=false;el.classList.add('open');}});
+   if(state.scroll)setTimeout(()=>window.scrollTo(state.scroll.x,state.scroll.y),80);
+  }catch(_){}
+ });
+})();
+</script></body></html>

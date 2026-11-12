@@ -1,0 +1,20 @@
+/* SUHAS-MAX composer increment 1 — clear publish action and honest unavailable tools */
+.suhas-new-post-header .suhas-new-post-next{
+  min-width:76px;min-height:40px;padding:0 18px;border:0;border-radius:10px;
+  background:#0866ff;color:#fff;font:700 15px/1 Arial,Helvetica,sans-serif;
+  box-shadow:none;cursor:pointer;transition:background .15s ease,opacity .15s ease;
+}
+.suhas-new-post-header .suhas-new-post-next:not(:disabled):hover{background:#075bd8}
+.suhas-new-post-header .suhas-new-post-next:disabled{background:#e4e6eb;color:#8a8d91;opacity:1;cursor:not-allowed}
+.suhas-new-post-tools button:disabled,.suhas-new-post-media-tools button:disabled{
+  opacity:.48!important;filter:grayscale(.7);cursor:not-allowed!important;
+  box-shadow:none!important;transform:none!important;
+}
+.suhas-new-post-tools button:disabled::after,.suhas-new-post-media-tools button:disabled::after{
+  content:"Not connected";display:block;margin-top:3px;font-size:10px;font-weight:600;color:#65676b;
+}
+.suhas-new-post-tools button:focus-visible,.suhas-new-post-media-tools button:focus-visible,
+.suhas-new-post-header button:focus-visible{outline:3px solid #80b5ff;outline-offset:2px}
+@media(max-width:560px){
+ .suhas-new-post-header .suhas-new-post-next{min-width:72px;min-height:42px;border-radius:22px}
+}
