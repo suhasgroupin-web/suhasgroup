@@ -52,6 +52,27 @@
 .owner-job-tools{display:none;margin-top:12px;padding:11px;border:1px dashed #c9a34e;border-radius:12px;background:#fff9e9}
 .owner-job-tools a{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border-radius:9px;background:linear-gradient(145deg,#f9df9b,#dca83e);color:#263750;text-decoration:none;font-size:11px;font-weight:900;box-shadow:0 3px 0 #98702a}
 @media(max-width:430px){.career-action-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.career-action{padding:10px 8px}.career-action small{font-size:8px}.career-action strong{font-size:10px}.job-global-search-row{flex-direction:column}.job-global-search-row button{width:100%}}
+
+/* Mobile viewport lock: keep the career centre at the device width */
+@media(max-width:760px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  .job-top,.job-shell{width:100%;max-width:100%;min-width:0}
+  .job-top{padding-left:12px;padding-right:12px;flex-wrap:wrap}
+  .job-shell{padding-left:12px;padding-right:12px}
+  .job-search,.job-filters,.job-panel,.job-hero,.career-toolkit{min-width:0;max-width:100%}
+  .job-search input,.job-search select,.job-filters input,.job-filters select,.job-global-search-row input{font-size:16px!important}
+  .job-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .job-tab{min-width:0;padding:7px 4px;font-size:11px;white-space:normal}
+  .job-card,.job-card-main,.job-meta,.job-actions{min-width:0}
+  .job-title,.job-description{overflow-wrap:anywhere}
+  .career-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .career-action{min-width:0}
+}
+@media(max-width:380px){
+  .job-tabs{grid-template-columns:1fr}
+  .job-search,.job-filters{grid-template-columns:minmax(0,1fr)}
+  .job-search .job-field:first-child,.job-filters .job-field:first-child{grid-column:auto}
+}
 </style>
 <script>(function(){document.documentElement.classList.add('suhas-auth-pending');document.write('<style>html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>')})();</script>
 </head>
