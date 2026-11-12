@@ -1014,3 +1014,13 @@ Date: 2026-11-10
 - Added icon-only visual rules to the protected navigation stylesheet. The six buttons, labels, order, grid, fixed position, dimensions and tap destinations are unchanged.
 - Release metadata advanced to `2026.11.11.7`; service-worker cache advanced to `v107`.
 - Static source verification and signed-in Android rendering still require confirmation after deployment.
+
+
+## 2026-11-12 — CV Studio mobile-first responsive layout
+- User reported that the CV builder still rendered like a desktop page on Android and required manual resizing; requested mobile layout as the default with Desktop Mode available only from the top-right three-dot menu.
+- Updated `resume-builder.html`: simplified viewport meta to device-width/initial-scale, added a working top-right display-mode menu with Mobile Mode and Desktop Mode, and made Mobile Mode the default when no preference has been saved. The selected mode is stored locally for the page and restored on reload.
+- Mobile Mode now forces a single-column page flow, full-width form controls, stacked education/reference fields, and a single-column on-screen CV preview to fit the phone viewport without horizontal dragging. Existing A4 print CSS retains the professional two-column PDF layout. Desktop Mode restores the wide two-column editor and preview on explicit selection.
+- Existing CV save/records/edit/duplicate/delete, photo processing, signature processing, live preview, and PDF print handlers were not intentionally changed.
+- Code commits: `41cb419fb6f4c9ea4e18baeb2f00d48c20452247` (responsive mode implementation) and `d9eb6ec10fb28edbaf5ee1c9b6a7aa69094fedf5` (menu typography polish).
+- Static verification so far: fetched the exact current source before editing; verified the target viewport/header/CSS insertion points existed; saved the additive responsive-mode changes to the main branch. Browser/device rendering and live deployment verification have not yet been performed.
+- Pending: run a syntax check and inspect latest deployment/workflow state; then verify the live Android page in Mobile Mode and confirm Desktop Mode is available and selectable from the three-dot menu. Do not claim live behavior is verified until that test succeeds.
