@@ -1093,3 +1093,14 @@ Date: 2026-11-10
 - Source files were read back and verified on GitHub main. Latest commit: `c597332bea7615eef9782aef56c3f4ee6df3f9a0`.
 - Deployment is NOT confirmed. Latest combined commit status reports Vercel failure due to build-rate-limit. No Cloudflare Pages deployment tool is connected in this session, and direct live-site opens for the new directory/sitemap were inaccessible. Do not claim these SEO changes are live until Cloudflare Pages production deployment is verified.
 - Google Search Console/Bing Webmaster sitemap submission and URL indexing requests remain pending; no search engine can guarantee immediate indexing or first-place ranking. Google documents that sitemaps are hints and indexing is not guaranteed.
+
+
+## Modular Isolation Foundation — 2026-11-13
+- Created isolated working branch `architecture/modular-isolation-foundation` from `main`; no production branch or deployment changed.
+- Added `ARCHITECTURE.md` defining SUHAS GROUP / SUHAS MAX boundaries, CSS/JS isolation, shared auth/backend contracts, incremental migration and regression gates.
+- Added `MODULE_MANIFEST.json` mapping current legacy entry points to intended modules; statuses are inventory only and do not claim extraction is complete.
+- Added `apps/README.md` as the additive migration boundary. No existing page, asset, route, database object or user data was moved, overwritten or deleted.
+- Baseline confirms `social.html` is a large monolith (~604 KB); Messenger already has separate HTML/CSS/JS; several corporate sections already have separate legacy pages.
+- Checks performed: repository tree and current development rules/checkpoint reviewed; source entry points for social, messenger and profile inspected. No browser runtime, syntax/build or authenticated end-to-end test was run in this foundation increment.
+- Next exact step: inventory actual navigation targets and CSS/JS dependencies for SUHAS GROUP buttons, then isolate one low-risk independent module. Decompose social.html only in small tested increments.
+- Deployment: not performed. Live behavior: unchanged and not re-verified in this increment.
