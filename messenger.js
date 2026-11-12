@@ -47,6 +47,30 @@
   }catch(e){console.warn('Messenger isolated theme not applied',e)}
  }
  frame?.addEventListener('load',()=>{apply();setTimeout(apply,400);setTimeout(apply,1200)});
- // The current schema has no group-conversation discriminator. Do not misroute this filter to the social Groups page.
- groups?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();document.querySelectorAll('.shortcut').forEach(b=>b.classList.toggle('active',b===groups));const d=frame.contentDocument,host=d?.getElementById('threads');if(host)host.innerHTML='<div class="empty">Group conversations are not enabled yet. Individual Messenger chats remain available.</div>'},true);
+ // Also handle an iframe that finished loading before this deferred script attached its listener.
+ if(frame?.contentDocument?.readyState==='complete')apply();
+ // Group conversations are not enabled in the current data model. Keep the existing chat DOM intact.
+ const all=document.querySelector('.shortcut[data-filter="all"]');
+ let groupNotice=null;
+ groups?.addEventListener('click',e=>{
+  e.preventDefault();e.stopImmediatePropagation();
+  document.querySelectorAll('.shortcut').forEach(b=>b.classList.toggle('active',b===groups));
+  const d=frame.contentDocument,host=d?.getElementById('threads');
+  if(!host)return;
+  host.hidden=true;
+  host.style.setProperty('display','none','important');
+  if(!groupNotice){
+   groupNotice=d.createElement('div');
+   groupNotice.className='empty';
+   groupNotice.textContent='Group conversations are not enabled yet. Individual Messenger chats remain available.';
+   groupNotice.style.cssText='padding:22px 14px;text-align:center;color:#65676b;font-size:14px;line-height:1.5';
+   host.parentNode.insertBefore(groupNotice,host);
+  }
+  groupNotice.hidden=false;
+ },true);
+ all?.addEventListener('click',()=>{
+  const host=frame.contentDocument?.getElementById('threads');
+  if(host){host.hidden=false;host.style.removeProperty('display');}
+  if(groupNotice)groupNotice.hidden=true;
+ });
 })();
