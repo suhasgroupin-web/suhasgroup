@@ -3602,13 +3602,32 @@ $('post-form').addEventListener('submit',async e=>{
 });
 
 $('search').addEventListener('input',()=>renderPeople().catch(e=>notice(e.message,true)));
-function renderHeaderSearchResults(){
- const field=$('header-member-search'),host=$('header-search-results'),q=(field.value||'').trim().toLowerCase();
+let headerSearchRequest=0;
+async function renderHeaderSearchResults(){
+ const field=$('header-member-search'),host=$('header-search-results'),q=(field.value||'').trim();
+ const request=++headerSearchRequest;
  if(!host||!field||!q){if(host){host.hidden=true;host.innerHTML='';}return;}
- const real=members.filter(p=>p.user_id!==me&&[p.full_name,p.company,p.position,p.location,p.skills].filter(Boolean).join(' ').toLowerCase().includes(q)).slice(0,12);
- const html=real.map(p=>'<button type="button" class="header-search-result" role="option" data-profile-open="'+safe(p.user_id)+'">'+(p.profile_photo_url?'<img src="'+safe(p.profile_photo_url)+'" alt="">':'<span class="header-search-avatar">'+safe((p.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<span><b>'+safe(p.full_name||'SUHAS Member')+'</b><small>'+safe([p.position,p.company,p.location].filter(Boolean).join(' · ')||'SUHAS-MAX member')+'</small></span><span class="header-result-kind">MEMBER</span></button>').join('');
- host.innerHTML=html||'<div class="header-search-empty">No matching accounts</div>';host.hidden=false;
- host.querySelectorAll('[data-profile-open]').forEach(item=>item.addEventListener('click',async()=>{host.hidden=true;try{await openMemberProfile(item.dataset.profileOpen);}catch(err){notice(err.message||'Could not open this profile.',true);}}));
+ if(q.length<2){host.innerHTML='<div class="header-search-empty">Type at least 2 characters to search members</div>';host.hidden=false;return;}
+ host.innerHTML='<div class="header-search-empty">Searching SUHAS-MAX members…</div>';host.hidden=false;
+ try{
+  const result=await client.from('suhas_public_profiles')
+   .select('user_id,full_name,company,position,location,profile_photo_url')
+   .eq('profile_complete',true).neq('user_id',me)
+   .ilike('full_name','%'+q.replace(/[%_]/g,'\\$&')+'%')
+   .order('full_name',{ascending:true}).limit(50);
+  if(request!==headerSearchRequest||q!==(field.value||'').trim())return;
+  if(result.error)throw result.error;
+  const found=result.data||[];
+  const html=found.map(p=>'<button type="button" class="header-search-result" role="option" data-profile-open="'+safe(p.user_id)+'">'+(p.profile_photo_url?'<img src="'+safe(p.profile_photo_url)+'" alt="">':'<span class="header-search-avatar">'+safe((p.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<span><b>'+safe(p.full_name||'SUHAS Member')+'</b><small>'+safe([p.position,p.company,p.location].filter(Boolean).join(' · ')||'SUHAS-MAX member')+'</small></span><span class="header-result-kind">MEMBER</span></button>').join('');
+  host.innerHTML=html||'<div class="header-search-empty">No matching active member profiles</div>';
+  if(found.length===50)host.insertAdjacentHTML('beforeend','<div class="header-search-empty">Showing the first 50 matches. Refine the name to narrow results.</div>');
+  host.hidden=false;
+  host.querySelectorAll('[data-profile-open]').forEach(item=>item.addEventListener('click',async()=>{host.hidden=true;try{await openMemberProfile(item.dataset.profileOpen);}catch(err){notice(err.message||'Could not open this profile.',true);}}));
+ }catch(error){
+  if(request!==headerSearchRequest)return;
+  host.innerHTML='<div class="header-search-empty">Search is temporarily unavailable. Please try again.</div>';
+  host.hidden=false;console.warn('SUHAS-MAX member search failed:',error);
+ }
 }
 const headerSearchField=$('header-member-search'),headerSearchButton=$('header-search-toggle'),headerSearchResults=$('header-search-results');
 if(window.matchMedia('(min-width: 761px)').matches){headerSearchField.hidden=false;headerSearchButton.setAttribute('aria-expanded','true');}else{headerSearchField.hidden=true;headerSearchButton.setAttribute('aria-expanded','false');}
