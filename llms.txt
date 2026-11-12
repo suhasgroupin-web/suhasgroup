@@ -1,0 +1,25 @@
+# SUHAS GROUP
+
+> Official SUHAS GROUP website and SUHAS-MAX community platform. The site provides company information, recruitment and career resources, employer enquiries, and instructions for installing SUHAS-MAX as a Progressive Web App.
+
+SUHAS GROUP connects people with career opportunities and provides information about its recruitment, garments, design, and denim businesses. SUHAS-MAX is an installable web app; a standalone Android APK is not published on this website.
+
+## Main pages
+
+- [SUHAS GROUP home](https://suhasgroup.pages.dev/): Official website and overview of SUHAS-MAX.
+- [About SUHAS GROUP](https://suhasgroup.pages.dev/about.html): Group background, mission, leadership, and office information.
+- [SUHAS GROUP companies](https://suhasgroup.pages.dev/group.html): Information about recruitment, garments, design, and denim businesses.
+- [Career opportunities](https://suhasgroup.pages.dev/jobs.html): Search career opportunities and access the SUHAS GROUP career portal.
+- [For employers](https://suhasgroup.pages.dev/employers.html): Information for employers interested in recruitment services.
+- [Job portals](https://suhasgroup.pages.dev/job-portals.html): Directory of external job-search resources.
+- [Contact SUHAS GROUP](https://suhasgroup.pages.dev/contact.html): Official contact information and business enquiries.
+
+## SUHAS-MAX
+
+- [SUHAS-MAX install guide](https://suhasgroup.pages.dev/download.html): Instructions for installing the PWA on Android, iPhone, and desktop browsers.
+- [SUHAS Messenger](https://suhasgroup.pages.dev/messenger.html): Public information and access to SUHAS Messenger.
+
+## Optional
+
+- [Sitemap](https://suhasgroup.pages.dev/sitemap.xml): XML list of public pages intended for search engines.
+- [Robots instructions](https://suhasgroup.pages.dev/robots.txt): Public crawler access guidance.
