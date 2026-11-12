@@ -1118,3 +1118,15 @@ Date: 2026-11-10
 - Not yet verified: JavaScript parser/build, browser rendering, Android layout, authenticated sign-in, messaging/realtime or neighboring social-page regression. No deployment performed.
 - Recovery: revert the single `messenger.html` asset-reference commit to restore root asset loading; module copies and legacy files are additive.
 - Next: run syntax and route checks on the branch, then request review via a draft PR. Do not merge or deploy until checks and a browser/device test are available.
+
+
+## Modular isolation increment — SUHAS GROUP Job Details (2026-11-13)
+- Confirmed PR #58 (Messenger module) was merged to `main` with merge commit `b07c5de2f82f8cd6153738c160f5f28c4e435dd0`.
+- Started feature branch `feature/isolate-job-details-module-20261113` from the current `main`.
+- Added `apps/suhas-group/job/job.html` as the module-owned Job Details page and `apps/suhas-group/job/README.md` documenting its dependencies and compatibility contract.
+- Kept `/job.html` as a compatibility entry that forwards the full query string and hash to the module page. This preserves job links such as `job.html?code=...` and `job.html?id=...`.
+- The new module uses `<base href="/">` so existing root-relative assets and navigation continue to resolve to the same corporate routes. External job URLs resolve against this root base, matching the old root page.
+- Job lookup, Apply Now, Save Job, HTTPS validation, application tracking and duplicate-application handling are retained. The existing Supabase tables `jobs`, `saved_jobs` and `applications` remain shared dependencies; no database changes were made.
+- `jobs.html` (the job listings page), employer pages, shared assets, auth/session files and all other routes were not changed.
+- Static verification pending in this branch: check query/hash forwarding, module asset paths, required Supabase calls and manifest JSON. Browser/mobile and signed-in/signed-out apply/save tests are not available in this tool session and remain required before merge/deployment.
+- No production deployment performed.
