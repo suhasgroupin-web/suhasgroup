@@ -13,7 +13,18 @@
         {
           "id": "job",
           "legacyEntry": "job.html",
-          "status": "legacy-isolated"
+          "status": "module-entry-isolated-legacy-route-retained",
+          "moduleEntry": "apps/suhas-group/job/job.html",
+          "moduleAssets": [],
+          "moduleReadme": "apps/suhas-group/job/README.md",
+          "compatibility": "root URL forwards query string and hash",
+          "sharedDependencies": [
+            "assets/styles.css",
+            "assets/config.js",
+            "assets/auth.js",
+            "assets/script.js",
+            "Supabase: jobs, saved_jobs, applications"
+          ]
         },
         {
           "id": "o5-intl",
