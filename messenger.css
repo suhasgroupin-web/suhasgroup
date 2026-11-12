@@ -163,3 +163,34 @@ html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width
 .messenger-menu-section{margin:30px 28px 12px!important;color:#65676b!important;font-size:17px!important;font-weight:700!important}
 .messenger-menu-open .messenger-bottom{z-index:81!important}
 @media(max-width:600px){.messenger-menu-heading{height:78px!important;padding:0 28px!important}.messenger-menu-heading h1{font-size:46px!important}.messenger-menu-row{min-height:76px!important;font-size:20px!important}.messenger-menu-profile{padding-left:28px!important;padding-right:28px!important}}
+
+
+/* Reference-match pass: header/search geometry and Messenger-style tab bar. */
+.messenger-head{height:88px!important;flex-basis:88px!important;padding:0 28px!important}
+.messenger-brand{font-size:36px!important;letter-spacing:-1.35px!important}
+.messenger-head-actions{gap:18px!important}
+.messenger-head button{width:42px!important;height:42px!important}
+#messenger-compose:before{width:22px!important;height:20px!important;border-width:2.5px!important}
+#messenger-compose:after{right:5px!important;top:2px!important}
+#messenger-back img{width:40px!important;height:40px!important}
+.messenger-search-wrap{flex-basis:70px!important;height:70px!important;padding:7px 28px!important;gap:0!important}
+.messenger-search-wrap .messenger-search-icon{position:absolute!important;left:49px!important;z-index:1!important;color:#65676b!important}
+.messenger-search-wrap input{height:54px!important;padding:0 18px 0 58px!important;border-radius:30px!important;background:#f0f2f5!important;font-size:16px!important}
+.messenger-stories{flex-basis:142px!important;height:142px!important;padding-top:8px!important}
+.messenger-shortcuts{flex-basis:58px!important;height:58px!important;gap:10px!important;padding:3px 28px 8px!important}
+.messenger-shortcuts .shortcut{height:48px!important;border-radius:26px!important;font-size:15px!important}
+.messenger-bottom{height:calc(74px + env(safe-area-inset-bottom))!important;min-height:74px!important;padding:0 20px env(safe-area-inset-bottom)!important;gap:0!important}
+.messenger-bottom button{height:64px!important;max-width:none!important;border-radius:40px!important}
+.messenger-bottom button svg{width:38px!important;height:38px!important;stroke:none!important}
+.messenger-bottom button[data-dest="messages"] svg{width:42px!important;height:42px!important}
+.messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
+.messenger-bottom .nav-badge{top:1px!important;left:calc(50% + 15px)!important;width:auto!important;min-width:20px!important;height:20px!important;background:#e41e3f!important}
+@media(max-width:600px){
+ .messenger-head{height:88px!important;flex-basis:88px!important;padding:0 28px!important}
+ .messenger-search-wrap{height:70px!important;flex-basis:70px!important;padding:7px 28px!important}
+ .messenger-search-wrap .messenger-search-icon{left:49px!important}
+ .messenger-stories{height:142px!important;flex-basis:142px!important}
+ .messenger-shortcuts{height:58px!important;flex-basis:58px!important;padding-left:28px!important;padding-right:28px!important}
+ .messenger-bottom{height:calc(74px + env(safe-area-inset-bottom))!important;min-height:74px!important;padding-left:20px!important;padding-right:20px!important}
+ .messenger-bottom button{height:64px!important}
+}
