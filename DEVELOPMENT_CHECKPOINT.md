@@ -1142,3 +1142,16 @@ Date: 2026-11-10
 - No linked O5 child page, database, storage, auth configuration or unrelated corporate route was changed.
 - Static verification pending in this branch: compatibility route, query/hash forwarding, root base URL, shared dependencies and linked child pages. Browser/mobile visual and auth-gate behavior still require live testing before merge/deployment.
 - No production deployment performed.
+
+
+## Modular isolation increment — SUHAS GROUP Career Profile (2026-11-13)
+- Confirmed PR #60 (O5 International module) was merged to `main` with merge commit `8d16a630d196e591269bb05b4487cc133355432a`.
+- Started feature branch `feature/isolate-career-profile-module-20261113` from current `main`.
+- Added `apps/suhas-group/career-profile/profile.html` and a module README.
+- Kept `/profile.html` as a compatibility entry forwarding the full query string and hash.
+- Added root `<base href="/">` so existing assets, form navigation, and route links resolve as before.
+- Preserved the current profile form, profile completeness checks, member/public profile synchronization, avatar/cover handling, auth metadata updates, logout and Main Menu redirect.
+- The existing profile page's shared member/social-profile synchronization is documented and retained; this increment does not redesign or simplify that behavior.
+- No database schema, user records, storage objects, auth settings, or unrelated pages were changed.
+- Static verification pending in this branch: compatibility route, base URL, profile form/upsert/sync and logout hooks. Browser/mobile and authenticated profile-save/photo/logout tests still require live testing before merge/deployment.
+- No production deployment performed.
