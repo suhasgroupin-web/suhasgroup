@@ -27,7 +27,7 @@
 <div class="messenger-head-actions">
 <button type="button" id="messenger-compose" aria-label="New message" title="New message">✎</button>
 
-<button type="button" id="messenger-back" aria-label="Open SUHAS-MAX" title="Open SUHAS-MAX"><img src="assets/logo.png" alt="SUHAS GROUP"></button>
+<button type="button" id="messenger-back" aria-label="Open SUHAS-MAX home" title="Open SUHAS-MAX home"><img src="assets/logo.png" alt="SUHAS GROUP logo"></button>
 </div>
 </header>
 <div class="messenger-notice" id="messenger-notice" role="button" tabindex="0">Notifications are currently off. Tap to turn on.</div>
@@ -168,7 +168,7 @@
    if(!frame.contentDocument||!frame.contentDocument.querySelector('#messages'))openInboxDirectly();
   }catch(e){openInboxDirectly();}
  },10000);
- document.getElementById('messenger-back').addEventListener('click',function(){location.href='home.html';});
+ document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
 
  const settingsPanel=document.getElementById('messenger-settings-panel');
  const settingsKey='suhas-messenger-preferences-v1';
@@ -190,7 +190,7 @@
 
  const pop=document.getElementById('messenger-popover');
  document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=true;openMessengerMenu();});
- document.getElementById('messenger-settings').addEventListener('click',()=>{pop.hidden=true;});
+ document.getElementById('messenger-settings')?.addEventListener('click',()=>{pop.hidden=true;});
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
  document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
  document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.shortcut').forEach(x=>x.classList.toggle('active',x===b));const d=frame.contentDocument;if(!d)return;const threads=[...d.querySelectorAll('#threads .message-thread')];threads.forEach(t=>{const unread=t.querySelector('.message-thread-unread');t.style.display=b.dataset.filter==='unread'?(unread?'flex':'none'):'flex';if(b.dataset.filter==='groups'){const nav=d.querySelector('[data-tab="groups"]');if(nav)nav.click();}});}));
