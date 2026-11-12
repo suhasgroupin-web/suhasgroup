@@ -3,7 +3,17 @@ import { withSupabase } from "npm:@supabase/server";
 const AI_API_KEY = Deno.env.get("AI_API_KEY") || "";
 const AI_PROVIDER = (Deno.env.get("AI_PROVIDER") || "gemini").toLowerCase();
 const AI_BASE_URL = Deno.env.get("AI_BASE_URL") || "https://api.openai.com/v1";
-const AI_MODEL = Deno.env.get("AI_MODEL") || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : AI_PROVIDER === "gemini" ? "gemini-2.5-flash-lite" : "gpt-5");
+const DEFAULT_GEMINI_MODEL = "gemini-3.8-flash";
+function normalizeGeminiModel(value: string, fallback: string) {
+  let model = (value || fallback).trim();
+  model = model.replace(/^https?:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\//i, "");
+  model = model.replace(/^models\//i, "").replace(/:generateContent$/i, "").trim();
+  return /^[A-Za-z0-9][A-Za-z0-9._-]{1,100}$/.test(model) ? model : fallback;
+}
+const configuredModel = Deno.env.get("AI_MODEL") || "";
+const AI_MODEL = AI_PROVIDER === "gemini"
+  ? normalizeGeminiModel(configuredModel, DEFAULT_GEMINI_MODEL)
+  : configuredModel.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5");
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -53,13 +63,14 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
         ].filter(Boolean).join(" | ")).join("\n")
       : "No published SUHAS GROUP vacancies are currently listed in the live database. Do not invent or imply that any SUHAS vacancy is open.";
     const careerResources = "\n\nCAREER NAVIGATION: SUHAS GROUP Jobs: https://suhasgroup.pages.dev/jobs.html . Apply for Job: https://suhasgroup.pages.dev/apply-for-job.html . Online Job Search Center: https://suhasgroup.pages.dev/job-portals.html . Google job search: https://www.google.com/search?q=jobs+in+Bangladesh . LinkedIn Jobs: https://www.linkedin.com/jobs/search/ . Indeed: https://www.indeed.com/jobs . BDJobs: https://www.bdjobs.com/ . SUHAS GROUP LinkedIn: https://www.linkedin.com/company/suhasgroup/jobs/ . WhatsApp Jobs Channel: https://whatsapp.com/channel/0029VaGiyHs1XquODhluFX1N . Canva CV templates: https://www.canva.com/resumes/templates/ . These links are navigation destinations, not evidence of a current vacancy. The live SUHAS vacancy list is supplied below. External portal results are searched on their own websites; never claim that external listings have been automatically aggregated into SUHAS GROUP.";
-    const systemWithJobs = system + careerResources + "\n\nCURRENT PUBLISHED SUHAS GROUP JOBS (live database snapshot):\n" + liveJobsContext;
+    const productNavigation = "\\n\\nSUHAS PRODUCT NAVIGATION: SUHAS MAX social/community app and its main dashboard: https://suhasgroup.pages.dev/app.html . Professional CV Studio / Resume Builder: https://suhasgroup.pages.dev/resume-builder.html . SUHAS GROUP Main Menu: https://suhasgroup.pages.dev/main-menu.html . SUHAS AI Assistant: https://suhasgroup.pages.dev/ai.html . If a user asks how to open one of these products, explain briefly and provide the exact corresponding URL as a clickable plain URL. Do not say a feature is live unless it is present in the current product or verified by the user. The public product pages are the source of truth for navigation.";
+    const systemWithJobs = system + careerResources + productNavigation + "\\n\\nCURRENT PUBLISHED SUHAS GROUP JOBS (live database snapshot):\\n" + liveJobsContext;
 
     let endpoint = "";
     let headers: Record<string, string> = { "Content-Type": "application/json" };
     let payload: Record<string, unknown>;
     if (AI_PROVIDER === "gemini") {
-      endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(AI_MODEL) + ":generateContent";
+      endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + AI_MODEL + ":generateContent";
       headers["x-goog-api-key"] = AI_API_KEY;
       payload = {
         systemInstruction: { parts: [{ text: systemWithJobs }] },
@@ -91,12 +102,24 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     } catch {
       return json({ error: "Could not connect to the AI provider. Check the Supabase function's network and provider settings." }, 502);
     }
+    let activeModel = AI_MODEL;
+    if (!response.ok && AI_PROVIDER === "gemini" && AI_MODEL !== DEFAULT_GEMINI_MODEL && [400, 404].includes(response.status)) {
+      const firstError = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
+      if (/model|name format|not found/i.test(firstError)) {
+        const fallbackEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + DEFAULT_GEMINI_MODEL + ":generateContent";
+        try {
+          const retry = await fetch(fallbackEndpoint, { method: "POST", headers, body: JSON.stringify(payload) });
+          const retryData = await retry.json().catch(() => ({}));
+          if (retry.ok) { response = retry; data = retryData; activeModel = DEFAULT_GEMINI_MODEL; }
+        } catch { /* Keep the original provider error. */ }
+      }
+    }
     if (!response.ok) {
       const providerMessage = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
       const providerCode = cleanText(data?.error?.code ?? data?.error?.type ?? "", 100);
-      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "provider_error", usage_data: { status: response.status, code: providerCode } });
+      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: activeModel, status: "provider_error", usage_data: { status: response.status, code: providerCode } });
       const hint = response.status === 401 ? "API key is invalid or revoked." : response.status === 403 ? "API key has no permission for this model or project." : response.status === 404 ? "Model or API endpoint was not found." : response.status === 429 ? "Provider quota or billing limit reached." : "Provider rejected the request.";
-      return json({ error: hint + (providerCode ? " [" + providerCode + "]" : "") + (providerMessage ? " " + providerMessage : ""), provider_status: response.status, model: AI_MODEL }, 502);
+      return json({ error: hint + (providerCode ? " [" + providerCode + "]" : "") + (providerMessage ? " " + providerMessage : ""), provider_status: response.status, model: activeModel }, 502);
     }
 
     const output = AI_PROVIDER === "gemini"
@@ -106,8 +129,8 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
         : (data?.output_text ?? data?.output?.flatMap((x: any) => x?.content ?? []).map((x: any) => x?.text ?? "").join("")).trim();
     if (!output) return json({ error: "The AI provider returned an empty response. Please try again." }, 502);
 
-    await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: AI_MODEL, status: "success", usage_data: data?.usage ?? {} });
-    return json({ output, provider: AI_PROVIDER, model: AI_MODEL });
+    await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: activeModel, status: "success", usage_data: data?.usage ?? {} });
+    return json({ output, provider: AI_PROVIDER, model: activeModel });
 });
 
 export default {
