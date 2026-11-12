@@ -35,7 +35,7 @@
  .cv-page{width:210mm!important;min-height:297mm!important;padding:0!important;margin:0!important;background:#fff!important}
  .cv-wrap{width:210mm!important;max-width:none!important;padding:0!important;margin:0!important}
  .cv-layout{display:block!important;width:210mm!important;margin:0!important}
- .cv-preview{width:210mm!important;height:297mm!important;min-height:297mm!important;max-height:297mm!important;grid-template-columns:34% 66%!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important}
+ .cv-preview{width:210mm!important;height:auto!important;min-height:297mm!important;max-height:none!important;grid-template-columns:34% 66%!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important}
  .cv-sidebar{padding:9mm 6mm!important;border-radius:0 12mm 12mm 0!important}.cv-main{padding:10mm 8mm!important}
  .cv-photo{width:36mm!important;height:36mm!important;max-width:none!important}.cv-preview h2{font-size:18pt!important}.cv-side-block,.cv-main-block{margin-top:4mm!important}.cv-side-block h3,.cv-main-block h3{font-size:9pt!important}.cv-side-block p,.cv-main-block p,.cv-side-list li,.cv-main-list li,.cv-side-contact div{font-size:7.2pt!important;line-height:1.35!important}.cv-signature{margin-top:8mm!important}
 }
@@ -137,7 +137,7 @@ function canvasToData(canvas){return canvas.toDataURL('image/jpeg',.88)}
 function processWhiteBackground(file){
 return new Promise(function(resolve,reject){
 var img=new Image(),url=URL.createObjectURL(file);img.onload=async function(){try{var max=850,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale)),src=document.createElement('canvas');src.width=w;src.height=h;src.getContext('2d').drawImage(img,0,0,w,h);
-if(!window.SelfieSegmentation){var fallback=document.createElement('canvas');fallback.width=w;fallback.height=h;var f=fallback.getContext('2d');f.fillStyle='#fff';f.fillRect(0,0,w,h);f.drawImage(src,0,0);URL.revokeObjectURL(url);resolve(canvasToData(fallback));return}
+if(!window.SelfieSegmentation){throw new Error('Free photo cut-out model did not load. Check internet connection and try again.')}
 if(!segmentation){segmentation=new SelfieSegmentation({locateFile:function(file){return 'https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/'+file}});segmentation.setOptions({modelSelection:1});}
 var result=await new Promise(function(done,fail){var timer=setTimeout(function(){fail(new Error('Photo background processor timed out'))},20000);segmentation.onResults(function(res){clearTimeout(timer);done(res)});segmentation.send({image:src}).catch(fail)});
 var cut=document.createElement('canvas');cut.width=w;cut.height=h;var cx=cut.getContext('2d');cx.drawImage(src,0,0);cx.globalCompositeOperation='destination-in';cx.drawImage(result.segmentationMask,0,0,w,h);cx.globalCompositeOperation='source-over';
