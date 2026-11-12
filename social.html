@@ -2571,7 +2571,16 @@ body .tabbar{display:none!important}
  html body .site-header .suhas-create-wrap{width:31px!important;flex-basis:31px!important}
 }
 </style>
-</head><body><header class="site-header"><div class="nav-wrap">
+<style id="suhas-max-active-blue-marker-20261112">
+.social-topnav [data-tab],.social-mobile-nav [data-tab],.side-nav [data-tab],.max-menu-grid [data-tab]{position:relative!important}
+.social-topnav [data-tab].active:before,.social-mobile-nav [data-tab].active:before,.side-nav [data-tab].active:before,.max-menu-grid [data-tab].active:before{content:"";position:absolute;display:block;background:#0866ff;border-radius:5px;box-shadow:0 0 9px #0866ff55}
+.social-topnav [data-tab].active:before{left:7px;top:50%;width:3px;height:24px;transform:translateY(-50%)}
+.social-mobile-nav [data-tab].active:before{left:1px;top:50%;width:3px;height:27px;transform:translateY(-50%)}
+.side-nav [data-tab].active:before,.max-menu-grid [data-tab].active:before{left:0;top:9px;bottom:9px;width:3px}
+.social-topnav [data-tab].active{background:linear-gradient(90deg,#eaf3ff 0%,transparent 48%)}
+.social-mobile-nav [data-tab].active{background:linear-gradient(90deg,#eaf3ff 0%,#fff 38%)!important}
+.side-nav [data-tab].active,.max-menu-grid [data-tab].active{background:#eaf3ff!important;color:#0866ff!important}
+</style></head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation"><button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="desktop-nav-icon">⌂</span><span>Home</span></button><button data-tab="friends" type="button" aria-label="Friends"><span class="desktop-nav-icon">♙</span><span>Friends</span></button><button data-tab="groups" type="button" aria-label="Groups"><span class="desktop-nav-icon">▦</span><span>Groups</span></button><button data-tab="reels" type="button" aria-label="Reels"><span class="desktop-nav-icon">▣</span><span>Reels</span></button><button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="desktop-nav-icon">▱</span><span>Marketplace</span></button><button data-tab="notifications" type="button" aria-label="Notifications"><span class="desktop-nav-icon">♧</span><span>Notifications</span></button></nav>
 <div class="social-user-actions suhas-premium-header-actions"><a id="header-messenger-open" class="mobile-head-action messenger-head-action" href="messenger.html" aria-label="Open Messenger" title="Messenger"><span id="messenger-unread-badge" class="messenger-unread-badge" hidden aria-live="polite"></span><svg class="messenger-head-icon" viewBox="0 0 36 36" role="img" aria-hidden="true"><defs><linearGradient id="suhasMessengerBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00C6FF"/><stop offset=".48" stop-color="#087BFF"/><stop offset="1" stop-color="#5B3DF5"/></linearGradient></defs><path fill="url(#suhasMessengerBlue)" d="M18 2.5C9.1 2.5 2 9.1 2 17.4c0 4.5 2.1 8.4 5.5 11v5.1l5.1-2.8c1.7.5 3.5.8 5.4.8 8.9 0 16-6.6 16-14.1S26.9 2.5 18 2.5Z"/><path fill="#fff" d="m8.7 21.5 7.1-7.6 4.1 3.1 7.4-3.1-7.1 7.6-4.1-3.1z"/></svg></a><div class="header-search-wrap"><button id="header-search-toggle" class="mobile-head-action header-search-trigger" type="button" aria-label="Search SUHAS-MAX members" title="Search" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button><input id="header-member-search" class="header-member-search" type="search" placeholder="Search SUHAS-MAX" aria-label="Search SUHAS-MAX members" autocomplete="off"><div id="header-search-results" class="header-search-results" hidden role="listbox" aria-label="Matching SUHAS-MAX accounts"></div></div><div class="suhas-create-wrap"><button class="mobile-head-action suhas-create-trigger" type="button" aria-label="Create" title="Create" aria-haspopup="menu" aria-expanded="false" aria-controls="suhas-create-menu">＋</button><div id="suhas-create-menu" class="suhas-create-menu" role="menu" hidden><div class="suhas-create-title">Create</div><button type="button" role="menuitem" data-create-action="post"><span class="suhas-create-symbol post">✎</span><span><b>Post</b><small>Write a new post for your feed</small></span></button><button type="button" role="menuitem" data-create-action="story"><span class="suhas-create-symbol story">◉</span><span><b>Story</b><small>Share a photo or update for 24 hours</small></span></button><button type="button" role="menuitem" data-create-action="photo"><span class="suhas-create-symbol photo">▧</span><span><b>Photo</b><small>Share a photo in your feed</small></span></button><button type="button" role="menuitem" data-create-action="video"><span class="suhas-create-symbol video">▶</span><span><b>Video</b><small>Share a video in your feed</small></span></button><button type="button" role="menuitem" data-create-action="reel"><span class="suhas-create-symbol reel">▣</span><span><b>Reel</b><small>Create a short video reel</small></span></button></div></div><a class="social-profile-link" href="#profile" data-max-own-profile>My Profile</a></div></div>
@@ -4726,36 +4735,9 @@ body.suhas-desktop-mode .suhas-display-mode-option{background:#e7f3ff!important;
 .social-mobile-nav{z-index:15000!important;pointer-events:auto!important;touch-action:manipulation!important}
 .social-mobile-nav button{min-height:52px;cursor:pointer;touch-action:manipulation}
 .social-mobile-nav button:focus-visible,.facebook-left-menu-trigger:focus-visible{outline:2px solid #0866ff;outline-offset:2px}
-.suhas-go-sg{position:fixed;z-index:14999;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid #0866ff;border-radius:18px;background:#0866ff;color:#fff;text-decoration:none;font:700 12px Arial,sans-serif;box-shadow:0 3px 12px #0002;white-space:nowrap;touch-action:manipulation}
-.suhas-go-sg:active{transform:scale(.97)}
-@media(min-width:761px){.suhas-go-sg{right:20px;bottom:20px}}
+
 </style>
-<a class="suhas-go-sg" href="https://suhasgroup.pages.dev/" aria-label="Go to Suhas Group main website" title="Go to Suhas Group">Go to SG</a>
-<style id="suhas-max-nav-single-handler-20261111">
-/* All mobile destinations use one route handler; avoid duplicate click dispatch. */
-.social-mobile-nav>button[data-tab]{pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
-</style>
-<style id="suhas-go-sg-profile-only-20261111">
-/* Go to SG is available only while the Profile viewer is the active screen. */
-.suhas-go-sg{display:none!important}
-.suhas-go-sg.is-profile-screen{display:flex!important}
-</style>
-<script id="suhas-go-sg-profile-only-20261111-script">
-(function(){
- const button=document.querySelector('.suhas-go-sg');
- const profile=document.getElementById('profile-viewer');
- if(!button||!profile)return;
- function sync(){
-   const isProfile=profile.classList.contains('open')&&!profile.hidden;
-   button.classList.toggle('is-profile-screen',isProfile);
-   button.setAttribute('aria-hidden',String(!isProfile));
-   button.tabIndex=isProfile?0:-1;
- }
- new MutationObserver(sync).observe(profile,{attributes:true,attributeFilter:['class','style','hidden','aria-hidden']});
- window.addEventListener('popstate',sync);
- sync();
-})();
-</script>
+
 
 
 
