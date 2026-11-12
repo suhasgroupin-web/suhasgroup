@@ -95,37 +95,63 @@ SG.loginThenReturn = function () {
   location.href = 'login.html';
 };
 
-/* install card (Android/desktop prompt, iOS instructions) */
+/* Global PWA install reminder: re-check every 5 minutes; never nag an installed app. */
 (function () {
-  var deferred = null, card = null;
-  function dismissed() { var t = +SG.store.get('sg_install_dismissed') || 0; return Date.now() - t < 7 * 864e5; }
-  function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
-  function hide(remember) { if (card) { card.remove(); card = null; } if (remember) SG.store.set('sg_install_dismissed', String(Date.now())); }
+  var deferred = null, card = null, timer = null, lastShown = 0;
+  var INTERVAL = 5 * 60 * 1000;
+  function standalone() {
+    return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) ||
+      navigator.standalone === true || document.referrer.indexOf('android-app://') === 0;
+  }
+  function installed() {
+    return standalone() || SG.store.get('sg_pwa_installed') === '1';
+  }
+  function hide() { if (card) { card.remove(); card = null; } }
   function show(kind) {
-    if (card || dismissed() || standalone() || !document.body || !document.documentElement.classList.contains('suhas-authenticated')) return;
-    card = document.createElement('div'); card.className = 'install-card';
-    card.innerHTML = '<img src="assets/icon-192.png" alt=""><div class="t"><b>Install SUHAS GROUP app</b><small>' +
-      (kind === 'ios' ? 'Tap Share, then &ldquo;Add to Home Screen&rdquo;' : 'Apply faster. Works like an app.') + '</small></div>' +
-      (kind === 'ios' ? '' : '<button class="btn btn-gold btn-sm" type="button" data-i>Install</button>') +
-      '<button class="x" type="button" aria-label="Dismiss" data-x>&times;</button>';
+    if (card || installed() || !document.body || Date.now() - lastShown < INTERVAL) return;
+    lastShown = Date.now();
+    card = document.createElement('aside');
+    card.className = 'install-card';
+    card.setAttribute('role','dialog');
+    card.setAttribute('aria-label','Install SUHAS-MAX');
+    card.innerHTML = '<img src="/assets/icon-192.png" alt=""><div class="t"><b>Install SUHAS-MAX</b><small>' +
+      (kind === 'ios' ? 'Tap Share, then “Add to Home Screen”.' : 'Add SUHAS-MAX to your device for quick access.') +
+      '</small></div>' +
+      (kind === 'prompt' ? '<button class="btn btn-gold btn-sm" type="button" data-i>Install</button>' : '') +
+      '<button class="x" type="button" aria-label="Dismiss" data-x>×</button>';
     document.body.appendChild(card);
-    card.querySelector('[data-x]').addEventListener('click', function () { hide(true); });
+    card.querySelector('[data-x]').addEventListener('click', hide);
     var ib = card.querySelector('[data-i]');
     if (ib) ib.addEventListener('click', async function () {
       if (!deferred) return;
-      deferred.prompt();
-      try { await deferred.userChoice; } catch (e) { /* ignore */ }
-      deferred = null; hide(false);
+      var choice;
+      try { await deferred.prompt(); choice = await deferred.userChoice; } catch (e) {}
+      deferred = null; hide();
+      if (choice && choice.outcome === 'accepted') SG.store.set('sg_pwa_install_pending','1');
     });
   }
-  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; show('prompt'); });
-  document.addEventListener('suhas-auth-ready', function(){ if(deferred) show('prompt'); });
-  window.addEventListener('appinstalled', function () { deferred = null; hide(false); SG.toast('App installed', 'ok'); });
-  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent)) {
-    setTimeout(function () { show('ios'); }, 2500);
+  window.addEventListener('beforeinstallprompt', function (e) {
+    if (installed()) return;
+    e.preventDefault(); deferred = e; show('prompt');
+  });
+  window.addEventListener('appinstalled', function () {
+    SG.store.set('sg_pwa_installed','1'); SG.store.del('sg_pwa_install_pending');
+    deferred = null; hide(); if (SG.toast) SG.toast('SUHAS-MAX installed successfully','ok');
+    if (timer) clearInterval(timer);
+  });
+  function check() {
+    if (installed()) { hide(); if (timer) clearInterval(timer); return; }
+    if (deferred) show('prompt');
+    else if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone()) show('ios');
   }
+  function start() {
+    check();
+    timer = setInterval(check, INTERVAL);
+    document.addEventListener('visibilitychange', function(){ if(!document.hidden) check(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
 })();
-
 /* mobile bottom tab bar (shown on phones only) */
 document.addEventListener('DOMContentLoaded', function () {
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
