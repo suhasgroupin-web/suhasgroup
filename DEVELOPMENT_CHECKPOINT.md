@@ -1074,3 +1074,13 @@ Date: 2026-11-10
 - Removed the automatic multi-link career resource bundle from the AI system context; added strict instructions for concise, one-question-at-a-time career conversations and link-on-explicit-request only.
 - Supabase Edge Function `ai-assistant` deployed and read back ACTIVE at version 60 with JWT verification enabled. Source commit: `3ad031990e17506aadff42899d12abeba378581f` (earlier prompt/rule commit: `5232c3d553bea88c776a2916868e07d15adfcc48`).
 - Pending live user acceptance test: sign in to SUHAS AI and try “I need a job”, “I need a LinkedIn job”, and “send me the job portal link”; verify the actual rendered answers and confirm the single link destination. The Edge Function deployment is confirmed; the full authenticated browser journey was not run from this session.
+
+
+## 2026-11-12 — SUHAS Career PLC conversational job guidance refinement
+- Expanded career conversation guidance to cover job search, vacancies, CV/resume, interview, salary, applications, recruitment, LinkedIn and job portals. AI should mention SUHAS Career PLC's LinkedIn recruiting presence and offer to share one relevant post/page link only if wanted; it should not push a URL into an ordinary answer.
+- Generic “I need a job” now gets a concise offer of SUHAS Career PLC recruiting-page help plus one clarifying question about role/sector. LinkedIn job-search prompts recommend the SUHAS Career PLC recruiting page and ask whether the user wants its link/post.
+- Explicit request for a job/recruiting page link, or a clear yes after the assistant offered it, returns one URL only. Acceptance is checked against the prior assistant message to avoid interpreting an unrelated “yes” as permission to send a job link.
+- Detailed job-related questions are deliberately left to the AI model rather than intercepted by a generic local response, so questions about CVs, interviews, salaries, etc. can receive an answer to the actual question plus the relevant recruiting-page offer.
+- Supabase ai-assistant deployed and read back ACTIVE at version 65 with JWT verification enabled. Source commit: 099a0bcfc225a89d8fec055f32cc08788d92b0e6.
+- Link currently configured is the existing SUHAS GROUP LinkedIn Jobs page (https://www.linkedin.com/company/suhasgroup/jobs/); a separate SUHAS Career PLC company-page URL was not independently verified. Replace with the exact canonical PLC URL if a distinct official page exists.
+- Pending: live signed-in tests for “I need a job”, “LinkedIn job search”, “How do I prepare for an interview?”, explicit page-link request, and affirmative acceptance after offer. Verify concise replies and no unrelated links.
