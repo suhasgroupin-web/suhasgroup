@@ -209,12 +209,12 @@ var ext=(file.name.split('.').pop()||'').toLowerCase();
 if(!allowed.includes(file.type)&&!['pdf','doc','docx','rtf'].includes(ext)){say('Choose a PDF, DOC, DOCX or RTF CV file.',false);return}
 if(file.size>12*1024*1024){say('Previous CV must be smaller than 12 MB.',false);return}
 var safe=file.name.replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-100)||('previous-cv.'+ext);
-var path=user.id+'/'+Date.now()+'-'+safe,button=el('cv-upload-previous');button.disabled=true;
+var mime=file.type||({pdf:'application/pdf',doc:'application/msword',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',rtf:'application/rtf'}[ext]||'application/pdf');var path=user.id+'/'+Date.now()+'-'+safe,button=el('cv-upload-previous');button.disabled=true;
 say('Uploading your previous CV securely…',true);
 try{
-var up=await sb.storage.from('cv-previous-documents').upload(path,file,{contentType:file.type||'application/octet-stream',upsert:false});
+var up=await sb.storage.from('cv-previous-documents').upload(path,file,{contentType:mime,upsert:false});
 if(up.error)throw up.error;
-var row=await sb.from('candidate_previous_resumes').insert({user_id:user.id,file_name:file.name,file_path:path,content_type:file.type||'application/octet-stream',file_size:file.size});
+var row=await sb.from('candidate_previous_resumes').insert({user_id:user.id,file_name:file.name,file_path:path,content_type:mime,file_size:file.size});
 if(row.error){await sb.storage.from('cv-previous-documents').remove([path]);throw row.error}
 await refreshPreviousRecords();say('Previous CV uploaded and saved privately to your account.',true);openManager();
 }catch(e){say(e.message||'Previous CV upload failed.',false)}
@@ -224,7 +224,7 @@ async function refreshSaved(){var r=await sb.from('candidate_resumes').select('i
 function openManager(){el('cv-manager').classList.add('open');el('cv-manager').setAttribute('aria-hidden','false');refreshPreviousRecords()}
 function closeManager(){el('cv-manager').classList.remove('open');el('cv-manager').setAttribute('aria-hidden','true')}
 async function deleteRecord(id,title){if(!confirm('Delete saved CV '+(title||'Untitled CV')+'?'))return;var r=await sb.from('candidate_resumes').delete().eq('id',id).eq('user_id',user.id);if(r.error){say(r.error.message,false);return}if(activeId===id)activeId=null;await refreshSaved();say('CV record deleted.',true)}
-async function save(){if(!val('name')){say('Please enter your full name before saving.',false);el('cv-name').focus();return}if(processing){say('Please wait until photo processing finishes.',false);return}var b=el('cv-save');b.disabled=true;try{var row={user_id:user.id,title:val('title')||'My Professional CV',resume_data:data(),updated_at:new Date().toISOString()};var r=activeId?await sb.from('candidate_resumes').update(row).eq('id',activeId).eq('user_id',user.id).select('id').single():await sb.from('candidate_resumes').insert(row).select('id').single();if(r.error)throw r.error;activeId=r.data.id;await refreshSaved();el('cv-saved').value=activeId;say('CV saved to your private records. Use Saved CVs / Records to edit, duplicate or download it.',true);openManager()}catch(e){say(e.message||'Could not save your CV.',false)}finally{b.disabled=false}}
+async function save(){if(!val('name')){say('Please enter your full name before saving.',false);el('cv-name').focus();return}if(processing){say('Please wait until photo processing finishes.',false);return}var b=el('cv-save'),bottom=el('cv-bottom-save');b.disabled=true;if(bottom)bottom.disabled=true;try{var row={user_id:user.id,title:val('title')||'My Professional CV',resume_data:data(),updated_at:new Date().toISOString()};var r=activeId?await sb.from('candidate_resumes').update(row).eq('id',activeId).eq('user_id',user.id).select('id').single():await sb.from('candidate_resumes').insert(row).select('id').single();if(r.error)throw r.error;activeId=r.data.id;await refreshSaved();el('cv-saved').value=activeId;say('CV saved to your private records. Use Saved CVs / Records to edit, duplicate or download it.',true);openManager()}catch(e){say(e.message||'Could not save your CV.',false)}finally{b.disabled=false;if(bottom)bottom.disabled=false}}
 async function load(){var id=el('cv-saved').value;if(!id){say('Choose a saved CV first.',false);return}var r=await sb.from('candidate_resumes').select('id,title,resume_data').eq('id',id).eq('user_id',user.id).maybeSingle();if(r.error||!r.data){say(r.error?r.error.message:'Saved CV not found.',false);return}activeId=r.data.id;fill(Object.assign({},r.data.resume_data||{},{title:r.data.title}));say('Saved CV loaded.',true)}
 function canvasToData(canvas){return canvas.toDataURL('image/jpeg',.88)}
 function processWhiteBackground(file){
