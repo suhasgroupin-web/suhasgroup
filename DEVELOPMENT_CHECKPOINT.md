@@ -1044,3 +1044,13 @@ Date: 2026-11-10
 - Recovery point: `main` after code commit `e70d2cc714e78a4ad5e430477d086b38937cd416`.
 - Follow-up pipeline verification: Site Quality Checks passed and Datadog Synthetic tests passed for checkpoint commit `8f539487b179fc7617112109ba3fd2e55b8b9131`; Cloudflare Pages deployment completed successfully for the same commit. GitHub Pages deployment was still waiting and CodeQL was still running at the last check.
 - Live public fetch of `https://suhasgroup.pages.dev/ai.html` resolved to the page shell, but an unauthenticated browser QA run redirected to `/login?next=%2Fai`; the authenticated composer cannot be visually inspected without a signed-in browser profile. Real device rendering and authenticated image/document send tests remain pending.
+
+## Latest SUHAS AI concise-response and live-voice UI increment (2026-11-12)
+- Updated `ai.html` with an immersive full-screen SUHAS AI voice conversation view: animated blue orb, Listening/Thinking/Speaking states, close/end controls, and responsive safe-area spacing.
+- Existing browser speech recognition + speech synthesis loop is reused; this provides turn-based spoken conversation and animated live-style UI, not full-duplex realtime streaming audio.
+- Updated `supabase/functions/ai-assistant/index.ts` with short owner-awareness acknowledgements for recognition-style questions (e.g. "তুমি কি তাকে চেনো?") in the user's language, without unsolicited profile links or biography.
+- Added a concise-answer policy: default 1–3 sentences; expand only when details are requested; include social/profile links only when requested or necessary.
+- Reduced Gemini output budget to 450 tokens and temperature to 0.35 for tighter, faster responses.
+- GitHub commits: frontend `470f66ef97b3230c0a89c3fd50065608d664b50e`; backend `0fdbb72e65f4493bcc4189f0bcb4018374d82fb8`.
+- Supabase Edge Function `ai-assistant` deployed successfully as version 55 with JWT verification enabled.
+- Authenticated Android end-to-end testing and true realtime full-duplex voice API integration remain pending.
