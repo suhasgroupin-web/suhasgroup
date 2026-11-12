@@ -191,10 +191,12 @@ var photo=document.createElement('div');photo.className='cv-featured-photo';
 if(d.photo){var img=document.createElement('img');img.src=d.photo;img.alt='CV photograph';photo.appendChild(img)}else{photo.textContent='PHOTO'}
 var name=document.createElement('div');name.className='cv-featured-name';name.textContent=d.name||'Your Full Name';
 var role=document.createElement('div');role.className='cv-featured-role';role.textContent=d.role||'Professional Title';
-var contact=document.createElement('div');contact.className='cv-featured-contact';contact.textContent=[d.phone,d.email,d.location].filter(Boolean).join(' · ');
-side.append(photo,name,role,contact);
+var company=document.createElement('div');company.className='cv-featured-contact';company.textContent=d.company||'';
+var contact=document.createElement('div');contact.className='cv-featured-contact';contact.textContent=[d.phone,d.email,d.location,d.linkedin].filter(Boolean).join(' · ');
+side.append(photo,name,role,company,contact);
 var main=document.createElement('div');main.className='cv-featured-main';
-[['Professional Summary',d.summary],['Professional Experience',d.experience],['Key Achievements',d.achievements],['Academic Qualifications',d.education],['Core Competencies',d.competencies],['Additional Skills',d.skills]].forEach(function(pair){if(!pair[1])return;var h=document.createElement('h4'),p=document.createElement('p');h.textContent=pair[0];p.textContent=pair[1];main.append(h,p)});
+[['Professional Summary',d.summary],['Professional Experience',d.experience],['Key Achievements',d.achievements],['Quality / Professional Expertise',d.expertise],['Employment History',d.employment],['Buyer / Client Exposure',d.buyers],['Academic Qualifications',d.education],['Core Competencies',d.competencies],['Language Skills',d.languages],['Training Skills',d.training],['Technical Skills',d.technical],['Personal Information',d.personal],['Permanent Address',d.address],['References',d.reference],['Additional Skills',d.skills],['Declaration',d.declaration]].forEach(function(pair){if(!pair[1])return;var h=document.createElement('h4'),p=document.createElement('p');h.textContent=pair[0];p.textContent=pair[1];main.append(h,p)});
+if(d.signatureImage){var sh=document.createElement('h4'),si=document.createElement('img');sh.textContent='Signature';si.src=d.signatureImage;si.alt='Applicant signature';si.style.maxWidth='110px';si.style.maxHeight='42px';si.style.objectFit='contain';main.append(sh,si)}
 if(!main.children.length){var p=document.createElement('p');p.textContent='Your saved CV details will appear here.';main.appendChild(p)}
 box.append(side,main);open.hidden=false;open.onclick=function(){el('cv-saved').value=record.id;load().then(function(){closeManager();var target=document.querySelector('.cv-preview-wrap');if(target)target.scrollIntoView({behavior:'smooth',block:'start'})})}
 }
