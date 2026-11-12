@@ -8,7 +8,8 @@ function normalizeGeminiModel(value: string, fallback: string) {
   let model = (value || fallback).trim();
   model = model.replace(/^https?:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\//i, "");
   model = model.replace(/^models\//i, "").replace(/:generateContent$/i, "").trim();
-  return /^[A-Za-z0-9][A-Za-z0-9._-]{1,100}$/.test(model) ? model : fallback;
+  // Gemini model IDs must be model names, never API keys or arbitrary config strings.
+  return /^gemini-[A-Za-z0-9][A-Za-z0-9._-]{1,90}$/i.test(model) ? model : fallback;
 }
 const configuredModel = Deno.env.get("AI_MODEL") || "";
 const AI_MODEL = AI_PROVIDER === "gemini"
