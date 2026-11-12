@@ -107,7 +107,7 @@
 <button type="button" data-setting="sound">Sound &amp; alerts</button>
 <button type="button" data-setting="privacy">Privacy &amp; safety</button>
 <button type="button" data-setting="account">Account settings</button>
-<button type="button" data-setting="home">Back to SUHAS-MAX</button>
+
 </div>
 </div>
 <script>
@@ -205,9 +205,9 @@
  menuScreen.querySelectorAll('[data-menu-action]').forEach(b=>b.addEventListener('click',()=>{
   const action=b.dataset.menuAction;const map={communities:'groups',friends:'requests',requests:'requests',marketplace:'marketplace',reels:'reels',saved:'saved',following:'following',gaming:'gaming'};
   if(action==='settings'){closeMessengerMenu();settingsPanel.hidden=false;return;}
-  if(action==='profile'){closeMessengerMenu();setActiveBottom(document.querySelector('.messenger-bottom [data-dest=\"friends\"]'));activateChildTab('profile');return;}
+  if(action==='profile'){closeMessengerMenu();location.href='profile.html';return;}
   if(action==='support'){closeMessengerMenu();location.href='contact.html';return;}
-  if(action==='max'){closeMessengerMenu();location.href='index.html';return;}
+  if(action==='max'){closeMessengerMenu();location.href='social.html?tab=feed';return;}
   if(action==='archive'){closeMessengerMenu();alert('Archive is not available yet. Your existing conversations have not been changed or deleted.');return;}
   if(map[action]){closeMessengerMenu();if(!activateChildTab(map[action])){const d=frame.contentDocument;const tab=d?.querySelector('[data-tab="'+map[action]+'"]');if(tab)tab.click();}return;}
  }));
@@ -216,7 +216,7 @@
  function refreshUnreadBadge(){try{const d=frame.contentDocument;if(!d||!unreadBadge)return;const rows=[...d.querySelectorAll('#threads .message-thread')];let count=0;rows.forEach(row=>{const badge=row.querySelector('.message-thread-unread');if(!badge)return;const n=parseInt((badge.textContent||'1').replace(/[^0-9]/g,''),10);count+=Number.isFinite(n)&&n>0?n:1;});unreadBadge.textContent=count>99?'99+':String(count);unreadBadge.dataset.count=String(count);unreadBadge.hidden=count===0;}catch(e){}}
  frame.addEventListener('load',()=>{refreshUnreadBadge();setTimeout(refreshUnreadBadge,500);setTimeout(refreshUnreadBadge,1600);});
  setInterval(refreshUnreadBadge,5000);
- const bottomButtons=[...document.querySelectorAll('.messenger-bottom button')];
+ // Header SUHAS logo is the only home shortcut: open SUHAS-MAX social home, never SUHAS GROUP landing page.\n document.getElementById('messenger-back')?.addEventListener('click',()=>{location.href='social.html?tab=feed';});\n const bottomButtons=[...document.querySelectorAll('.messenger-bottom button')];
  function setActiveBottom(button){bottomButtons.forEach(x=>{const on=x===button;x.classList.toggle('selected',on);if(on)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});}
  function activateChildTab(tab){try{const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return false;if(typeof w.activateMaxTab==='function'){w.activateMaxTab(tab);return true;}const target=d.querySelector('[data-tab="'+tab+'"]');if(target){target.click();return true;}}catch(e){console.warn('Messenger navigation failed',tab,e);}return false;}
  document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{if(activateChildTab(b.dataset.dest))setActiveBottom(b);}));
