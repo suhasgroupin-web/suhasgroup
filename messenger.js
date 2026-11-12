@@ -58,6 +58,7 @@
   const d=frame.contentDocument,host=d?.getElementById('threads');
   if(!host)return;
   host.hidden=true;
+  host.style.setProperty('display','none','important');
   if(!groupNotice){
    groupNotice=d.createElement('div');
    groupNotice.className='empty';
@@ -69,7 +70,7 @@
  },true);
  all?.addEventListener('click',()=>{
   const host=frame.contentDocument?.getElementById('threads');
-  if(host)host.hidden=false;
+  if(host){host.hidden=false;host.style.removeProperty('display');}
   if(groupNotice)groupNotice.hidden=true;
  });
 })();
