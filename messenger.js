@@ -18,7 +18,11 @@
 
  *,*::before,*::after{box-sizing:border-box!important}
  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;margin:0!important}
- body{font-family:Arial,Helvetica,sans-serif!important;overflow-x:hidden!important}\n html,body,#messages{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}\n #messages{inset:0!important;right:0!important;left:0!important;touch-action:pan-y!important}\n #messages .suhas-messenger-pagebar,#messages>h2,#messages .message-subtitle,#message-thread-search{display:none!important}\n #messages .social-grid,#messages .social-grid>div:first-child,#threads{width:100%!important;max-width:100%!important;min-width:0!important}
+ body{font-family:Arial,Helvetica,sans-serif!important;overflow-x:hidden!important}
+ html,body,#messages{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+ #messages{inset:0!important;right:0!important;left:0!important;touch-action:pan-y!important}
+ #messages .suhas-messenger-pagebar,#messages>h2,#messages .message-subtitle,#message-thread-search{display:none!important}
+ #messages .social-grid,#messages .social-grid>div:first-child,#threads{width:100%!important;max-width:100%!important;min-width:0!important}
  .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading,.suhas-messenger-pagebar,.social-topbar,.social-header{display:none!important}
  .social-shell,.social-center,main,.panel,#messages{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;border:0!important;border-radius:0!important;box-shadow:none!important}
  #messages>h2,#messages .message-start h3,#messages .message-subtitle,#message-thread-search{display:none!important}
