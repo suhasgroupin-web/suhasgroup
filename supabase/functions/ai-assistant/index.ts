@@ -68,6 +68,36 @@ function localSmallTalk(prompt: string) {
 }
 
 
+
+function localCareerIntent(prompt: string) {
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،]+$/g, "").replace(/\\s+/g, " ");
+  const lang = detectReplyLanguage(prompt);
+  const bangla = lang.startsWith("Bangla in");
+  const banglish = lang.startsWith("Banglish");
+  const asksPortalLink = /\\b(job portal link|job portals link|career portal link|suhas career.*linkedin.*link|linkedin.*company.*jobs.*link)\\b/.test(p)
+    || /(জব পোর্টাল.*লিংক|চাকরির পোর্টাল.*লিংক|ক্যারিয়ার পোর্টাল.*লিংক|লিংকডইন.*কোম্পানি.*লিংক)/.test(p);
+  if (asksPortalLink) {
+    const url = "https://www.linkedin.com/company/suhasgroup/jobs/";
+    if (bangla) return "SUHAS GROUP-এর LinkedIn Jobs পেজ: " + url;
+    if (banglish) return "SUHAS GROUP-er LinkedIn Jobs page: " + url;
+    return "Here is the SUHAS GROUP LinkedIn Jobs page: " + url;
+  }
+  const linkedinIntent = /\\blinkedin\\b/.test(p) && /\\b(job|jobs|search|find|apply|career)\\b/.test(p)
+    || /লিংকডইন/.test(p) && /(চাকরি|জব|খুঁজ|আবেদন)/.test(p);
+  if (linkedinIntent) {
+    if (bangla) return "LinkedIn-এ চাকরি খুঁজতে পারেন। কোন ধরনের কাজ বা কোন সেক্টরে চাকরি চান?";
+    if (banglish) return "LinkedIn-e job search korte paren. Kon dhoroner job ba kon sector-e kaj chan?";
+    return "You can search for jobs on LinkedIn. What type of role or industry are you looking for?";
+  }
+  const genericNeedJob = /^(i need a job|i want a job|need job|looking for a job|i am looking for a job|i want job|find me a job|help me find a job|job chai|amar ekta job dorkar|amar chakri dorkar|chakri chai|job lagbe|চাকরি চাই|আমার চাকরি দরকার|আমার একটা চাকরি দরকার|আমার জব দরকার|জব চাই|চাকরি খুঁজছি|কাজ দরকার)$/.test(p);
+  if (genericNeedJob) {
+    if (bangla) return "আপনি কোন ধরনের চাকরি চান—কোন সেক্টরে?";
+    if (banglish) return "Apni kon dhoroner job chan—kon sector-e?";
+    return "What type of job are you looking for, and in which sector?";
+  }
+  return null;
+}
+
 function localOwnerAwareness(prompt: string, hasImage: boolean) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const asksKnow = /\b(do you know him|do you know her|do you know this person|know about him|know about her)\b/.test(p)
@@ -131,6 +161,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
       return json({ output: smallTalk, provider: "local", model: "instant-smalltalk" });
     }
+    const careerReply = localCareerIntent(prompt);
+    if (careerReply) {
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-career-clarification", status: "success", usage_data: { source: "short_job_navigation_reply" } });
+      return json({ output: careerReply, provider: "local", model: "local-career-clarification" });
+    }
     if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
 
     const { count } = await ctx.supabase.from("ai_usage_logs").select("*", { count: "exact", head: true })
@@ -144,7 +179,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return role && content ? [{ role, content }] : [];
     }) : [];
     const replyLanguage = detectReplyLanguage(prompt);
-    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
+    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. CAREER CONVERSATION RULES: If the user only says they need/want a job, do NOT give any URL, job list or multiple suggestions. Ask one short clarifying question about the type of job/sector. Continue one question at a time (for example, role/sector, then location, then experience) and keep each reply short. If the user asks about finding a job on LinkedIn, recommend searching on LinkedIn in one sentence, without providing a URL; then ask what role/sector they want. Only provide a link when the user explicitly asks for a link. When a job-portal link is explicitly requested, provide only this one relevant SUHAS GROUP LinkedIn Jobs page: https://www.linkedin.com/company/suhasgroup/jobs/ . Never provide multiple links in one reply. Do not provide links for vague requests such as 'I need a job', 'find me a job', or 'LinkedIn job'. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
 
 LANGUAGE MATCHING IS MANDATORY. Detected language hint: ${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
 
@@ -182,7 +217,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
           j.external_url ? "Original apply link: " + j.external_url : ""
         ].filter(Boolean).join(" | ")).join("\n")
       : "No published SUHAS GROUP vacancies are currently listed in the live database. Do not invent or imply that any SUHAS vacancy is open.";
-    const careerResources = "\n\nCAREER NAVIGATION: SUHAS GROUP Jobs: https://suhasgroup.pages.dev/jobs.html . Apply for Job: https://suhasgroup.pages.dev/apply-for-job.html . Online Job Search Center: https://suhasgroup.pages.dev/job-portals.html . Google job search: https://www.google.com/search?q=jobs+in+Bangladesh . LinkedIn Jobs: https://www.linkedin.com/jobs/search/ . Indeed: https://www.indeed.com/jobs . BDJobs: https://www.bdjobs.com/ . SUHAS GROUP LinkedIn: https://www.linkedin.com/company/suhasgroup/jobs/ . WhatsApp Jobs Channel: https://whatsapp.com/channel/0029VaGiyHs1XquODhluFX1N . Canva CV templates: https://www.canva.com/resumes/templates/ . These links are navigation destinations, not evidence of a current vacancy. The live SUHAS vacancy list is supplied below. External portal results are searched on their own websites; never claim that external listings have been automatically aggregated into SUHAS GROUP.";
+    const careerResources = "";
     const productNavigation = "\\n\\nSUHAS PRODUCT NAVIGATION: SUHAS MAX social/community app and its main dashboard: https://suhasgroup.pages.dev/app.html . Professional CV Studio / Resume Builder: https://suhasgroup.pages.dev/resume-builder.html . SUHAS GROUP Main Menu: https://suhasgroup.pages.dev/main-menu.html . SUHAS AI Assistant: https://suhasgroup.pages.dev/ai.html . If a user asks how to open one of these products, explain briefly and provide the exact corresponding URL as a clickable plain URL. Do not say a feature is live unless it is present in the current product or verified by the user. The public product pages are the source of truth for navigation.";
     const systemWithJobs = system + (asksAboutJobs ? careerResources + "\\n\\nCURRENT PUBLISHED SUHAS GROUP JOBS (live database snapshot):\\n" + liveJobsContext : "") + productNavigation;
 
