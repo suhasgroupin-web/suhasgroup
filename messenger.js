@@ -7,7 +7,7 @@
  const theme=`
  *,*::before,*::after{box-sizing:border-box!important}
  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;margin:0!important}
- body{font-family:Arial,Helvetica,sans-serif!important}
+ body{font-family:Arial,Helvetica,sans-serif!important;overflow-x:hidden!important}\n html,body,#messages{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}\n #messages{inset:0!important;right:0!important;left:0!important;touch-action:pan-y!important}\n #messages .suhas-messenger-pagebar,#messages>h2,#messages .message-subtitle,#message-thread-search{display:none!important}\n #messages .social-grid,#messages .social-grid>div:first-child,#threads{width:100%!important;max-width:100%!important;min-width:0!important}
  .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading,.suhas-messenger-pagebar,.social-topbar,.social-header{display:none!important}
  .social-shell,.social-center,main,.panel,#messages{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;border:0!important;border-radius:0!important;box-shadow:none!important}
  #messages>h2,#messages .message-start h3,#messages .message-subtitle,#message-thread-search{display:none!important}
@@ -41,6 +41,32 @@
    let s=d.getElementById('suhas-messenger-dark-inbox');if(!s){s=d.createElement('style');s.id='suhas-messenger-dark-inbox';d.head.appendChild(s)}s.textContent=theme;
    const title=d.getElementById('chat-title'),panel=d.querySelector('#messages .message-chat-panel');
    const sync=()=>{if(title&&panel){const open=!!title.textContent.trim()&&!/choose a conversation/i.test(title.textContent);panel.style.setProperty('display',open?'flex':'none','important')}};
+   // Pull down at the top of the inbox to refresh the outer Messenger URL.
+   const inbox=d.getElementById('messages');
+   if(inbox&&!inbox.dataset.suhasPullRefresh){
+    inbox.dataset.suhasPullRefresh='1';
+    let startY=0,armed=false,lastRefresh=0;
+    inbox.addEventListener('touchstart',ev=>{
+     if(!ev.touches||ev.touches.length!==1)return;
+     const target=ev.target;
+     if(target.closest('input,textarea,form,.msg-list,button,a,select')){armed=false;return;}
+     startY=ev.touches[0].clientY;
+     armed=inbox.scrollTop<=2;
+    },{passive:true});
+    inbox.addEventListener('touchend',ev=>{
+     if(!armed||!ev.changedTouches||!ev.changedTouches.length)return;
+     const distance=ev.changedTouches[0].clientY-startY;
+     armed=false;
+     if(distance>105&&inbox.scrollTop<=2&&Date.now()-lastRefresh>4000){
+      lastRefresh=Date.now();
+      const hint=d.createElement('div');
+      hint.textContent='Refreshing Messenger…';
+      hint.style.cssText='position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99999;background:#0866ff;color:#fff;padding:10px 16px;border-radius:22px;font:600 14px Arial;box-shadow:0 2px 12px #0002';
+      d.body.appendChild(hint);
+      setTimeout(()=>window.parent.location.reload(),180);
+     }
+    },{passive:true});
+   }
    if(title&&!title.dataset.suhasDarkObserver){new MutationObserver(sync).observe(title,{childList:true,subtree:true,characterData:true});title.dataset.suhasLightObserver='1'}sync();
   }catch(e){console.warn('Messenger isolated theme not applied',e)}
  }
