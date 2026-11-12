@@ -74,30 +74,37 @@ function localCareerIntent(prompt: string) {
   const lang = detectReplyLanguage(prompt);
   const bangla = lang.startsWith("Bangla in");
   const banglish = lang.startsWith("Banglish");
-  const asksPortalLink = /\b(job portal link|job portals link|career portal link|suhas career.*linkedin.*link|linkedin.*company.*jobs.*link)\b/.test(p)
-    || /(জব পোর্টাল.*লিংক|চাকরির পোর্টাল.*লিংক|ক্যারিয়ার পোর্টাল.*লিংক|লিংকডইন.*কোম্পানি.*লিংক)/.test(p);
-  if (asksPortalLink) {
-    const url = "https://www.linkedin.com/company/suhasgroup/jobs/";
-    if (bangla) return "SUHAS GROUP-এর LinkedIn Jobs পেজ: " + url;
-    if (banglish) return "SUHAS GROUP-er LinkedIn Jobs page: " + url;
-    return "Here is the SUHAS GROUP LinkedIn Jobs page: " + url;
+  const link = "https://www.linkedin.com/company/suhasgroup/jobs/";
+  const explicitLink = /\b(link|url|website|page|profile|post)\b/.test(p) && /\b(job|jobs|career|careers|linkedin|recruit|recruitment|suhas)\b/.test(p)
+    || /(লিংক|লিংকটা|লিংকটি|ওয়েবসাইট|ওয়েবসাইট|পেজটা|পোস্টটা).*(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস)/.test(p)
+    || /(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস).*(লিংক|ওয়েবসাইট|ওয়েবসাইট|পেজ|পোস্ট)/.test(p);
+  const acceptsOffer = /^(yes|yes please|sure|okay|ok|please|send it|share it|give me the link|show me|হ্যাঁ|জি|দাও|দিন|লিংক দাও|পাঠাও|শেয়ার করো|হ্যাঁ দাও|হ্যাঁ দিন|হ্যাঁ পাঠাও)$/.test(p);
+  if (explicitLink || acceptsOffer) {
+    if (bangla) return "এখানে SUHAS GROUP-এর LinkedIn Jobs পেজটি দেওয়া হলো: " + link;
+    if (banglish) return "Ekhane SUHAS GROUP-er LinkedIn Jobs page: " + link;
+    return "Here is the SUHAS GROUP LinkedIn Jobs page: " + link;
   }
-  const linkedinIntent = /\blinkedin\b/.test(p) && /\b(job|jobs|search|find|apply|career)\b/.test(p)
-    || /লিংকডইন/.test(p) && /(চাকরি|জব|খুঁজ|আবেদন)/.test(p);
-  if (linkedinIntent) {
-    if (bangla) return "LinkedIn-এ চাকরি খুঁজতে পারেন। কোন ধরনের কাজ বা কোন সেক্টরে চাকরি চান?";
-    if (banglish) return "LinkedIn-e job search korte paren. Kon dhoroner job ba kon sector-e kaj chan?";
-    return "You can search for jobs on LinkedIn. What type of role or industry are you looking for?";
+  const jobTopic = /\b(job|jobs|career|careers|vacancy|vacancies|recruit|recruitment|hiring|interview|salary|cv|resume|application|apply|employment|unemployed|linkedin|job portal|job search)\b/.test(p)
+    || /(চাকরি|জব|কাজের সুযোগ|কাজ খুঁজ|কাজ চাই|নিয়োগ|নিয়োগ|ভ্যাকান্সি|ইন্টারভিউ|বেতন|সিভি|জীবনবৃত্তান্ত|আবেদন|ক্যারিয়ার|ক্যারিয়ার|লিংকডইন|জব পোর্টাল)/.test(p);
+  if (!jobTopic) return null;
+  const offerBangla = "আমাদের SUHAS Career PLC-এর LinkedIn recruiting page আছে। চাইলে সেখানকার প্রাসঙ্গিক job post বা লিংক শেয়ার করে আপনাকে খুঁজতে সাহায্য করতে পারি। আপনি কোন ধরনের চাকরি বা কোন সেক্টর খুঁজছেন?";
+  const offerBanglish = "Amader SUHAS Career PLC-er LinkedIn recruiting page ache. Chaile sekhaner relevant job post ba link share kore help korte pari. Apni kon dhoroner job ba kon sector khুঁজছেন?";
+  const offerEnglish = "We have a LinkedIn recruiting page for SUHAS Career PLC. If you’d like, I can share its relevant job post or page link to help you search. What type of role or sector are you looking for?";
+  if (/\b(linkedin)\b/.test(p) || /লিংকডইন/.test(p)) {
+    if (bangla) return "LinkedIn-এ চাকরি খুঁজতে পারেন। আমাদের SUHAS Career PLC-এর recruiting page থেকেও সাহায্য করতে পারি—চাইলে লিংক বা প্রাসঙ্গিক পোস্ট শেয়ার করব। কোন ধরনের চাকরি চান?";
+    if (banglish) return "LinkedIn-e job search korte paren. Amader SUHAS Career PLC recruiting page thekeo help korte pari—chaile link ba relevant post share korbo. Kon dhoroner job chan?";
+    return "You can search on LinkedIn, and I can also help through our SUHAS Career PLC recruiting page. Would you like me to share its link or a relevant post? What role are you looking for?";
   }
   const genericNeedJob = /^(i need a job|i want a job|need job|looking for a job|i am looking for a job|i want job|find me a job|help me find a job|job chai|amar ekta job dorkar|amar chakri dorkar|chakri chai|job lagbe|চাকরি চাই|আমার চাকরি দরকার|আমার একটা চাকরি দরকার|আমার জব দরকার|জব চাই|চাকরি খুঁজছি|কাজ দরকার)$/.test(p);
   if (genericNeedJob) {
-    if (bangla) return "আপনি কোন ধরনের চাকরি চান—কোন সেক্টরে?";
-    if (banglish) return "Apni kon dhoroner job chan—kon sector-e?";
-    return "What type of job are you looking for, and in which sector?";
+    if (bangla) return "অবশ্যই, সাহায্য করব। আমাদের SUHAS Career PLC-এর LinkedIn recruiting page আছে—চাইলে সেখানকার job post বা লিংক শেয়ার করতে পারি। আপনি কোন ধরনের চাকরি চান, কোন সেক্টরে?";
+    if (banglish) return "Obosshoi, help korbo. Amader SUHAS Career PLC-er LinkedIn recruiting page ache—chaile job post ba link share korte pari. Apni kon dhoroner job chan, kon sector-e?";
+    return "I can help. We have a SUHAS Career PLC LinkedIn recruiting page and can share a relevant post or link if you’d like. What type of job and sector are you interested in?";
   }
-  return null;
+  if (bangla) return offerBangla;
+  if (banglish) return offerBanglish;
+  return offerEnglish;
 }
-
 function localOwnerAwareness(prompt: string, hasImage: boolean) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const asksKnow = /\b(do you know him|do you know her|do you know this person|know about him|know about her)\b/.test(p)
@@ -179,7 +186,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return role && content ? [{ role, content }] : [];
     }) : [];
     const replyLanguage = detectReplyLanguage(prompt);
-    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. CAREER CONVERSATION RULES: If the user only says they need/want a job, do NOT give any URL, job list or multiple suggestions. Ask one short clarifying question about the type of job/sector. Continue one question at a time (for example, role/sector, then location, then experience) and keep each reply short. If the user asks about finding a job on LinkedIn, recommend searching on LinkedIn in one sentence, without providing a URL; then ask what role/sector they want. Only provide a link when the user explicitly asks for a link. When a job-portal link is explicitly requested, provide only this one relevant SUHAS GROUP LinkedIn Jobs page: https://www.linkedin.com/company/suhasgroup/jobs/ . Never provide multiple links in one reply. Do not provide links for vague requests such as 'I need a job', 'find me a job', or 'LinkedIn job'. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
+    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. CAREER CONVERSATION RULES: For ANY job-related question (job search, vacancy, CV, interview, salary, application, recruitment, LinkedIn, job portals or needing work), reply naturally and briefly. Mention that SUHAS Career PLC has a LinkedIn recruiting page and offer to share its relevant job post or page link IF the user wants it; do not include the URL unless explicitly requested or the user accepts the offer. Ask only one useful follow-up question, matched to what they asked (role/sector, location, experience, CV/interview, etc.). If the user only says they need a job, ask what role/sector they want while briefly offering SUHAS Career PLC recruiting-page help. If they ask where/how to search on LinkedIn or a job portal, recommend SUHAS Career PLC's LinkedIn recruiting page first and ask whether they want its link; do not send a generic collection of external portals. If they explicitly request a job/recruiting page link or accept the offer, provide exactly one relevant SUHAS Career PLC LinkedIn page: https://www.linkedin.com/company/suhasgroup/jobs/ . Never send multiple links or unrelated URLs. Keep the exchange conversational, short, and one question at a time. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
 
 LANGUAGE MATCHING IS MANDATORY. Detected language hint: ${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
 
