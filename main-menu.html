@@ -184,6 +184,12 @@ body{position:fixed;inset:0}
 @media(max-height:740px){.welcome-stage{gap:4px}.logo-halo{width:72px}.ambient-showcase{height:31svh;min-height:165px}.welcome-subtitle{font-size:11px}.welcome-values{font-size:8px}}
 @media(max-width:600px){.menu-wrap{padding-left:14px;padding-right:14px}.ambient-showcase{height:clamp(210px,36svh,310px);min-height:190px}.welcome-cta-wrap{right:2%;bottom:6%;width:clamp(128px,37vw,160px)}}
 @media(prefers-reduced-motion:reduce){.scene-car,.scene-van,.scene-bike,.scene-pedestrians i,.scene-car .wheel,.scene-bike:before,.scene-bike:after,.suhas-balloon,.welcome-cta-wrap{animation:none!important;opacity:1!important;transform:none!important}}
+
+/* SUHAS-MOBILE-LOGO-FIX-20261112: keep the full emblem visible on compact screens */
+.logo-halo{position:relative;top:5mm}
+@media(max-width:600px){
+  .ambient-showcase{height:clamp(170px,29svh,260px);flex:0 1 260px;min-height:160px}
+}
 </style></head><body><main class="menu-wrap"><div class="welcome-stars"></div><section class="welcome-stage" aria-label="Welcome to SUHAS GROUP"><div class="welcome-orbit"></div><div class="logo-halo"><img src="assets/logo.png" alt="SUHAS GROUP logo"></div><div class="welcome-kicker">A world of opportunities</div><h1 class="welcome-title"><span>Welcome to</span>SUHAS GROUP</h1><div class="welcome-divider"></div><p class="welcome-subtitle">One vision. One community. Endless possibilities.<br>We are delighted to have you with us.</p><div class="welcome-values"><span>Careers</span><span>Quality</span><span>Design</span><span>Innovation</span></div>
 <section class="ambient-showcase" id="suhas-ambient-showcase" aria-label="SUHAS GROUP visual showcase">
   <video id="suhas-ambient-video" class="ambient-video" muted playsinline autoplay preload="none" aria-label="SUHAS GROUP cinematic showcase"></video>
