@@ -36,6 +36,8 @@ body{background:#f0f2f5!important;min-height:100vh}
 .site-header .nav-cta{margin-left:auto!important}
 .site-footer{display:none!important}
 @media(max-width:600px){.site-header .nav-wrap{padding:10px 14px!important}.site-header .brand-tag{display:none!important}.site-header .brand-name{font-size:17px!important}.site-header .brand img{width:42px!important;height:42px!important}.site-header .nav-cta .btn{padding:9px 12px!important}.menu-toggle{display:none!important}.auth-wrap{min-height:calc(100dvh - 72px)!important;padding:22px 14px!important;align-items:center!important}.form-card{padding:25px 20px!important;border-radius:14px!important}.form-card h1{font-size:28px!important}}
+
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-top:4px}.auth-actions .btn{width:100%;min-height:52px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:10px!important;font-size:17px!important;font-weight:750!important;text-decoration:none!important;cursor:pointer}.auth-actions #sub{width:100%!important;min-height:52px!important}.auth-actions a{box-shadow:none!important}@media(max-width:360px){.auth-actions{gap:8px}.auth-actions .btn{font-size:15px!important;min-height:48px}}
 </style>
 <style id="suhas-public-auth-nav-hide">
 html,body{min-height:100%;padding-bottom:0!important}
@@ -47,7 +49,6 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <nav class="nav-links"><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="group.html">Our Companies</a><a href="about.html">About</a><a href="employers.html">For Employers</a><a href="contact.html">Contact</a></nav>
 <button class="menu-toggle" aria-label="Menu">&#9776;</button>
 </div></header>
-<div class="auth-switch" aria-label="Account access"><a href="login.html" class="btn btn-outline btn-sm">Login</a><a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a></div>
 <div class="auth-wrap"><div class="auth-brand"><img src="assets/logo.png" alt="" style="width:110px;margin-bottom:26px"><h2>Global Opportunities, Trusted Quality</h2><p style="margin-bottom:26px">Join the SUHAS GROUP portal and connect with verified employers worldwide.</p><ul><li>Build one profile and apply in one tap</li><li>Track every application in one place</li><li>Verified employers and real vacancies only</li></ul></div><div class="auth-form"><div class="form-card">
 <h1>Create your account</h1><p>Create your SUHAS GROUP account. SUHAS-MAX has a separate profile setup after you enter the social platform.</p>
 <div id="msg" class="msg"></div>
@@ -58,7 +59,7 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <div class="form-row" id="role-wrap"><label for="role">Account type</label><select id="role"><option value="candidate">Job seeker</option><option value="employer">Employer / Recruiter</option></select></div>
 <div id="o5-note" class="msg" style="display:none;background:#eaf2ff;color:#173d75">O5 International employee account: this account will be a standard User, not Admin or Recruiter. You will be taken to the O5 workspace.</div>
 <div id="install-note" class="msg" style="display:none;background:#eaf2ff;color:#173d75"><strong>Install SUHAS GROUP app</strong><br>After creating your account, you can install the app on your phone for quicker access.<br><button type="button" id="install-app" class="btn btn-primary btn-sm" style="margin-top:10px">Install App</button></div>
-<button class="btn btn-primary" id="sub" style="width:100%" type="submit">Sign Up</button>
+<div class="auth-actions"><a class="btn btn-outline" href="login.html">Login</a><button class="btn btn-primary" id="sub" type="submit">Sign Up</button></div>
 </form>
 <p class="linkline">Already registered? <a href="login.html">Login</a></p>
 </div></div></div>
