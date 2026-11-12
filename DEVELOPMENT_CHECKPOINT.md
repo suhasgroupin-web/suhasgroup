@@ -1064,3 +1064,13 @@ Date: 2026-11-10
 - Commits: database + UI/history + voice permission `34c3be4f3af2919ea7d9bfb378e6b230a5c9ad0e`; Edge Function streaming source `61de1a79401fde9d669c77e6f224a1919175e8a5`; frontend streaming `a22f9954f30f77e4aaedfe0aff18d3483ceb0057`; SSE newline parser correction `624960d18a8afdf607bcf5cd5b815ceab099f73e`.
 - Supabase Edge Function `ai-assistant` deployed and read back ACTIVE at version 57 with JWT verification enabled.
 - Pending: authenticated Android test of microphone permission and spoken turn-taking; send/stream test against the live Gemini provider; create/open a new chat and verify persistence after refresh/logout-login; confirm latest Cloudflare Pages deployment. The combined GitHub status for the latest frontend commit reports Vercel build-rate-limit failure; this is not proof that Cloudflare Pages deployed the new frontend. Do not mark the frontend live until Cloudflare's deployed release is confirmed.
+
+
+## 2026-11-12 — SUHAS AI concise job-seeking conversation rules
+- Updated `supabase/functions/ai-assistant/index.ts` with deterministic local career-intent replies before any Gemini call, so common job-navigation questions receive immediate short responses.
+- “I need a job” / equivalent Bangla and Banglish prompts now ask one clarifying question about desired job type/sector and do not send a URL or job list.
+- “LinkedIn job” / job-search-on-LinkedIn prompts recommend LinkedIn without including a URL and ask what role/sector the user wants.
+- An explicit job-portal-link request returns one SUHAS GROUP LinkedIn Jobs destination only: `https://www.linkedin.com/company/suhasgroup/jobs/`.
+- Removed the automatic multi-link career resource bundle from the AI system context; added strict instructions for concise, one-question-at-a-time career conversations and link-on-explicit-request only.
+- Supabase Edge Function `ai-assistant` deployed and read back ACTIVE at version 60 with JWT verification enabled. Source commit: `3ad031990e17506aadff42899d12abeba378581f` (earlier prompt/rule commit: `5232c3d553bea88c776a2916868e07d15adfcc48`).
+- Pending live user acceptance test: sign in to SUHAS AI and try “I need a job”, “I need a LinkedIn job”, and “send me the job portal link”; verify the actual rendered answers and confirm the single link destination. The Edge Function deployment is confirmed; the full authenticated browser journey was not run from this session.
