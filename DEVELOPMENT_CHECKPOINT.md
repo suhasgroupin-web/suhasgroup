@@ -1052,5 +1052,5 @@ Date: 2026-11-10
 - Added a concise-answer policy: default 1–3 sentences; expand only when details are requested; include social/profile links only when requested or necessary.
 - Reduced Gemini output budget to 450 tokens and temperature to 0.35 for tighter, faster responses.
 - GitHub commits: frontend `470f66ef97b3230c0a89c3fd50065608d664b50e`; backend `0fdbb72e65f4493bcc4189f0bcb4018374d82fb8`.
-- Supabase Edge Function `ai-assistant` deployed successfully as version 55 with JWT verification enabled.
+- Supabase Edge Function `ai-assistant` deployed successfully; Supabase read-back confirmed ACTIVE version 56 with JWT verification enabled.
 - Authenticated Android end-to-end testing and true realtime full-duplex voice API integration remain pending.
