@@ -7,6 +7,7 @@ SUHAS GROUP connects people with career opportunities and provides information a
 ## Main pages
 
 - [SUHAS GROUP home](https://suhasgroup.pages.dev/): Official website and overview of SUHAS-MAX.
+- [SUHAS Work & Careers](https://suhasgroup.pages.dev/suhas-work): Work areas, SUHAS Careers PLC, jobs, recruitment, garments, quality, design, and denim.
 - [About SUHAS GROUP](https://suhasgroup.pages.dev/about.html): Group background, mission, leadership, and office information.
 - [SUHAS GROUP companies](https://suhasgroup.pages.dev/group.html): Information about recruitment, garments, design, and denim businesses.
 - [Career opportunities](https://suhasgroup.pages.dev/jobs.html): Search career opportunities and access the SUHAS GROUP career portal.
