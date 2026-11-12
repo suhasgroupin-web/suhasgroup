@@ -3614,13 +3614,13 @@ async function renderHeaderSearchResults(){
    .select('user_id,full_name,company,position,location,profile_photo_url')
    .eq('profile_complete',true).neq('user_id',me)
    .ilike('full_name','%'+q.replace(/[%_]/g,'\\$&')+'%')
-   .order('full_name',{ascending:true}).limit(50);
+   .order('full_name',{ascending:true}).limit(500);
   if(request!==headerSearchRequest||q!==(field.value||'').trim())return;
   if(result.error)throw result.error;
   const found=result.data||[];
   const html=found.map(p=>'<button type="button" class="header-search-result" role="option" data-profile-open="'+safe(p.user_id)+'">'+(p.profile_photo_url?'<img src="'+safe(p.profile_photo_url)+'" alt="">':'<span class="header-search-avatar">'+safe((p.full_name||'S').slice(0,1).toUpperCase())+'</span>')+'<span><b>'+safe(p.full_name||'SUHAS Member')+'</b><small>'+safe([p.position,p.company,p.location].filter(Boolean).join(' · ')||'SUHAS-MAX member')+'</small></span><span class="header-result-kind">MEMBER</span></button>').join('');
   host.innerHTML=html||'<div class="header-search-empty">No matching active member profiles</div>';
-  if(found.length===50)host.insertAdjacentHTML('beforeend','<div class="header-search-empty">Showing the first 50 matches. Refine the name to narrow results.</div>');
+  if(found.length===500)host.insertAdjacentHTML('beforeend','<div class="header-search-empty">Showing the first 500 matches. Refine the name to narrow results.</div>');
   host.hidden=false;
   host.querySelectorAll('[data-profile-open]').forEach(item=>item.addEventListener('click',async()=>{host.hidden=true;try{await openMemberProfile(item.dataset.profileOpen);}catch(err){notice(err.message||'Could not open this profile.',true);}}));
  }catch(error){
