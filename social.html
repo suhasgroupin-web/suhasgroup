@@ -5507,19 +5507,24 @@ html.suhas-authenticated .tabbar{display:none!important}
 </style>
 
 <style id="suhas-max-header-lock-plus-size-and-right-create-fix-20261112">
-/* Preserve the approved header; only make the Plus control slightly more compact. */
+/* Compact only the Plus control; preserve the approved header and menu alignment. */
 @media(max-width:760px){
- html body:not(.suhas-desktop-mode) .site-header .suhas-create-wrap{
-  flex:0 0 32px!important;width:32px!important;min-width:32px!important;
+ html body:not(.suhas-desktop-mode) header.site-header .suhas-premium-header-actions .suhas-create-wrap{
+  flex:0 0 28px!important;width:28px!important;min-width:28px!important;
  }
- html body:not(.suhas-desktop-mode) .site-header .suhas-create-trigger{
-  width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;
-  flex:0 0 32px!important;
+ html body:not(.suhas-desktop-mode) header.site-header .suhas-premium-header-actions button.mobile-head-action.suhas-create-trigger{
+  display:inline-flex!important;box-sizing:border-box!important;
+  width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;
+  flex:0 0 28px!important;padding:0!important;font-size:0!important;line-height:0!important;
  }
- html body:not(.suhas-desktop-mode) .site-header .suhas-create-trigger:before{
-  font-size:22px!important;line-height:1!important;
+ html body:not(.suhas-desktop-mode) header.site-header .suhas-premium-header-actions button.mobile-head-action.suhas-create-trigger:before{
+  content:"＋"!important;display:grid!important;place-items:center!important;
+  font:400 18px/1 Arial,sans-serif!important;
  }
- html body.suhas-header-panel-open .site-header .suhas-create-menu:not([hidden]){
+ html body:not(.suhas-desktop-mode) header.site-header .suhas-premium-header-actions button.mobile-head-action.suhas-create-trigger:after{
+  content:none!important;display:none!important;
+ }
+ html body.suhas-header-panel-open header.site-header .suhas-create-menu:not([hidden]){
   position:fixed!important;left:auto!important;right:8px!important;
   width:min(390px,calc(100vw - 16px))!important;max-width:390px!important;
   margin:0!important;transform:none!important;box-sizing:border-box!important;
