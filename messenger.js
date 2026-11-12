@@ -74,4 +74,46 @@
   if(host){host.hidden=false;host.style.removeProperty('display');}
   if(groupNotice)groupNotice.hidden=true;
  });
+
+ // Keep browser pull-to-refresh available on this dedicated page and check for fresh app releases.
+ // A waiting worker is activated automatically; the current URL is reloaded after activation.
+ (function enableMessengerRefreshAndAutoUpdate(){
+  if(!('serviceWorker' in navigator))return;
+  var root=new URL('./',location.href);
+  var registration=null, applying=false, reloading=false;
+  function activateWaiting(){
+   if(!registration||!registration.waiting||applying)return;
+   applying=true;
+   registration.waiting.postMessage({type:'SUHAS_SKIP_WAITING'});
+  }
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+   if(!applying||reloading)return;
+   reloading=true;
+   // Preserve the exact Messenger route and query parameters across the update reload.
+   location.reload();
+  });
+  async function check(){
+   try{
+    var releaseResponse=await fetch(new URL('release.json',root).href,{cache:'no-store'});
+    if(!releaseResponse.ok)return;
+    var release=await releaseResponse.json();
+    if(!release||!release.version)return;
+    registration=await navigator.serviceWorker.register(new URL('sw.js?v='+encodeURIComponent(release.version),root).href,{scope:root.pathname,updateViaCache:'none'});
+    await registration.update();
+    activateWaiting();
+    registration.addEventListener('updatefound',function(){
+     var worker=registration.installing;
+     if(!worker)return;
+     worker.addEventListener('statechange',function(){
+      if(worker.state==='installed'&&navigator.serviceWorker.controller)activateWaiting();
+     });
+    });
+    if(registration.waiting)activateWaiting();
+   }catch(error){console.warn('SUHAS Messenger update check:',error);}
+  }
+  check();
+  window.addEventListener('focus',check);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)check();});
+ })();
+
 })();

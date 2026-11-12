@@ -84,3 +84,7 @@ html,body,.messenger-app{background:#000!important;color:#f5f5f5!important}
  .messenger-bottom{height:66px!important;min-height:66px!important;flex-basis:66px!important}
 }
 @media(max-height:760px){.messenger-stories{height:122px!important;min-height:122px!important;flex-basis:122px!important}.story-avatar{width:78px!important;height:78px!important}.story-contact img{width:74px!important;height:74px!important}.story-contact:after{top:56px!important}}
+
+/* Allow the mobile browser's native pull-to-refresh gesture on Messenger. */
+html,body{overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important}
+.messenger-app{min-height:100dvh!important}
