@@ -115,3 +115,18 @@ html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width
 .messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
 .messenger-bottom button small{display:none!important}
 @media(max-width:600px){.messenger-bottom{height:calc(62px + env(safe-area-inset-bottom))!important}.messenger-bottom button{height:54px!important}}
+
+/* Facebook Messenger-inspired compact header and balanced tab bar */
+.messenger-head{flex:0 0 72px!important;height:72px!important;padding:0 24px!important;align-items:center!important}
+.messenger-brand{font-size:36px!important;letter-spacing:-1.5px!important}
+.messenger-head-actions{gap:18px!important}
+#messenger-compose{width:42px!important;height:42px!important;font-size:0!important;position:relative!important}
+#messenger-compose:before{content:""!important;display:block!important;width:22px!important;height:18px!important;border:2.5px solid currentColor!important;border-radius:3px!important}
+#messenger-compose:after{content:"↗"!important;position:absolute!important;right:7px!important;top:4px!important;width:17px!important;height:17px!important;background:#fff!important;font-size:20px!important;line-height:15px!important;font-weight:700!important}
+#messenger-back{width:42px!important;height:42px!important}
+#messenger-back img{width:38px!important;height:38px!important}
+.messenger-bottom{justify-content:space-around!important;gap:0!important;padding-left:12px!important;padding-right:12px!important}
+.messenger-bottom button{max-width:84px!important;height:54px!important}
+.messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
+.messenger-bottom button:focus-visible,#messenger-compose:focus-visible,#messenger-back:focus-visible{outline:2px solid #0866ff!important;outline-offset:2px!important}
+@media(max-width:600px){.messenger-head{flex-basis:72px!important;height:72px!important;padding:0 24px!important}.messenger-brand{font-size:35px!important}}
