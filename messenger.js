@@ -34,6 +34,15 @@
  #messages .bubble{max-width:82%!important;padding:10px 14px!important;border-radius:19px!important;background:#f0f2f5!important;color:#050505!important}
  #messages .bubble.mine{background:#0866ff!important;color:#fff!important}
  #messages .empty{padding:24px 12px!important;color:#65676b!important;text-align:center!important}
+ /* One visible filter row: the shell owns All / Unread / Groups. */
+ #messages .suhas-inbox-filters{display:none!important}
+ #messages .message-subtitle{display:none!important}
+ #messages .social-grid{display:flex!important;flex:1 1 auto!important;min-height:0!important;height:100%!important;overflow:hidden!important}
+ #messages .social-grid>div:first-child{display:flex!important;flex:1 1 auto!important;min-height:0!important;height:100%!important;overflow:hidden!important}
+ #messages #threads{display:flex!important;flex:1 1 auto!important;min-height:0!important;height:100%!important;overflow-y:auto!important;overflow-x:hidden!important}
+ #messages #threads>.empty{display:block!important;flex:0 0 auto!important;padding:26px 12px!important;color:#65676b!important;text-align:center!important}
+ #messages .message-chat-panel{display:none!important}
+ #messages.chat-open .message-chat-panel{display:flex!important}
  @media(max-width:600px){#messages .social-grid{padding:0 14px!important}#messages .message-thread{min-height:82px!important}#messages .message-thread>img,#messages .message-thread>.message-member-avatar{width:58px!important;height:58px!important;flex-basis:58px!important}}
  `;
  function apply(){
@@ -47,6 +56,10 @@
  }
  frame.addEventListener('load',()=>{apply();setTimeout(apply,250);setTimeout(apply,900)});
  if(frame.contentDocument?.readyState==='complete')apply();
+ const observeFrame=()=>{try{const d=frame.contentDocument;if(!d||!d.documentElement)return;apply();if(d.documentElement.dataset.suhasMessengerObserved==='1')return;d.documentElement.dataset.suhasMessengerObserved='1';const mo=new MutationObserver(()=>{if(d.getElementById('messages')&&!d.getElementById('messages').hidden)apply();});mo.observe(d.documentElement,{subtree:true,attributes:true,attributeFilter:['hidden','class']});}catch(e){}};
+ frame.addEventListener('load',()=>setTimeout(observeFrame,80));
+ window.addEventListener('pageshow',()=>{apply();observeFrame();});
+
  const search=document.getElementById('messenger-search');
  search?.addEventListener('input',()=>{
   try{const d=frame.contentDocument;const q=d?.getElementById('message-thread-search');if(q){q.value=search.value;q.dispatchEvent(new Event('input',{bubbles:true}))}}catch(e){}
