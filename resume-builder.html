@@ -129,7 +129,7 @@ setText('p-name',val('name').toUpperCase(),'YOUR FULL NAME');setText('p-role',va
 setText('p-phone',val('phone'),'Phone');setText('p-email',val('email'),'Email');setText('p-linkedin',val('linkedin'));setText('p-location',val('location'),'Location');
 list('p-competencies',val('competencies'),'Add your competencies');
 ['languages','training','technical','personal','address','reference','summary','experience','achievements','expertise','employment','buyers','education','declaration'].forEach(function(k){setText('p-'+k,val(k),k==='summary'?'Add your professional summary':k==='experience'?'Add your professional experience':'')});
-setText('p-skills',val('skills'));setText('p-signature',val('signature')||"Applicant's signature");showPhoto();
+setText('p-skills',val('skills'));setText('p-signature-name',val('signature')||"Applicant's signature");var si=el('p-signature-image');if(signatureData){si.src=signatureData;si.hidden=false}else{si.hidden=true;si.removeAttribute('src')}showPhoto();
 }
 function fill(x){keys.forEach(function(k){if(el('cv-'+k))el('cv-'+k).value=k==='title'?(x.title||'My Professional CV'):(x[k]||'')});photoData=x.photo||'';if(!photoData&&x.photo_url)photoData=x.photo_url;preview()}
 async function refreshSaved(){var r=await sb.from('candidate_resumes').select('id,title,updated_at').eq('user_id',user.id).order('updated_at',{ascending:false});if(r.error){say('Could not load saved CVs: '+r.error.message,false);return}var s=el('cv-saved');s.innerHTML='<option value="">Saved CV drafts</option>';(r.data||[]).forEach(function(x){var o=document.createElement('option');o.value=x.id;o.textContent=x.title+' · '+new Date(x.updated_at).toLocaleDateString();s.appendChild(o)})}
