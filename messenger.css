@@ -130,3 +130,15 @@ html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width
 .messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
 .messenger-bottom button:focus-visible,#messenger-compose:focus-visible,#messenger-back:focus-visible{outline:2px solid #0866ff!important;outline-offset:2px!important}
 @media(max-width:600px){.messenger-head{flex-basis:72px!important;height:72px!important;padding:0 24px!important}.messenger-brand{font-size:35px!important}}
+
+/* Match the supplied Facebook Messenger bottom navigation reference */
+.messenger-bottom{justify-content:stretch!important;gap:0!important;padding:0 12px env(safe-area-inset-bottom)!important}
+.messenger-bottom button{position:relative!important;flex:1 1 25%!important;width:25%!important;max-width:none!important;height:62px!important;border-radius:40px!important;color:#85888d!important}
+.messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
+.messenger-bottom button svg{width:38px!important;height:38px!important;stroke-width:2.2!important}
+.messenger-bottom button[data-dest="messages"] svg{width:42px!important;height:42px!important}
+.messenger-bottom .nav-badge{position:absolute!important;top:4px!important;left:calc(50% + 17px)!important;z-index:2!important;display:flex!important;align-items:center!important;justify-content:center!important;min-width:21px!important;height:21px!important;padding:0 5px!important;border:2px solid #fff!important;border-radius:999px!important;background:#e41e3f!important;color:#fff!important;font:800 12px/1 Arial,sans-serif!important;box-shadow:0 1px 2px #0002!important}
+.messenger-bottom .nav-dot{width:20px!important;min-width:20px!important;height:20px!important;padding:0!important}
+.messenger-bottom .nav-count:empty,.messenger-bottom .nav-count[data-count="0"]{display:none!important}
+.messenger-bottom button:focus-visible{outline:2px solid #0866ff!important;outline-offset:2px!important}
+@media(max-width:600px){.messenger-bottom{height:calc(70px + env(safe-area-inset-bottom))!important;min-height:70px!important;padding:0 14px env(safe-area-inset-bottom)!important}.messenger-bottom button{height:62px!important}.messenger-bottom button svg{width:36px!important;height:36px!important}.messenger-bottom button[data-dest="messages"] svg{width:40px!important;height:40px!important}.messenger-bottom .nav-badge{top:3px!important;left:calc(50% + 14px)!important}}
