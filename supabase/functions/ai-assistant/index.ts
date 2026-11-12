@@ -31,7 +31,6 @@ function cleanText(value: unknown, max = 12000) {
 
 const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => {
     if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
-    if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
     if (!["openai", "anthropic", "gemini"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use gemini, openai or anthropic." }, 500);
 
     let body: Record<string, unknown>;
@@ -39,6 +38,16 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     const prompt = cleanText(body.prompt, 4000);
     const requestType = cleanText(body.request_type, 80) || "career_assistant";
     if (!prompt) return json({ error: "Please enter a message." }, 400);
+
+    // Standalone greetings are answered locally, so model overload cannot block them.
+    if (/^(hi|hello|hey|hiya|good morning|good afternoon|good evening|assalamu alaikum|salam|হ্যালো|হাই|আসসালামু আলাইকুম)[!.?,\s]*$/i.test(prompt)) {
+      const greeting = /[\u0980-\u09FF]/.test(prompt)
+        ? "ওয়ালাইকুম আসসালাম! কীভাবে সাহায্য করতে পারি?"
+        : "Hi! How can I help you?";
+      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-greeting", status: "success", usage_data: { source: "instant_greeting" } });
+      return json({ output: greeting, provider: "local", model: "instant-greeting" });
+    }
+    if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
 
     const { count } = await ctx.supabase.from("ai_usage_logs").select("*", { count: "exact", head: true })
       .eq("user_id", ctx.userClaims?.sub ?? "")
@@ -95,31 +104,51 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       ] };
     }
 
-    let response: Response;
-    let data: any;
-    try {
-      response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(payload) });
-      data = await response.json().catch(() => ({}));
-    } catch {
-      return json({ error: "Could not connect to the AI provider. Check the Supabase function's network and provider settings." }, 502);
-    }
+    let response: Response | undefined;
+    let data: any = {};
     let activeModel = AI_MODEL;
-    if (!response.ok && AI_PROVIDER === "gemini" && AI_MODEL !== DEFAULT_GEMINI_MODEL && [400, 404].includes(response.status)) {
-      const firstError = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
-      if (/model|name format|not found/i.test(firstError)) {
-        const fallbackEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + DEFAULT_GEMINI_MODEL + ":generateContent";
-        try {
-          const retry = await fetch(fallbackEndpoint, { method: "POST", headers, body: JSON.stringify(payload) });
-          const retryData = await retry.json().catch(() => ({}));
-          if (retry.ok) { response = retry; data = retryData; activeModel = DEFAULT_GEMINI_MODEL; }
-        } catch { /* Keep the original provider error. */ }
+    let networkFailure = false;
+    if (AI_PROVIDER === "gemini") {
+      // Retry transient overload/rate-limit failures, then fail over to another supported model.
+      const models = [...new Set([AI_MODEL, DEFAULT_GEMINI_MODEL, "gemini-3.5-flash", "gemini-3.5-flash-lite"])];
+      for (let modelIndex = 0; modelIndex < models.length && !response?.ok; modelIndex++) {
+        const model = models[modelIndex];
+        const attempts = modelIndex === 0 ? 2 : 1;
+        for (let attempt = 0; attempt < attempts; attempt++) {
+          const modelEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
+          try {
+            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload) });
+            const candidateData = await candidate.json().catch(() => ({}));
+            response = candidate;
+            data = candidateData;
+            activeModel = model;
+            if (candidate.ok) break;
+            const transient = [429, 500, 502, 503, 504].includes(candidate.status);
+            const modelIssue = [400, 404].includes(candidate.status) && /model|name format|not found/i.test(cleanText(candidateData?.error?.message ?? candidateData?.message ?? "", 500));
+            if (!transient && !modelIssue) break;
+            if (attempt + 1 < attempts) await new Promise(resolve => setTimeout(resolve, 900 * (attempt + 1)));
+          } catch {
+            networkFailure = true;
+            if (attempt + 1 < attempts) await new Promise(resolve => setTimeout(resolve, 900 * (attempt + 1)));
+          }
+        }
+        if (response?.ok) break;
+        if (response && ![429, 400, 404, 500, 502, 503, 504].includes(response.status)) break;
       }
+    } else {
+      try {
+        response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(payload) });
+        data = await response.json().catch(() => ({}));
+      } catch { networkFailure = true; }
+    }
+    if (!response) {
+      return json({ error: networkFailure ? "AI connection is temporarily unavailable. Please try again shortly." : "AI provider did not return a response." }, 502);
     }
     if (!response.ok) {
       const providerMessage = cleanText(data?.error?.message ?? data?.message ?? data?.error ?? "", 500);
       const providerCode = cleanText(data?.error?.code ?? data?.error?.type ?? "", 100);
       await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: activeModel, status: "provider_error", usage_data: { status: response.status, code: providerCode } });
-      const hint = response.status === 401 ? "API key is invalid or revoked." : response.status === 403 ? "API key has no permission for this model or project." : response.status === 404 ? "Model or API endpoint was not found." : response.status === 429 ? "Provider quota or billing limit reached." : "Provider rejected the request.";
+      const hint = response.status === 401 ? "API key is invalid or revoked." : response.status === 403 ? "API key has no permission for this model or project." : response.status === 404 ? "Model or API endpoint was not found." : [429, 500, 502, 503, 504].includes(response.status) ? "AI service is temporarily busy. Please try again in a few seconds." : "Provider rejected the request.";
       return json({ error: hint + (providerCode ? " [" + providerCode + "]" : "") + (providerMessage ? " " + providerMessage : ""), provider_status: response.status, model: activeModel }, 502);
     }
 
