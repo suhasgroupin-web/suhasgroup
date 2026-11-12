@@ -80,6 +80,50 @@
  document.getElementById('messenger-compose')?.addEventListener('click',()=>{
   try{const d=frame.contentDocument;const field=d?.getElementById('message-member-search');const box=d?.querySelector('#messages .message-start');if(box)box.style.setProperty('display','block','important');field?.focus()}catch(e){}
  });
+
+ // Single authoritative search + All/Unread/Groups behavior for the Messenger shell.
+ const shellSearch=document.getElementById('messenger-search');
+ function syncMemberSearch(){
+  try{
+   const d=frame.contentDocument;if(!d)return;
+   const list=d.getElementById('message-member-list');
+   const q=(shellSearch?.value||'').trim();
+   if(list){
+    list.style.setProperty('display',q?'grid':'none','important');
+    list.style.setProperty('max-height',q?'42vh':'0','important');
+    list.style.setProperty('overflow-y','auto','important');
+    list.style.setProperty('padding',q?'8px 0':'0','important');
+    list.style.setProperty('background','#fff','important');
+    list.style.setProperty('position','relative','important');
+    list.style.setProperty('z-index','3','important');
+   }
+   d.documentElement.classList.toggle('suhas-messenger-searching',!!q);
+  }catch(e){}
+ }
+ shellSearch?.addEventListener('input',()=>setTimeout(syncMemberSearch,0));
+ shellSearch?.addEventListener('focus',()=>setTimeout(syncMemberSearch,0));
+ frame.addEventListener('load',()=>setTimeout(syncMemberSearch,180));
+ document.querySelectorAll('.messenger-shortcuts .shortcut').forEach(btn=>{
+  btn.addEventListener('click',event=>{
+   event.preventDefault();event.stopImmediatePropagation();
+   document.querySelectorAll('.messenger-shortcuts .shortcut').forEach(x=>x.classList.toggle('active',x===btn));
+   const d=frame.contentDocument;if(!d)return;
+   const rows=[...d.querySelectorAll('#threads .message-thread')];
+   let empty=d.getElementById('suhas-groups-unavailable');
+   if(empty)empty.remove();
+   if(btn.dataset.filter==='groups'){
+    const groupRows=rows.filter(r=>r.matches('[data-group],.group-thread,.message-thread-group,[data-conversation-type="group"]')||r.querySelector('[data-conversation-type="group"],.group-avatar'));
+    rows.forEach(r=>r.hidden=!groupRows.includes(r));
+    if(!groupRows.length){
+     empty=d.createElement('div');empty.id='suhas-groups-unavailable';empty.className='empty';
+     empty.textContent='No group conversations yet. Groups will appear here after a group is created.';
+     d.getElementById('threads')?.append(empty);
+    }
+   }else{
+    rows.forEach(r=>{const unread=!!r.querySelector('.message-thread-unread');r.hidden=btn.dataset.filter==='unread'&&!unread;});
+   }
+  },true);
+ });
  // Facebook-inspired People view, scoped to the Messenger iframe only.
  const peopleStyle=`
  #friends{display:block!important;position:relative!important;flex:1 1 auto!important;min-height:0!important;height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 18px 24px!important;border:0!important;border-radius:0!important;background:#fff!important;color:#050505!important}
