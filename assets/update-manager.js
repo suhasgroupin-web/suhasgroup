@@ -23,7 +23,7 @@
   });
  }
  function maybeNotify(){
-  if(!release||!registration||!registration.waiting||!session)return;
+  if(!release||!registration||!registration.waiting)return;
   if(getInstalled()===release.version)return;
   var published=Date.parse(release.published_at||'');
   var delayDays=Number(release.notify_after_days);if(!Number.isFinite(delayDays)||delayDays<0)delayDays=15;
@@ -32,8 +32,6 @@
  }
  async function start(){
   try{
-   var auth=window.sb&&await window.sb.auth.getSession();
-   session=!!(auth&&auth.data&&auth.data.session);
    var response=await fetch(new URL('release.json',root).href,{cache:'no-store'});
    if(!response.ok)throw new Error('Release information unavailable');
    release=await response.json();
