@@ -78,7 +78,9 @@ function localCareerIntent(prompt: string, priorHistory: any[] = []) {
   const explicitLink = /\b(link|url|website|page|profile|post)\b/.test(p) && /\b(job|jobs|career|careers|linkedin|recruit|recruitment|suhas)\b/.test(p)
     || /(লিংক|লিংকটা|লিংকটি|ওয়েবসাইট|ওয়েবসাইট|পেজটা|পোস্টটা).*(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস)/.test(p)
     || /(চাকরি|জব|ক্যারিয়ার|লিংকডইন|সুহাস).*(লিংক|ওয়েবসাইট|ওয়েবসাইট|পেজ|পোস্ট)/.test(p);
-  const lastAssistant = [...priorHistory].reverse().find((m: any) => m?.role === "assistant")?.content || "";\n  const priorOfferedCareerLink = /SUHAS Career PLC|recruiting page|recruiting-page|relevant job post|লিংক শেয়ার|লিংক বা প্রাসঙ্গিক পোস্ট/i.test(String(lastAssistant));\n  const acceptsOffer = priorOfferedCareerLink && /^(yes|yes please|sure|okay|ok|please|send it|share it|give me the link|show me|হ্যাঁ|জি|দাও|দিন|লিংক দাও|পাঠাও|শেয়ার করো|হ্যাঁ দাও|হ্যাঁ দিন|হ্যাঁ পাঠাও)$/.test(p);
+  const lastAssistant = [...priorHistory].reverse().find((m: any) => m?.role === "assistant")?.content || "";
+  const priorOfferedCareerLink = /SUHAS Career PLC|recruiting page|recruiting-page|relevant job post|লিংক শেয়ার|লিংক বা প্রাসঙ্গিক পোস্ট/i.test(String(lastAssistant));
+  const acceptsOffer = priorOfferedCareerLink && /^(yes|yes please|sure|okay|ok|please|send it|share it|give me the link|show me|হ্যাঁ|জি|দাও|দিন|লিংক দাও|পাঠাও|শেয়ার করো|হ্যাঁ দাও|হ্যাঁ দিন|হ্যাঁ পাঠাও)$/.test(p);
   if (explicitLink || acceptsOffer) {
     if (bangla) return "এখানে SUHAS GROUP-এর LinkedIn Jobs পেজটি দেওয়া হলো: " + link;
     if (banglish) return "Ekhane SUHAS GROUP-er LinkedIn Jobs page: " + link;
