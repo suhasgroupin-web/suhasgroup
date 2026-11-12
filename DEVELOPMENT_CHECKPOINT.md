@@ -1084,3 +1084,12 @@ Date: 2026-11-10
 - Supabase ai-assistant deployed and read back ACTIVE at version 65 with JWT verification enabled. Source commit: 099a0bcfc225a89d8fec055f32cc08788d92b0e6.
 - Link currently configured is the existing SUHAS GROUP LinkedIn Jobs page (https://www.linkedin.com/company/suhasgroup/jobs/); a separate SUHAS Career PLC company-page URL was not independently verified. Replace with the exact canonical PLC URL if a distinct official page exists.
 - Pending: live signed-in tests for “I need a job”, “LinkedIn job search”, “How do I prepare for an interview?”, explicit page-link request, and affirmative acceptance after offer. Verify concise replies and no unrelated links.
+
+## 2026-11-12 — SUHAS GROUP public brand SEO directory
+- Updated homepage SEO title, meta description, keyword aliases and Organization/SoftwareApplication structured data to include SUHAS GROUP / Suhasgroup / Suhas Group, SUHAS Careers PLC / Suhas Careers, SUHAS-MAX / Suhas Max, SUHAS Messenger, Hasnain APK / Hasnain's Apps, Hasnain website, Suhas Website and Suhas APK link.
+- Added a crawlable public brand directory at `discover.html` with natural descriptions and internal links to company information, jobs, SUHAS-MAX install guide, Messenger, account creation and login. Explicitly clarifies that SUHAS-MAX is currently a PWA and that no standalone APK is published; do not imply a non-existent APK download.
+- Updated group/about metadata to better describe SUHAS Careers PLC and the digital products. Added public metadata and canonical URL to Messenger.
+- Added `discover.html` and `messenger.html` to `sitemap.xml`. Existing `robots.txt` already allows public pages, disallows private login/signup/profile/admin pages, and points to the sitemap. Existing homepage already contains Google Search Console and Bing Webmaster verification meta tags.
+- Source files were read back and verified on GitHub main. Latest commit: `c597332bea7615eef9782aef56c3f4ee6df3f9a0`.
+- Deployment is NOT confirmed. Latest combined commit status reports Vercel failure due to build-rate-limit. No Cloudflare Pages deployment tool is connected in this session, and direct live-site opens for the new directory/sitemap were inaccessible. Do not claim these SEO changes are live until Cloudflare Pages production deployment is verified.
+- Google Search Console/Bing Webmaster sitemap submission and URL indexing requests remain pending; no search engine can guarantee immediate indexing or first-place ranking. Google documents that sitemaps are hints and indexing is not guaranteed.
