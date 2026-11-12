@@ -67,6 +67,21 @@ function localSmallTalk(prompt: string) {
   return null;
 }
 
+
+function localOwnerAwareness(prompt: string, hasImage: boolean) {
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
+  const asksKnow = /\b(do you know him|do you know her|do you know this person|know about him|know about her)\b/.test(p)
+    || /\b(ki take chino|tumi ki take chino|take chino|tar somporke jano|take cheno)\b/.test(p)
+    || /^(তুমি কি তাকে চেনো|তাকে কি চেনো|তুমি কি তাকে জানো|তুমি কি ওনাকে চেনো|আপনি কি তাকে চেনেন|তাকে চেনো)$/.test(p);
+  const asksOwner = /\b(owner|md\.? hasnain|suhas group owner)\b/.test(p)
+    || /(ওনার|তার|মালিক|মোঃ হাসনাইন|হাসনাইন)/.test(p);
+  if (!asksKnow && !(asksOwner && hasImage && /\b(who|who is|identify|chino|cheno|ke|কে|চেনো|চেনেন)\b/.test(p))) return null;
+  const lang = detectReplyLanguage(prompt);
+  if (lang.startsWith("Bangla in")) return "হ্যাঁ, SUHAS GROUP-এর Owner Md. Hasnain সম্পর্কে কিছু প্রকাশ্য তথ্য জানি। তাঁর সম্পর্কে কী জানতে চান?";
+  if (lang.startsWith("Banglish")) return "Haan, SUHAS GROUP-er Owner Md. Hasnain somporke kichu public information jani. Tar somporke ki jante chan?";
+  return "Yes, I know some public information about SUHAS GROUP owner Md. Hasnain. What would you like to know?";
+}
+
 const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => {
     if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
     if (!["openai", "anthropic", "gemini"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use gemini, openai or anthropic." }, 500);
@@ -97,6 +112,14 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return json({ error: "Photo and voice attachments currently require the configured Gemini AI provider." }, 415);
     }
 
+    // Keep simple owner-awareness questions short; only provide biography or links when explicitly requested.
+    const hasImageAttachment = (rawAttachments as any[]).some((item: any) => /^data:image\//i.test(cleanText(item?.dataUrl, 100)));
+    const ownerAwareness = localOwnerAwareness(prompt, hasImageAttachment);
+    if (ownerAwareness) {
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-owner-awareness", status: "success", usage_data: { source: "concise_owner_acknowledgement" } });
+      return json({ output: ownerAwareness, provider: "local", model: "local-owner-awareness" });
+    }
+
     // Answer short greetings locally in the same language/script as the user.
     const greeting = localGreeting(prompt);
     if (greeting) {
@@ -121,7 +144,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return role && content ? [{ role, content }] : [];
     }) : [];
     const replyLanguage = detectReplyLanguage(prompt);
-    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
+    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
 
 LANGUAGE MATCHING IS MANDATORY. Detected language hint: ${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
 
@@ -175,7 +198,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
           ...history.map((m: any) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
           { role: "user", parts: [{ text: prompt }, ...attachmentParts] },
         ],
-        generationConfig: { maxOutputTokens: 800, temperature: 0.5 },
+        generationConfig: { maxOutputTokens: 450, temperature: 0.35 },
       };
     } else if (AI_PROVIDER === "anthropic") {
       endpoint = (Deno.env.get("AI_BASE_URL") || "https://api.anthropic.com").replace(/\/$/, "") + "/v1/messages";
