@@ -38,6 +38,11 @@ body{background:#f0f2f5!important;min-height:100vh}
 @media(max-width:600px){.site-header .nav-wrap{padding:10px 14px!important}.site-header .brand-tag{display:none!important}.site-header .brand-name{font-size:17px!important}.site-header .brand img{width:42px!important;height:42px!important}.site-header .nav-cta .btn{padding:9px 12px!important}.menu-toggle{display:none!important}.auth-wrap{min-height:calc(100dvh - 72px)!important;padding:22px 14px!important;align-items:center!important}.form-card{padding:25px 20px!important;border-radius:14px!important}.form-card h1{font-size:28px!important}}
 
 .auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-top:4px}.auth-actions .btn{width:100%;min-height:52px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:10px!important;font-size:17px!important;font-weight:750!important;text-decoration:none!important;cursor:pointer}.auth-actions #sub{width:100%!important;min-height:52px!important}.auth-actions a{box-shadow:none!important}@media(max-width:360px){.auth-actions{gap:8px}.auth-actions .btn{font-size:15px!important;min-height:48px}}
+
+/* Public auth layout: keep account switches inside the form, never in the header. */
+.site-header .nav-links,.site-header .nav-cta,.site-header .auth-switch,.site-header .auth-actions{display:none!important}
+.auth-form form>.auth-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important;margin-top:4px!important}
+.auth-form form>.auth-actions>.btn{min-width:0!important;width:100%!important}
 </style>
 <style id="suhas-public-auth-nav-hide">
 html,body{min-height:100%;padding-bottom:0!important}
