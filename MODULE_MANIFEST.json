@@ -29,7 +29,18 @@
         {
           "id": "o5-intl",
           "legacyEntry": "o5-all-in-one.html",
-          "status": "legacy-isolated"
+          "status": "module-entry-isolated-legacy-route-retained",
+          "moduleEntry": "apps/suhas-group/o5-intl/o5-all-in-one.html",
+          "moduleReadme": "apps/suhas-group/o5-intl/README.md",
+          "compatibility": "root URL forwards query string and hash",
+          "sharedDependencies": [
+            "assets/styles.css",
+            "assets/auth.js",
+            "related-apk.html",
+            "o5-calculator.html",
+            "suhas-calculator.html",
+            "o5-desk.html"
+          ]
         },
         {
           "id": "career-profile",
