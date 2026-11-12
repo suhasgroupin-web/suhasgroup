@@ -3,7 +3,8 @@ import { withSupabase } from "npm:@supabase/server";
 const AI_API_KEY = Deno.env.get("AI_API_KEY") || "";
 const AI_PROVIDER = (Deno.env.get("AI_PROVIDER") || "gemini").toLowerCase();
 const AI_BASE_URL = Deno.env.get("AI_BASE_URL") || "https://api.openai.com/v1";
-const DEFAULT_GEMINI_MODEL = "gemini-3.8-flash";
+const DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite";
+const FALLBACK_GEMINI_MODEL = "gemini-3.8-flash";
 function normalizeGeminiModel(value: string, fallback: string) {
   let model = (value || fallback).trim();
   model = model.replace(/^https?:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\//i, "");
@@ -44,21 +45,25 @@ function detectReplyLanguage(text: string) {
   return "Latin-script language: infer exact language from the user's words; do not assume English";
 }
 function localGreeting(prompt: string) {
-  const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
   if (!/^(hi|hello|hey|hiya|good morning|good afternoon|good evening|salam|assalamu alaikum|assalamualaikum|হ্যালো|হাই|আসসালামু আলাইকুম|مرحبا|السلام عليكم|أهلا|你好|您好|嗨)$/i.test(p)) return null;
   const language = detectReplyLanguage(prompt);
-  if (language.startsWith("Bangla in")) return "ওয়ালাইকুম আসসালাম! কীভাবে সাহায্য করতে পারি?";
+  if (language.startsWith("Bangla in")) return /^(হ্যালো|হাই)$/.test(p) ? "হ্যালো! কীভাবে সাহায্য করতে পারি?" : "ওয়ালাইকুম আসসালাম! কীভাবে সাহায্য করতে পারি?";
   if (language.startsWith("Arabic")) return "وعليكم السلام! كيف يمكنني مساعدتك؟";
   if (language.startsWith("Chinese")) return "你好！我能为你做些什么？";
-  if (language.startsWith("Banglish")) return "Wa alaikum assalam! Ki vabe help korte pari?";
+  if (language.startsWith("Banglish")) return /^(hi|hello|hey)$/.test(p) ? "Hi! Ki obostha? Kivabe help korte pari?" : "Wa alaikum assalam! Ki vabe help korte pari?";
   return "Hi! How can I help you?";
 }
 
 function localSmallTalk(prompt: string) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
   const language = detectReplyLanguage(prompt);
-  if (language.startsWith("Banglish") && /^(kmn acho|kemon acho|kemon acho tumi|kmn aso|kemon aso|kemon achen|kmn achen|tumi kemon acho|apni kemon achen|ki obostha)$/.test(p)) return "Ami bhalo achi, dhonnobad! Tumi kemon acho?";
-  if (language.startsWith("Bangla in") && /^(কেমন আছো|কেমন আছেন|তুমি কেমন আছো|আপনি কেমন আছেন|কি খবর)$/.test(p)) return "আমি ভালো আছি, ধন্যবাদ! তুমি কেমন আছো?";
+  if (/^(how are you|how are you doing|how r you|how r u|hows it going|are you fine)$/.test(p)) return "I'm doing well, thank you for asking! How can I help you today?";
+  if (/^(what is your name|who are you)$/.test(p)) return "I'm SUHAS AI, the official AI assistant for SUHAS GROUP. How can I help you?";
+  if (language.startsWith("Banglish") && /^(kmn acho|kemon acho|kemon acho tumi|kmn aso|kemon aso|kemon achen|kmn achen|tumi kemon acho|apni kemon achen|ki obostha|tumi k|tumi ke|tumi kmn|tumi kemon|valo acho|bhalo acho)$/.test(p)) return "Ami bhalo achi, dhonnobad! Tumi kemon acho? SUHAS GROUP niye ba onno kichu jante chaile bolo.";
+  if (language.startsWith("Bangla in") && /^(কেমন আছো|কেমন আছেন|তুমি কেমন আছো|আপনি কেমন আছেন|কি খবর)$/.test(p)) return "আমি ভালো আছি, ধন্যবাদ! তুমি কেমন আছো? কীভাবে সাহায্য করতে পারি?";
+  if (language.startsWith("Arabic") && /^(كيف حالك|كيف حالكم)$/.test(p)) return "أنا بخير، شكرًا لسؤالك! كيف يمكنني مساعدتك اليوم؟";
+  if (language.startsWith("Chinese") && /^(你好吗|最近怎么样)$/.test(p)) return "我很好，谢谢你的关心！今天我能为你做些什么？";
   return null;
 }
 
@@ -75,12 +80,12 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     // Answer short greetings locally in the same language/script as the user.
     const greeting = localGreeting(prompt);
     if (greeting) {
-      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-greeting", status: "success", usage_data: { source: "instant_greeting" } });
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-greeting", status: "success", usage_data: { source: "instant_greeting" } });
       return json({ output: greeting, provider: "local", model: "instant-greeting" });
     }
     const smallTalk = localSmallTalk(prompt);
     if (smallTalk) {
-      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
       return json({ output: smallTalk, provider: "local", model: "instant-smalltalk" });
     }
     if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
@@ -90,7 +95,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       .gte("created_at", new Date(Date.now() - 86400000).toISOString());
     if ((count ?? 0) >= 30) return json({ error: "Daily AI limit reached. Please try again tomorrow." }, 429);
 
-    const history = Array.isArray(body.history) ? body.history.slice(-10).flatMap((m: any) => {
+    const history = Array.isArray(body.history) ? body.history.slice(-6).flatMap((m: any) => {
       const role = m?.role === "assistant" ? "assistant" : m?.role === "user" ? "user" : "";
       const content = cleanText(m?.content, 2000);
       return role && content ? [{ role, content }] : [];
@@ -147,7 +152,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
           ...history.map((m: any) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
           { role: "user", parts: [{ text: prompt }] },
         ],
-        generationConfig: { maxOutputTokens: 1200, temperature: 0.6 },
+        generationConfig: { maxOutputTokens: 800, temperature: 0.5 },
       };
     } else if (AI_PROVIDER === "anthropic") {
       endpoint = (Deno.env.get("AI_BASE_URL") || "https://api.anthropic.com").replace(/\/$/, "") + "/v1/messages";
@@ -169,14 +174,14 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
     let networkFailure = false;
     if (AI_PROVIDER === "gemini") {
       // Retry transient overload/rate-limit failures, then fail over to another supported model.
-      const models = [...new Set([AI_MODEL, DEFAULT_GEMINI_MODEL, "gemini-3.5-flash-lite"])];
+      const models = [...new Set([DEFAULT_GEMINI_MODEL, AI_MODEL, FALLBACK_GEMINI_MODEL])];
       for (let modelIndex = 0; modelIndex < models.length && !response?.ok; modelIndex++) {
         const model = models[modelIndex];
         const attempts = 1;
         for (let attempt = 0; attempt < attempts; attempt++) {
           const modelEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
           try {
-            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(9000) });
+            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(7000) });
             const candidateData = await candidate.json().catch(() => ({}));
             response = candidate;
             data = candidateData;
