@@ -1,24 +1,75 @@
 {
   "schemaVersion": 1,
-  "status": "foundation-only",
+  "status": "incremental-migration",
   "products": {
     "suhas-group": {
       "entry": "index.html",
       "modules": [
-        {"id":"main-menu","legacyEntry":"main-menu.html","status":"inventory"},
-        {"id":"job","legacyEntry":"job.html","status":"legacy-isolated"},
-        {"id":"o5-intl","legacyEntry":"o5-all-in-one.html","status":"legacy-isolated"},
-        {"id":"career-profile","legacyEntry":"profile.html","status":"inventory"},
-        {"id":"career-content","legacyEntries":["departments.html","factories.html","quality.html","religion.html","technical.html"],"status":"inventory"},
-        {"id":"contact","legacyEntry":"contact.html","status":"legacy-isolated"}
+        {
+          "id": "main-menu",
+          "legacyEntry": "main-menu.html",
+          "status": "inventory"
+        },
+        {
+          "id": "job",
+          "legacyEntry": "job.html",
+          "status": "legacy-isolated"
+        },
+        {
+          "id": "o5-intl",
+          "legacyEntry": "o5-all-in-one.html",
+          "status": "legacy-isolated"
+        },
+        {
+          "id": "career-profile",
+          "legacyEntry": "profile.html",
+          "status": "inventory"
+        },
+        {
+          "id": "career-content",
+          "legacyEntries": [
+            "departments.html",
+            "factories.html",
+            "quality.html",
+            "religion.html",
+            "technical.html"
+          ],
+          "status": "inventory"
+        },
+        {
+          "id": "contact",
+          "legacyEntry": "contact.html",
+          "status": "legacy-isolated"
+        }
       ]
     },
     "suhas-max": {
       "entry": "social.html",
       "modules": [
-        {"id":"social","legacyEntry":"social.html","status":"monolith-to-decompose"},
-        {"id":"messenger","legacyEntry":"messenger.html","assets":["messenger.css","messenger.js"],"status":"legacy-isolated"},
-        {"id":"ai","legacyEntry":"ai.html","status":"inventory"}
+        {
+          "id": "social",
+          "legacyEntry": "social.html",
+          "status": "monolith-to-decompose"
+        },
+        {
+          "id": "messenger",
+          "legacyEntry": "messenger.html",
+          "assets": [
+            "apps/suhas-max/messenger/messenger.css",
+            "apps/suhas-max/messenger/messenger.js"
+          ],
+          "status": "module-folder-isolated-legacy-route-retained",
+          "moduleReadme": "apps/suhas-max/messenger/README.md",
+          "legacyAssets": [
+            "messenger.css",
+            "messenger.js"
+          ]
+        },
+        {
+          "id": "ai",
+          "legacyEntry": "ai.html",
+          "status": "inventory"
+        }
       ]
     }
   },
