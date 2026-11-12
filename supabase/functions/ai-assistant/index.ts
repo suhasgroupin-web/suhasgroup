@@ -89,9 +89,7 @@ function localCareerIntent(prompt: string, priorHistory: any[] = []) {
   const jobTopic = /\b(job|jobs|career|careers|vacancy|vacancies|recruit|recruitment|hiring|interview|salary|cv|resume|application|apply|employment|unemployed|linkedin|job portal|job search)\b/.test(p)
     || /(চাকরি|জব|কাজের সুযোগ|কাজ খুঁজ|কাজ চাই|নিয়োগ|নিয়োগ|ভ্যাকান্সি|ইন্টারভিউ|বেতন|সিভি|জীবনবৃত্তান্ত|আবেদন|ক্যারিয়ার|ক্যারিয়ার|লিংকডইন|জব পোর্টাল)/.test(p);
   if (!jobTopic) return null;
-  const offerBangla = "আমাদের SUHAS Career PLC-এর LinkedIn recruiting page আছে। চাইলে সেখানকার প্রাসঙ্গিক job post বা লিংক শেয়ার করে আপনাকে খুঁজতে সাহায্য করতে পারি। আপনি কোন ধরনের চাকরি বা কোন সেক্টর খুঁজছেন?";
-  const offerBanglish = "Amader SUHAS Career PLC-er LinkedIn recruiting page ache. Chaile sekhaner relevant job post ba link share kore help korte pari. Apni kon dhoroner job ba kon sector khুঁজছেন?";
-  const offerEnglish = "We have a LinkedIn recruiting page for SUHAS Career PLC. If you’d like, I can share its relevant job post or page link to help you search. What type of role or sector are you looking for?";
+
   if (/\b(linkedin)\b/.test(p) || /লিংকডইন/.test(p)) {
     if (bangla) return "LinkedIn-এ চাকরি খুঁজতে পারেন। আমাদের SUHAS Career PLC-এর recruiting page থেকেও সাহায্য করতে পারি—চাইলে লিংক বা প্রাসঙ্গিক পোস্ট শেয়ার করব। কোন ধরনের চাকরি চান?";
     if (banglish) return "LinkedIn-e job search korte paren. Amader SUHAS Career PLC recruiting page thekeo help korte pari—chaile link ba relevant post share korbo. Kon dhoroner job chan?";
@@ -103,9 +101,7 @@ function localCareerIntent(prompt: string, priorHistory: any[] = []) {
     if (banglish) return "Obosshoi, help korbo. Amader SUHAS Career PLC-er LinkedIn recruiting page ache—chaile job post ba link share korte pari. Apni kon dhoroner job chan, kon sector-e?";
     return "I can help. We have a SUHAS Career PLC LinkedIn recruiting page and can share a relevant post or link if you’d like. What type of job and sector are you interested in?";
   }
-  if (bangla) return offerBangla;
-  if (banglish) return offerBanglish;
-  return offerEnglish;
+  return null;
 }
 function localOwnerAwareness(prompt: string, hasImage: boolean) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
