@@ -114,3 +114,9 @@ html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!import
 .messenger-bottom button.selected{background:#e7f3ff!important;color:#0866ff!important}
 .messenger-popover{background:#fff!important;border-color:#e4e6eb!important}
 .messenger-popover button{color:#050505!important}
+
+/* Final viewport containment: prevent the Messenger shell and iframe from narrowing or overflowing. */
+html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+.messenger-app{width:100vw!important;max-width:100vw!important;min-width:0!important;margin:0!important;overflow:hidden!important}
+.messenger-app>*{min-width:0!important;max-width:100%!important}
+.messenger-frame{display:block!important;align-self:stretch!important;width:100%!important;min-width:0!important;max-width:100%!important;flex:1 1 0!important}

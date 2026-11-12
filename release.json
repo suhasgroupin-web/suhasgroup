@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.12.3",
-  "published_at": "2026-11-12T01:50:00.000Z",
+  "version": "2026.11.12.4",
+  "published_at": "2026-11-12T17:40:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Updated SUHAS-MAX launcher and navigation: compact app icons, one Go to SG exit, and a clear blue active-navigation marker.",
+  "update_message": "Updated SUHAS Messenger layout, fixed mobile pull-to-refresh, and refreshed Messenger assets from the network.",
   "mandatory": false
 }

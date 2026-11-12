@@ -1,7 +1,7 @@
 const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v119';
 const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
-  'index.html','home.html','social.html','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
+  'index.html','home.html','social.html','messenger.html','messenger.js','messenger.css','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
   'login.html','signup.html','main-menu.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','factories.html','factory-profile.html','job-portals.html','resume-builder.html','privacy-policy.html','religion.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
   'assets/styles.css','assets/welcome-onboarding.js','assets/ambient-scenes/manifest.json','assets/suhas-max-composer-v1.css','assets/suhas-max-fb-mobile-v1.css','assets/suhas-max-bottom-nav-locked-v1.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/hrm.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
   'barcode/','assets/logo.png','assets/icon-192.png','assets/icon-512.png','manifest.json'
@@ -43,6 +43,20 @@ self.addEventListener('fetch', function(e){
       return response;
     }).catch(async function() {
       return (await caches.open(CACHE)).match(e.request) || Response.error();
+    }));
+    return;
+  }
+
+  // Messenger assets use network-first so merged UI fixes cannot remain trapped in an old PWA cache.
+  if (requestUrl.pathname.endsWith('/messenger.html') || requestUrl.pathname.endsWith('/messenger.js') || requestUrl.pathname.endsWith('/messenger.css')) {
+    e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
+      if (response && response.ok) {
+        var messengerCache = await caches.open(CACHE);
+        await messengerCache.put(e.request, response.clone());
+      }
+      return response;
+    }).catch(async function() {
+      return (await caches.open(CACHE)).match(e.request, { ignoreSearch: true }) || Response.error();
     }));
     return;
   }
