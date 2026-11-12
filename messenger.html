@@ -18,7 +18,7 @@
 
 
 
-  <link rel="stylesheet" href="messenger.css?v=20261113-bottom-nav-fix-1">
+  <link rel="stylesheet" href="messenger.css?v=20261113-header-nav-v2">
 </head>
 <body>
 <div class="messenger-app">
@@ -26,7 +26,7 @@
 <div class="messenger-brand">messenger</div>
 <div class="messenger-head-actions">
 <button type="button" id="messenger-compose" aria-label="New message" title="New message">✎</button>
-<button type="button" id="messenger-settings" aria-label="Settings" title="Settings">⚙</button>
+
 <button type="button" id="messenger-back" aria-label="Open SUHAS-MAX" title="Open SUHAS-MAX"><img src="assets/logo.png" alt="SUHAS GROUP"></button>
 </div>
 </header>
@@ -176,7 +176,12 @@
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
  document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
  document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.shortcut').forEach(x=>x.classList.toggle('active',x===b));const d=frame.contentDocument;if(!d)return;const threads=[...d.querySelectorAll('#threads .message-thread')];threads.forEach(t=>{const unread=t.querySelector('.message-thread-unread');t.style.display=b.dataset.filter==='unread'?(unread?'flex':'none'):'flex';if(b.dataset.filter==='groups'){const nav=d.querySelector('[data-tab="groups"]');if(nav)nav.click();}});}));
- document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{const d=frame.contentDocument;if(!d)return;const dest=b.dataset.dest;const target=dest==='messages'?'messages':dest;const nav=d.querySelector('[data-tab="'+target+'"]');if(nav)nav.click();document.querySelectorAll('.messenger-bottom button').forEach(x=>x.classList.toggle('selected',x===b));}));
+ const bottomButtons=[...document.querySelectorAll('.messenger-bottom button')];
+ function setActiveBottom(button){bottomButtons.forEach(x=>{const on=x===button;x.classList.toggle('selected',on);if(on)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});}
+ function activateChildTab(tab){try{const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return false;if(typeof w.activateMaxTab==='function'){w.activateMaxTab(tab);return true;}const target=d.querySelector('[data-tab="'+tab+'"]');if(target){target.click();return true;}}catch(e){console.warn('Messenger navigation failed',tab,e);}return false;}
+ document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{if(activateChildTab(b.dataset.dest))setActiveBottom(b);}));
+ document.getElementById('messenger-menu')?.addEventListener('click',()=>{setActiveBottom(document.getElementById('messenger-menu'));pop.hidden=true;settingsPanel.hidden=false;});
+
  settingsPanel.querySelectorAll('[data-mnav]').forEach(b=>b.addEventListener('click',()=>{const d=frame.contentDocument;const key=b.dataset.mnav;settingsPanel.hidden=true;if(key==='requests'){const n=d?.querySelector('[data-tab="requests"]');if(n)n.click();else location.href='social.html?tab=requests';}else if(key==='account'){location.href='profile.html';}else if(key==='privacy'||key==='active'){const n=d?.querySelector('[data-tab="settings"]');if(n)n.click();else alert('Open SUHAS-MAX Settings to manage account privacy and presence.');}else if(key==='contacts'){if('contacts'in navigator&&navigator.contacts?.select){navigator.contacts.select(['name','tel'],{multiple:true}).catch(()=>{});}else alert('Contact picker is not supported by this browser.');}else if(key==='media'){alert('Photos and media permissions are managed by your device and browser.');}else if(key==='story'){document.getElementById('messenger-create-story').click();}else if(key==='report'||key==='help'||key==='legal'){location.href='contact.html';}}));
  document.getElementById('messenger-notice').addEventListener('click',async()=>{if(!('Notification'in window)){alert('This browser does not support notifications.');return;}const permission=await Notification.requestPermission();document.getElementById('messenger-notice').textContent=permission==='granted'?'Notifications are on.':'Notifications are still off.';});
  document.getElementById('messenger-notice').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.currentTarget.click();}});
@@ -184,6 +189,6 @@
 
 })();
 </script>
-  <script src="messenger.js?v=20261113-bottom-nav-fix-1" defer></script>
+  <script src="messenger.js?v=20261113-header-nav-v2" defer></script>
 </body>
 </html>
