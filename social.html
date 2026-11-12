@@ -3355,10 +3355,16 @@ async function loadNotifications(){
   let profiles=[];
   if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',ids);if(p.error)throw p.error;profiles=p.data||[];}
   const byId=Object.fromEntries(profiles.map(x=>[x.user_id,x]));
-  $('notifications-list').innerHTML=(r.data||[]).map(n=>{
+  const messengerMode=new URLSearchParams(location.search).get('messenger')==='1';
+  const now=Date.now();
+  const relativeTime=value=>{const diff=Math.max(0,now-new Date(value).getTime());const mins=Math.floor(diff/60000);if(mins<1)return 'now';if(mins<60)return mins+'m';const hours=Math.floor(mins/60);if(hours<24)return hours+'h';const days=Math.floor(hours/24);if(days<7)return days+'d';const weeks=Math.floor(days/7);if(weeks<5)return weeks+'w';return new Date(value).toLocaleDateString(undefined,{month:'short',day:'numeric'});};
+  const rows=(r.data||[]).map(n=>{
     const actor=byId[n.actor_id]||{};
+    const avatar=actor.profile_photo_url?'<img src="'+safe(actor.profile_photo_url)+'" alt="" style="width:64px;height:64px;flex:0 0 64px;border-radius:50%;object-fit:cover">':'<span aria-hidden="true" style="width:64px;height:64px;flex:0 0 64px;border-radius:50%;display:grid;place-items:center;background:#e4e6eb;color:#65676b;font-size:25px;font-weight:700">'+safe((actor.full_name||'S').slice(0,1).toUpperCase())+'</span>';
+    if(messengerMode)return '<button type="button" class="notification-item" data-notification="'+safe(n.id)+'" data-entity="'+safe(n.entity_type)+'" style="display:flex;width:100%;gap:14px;align-items:center;text-align:left;padding:14px 4px;border:0;border-bottom:0;background:#fff;color:#080809;cursor:pointer">'+avatar+'<span style="flex:1;min-width:0;display:block"><b style="display:block;font-size:16px;line-height:1.28;font-weight:'+(n.read_at?'600':'750')+'">'+safe(actor.full_name||'SUHAS Member')+'</b><span style="display:block;font-size:15px;line-height:1.35;color:#080809;margin-top:2px">'+safe(n.message)+'</span><small style="display:block;font-size:13px;color:#65676b;margin-top:3px">'+relativeTime(n.created_at)+'</small></span>'+(n.read_at?'':'<span aria-label="Unread notification" style="width:10px;height:10px;flex:0 0 10px;border-radius:50%;background:#0866ff;margin:0 3px"></span>')+'</button>';
     return '<button type="button" class="notification-item" data-notification="'+safe(n.id)+'" data-entity="'+safe(n.entity_type)+'" style="display:flex;width:100%;gap:10px;align-items:center;text-align:left;padding:12px;border:0;border-bottom:1px solid var(--fb-line);background:'+(n.read_at?'#fff':'#eaf3ff')+';cursor:pointer"><span class="side-icon">●</span><span style="flex:1"><b>'+safe(actor.full_name||'SUHAS Member')+'</b>'+verifiedBadge(actor)+' '+safe(n.message)+'<br><small class="post-meta">'+safe(new Date(n.created_at).toLocaleString())+'</small></span>'+(n.read_at?'':'<b aria-label="Unread">•</b>')+'</button>';
-  }).join('')||'<div class="empty">You are all caught up. New likes, comments, friend requests and messages will appear here.</div>';
+  }).join('');
+  $('notifications-list').innerHTML=messengerMode?'<div style="padding:4px 0 10px;color:#65676b;font-size:15px;font-weight:700">Earlier</div>'+rows:rows||'<div class="empty">You are all caught up. New likes, comments, friend requests and messages will appear here.</div>';
 }
 function showSuhasLiveNotification(n){
  if(!n||n.recipient_id!==me)return;
