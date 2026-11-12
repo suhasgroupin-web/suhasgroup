@@ -1130,3 +1130,15 @@ Date: 2026-11-10
 - `jobs.html` (the job listings page), employer pages, shared assets, auth/session files and all other routes were not changed.
 - Static verification pending in this branch: check query/hash forwarding, module asset paths, required Supabase calls and manifest JSON. Browser/mobile and signed-in/signed-out apply/save tests are not available in this tool session and remain required before merge/deployment.
 - No production deployment performed.
+
+
+## Modular isolation increment — O5 International All-in-One (2026-11-13)
+- Confirmed PR #59 (SUHAS GROUP Job Details module) was merged to `main` with merge commit `d86620f4019fb84fa78b0db70dce9b3571f8162d`.
+- Started feature branch `feature/isolate-o5-intl-module-20261113` from current `main`.
+- Added `apps/suhas-group/o5-intl/o5-all-in-one.html` as the module-owned O5 All-in-One landing page and a module README.
+- Kept `/o5-all-in-one.html` as a compatibility entry forwarding the full query string and hash to the module route.
+- Added root `<base href="/">` to the module page so the existing shared stylesheet, auth script and child-page links continue to resolve to their original root routes.
+- Preserved the existing O5 Calculator, SUHAS Calculator and O5 International Desk links and the O5 App Library back link.
+- No linked O5 child page, database, storage, auth configuration or unrelated corporate route was changed.
+- Static verification pending in this branch: compatibility route, query/hash forwarding, root base URL, shared dependencies and linked child pages. Browser/mobile visual and auth-gate behavior still require live testing before merge/deployment.
+- No production deployment performed.
