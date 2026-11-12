@@ -62,7 +62,9 @@
  <button type="button" class="messenger-menu-row" data-menu-action="friends"><span class="menu-icon">♟</span>Friend requests <span class="menu-chevron">›</span></button>
  <h2 class="messenger-menu-section">SUHAS services</h2>
  <button type="button" class="messenger-menu-row" data-menu-action="reels"><span class="menu-icon">▶</span>SUHAS Reels <span class="menu-chevron">›</span></button>
- <button type="button" class="messenger-menu-row" data-menu-action="events"><span class="menu-icon">▦</span>Events <span class="menu-chevron">›</span></button>
+ <button type="button" class="messenger-menu-row" data-menu-action="saved"><span class="menu-icon">🔖</span>Saved items <span class="menu-chevron">›</span></button>
+ <button type="button" class="messenger-menu-row" data-menu-action="following"><span class="menu-icon">☆</span>Following <span class="menu-chevron">›</span></button>
+ <button type="button" class="messenger-menu-row" data-menu-action="gaming"><span class="menu-icon">🎮</span>Gaming <span class="menu-chevron">›</span></button>
  <button type="button" class="messenger-menu-row" data-menu-action="max"><span class="menu-icon">S</span>Back to SUHAS-MAX <span class="menu-chevron">›</span></button>
 </div>
 <div class="messenger-settings-backdrop" id="messenger-settings-panel" hidden>
@@ -201,12 +203,12 @@
  function closeMessengerMenu(){menuScreen.hidden=true;document.body.classList.remove('messenger-menu-open');}
  document.getElementById('messenger-menu-close').addEventListener('click',closeMessengerMenu);
  menuScreen.querySelectorAll('[data-menu-action]').forEach(b=>b.addEventListener('click',()=>{
-  const action=b.dataset.menuAction;const map={communities:'groups',friends:'friends',requests:'requests',marketplace:'marketplace',reels:'reels',events:'feed'};
+  const action=b.dataset.menuAction;const map={communities:'groups',friends:'requests',requests:'requests',marketplace:'marketplace',reels:'reels',saved:'saved',following:'following',gaming:'gaming'};
   if(action==='settings'){closeMessengerMenu();settingsPanel.hidden=false;return;}
-  if(action==='profile'){closeMessengerMenu();location.href='profile.html';return;}
+  if(action==='profile'){closeMessengerMenu();setActiveBottom(document.querySelector('.messenger-bottom [data-dest=\"friends\"]'));activateChildTab('profile');return;}
   if(action==='support'){closeMessengerMenu();location.href='contact.html';return;}
-  if(action==='max'){closeMessengerMenu();location.href='home.html';return;}
-  if(action==='archive'){closeMessengerMenu();alert('Archive view is not available in the current SUHAS Messenger data model yet.');return;}
+  if(action==='max'){closeMessengerMenu();location.href='index.html';return;}
+  if(action==='archive'){closeMessengerMenu();alert('Archive is not available yet. Your existing conversations have not been changed or deleted.');return;}
   if(map[action]){closeMessengerMenu();if(!activateChildTab(map[action])){const d=frame.contentDocument;const tab=d?.querySelector('[data-tab="'+map[action]+'"]');if(tab)tab.click();}return;}
  }));
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMessengerMenu();settingsPanel.hidden=true;pop.hidden=true;}});
