@@ -48,7 +48,7 @@ self.addEventListener('fetch', function(e){
   }
 
   // Messenger assets use network-first so merged UI fixes cannot remain trapped in an old PWA cache.
-  if (/\\/messenger\\.(html|js|css)$/.test(requestUrl.pathname)) {
+  if (requestUrl.pathname.endsWith('/messenger.html') || requestUrl.pathname.endsWith('/messenger.js') || requestUrl.pathname.endsWith('/messenger.css')) {
     e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
       if (response && response.ok) {
         var messengerCache = await caches.open(CACHE);
