@@ -5449,11 +5449,20 @@ html.suhas-authenticated .tabbar{display:none!important}
   body.style.setProperty('--suhas-search-max-height',Math.max(140,max-62)+'px');
   body.style.setProperty('--suhas-search-input-top',bottom+'px');
   if(!menu.hidden){
+   /* Anchor the flyout to the viewport, not the header's left-side wrapper. */
+   menu.style.setProperty('position','fixed','important');
    menu.style.setProperty('top',bottom+'px','important');
    menu.style.setProperty('right','8px','important');
    menu.style.setProperty('left','auto','important');
-   menu.style.setProperty('width','min(390px, calc(100vw - 24px))','important');
+   menu.style.setProperty('width','min(390px, calc(100vw - 16px))','important');
    menu.style.setProperty('max-width','390px','important');
+   menu.style.setProperty('margin','0','important');
+   menu.style.setProperty('transform','none','important');
+   menu.style.setProperty('box-sizing','border-box','important');
+   menu.style.setProperty('max-height',max+'px','important');
+   menu.style.setProperty('overflow-y','auto','important');
+   menu.style.setProperty('overflow-x','hidden','important');
+   menu.style.setProperty('z-index','15002','important');
   }
   if(!searchField.hidden){
    searchField.style.setProperty('top',bottom+'px','important');
@@ -5494,6 +5503,30 @@ html.suhas-authenticated .tabbar{display:none!important}
  html body:not(.suhas-desktop-mode) .site-header .suhas-create-menu>button>span:last-child{min-width:0!important;flex:1 1 auto!important}
  html body:not(.suhas-desktop-mode) .site-header .suhas-create-menu>button b{font-size:15px!important}
  html body:not(.suhas-desktop-mode) .site-header .suhas-create-menu>button small{font-size:12px!important;line-height:1.25!important;white-space:normal!important}
+}
+</style>
+
+<style id="suhas-max-header-lock-plus-size-and-right-create-fix-20261112">
+/* Preserve the approved header; only make the Plus control slightly more compact. */
+@media(max-width:760px){
+ html body:not(.suhas-desktop-mode) .site-header .suhas-create-wrap{
+  flex:0 0 32px!important;width:32px!important;min-width:32px!important;
+ }
+ html body:not(.suhas-desktop-mode) .site-header .suhas-create-trigger{
+  width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;
+  flex:0 0 32px!important;
+ }
+ html body:not(.suhas-desktop-mode) .site-header .suhas-create-trigger:before{
+  font-size:22px!important;line-height:1!important;
+ }
+ html body.suhas-header-panel-open .site-header .suhas-create-menu:not([hidden]){
+  position:fixed!important;left:auto!important;right:8px!important;
+  width:min(390px,calc(100vw - 16px))!important;max-width:390px!important;
+  margin:0!important;transform:none!important;box-sizing:border-box!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+  z-index:15002!important;
+ }
 }
 </style>
 </body></html>
