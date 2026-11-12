@@ -54,6 +54,14 @@ function localGreeting(prompt: string) {
   return "Hi! How can I help you?";
 }
 
+function localSmallTalk(prompt: string) {
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
+  const language = detectReplyLanguage(prompt);
+  if (language.startsWith("Banglish") && /^(kmn acho|kemon acho|kemon acho tumi|kmn aso|kemon aso|kemon achen|kmn achen|tumi kemon acho|apni kemon achen|ki obostha)$/.test(p)) return "Ami bhalo achi, dhonnobad! Tumi kemon acho?";
+  if (language.startsWith("Bangla in") && /^(কেমন আছো|কেমন আছেন|তুমি কেমন আছো|আপনি কেমন আছেন|কি খবর)$/.test(p)) return "আমি ভালো আছি, ধন্যবাদ! তুমি কেমন আছো?";
+  return null;
+}
+
 const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => {
     if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
     if (!["openai", "anthropic", "gemini"].includes(AI_PROVIDER)) return json({ error: "Unsupported AI_PROVIDER. Use gemini, openai or anthropic." }, 500);
@@ -70,6 +78,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-greeting", status: "success", usage_data: { source: "instant_greeting" } });
       return json({ output: greeting, provider: "local", model: "instant-greeting" });
     }
+    const smallTalk = localSmallTalk(prompt);
+    if (smallTalk) {
+      await ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
+      return json({ output: smallTalk, provider: "local", model: "instant-smalltalk" });
+    }
     if (!AI_API_KEY) return json({ error: "AI is not configured yet. SUHAS admin must add the AI_API_KEY secret in Supabase." }, 503);
 
     const { count } = await ctx.supabase.from("ai_usage_logs").select("*", { count: "exact", head: true })
@@ -85,7 +98,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
     const replyLanguage = detectReplyLanguage(prompt);
     const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
 
-LANGUAGE MATCHING IS MANDATORY. Detected language hint: \${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
+LANGUAGE MATCHING IS MANDATORY. Detected language hint: ${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
 
 IDENTITY: If asked who created, designed, developed or owns you, explain: "I am SUHAS AI, created as the official AI assistant for SUHAS GROUP. The public SUHAS GROUP About page identifies Md. Hasnain as the company owner." Do not claim the owner personally coded or designed the AI unless verified.
 
@@ -156,14 +169,14 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
     let networkFailure = false;
     if (AI_PROVIDER === "gemini") {
       // Retry transient overload/rate-limit failures, then fail over to another supported model.
-      const models = [...new Set([AI_MODEL, DEFAULT_GEMINI_MODEL, "gemini-3.5-flash", "gemini-3.5-flash-lite"])];
+      const models = [...new Set([AI_MODEL, DEFAULT_GEMINI_MODEL, "gemini-3.5-flash-lite"])];
       for (let modelIndex = 0; modelIndex < models.length && !response?.ok; modelIndex++) {
         const model = models[modelIndex];
-        const attempts = modelIndex === 0 ? 2 : 1;
+        const attempts = 1;
         for (let attempt = 0; attempt < attempts; attempt++) {
           const modelEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
           try {
-            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload) });
+            const candidate = await fetch(modelEndpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(9000) });
             const candidateData = await candidate.json().catch(() => ({}));
             response = candidate;
             data = candidateData;
@@ -183,7 +196,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
       }
     } else {
       try {
-        response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(payload) });
+        response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(payload), signal: AbortSignal.timeout(18000) });
         data = await response.json().catch(() => ({}));
       } catch { networkFailure = true; }
     }
