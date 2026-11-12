@@ -144,7 +144,7 @@ html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width
 @media(max-width:600px){.messenger-bottom{height:calc(70px + env(safe-area-inset-bottom))!important;min-height:70px!important;padding:0 14px env(safe-area-inset-bottom)!important}.messenger-bottom button{height:62px!important}.messenger-bottom button svg{width:36px!important;height:36px!important}.messenger-bottom button[data-dest="messages"] svg{width:40px!important;height:40px!important}.messenger-bottom .nav-badge{top:3px!important;left:calc(50% + 14px)!important}}
 
 /* Full-page Messenger Menu inspired by the supplied Facebook reference */
-.messenger-menu-screen{position:fixed!important;inset:0!important;z-index:80!important;overflow-y:auto!important;background:#fff!important;color:#111!important;padding:calc(18px + env(safe-area-inset-top)) 0 calc(92px + env(safe-area-inset-bottom))!important;font-family:Arial, sans-serif!important}
+.messenger-menu-screen{position:fixed!important;inset:0 0 calc(70px + env(safe-area-inset-bottom)) 0!important;z-index:80!important;overflow-y:auto!important;background:#fff!important;color:#111!important;padding:calc(18px + env(safe-area-inset-top)) 0 calc(92px + env(safe-area-inset-bottom))!important;font-family:Arial, sans-serif!important}
 .messenger-menu-screen[hidden]{display:none!important}
 .messenger-menu-heading{height:78px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 28px!important}
 .messenger-menu-heading h1{margin:0!important;font-size:46px!important;line-height:1!important;font-weight:750!important;color:#111!important}
@@ -161,5 +161,5 @@ html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width
 .messenger-menu-row .menu-chevron{margin-left:auto!important;color:#8a8d91!important;font-size:28px!important}
 .messenger-menu-divider{height:1px!important;background:#d8dade!important;margin:12px 0!important}
 .messenger-menu-section{margin:30px 28px 12px!important;color:#65676b!important;font-size:17px!important;font-weight:700!important}
-.messenger-menu-open .messenger-bottom{z-index:79!important}
+.messenger-menu-open .messenger-bottom{z-index:81!important}
 @media(max-width:600px){.messenger-menu-heading{height:78px!important;padding:0 28px!important}.messenger-menu-heading h1{font-size:46px!important}.messenger-menu-row{min-height:76px!important;font-size:20px!important}.messenger-menu-profile{padding-left:28px!important;padding-right:28px!important}}
