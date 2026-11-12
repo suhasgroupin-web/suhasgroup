@@ -186,3 +186,33 @@ html body:not(.suhas-desktop-mode) .social-mobile-nav button>span:not(.mobile-na
 @media (min-width:761px){
   .suhas-fb-phone-tabs{display:none!important}
 }
+
+
+/* 2026-11-12: keep the complete SUHAS-MAX wordmark visible in the phone header. */
+@media (max-width:760px){
+  html body:not(.suhas-desktop-mode) .site-header .nav-wrap{
+    gap:6px!important;
+  }
+  html body:not(.suhas-desktop-mode) .site-header .brand{
+    flex:1 1 0!important;
+    min-width:0!important;
+    overflow:visible!important;
+    gap:8px!important;
+  }
+  html body:not(.suhas-desktop-mode) .site-header .brand-name{
+    display:block!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    font-size:clamp(15px,4.6vw,18px)!important;
+    line-height:1.05!important;
+    font-weight:800!important;
+    letter-spacing:0!important;
+    white-space:nowrap!important;
+    word-break:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+  html body:not(.suhas-desktop-mode) .site-header .social-user-actions{
+    gap:8px!important;
+  }
+}
