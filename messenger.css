@@ -94,3 +94,13 @@ html,body{background:#fff!important;color:#050505!important}
  .story-contact:after{top:63px!important}
  .messenger-shortcuts{flex-basis:54px!important;height:54px!important}
 }
+
+/* V4 viewport contract: header + search + stories + one filter row + inbox + bottom nav */
+html,body,.messenger-app{width:100%!important;max-width:100%!important;min-width:0!important}
+.messenger-app{height:100dvh!important;min-height:0!important;overflow:hidden!important}
+.messenger-head{flex:0 0 62px!important;height:62px!important}
+.messenger-search-wrap{flex:0 0 68px!important;height:68px!important}
+.messenger-stories{flex:0 0 132px!important;height:132px!important;align-items:flex-start!important}
+.messenger-shortcuts{flex:0 0 54px!important;height:54px!important}
+.messenger-frame{display:block!important;flex:1 1 0!important;width:100%!important;height:0!important;min-height:0!important;max-height:none!important;overflow:hidden!important}
+.messenger-bottom{position:relative!important;flex:0 0 calc(62px + env(safe-area-inset-bottom))!important;height:calc(62px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom)!important}
