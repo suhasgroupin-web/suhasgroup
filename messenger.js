@@ -5,40 +5,37 @@
  const frame=document.getElementById('messenger-frame');
  const groups=document.querySelector('.shortcut[data-filter="groups"]');
  const theme=`
- html,body{background:#000!important;color:#f0f2f5!important}
- body{margin:0!important}
- .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading{display:none!important}
- .social-shell{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 12px 8px!important;background:#000!important}
- .social-center{width:100%!important;max-width:none!important}
- #messages{display:block!important;min-height:100%!important;padding:0 12px 12px!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important;color:#f0f2f5!important}
- #messages>h2{display:none!important}
- #messages h2,#messages h3,#messages .message-subtitle{color:#f0f2f5!important}
- #messages .message-start{padding:0!important;margin:0!important;border:0!important;background:#000!important}
- #messages .message-start h3{display:none!important}
- #messages .search{background:#242526!important;color:#f0f2f5!important;border:0!important;border-radius:24px!important;padding:12px 16px!important}
- #messages .social-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important}
- #messages .message-subtitle{display:none!important}
- #message-thread-search{display:none!important}
- #threads{display:flex!important;flex-direction:column!important;gap:0!important;max-height:none!important;height:auto!important;overflow:visible!important}
- #messages .message-thread{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:78px!important;padding:10px 2px!important;border:0!important;border-bottom:1px solid #242526!important;border-radius:0!important;background:#000!important;color:#f0f2f5!important;text-align:left!important}
+ *,*::before,*::after{box-sizing:border-box!important}
+ html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;margin:0!important}
+ body{font-family:Arial,Helvetica,sans-serif!important}
+ .site-header,.social-left,.social-right,.social-mobile-nav,.book-heading,.suhas-messenger-pagebar,.social-topbar,.social-header{display:none!important}
+ .social-shell,.social-center,main,.panel,#messages{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;overflow-x:hidden!important;background:#fff!important;color:#050505!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+ #messages>h2,#messages .message-start h3,#messages .message-subtitle,#message-thread-search{display:none!important}
+ #messages .message-start{display:block!important;padding:8px 14px!important;margin:0!important;background:#fff!important}
+ #message-member-search{width:100%!important;height:42px!important;border:0!important;border-radius:22px!important;background:#f0f2f5!important;color:#050505!important;padding:0 16px!important;font-size:15px!important}
+ #message-member-list{display:none!important}
+ #messages .social-grid{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0 12px 12px!important;background:#fff!important}
+ #messages .social-grid>div:first-child{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important}
+ #threads{display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;max-width:100%!important;min-width:0!important;max-height:none!important;height:auto!important;overflow:visible!important;background:#fff!important}
+ #messages .message-thread{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:78px!important;padding:10px 2px!important;border:0!important;border-bottom:1px solid #e4e6eb!important;border-radius:0!important;background:#fff!important;color:#050505!important;text-align:left!important}
  #messages .message-thread img,#messages .message-thread .message-member-avatar{width:58px!important;height:58px!important;flex:0 0 58px!important;border-radius:50%!important;object-fit:cover!important}
- #messages .message-thread-name{color:#f5f5f5!important;font-size:16px!important;font-weight:750!important}
- #messages .message-thread-preview{color:#b0b3b8!important;font-size:13px!important}
+ #messages .message-thread-name{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#050505!important;font-size:16px!important;font-weight:750!important}
+ #messages .message-thread-preview{color:#65676b!important;font-size:14px!important}
  #messages .message-thread-unread{background:#0866ff!important;color:#fff!important;border-radius:50px!important;padding:3px 7px!important}
- #messages .message-chat-panel{display:none;flex-direction:column!important;min-height:0!important;height:100%!important;border:0!important;border-radius:0!important;background:#000!important;padding:8px 0!important}
- #chat-title{color:#f0f2f5!important;font-size:18px!important;font-weight:750!important;padding:8px 0 12px!important;border-bottom:1px solid #303030!important}
- .msg-list{height:calc(100dvh - 300px)!important;min-height:180px!important;overflow:auto!important;border:0!important;border-radius:0!important;padding:12px 0!important;background:#000!important}
- .bubble{background:#303136!important;color:#fff!important;border-radius:20px!important;padding:11px 15px!important;font-size:15px!important}
+ #messages .message-chat-panel{display:none;flex-direction:column!important;width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;min-height:0!important;padding:8px 12px!important;border:0!important;border-radius:0!important;background:#fff!important}
+ #chat-title{color:#050505!important;font-size:18px!important;font-weight:750!important;padding:8px 0 12px!important;border-bottom:1px solid #e4e6eb!important}
+ .msg-list{height:calc(100dvh - 220px)!important;min-height:160px!important;overflow:auto!important;border:0!important;border-radius:0!important;padding:12px 0!important;background:#fff!important}
+ .bubble{background:#f0f2f5!important;color:#050505!important;border-radius:20px!important;padding:11px 15px!important;font-size:15px!important}
  .bubble.mine{background:#0866ff!important;color:#fff!important}
- .message-seen-status{color:#dce8ff!important}
- #compose{display:flex!important;gap:9px!important;margin-top:8px!important;background:#000!important}
- #compose input{background:#303136!important;color:#fff!important;border:0!important;border-radius:28px!important;padding:14px 18px!important;font-size:16px!important}
- #compose button{background:#0866ff!important;color:#fff!important;border:0!important;border-radius:22px!important;padding:12px 19px!important;font-size:15px!important}
- #messages .empty{color:#b0b3b8!important}
- #messages .message-member{background:#171717!important;color:#fff!important;border-color:#303030!important}
- #messages .message-member small{color:#b0b3b8!important}
- @media(max-width:600px){.social-shell{padding:0 8px 8px!important}#messages{padding:0 8px 8px!important}.msg-list{height:calc(100dvh - 280px)!important;min-height:160px!important}}
+ #compose{display:flex!important;gap:9px!important;margin-top:8px!important;background:#fff!important}
+ #compose input{min-width:0!important;flex:1!important;background:#f0f2f5!important;color:#050505!important;border:0!important;border-radius:28px!important;padding:14px 18px!important;font-size:16px!important}
+ #compose button{background:#0866ff!important;color:#fff!important;border:0!important;border-radius:22px!important;padding:12px 19px!important}
+ #messages .empty{padding:22px 10px!important;color:#65676b!important;text-align:center!important}
+ #messages .message-member{background:#fff!important;color:#050505!important;border-color:#e4e6eb!important}
+ #messages .message-member small{color:#65676b!important}
+ @media(max-width:600px){.social-shell{padding:0!important}#messages .social-grid{padding:0 12px 12px!important}.msg-list{height:calc(100dvh - 200px)!important;min-height:140px!important}}
  `;
+
  function apply(){
   try{const d=frame.contentDocument;if(!d?.head||!d.querySelector('#messages'))return;
    let s=d.getElementById('suhas-messenger-dark-inbox');if(!s){s=d.createElement('style');s.id='suhas-messenger-dark-inbox';d.head.appendChild(s)}s.textContent=theme;
