@@ -80,4 +80,56 @@
  document.getElementById('messenger-compose')?.addEventListener('click',()=>{
   try{const d=frame.contentDocument;const field=d?.getElementById('message-member-search');const box=d?.querySelector('#messages .message-start');if(box)box.style.setProperty('display','block','important');field?.focus()}catch(e){}
  });
+ // Facebook-inspired People view, scoped to the Messenger iframe only.
+ const peopleStyle=`
+ #friends{display:block!important;position:relative!important;flex:1 1 auto!important;min-height:0!important;height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 18px 24px!important;border:0!important;border-radius:0!important;background:#fff!important;color:#050505!important}
+ #friends>h2{margin:0!important;padding:18px 0 20px!important;font-size:30px!important;font-weight:800!important;color:#050505!important}
+ #friends .messenger-people-stories{display:flex!important;gap:12px!important;overflow-x:auto!important;padding:0 0 18px!important;scrollbar-width:none!important}
+ #friends .messenger-people-stories::-webkit-scrollbar{display:none!important}
+ #friends .messenger-people-story{display:flex!important;flex:0 0 112px!important;flex-direction:column!important;align-items:center!important;gap:7px!important;border:0!important;background:#fff!important;padding:0!important;color:#050505!important}
+ #friends .messenger-people-story .home-story-ring{width:104px!important;height:144px!important;padding:3px!important;border-radius:18px!important;background:#e4e6eb!important}
+ #friends .messenger-people-story .home-story-avatar{border:0!important;border-radius:15px!important}
+ #friends .messenger-people-story .home-story-name{font-size:13px!important;color:#050505!important}
+ #friends .messenger-people-tabs{display:flex!important;align-items:center!important;gap:10px!important;overflow-x:auto!important;padding:12px 0 16px!important;scrollbar-width:none!important}
+ #friends .messenger-people-tabs button{flex:0 0 auto!important;border:0!important;border-radius:24px!important;padding:11px 18px!important;background:#f0f2f5!important;color:#65676b!important;font-size:14px!important;font-weight:700!important}
+ #friends .messenger-people-tabs button.active{background:#e7f3ff!important;color:#0866ff!important}
+ #friends #friends-list{display:grid!important;gap:0!important}
+ #friends #friends-list .member{display:flex!important;align-items:center!important;gap:14px!important;min-height:88px!important;padding:10px 0!important;border:0!important;border-bottom:1px solid #f0f2f5!important;border-radius:0!important;background:#fff!important}
+ #friends #friends-list .member>img,.messenger-people-avatar{width:68px!important;height:68px!important;flex:0 0 68px!important;border-radius:50%!important;object-fit:cover!important}
+ #friends #friends-list .member-info{flex:1 1 auto!important;min-width:0!important}
+ #friends #friends-list .member-info b{font-size:16px!important;color:#050505!important}
+ #friends #friends-list .member-info .muted{font-size:14px!important;color:#65676b!important}
+ #friends #friends-list .member .actions{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+ #friends #friends-list .member .action{min-height:34px!important;padding:7px 11px!important;border-radius:8px!important;font-size:12px!important}
+ #friends .messenger-people-active-count{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:9px 14px!important;border-radius:22px!important;background:#f0f2f5!important;color:#1c1e21!important;font-size:14px!important;font-weight:700!important}
+ #friends .messenger-people-active-count{font-weight:700!important}
+ @media(max-width:600px){#friends{padding:0 18px 26px!important}#friends>h2{font-size:30px!important;padding-top:16px!important}}
+ `;
+ function installPeopleView(){
+  try{
+   const d=frame.contentDocument;if(!d)return;
+   let st=d.getElementById('suhas-messenger-people-style');
+   if(!st){st=d.createElement('style');st.id='suhas-messenger-people-style';d.head.appendChild(st)}
+   st.textContent=peopleStyle;
+   const panel=d.getElementById('friends');if(!panel)return;
+   if(!panel.querySelector('.messenger-people-tabs')){
+    const heading=panel.querySelector(':scope > h2');if(heading)heading.textContent='People';
+    const source=d.getElementById('home-stories-list');
+    const storyWrap=d.createElement('div');storyWrap.className='messenger-people-stories';
+    const own=d.createElement('button');own.type='button';own.className='messenger-people-story';own.innerHTML='<span class="home-story-ring"><span class="home-story-avatar">＋</span></span><span class="home-story-name">Add to story</span>';
+    own.addEventListener('click',()=>{const form=d.getElementById('story-create-form');form?.scrollIntoView({behavior:'smooth',block:'center'});d.getElementById('story-content')?.focus();});
+    storyWrap.append(own);
+    if(source){source.querySelectorAll('.home-story-card').forEach(card=>{const clone=card.cloneNode(true);clone.classList.add('messenger-people-story');clone.addEventListener('click',()=>card.click());storyWrap.append(clone);});}
+    panel.insertBefore(storyWrap,panel.querySelector('#friends-list'));
+    const tabs=d.createElement('div');tabs.className='messenger-people-tabs';
+    tabs.innerHTML='<span class="messenger-people-active-count">Friends</span><button type="button" data-people-view="requests">Friend requests</button><button type="button" class="active" data-people-view="all">All</button>';
+    panel.insertBefore(tabs,panel.querySelector('#friends-list'));
+    tabs.querySelector('[data-people-view="requests"]').addEventListener('click',()=>{const w=frame.contentWindow;if(w?.activateMaxTab)w.activateMaxTab('requests');});
+    tabs.querySelector('[data-people-view="all"]').addEventListener('click',()=>{tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.peopleView==='all'));});
+   }
+  }catch(e){console.warn('Messenger People view unavailable',e)}
+ }
+ document.querySelector('.messenger-bottom [data-dest="friends"]')?.addEventListener('click',()=>{setTimeout(installPeopleView,80);setTimeout(installPeopleView,500);});
+ frame.addEventListener('load',()=>{setTimeout(installPeopleView,150);});
+
 })();
