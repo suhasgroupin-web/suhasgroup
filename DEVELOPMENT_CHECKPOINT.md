@@ -1104,3 +1104,17 @@ Date: 2026-11-10
 - Checks performed: repository tree and current development rules/checkpoint reviewed; source entry points for social, messenger and profile inspected. No browser runtime, syntax/build or authenticated end-to-end test was run in this foundation increment.
 - Next exact step: inventory actual navigation targets and CSS/JS dependencies for SUHAS GROUP buttons, then isolate one low-risk independent module. Decompose social.html only in small tested increments.
 - Deployment: not performed. Live behavior: unchanged and not re-verified in this increment.
+
+
+## Modular isolation increment — SUHAS-MAX Messenger (2026-11-13)
+- Foundation PR #57 was merged to `main` (merge commit `1ef64dd786530d05f5162792888cfd40ca47af65`).
+- Started feature branch `feature/isolate-messenger-module-20261113` from the merged `main`.
+- Added `apps/suhas-max/messenger/README.md` documenting the Messenger module boundary and its shared social iframe contract.
+- Added module-owned copies of `messenger.css` and `messenger.js` under `apps/suhas-max/messenger/`; both are byte-for-byte copies of the root legacy assets at the start of this increment.
+- Updated only `messenger.html` asset references to load the module-folder copies. The root-level `messenger.css` and `messenger.js` remain untouched as rollback/legacy copies. Existing iframe route, logo/profile routes, DOM IDs, Supabase ownership and message/realtime behavior are unchanged.
+- Updated `MODULE_MANIFEST.json` to record the module-owned assets, retained legacy assets and migration status.
+- No database, storage, auth, user records, social page or other product routes were changed.
+- Static checks: confirmed source asset references in `messenger.html` now point to the module copies; confirmed the CSS contains no `url(...)` relative asset dependencies; confirmed the JS contains no import/fetch asset paths; confirmed the iframe remains `social.html?tab=messages&messenger=1`; manifest JSON parses.
+- Not yet verified: JavaScript parser/build, browser rendering, Android layout, authenticated sign-in, messaging/realtime or neighboring social-page regression. No deployment performed.
+- Recovery: revert the single `messenger.html` asset-reference commit to restore root asset loading; module copies and legacy files are additive.
+- Next: run syntax and route checks on the branch, then request review via a draft PR. Do not merge or deploy until checks and a browser/device test are available.
