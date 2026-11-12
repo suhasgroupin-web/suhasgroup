@@ -45,7 +45,7 @@ function detectReplyLanguage(text: string) {
   return "Latin-script language: infer exact language from the user's words; do not assume English";
 }
 function localGreeting(prompt: string) {
-  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   if (!/^(hi|hello|hey|hiya|good morning|good afternoon|good evening|salam|assalamu alaikum|assalamualaikum|হ্যালো|হাই|আসসালামু আলাইকুম|مرحبا|السلام عليكم|أهلا|你好|您好|嗨)$/i.test(p)) return null;
   const language = detectReplyLanguage(prompt);
   if (language.startsWith("Bangla in")) return /^(হ্যালো|হাই)$/.test(p) ? "হ্যালো! কীভাবে সাহায্য করতে পারি?" : "ওয়ালাইকুম আসসালাম! কীভাবে সাহায্য করতে পারি?";
@@ -56,7 +56,7 @@ function localGreeting(prompt: string) {
 }
 
 function localSmallTalk(prompt: string) {
-  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const language = detectReplyLanguage(prompt);
   if (/^(how are you|how are you doing|how r you|how r u|hows it going|are you fine)$/.test(p)) return "I'm doing well, thank you for asking! How can I help you today?";
   if (/^(what is your name|who are you)$/.test(p)) return "I'm SUHAS AI, the official AI assistant for SUHAS GROUP. How can I help you?";
