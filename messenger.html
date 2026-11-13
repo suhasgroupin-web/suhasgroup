@@ -19,13 +19,14 @@
 
 
   <link rel="stylesheet" href="apps/suhas-max/messenger/messenger.css?v=20261113-module-v1">
+  <link rel="stylesheet" href="apps/suhas-max/messenger/messenger-fb-v1.css?v=20261113-fb-v1">
 </head>
 <body>
 <div class="messenger-app">
 <header class="messenger-head">
 <div class="messenger-brand" aria-label="SUHAS Messenger"><span class="brand-suhas">SUHAS</span><span class="brand-messenger">Messenger</span></div>
 <div class="messenger-head-actions">
-<button type="button" id="messenger-compose" aria-label="New message" title="New message">✎</button>
+<button type="button" id="messenger-compose" aria-label="New message" title="New message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20h11a2.500 2.500 0 0 0 2.5-2.500V12"/><path d="m18.500 3.500 2 2L12 14l-3 1 1-3 8.500-8.500Z"/></svg></button>
 <button type="button" id="messenger-more" aria-label="More options" title="More options">⋮</button>
 
 <button type="button" id="messenger-back" aria-label="Open SUHAS-MAX home" title="Open SUHAS-MAX home"><img src="assets/logo.png" alt="SUHAS GROUP logo"></button>
@@ -49,6 +50,7 @@
 <button type="button" data-dest="notifications" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" fill="currentColor" stroke="none"/></svg><small>Notifications</small><span class="nav-badge nav-dot" aria-label="New notifications"></span></button>
 <button type="button" id="messenger-menu" aria-label="Menu and settings" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><small>Menu</small><span class="nav-badge nav-dot" aria-label="New menu activity"></span></button>
 </nav>
+<a class="messenger-ai-fab" id="messenger-ai-fab" href="ai.html" aria-label="Ask SUHAS AI"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="7" r="4.200" fill="#0866ff"/><circle cx="25" cy="14" r="4.200" fill="#7b3ff2"/><circle cx="21.500" cy="25" r="4.200" fill="#e0315a"/><circle cx="10.500" cy="25" r="4.200" fill="#f5a623"/><circle cx="7" cy="14" r="4.200" fill="#1fa463"/></svg>Ask SUHAS AI</a>
 <div class="messenger-menu-screen" id="messenger-menu-screen" hidden>
  <header class="messenger-menu-heading"><h1>Menu</h1><button type="button" id="messenger-menu-close" aria-label="Close menu">×</button></header>
  <button type="button" class="messenger-menu-profile" data-menu-action="profile"><img id="messenger-menu-avatar" alt=""><span><b id="messenger-menu-name">Your profile</b><small id="messenger-menu-handle">View your profile</small></span><strong class="messenger-menu-alert" id="messenger-menu-alert" hidden></strong></button>

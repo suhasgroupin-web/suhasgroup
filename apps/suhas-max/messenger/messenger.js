@@ -44,6 +44,17 @@
  #messages .message-chat-panel{display:none!important}
  #messages.chat-open .message-chat-panel{display:flex!important}
  @media(max-width:600px){#messages .social-grid{padding:0 14px!important}#messages .message-thread{min-height:82px!important}#messages .message-thread>img,#messages .message-thread>.message-member-avatar{width:58px!important;height:58px!important;flex-basis:58px!important}}
+ /* FB-style inbox rows (additive v1): time label, bold unread rows, blue unread dot, active dot on avatar. */
+ #messages .message-thread{position:relative!important;border-bottom:0!important;min-height:78px!important;padding:8px 0!important}
+ #messages .message-thread>img,#messages .message-thread>.message-member-avatar{width:56px!important;height:56px!important;flex-basis:56px!important}
+ #messages .message-thread-name{font-weight:500!important;font-size:16px!important}
+ #messages .message-thread-preview{font-size:14px!important}
+ #messages .message-thread.is-unread .message-thread-name,#messages .message-thread.is-unread .message-thread-preview{color:#050505!important;font-weight:700!important}
+ #messages .message-thread-time{align-self:flex-start!important;margin-top:8px!important;flex:0 0 auto!important;color:#65676b!important;font-size:13px!important;font-weight:400!important}
+ #messages .message-thread.is-unread .message-thread-time{color:#050505!important;font-weight:600!important}
+ #messages .message-thread-unread{position:absolute!important;right:6px!important;bottom:16px!important;min-width:12px!important;width:12px!important;min-height:12px!important;height:12px!important;padding:0!important;overflow:hidden!important;border-radius:50%!important;background:#0866ff!important;color:transparent!important;font-size:0!important}
+ #messages .message-status-dot.is-online{position:absolute!important;left:42px!important;bottom:12px!important;width:15px!important;height:15px!important;border:2px solid #fff!important;border-radius:50%!important;background:#31a24c!important}
+
  `;
  function apply(){
   try{

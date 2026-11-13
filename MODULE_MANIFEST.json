@@ -122,7 +122,8 @@
           "legacyEntry": "messenger.html",
           "assets": [
             "apps/suhas-max/messenger/messenger.css",
-            "apps/suhas-max/messenger/messenger.js"
+            "apps/suhas-max/messenger/messenger.js",
+            "apps/suhas-max/messenger/messenger-fb-v1.css"
           ],
           "status": "module-folder-isolated-legacy-route-retained",
           "moduleReadme": "apps/suhas-max/messenger/README.md",

@@ -1,0 +1,27 @@
+/* SUHAS Messenger — Facebook-Messenger-style shell polish (additive v1, presentation only).
+   Loaded after messenger.css. Scoped to .messenger-app; no ID/handler/markup contracts changed. */
+.messenger-app .messenger-head{padding:0 16px!important}
+.messenger-app .messenger-brand{font-size:30px!important;letter-spacing:-1.2px!important}
+.messenger-app .messenger-head-actions{gap:8px!important}
+.messenger-app .messenger-head button{background:#f0f2f5!important}
+.messenger-app #messenger-compose svg{display:block;width:22px;height:22px;fill:none;stroke:#050505;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Search: one grey pill with the icon inside it. */
+.messenger-app .messenger-search-wrap{padding:6px 16px 8px!important;flex-basis:62px!important;height:62px!important}
+.messenger-app .messenger-search-wrap .messenger-search-icon{display:grid!important;position:absolute!important;left:34px!important;top:50%!important;z-index:1!important;width:22px!important;height:22px!important;margin-top:-12px!important;transform:none!important;pointer-events:none!important}
+.messenger-app .messenger-search-wrap input{height:46px!important;padding:0 16px 0 46px!important;background:#f0f2f5!important;font-size:16px!important}
+
+/* Stories row: names under circles, calmer rings. */
+.messenger-app .story-contact img{border:3px solid #0866ff!important;padding:2px!important;background:#fff!important}
+.messenger-app .story-card strong,.messenger-app .story-contact span{font-size:13px!important;color:#65676b!important;font-weight:400!important}
+
+/* Filter chips like Messenger's inbox chips (existing controls kept). */
+.messenger-app .messenger-shortcuts{padding:2px 16px 8px!important;gap:8px!important}
+.messenger-app .messenger-shortcuts .shortcut{height:36px!important;flex:0 0 auto!important;min-width:64px!important;padding:0 16px!important;background:#f0f2f5!important;color:#050505!important;font-weight:600!important;font-size:14px!important}
+.messenger-app .messenger-shortcuts .shortcut.active{background:#e7f3ff!important;color:#0866ff!important}
+
+/* Floating assistant button (opens the existing SUHAS AI page). */
+.messenger-ai-fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:20;display:inline-flex;align-items:center;gap:10px;padding:10px 18px 10px 12px;border-radius:999px;background:#fff;color:#050505;font:600 16px/1 Arial,Helvetica,sans-serif;text-decoration:none;box-shadow:0 2px 12px rgba(0,0,0,.22)}
+.messenger-ai-fab svg{width:30px;height:30px;flex:none}
+.messenger-ai-fab:focus-visible{outline:3px solid #0866ff;outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.messenger-ai-fab{transition:transform .15s}.messenger-ai-fab:active{transform:scale(.97)}}

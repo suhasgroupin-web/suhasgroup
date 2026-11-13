@@ -1198,3 +1198,17 @@ Date: 2026-11-10
 - Updated `MODULE_MANIFEST.json` to record the Settings presentation module.
 - Static source checks: stylesheet link is registered once; all referenced setting control IDs and handlers remain in the existing page; responsive and reduced-motion CSS rules are present; JSON manifest parses.
 - Pending: browser rendering at 360px/412px/desktop, real signed-in save/reload test, and keyboard/screen-reader interaction. No deployment performed; do not mark live until Cloudflare Pages production is checked.
+
+
+## SUHAS Messenger — Facebook Messenger visual alignment, increment 1 (2026-11-13)
+Reference: user-supplied screenshots of the official Facebook Messenger inbox and the live SUHAS Messenger inbox.
+- Branch: `feature/messenger-fb-polish-20261113` (from `main`). Not merged. Not deployed.
+- Inbox rows (additive): each conversation row now shows a time label (clock time today, weekday within 6 days, otherwise "Mon D") from the latest message `created_at`; unread rows get `is-unread` (bold name/preview) and the existing unread element is restyled as a blue dot with an `aria-label` carrying the count. Active-status dot repositioned onto the avatar. Element names/classes and the `.message-thread-unread` selector used by the Unread filter are preserved.
+- Shell (additive, presentation only): new `apps/suhas-max/messenger/messenger-fb-v1.css` loaded after `messenger.css`: search icon shown inside the grey search pill, chip-style All/Unread/Groups filters, calmer story rings, compose button now an edit-square icon (was a text glyph).
+- New control: "Ask SUHAS AI" floating button linking to the existing `ai.html` (real destination, no placeholder).
+- Files changed: `social.html` (thread row renderer, 4 small string patches), `messenger.html`, `apps/suhas-max/messenger/messenger.js` (appended CSS only), `apps/suhas-max/messenger/messenger-fb-v1.css` (new), `MODULE_MANIFEST.json`.
+- No database, RLS, storage, auth or user-data changes. No existing control removed or disabled.
+- Checks run: `node --check` on messenger.js and the patched social.html script; manifest JSON parses; headless-Chrome render of messenger.html shell at phone width; headless render of the inbox row CSS against mock rows with the exact row markup (time, bold unread, blue dot, active dot all render; no horizontal overflow).
+- NOT verified (needs a signed-in account on a real device): real inbox with live data, realtime unread updates, Unread filter with the new dot, the ai.html button when signed out, dark-mode appearance.
+- Pending for later increments (compared against the Facebook Messenger reference): Message requests row in inbox, chat thread screen (header, bubbles, composer), More/3-dot menu contents, Settings/Menu page contents, People tab, Notifications tab, stories viewer, notes bubbles above stories, mute indicator. Each needs a Supabase/RLS check before any control is added.
+- Rollback: revert the branch commit; legacy root `messenger.css`/`messenger.js` untouched.
