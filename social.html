@@ -3788,8 +3788,15 @@ async function loadFeed(){
  const videos=[...$('feed-list').querySelectorAll('video[data-feed-autoplay]')];
  if(window.__suhasFeedVideoObserver){window.__suhasFeedVideoObserver.disconnect();window.__suhasFeedVideoObserver=null;}
  videos.forEach(v=>{
-  v.autoplay=true;v.playsInline=true;v.muted=true;v.defaultMuted=true;
-  v.addEventListener('click',function(event){event.preventDefault();event.stopPropagation();if(v.paused){v.play().catch(()=>{});}else{v.pause();}});
+  v.autoplay=true;v.playsInline=true;
+  const wantsSound=()=>{try{return JSON.parse(localStorage.getItem('suhas-max-settings')||'{}').videoSound!==false;}catch(_){return true;}};
+  v.muted=true;v.defaultMuted=true;
+  v.addEventListener('click',function(event){
+   event.preventDefault();event.stopPropagation();
+   if(v.paused){v.muted=false;v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});}
+   else if(v.muted){v.muted=false;}
+   else{v.pause();}
+  });
  });
  if('IntersectionObserver' in window){
   window.__suhasFeedVideoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
