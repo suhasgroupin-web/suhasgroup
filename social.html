@@ -3988,7 +3988,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
 })();
 
 document.getElementById('reels-close')?.addEventListener('click',()=>activateMaxTab('feed').catch(e=>notice(e.message||'Could not close Reels.',true)));
-window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='suhas-max-profile-updated')return;const editor=document.getElementById('suhas-profile-editor');if(editor)editor.hidden=true;openMemberProfile(me).then(()=>notice('SUHAS-MAX profile updated.')).catch(err=>notice(err.message||'Profile refreshed with an error.',true));});
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return;const editor=document.getElementById('suhas-profile-editor');if(e.data?.type==='suhas-max-profile-cancel'){if(editor)editor.hidden=true;return;}if(e.data?.type!=='suhas-max-profile-updated')return;if(editor)editor.hidden=true;openMemberProfile(me).then(()=>notice('SUHAS-MAX profile updated.')).catch(err=>notice(err.message||'Profile refreshed with an error.',true));});
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
 document.addEventListener('click',e=>{if(!e.target.closest('button,a,[role="button"]'))return;const n=document.getElementById('notice');if(n){n.textContent='';n.style.display='none';}},true);
