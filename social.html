@@ -3373,9 +3373,14 @@ function startReelsAutoplay(){
  window.__suhasReelObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{const v=entry.target;if(entry.isIntersecting&&entry.intersectionRatio>=0.55){videos.forEach(other=>{if(other!==v)other.pause();});v.play().catch(()=>{});}else{v.pause();}}),{threshold:[0,0.55,0.8]});
  videos.forEach(v=>window.__suhasReelObserver.observe(v));
 }
+async function refreshUnreadNotificationBadge(){
+ try{const result=await client.from('suhas_notifications').select('id',{count:'exact',head:true}).eq('recipient_id',me).is('read_at',null);if(result.error)throw result.error;const count=result.count||0;document.querySelectorAll('[data-fb-notif-badge]').forEach(b=>{b.textContent=count>99?'99+':String(count);b.hidden=count===0;});}
+ catch(error){console.warn('Could not refresh SUHAS-MAX notification badge:',error);}
+}
 async function loadNotifications(){
   const r=await client.from('suhas_notifications').select('id,actor_id,kind,entity_type,entity_id,message,created_at,read_at').eq('recipient_id',me).order('created_at',{ascending:false}).limit(60);
   if(r.error)throw r.error;
+  await refreshUnreadNotificationBadge();
   const ids=[...new Set((r.data||[]).map(x=>x.actor_id).filter(Boolean))];
   let profiles=[];
   if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',ids);if(p.error)throw p.error;profiles=p.data||[];}
@@ -3408,7 +3413,7 @@ document.getElementById('notifications-list')?.addEventListener('click',async e=
  try{
   const u=await client.from('suhas_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('recipient_id',me);
   if(u.error)throw u.error;
-  await loadNotifications();
+  await loadNotifications();await refreshUnreadNotificationBadge();
   const row=await client.from('suhas_notifications').select('kind,entity_id').eq('id',id).eq('recipient_id',me).maybeSingle();
   if(row.error)throw row.error;
   if(row.data?.kind==='friend_request'){document.querySelector('[data-tab="requests"]')?.click();await loadRequests();}
@@ -3946,7 +3951,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  const makeUrl=(tab,profile,editor)=>{const q=new URLSearchParams(location.search);q.set('tab',tab);if(profile)q.set('profile',profile);else q.delete('profile');if(editor)q.set('edit','1');else q.delete('edit');return location.pathname+'?'+q.toString();};
  let current=readRoute();
  const editor=$('suhas-profile-editor'),editorFrame=$('suhas-profile-editor-frame');
- const render=async state=>{current={...state};await activateMaxTab(current.tab);if(current.profile)await openMemberProfile(current.profile);else if($('profile-viewer').classList.contains('open')){$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;}editor.hidden=!current.editor;if(current.editor&&editorFrame.src==='about:blank')editorFrame.src='profile.html?embed=1';};
+ const render=async state=>{current={...state};await activateMaxTab(current.tab);if(current.profile)await openMemberProfile(current.profile);else if($('profile-viewer').classList.contains('open')){$('profile-viewer').classList.remove('open');$('profile-viewer').setAttribute('aria-hidden','true');$('profile-viewer-menu').classList.remove('open');activeProfileId=null;}editor.hidden=!current.editor;if(current.editor&&editorFrame.src==='about:blank')editorFrame.src='max-profile.html?embed=1';};
  // Preserve the exact profile/section route on reload. Only a plain app entry gets the Home back-guard.
  const initialState={...current,guard:!current.profile&&!current.editor};
  history.replaceState(initialState,'',makeUrl(initialState.tab,initialState.profile,initialState.editor));
@@ -3965,11 +3970,12 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  // One stable, delegated handler owns all six bottom-navigation buttons.
  // Delegation also covers taps on nested SVG paths and survives dynamic UI updates.
  document.addEventListener('click',e=>{
-  const b=e.target.closest('.social-mobile-nav button[data-tab]');
+  const b=e.target.closest('.social-mobile-nav button[data-tab],.suhas-fb-phone-tabs button[data-tab]');
   if(!b)return;
   e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
   const tab=b.dataset.tab;
   if(tab==='profile'){activateMaxTab('profile').catch(err=>notice(err.message||'Could not open your SUHAS-MAX profile.',true));return;}
+  if(tab==='maxmenu'){activateMaxTab('maxmenu');return;}
   if(!allowed.includes(tab)){notice('This navigation destination is not available.',true);return;}
   current={suhasMax:true,tab,profile:null,editor:false,guard:false};
   try{history.pushState(current,'',makeUrl(tab,null,false));}
@@ -3982,6 +3988,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
 })();
 
 document.getElementById('reels-close')?.addEventListener('click',()=>activateMaxTab('feed').catch(e=>notice(e.message||'Could not close Reels.',true)));
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.type!=='suhas-max-profile-updated')return;const editor=document.getElementById('suhas-profile-editor');if(editor)editor.hidden=true;openMemberProfile(me).then(()=>notice('SUHAS-MAX profile updated.')).catch(err=>notice(err.message||'Profile refreshed with an error.',true));});
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
 document.addEventListener('click',e=>{if(!e.target.closest('button,a,[role="button"]'))return;const n=document.getElementById('notice');if(n){n.textContent='';n.style.display='none';}},true);
@@ -4054,10 +4061,10 @@ $('compose').addEventListener('submit',async e=>{
   button.textContent=original;
  }
 });
-notificationChannel=client.channel('suhas-notifications-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_notifications',filter:'recipient_id=eq.'+me},payload=>{loadNotifications().catch(e=>notice(e.message,true));showSuhasLiveNotification(payload.new);if(payload.new?.kind==='friend_request')loadRequests().catch(e=>notice(e.message,true));}).subscribe();
+notificationChannel=client.channel('suhas-notifications-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_notifications',filter:'recipient_id=eq.'+me},payload=>{refreshUnreadNotificationBadge();loadNotifications().catch(e=>notice(e.message,true));showSuhasLiveNotification(payload.new);if(payload.new?.kind==='friend_request')loadRequests().catch(e=>notice(e.message,true));}).subscribe();
 friendRequestChannel=client.channel('suhas-friend-relationships-'+me).on('postgres_changes',{event:'*',schema:'public',table:'suhas_friend_requests',filter:'sender_id=eq.'+me},()=>{renderHomeDiscovery().catch(e=>console.warn('Friend suggestion refresh failed:',e));if(!$('friends').hidden)loadFriends().catch(e=>notice(e.message,true));if(!$('people').hidden)renderPeople().catch(e=>notice(e.message,true));}).on('postgres_changes',{event:'*',schema:'public',table:'suhas_friend_requests',filter:'recipient_id=eq.'+me},()=>{renderHomeDiscovery().catch(e=>console.warn('Friend suggestion refresh failed:',e));loadRequests().catch(e=>notice(e.message,true));if(!$('friends').hidden)loadFriends().catch(e=>notice(e.message,true));if(!$('people').hidden)renderPeople().catch(e=>notice(e.message,true));}).subscribe();
 messageBadgeChannel=client.channel('suhas-message-badges-'+me).on('postgres_changes',{event:'INSERT',schema:'public',table:'suhas_messages'},payload=>{if(payload.new?.sender_id!==me){refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}}).on('postgres_changes',{event:'UPDATE',schema:'public',table:'suhas_messages'},payload=>{refreshUnreadMessageBadge();if(!$('messages').hidden)loadThreads().catch(e=>console.warn('Could not refresh Messenger list:',e));}).subscribe();
-refreshUnreadMessageBadge();
+refreshUnreadMessageBadge();refreshUnreadNotificationBadge();
 const q=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified').eq('profile_complete',true).order('full_name').limit(500);if(q.error){notice('Could not load members: '+q.error.message,true);return;}members=q.data||[];
 // Supabase Realtime Presence: green means this member currently has an active SUHAS-MAX session.
 presenceChannel=client.channel('suhas-global-presence',{config:{presence:{key:me}}});
