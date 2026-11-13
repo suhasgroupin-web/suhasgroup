@@ -10,7 +10,7 @@ Working branch: `chore/integration-registry-audit`
 - **SUHAS GROUP** is the corporate/business platform: garments operations, HR, finance, inventory, CRM, ERP, reporting, management dashboards and internal automation.
 - **SUHAS-MAX** is the social platform: feed, profiles, friends, Messenger, stories, reels, groups, marketplace, notifications, privacy and account security.
 - Both products may share authentication, database infrastructure, observability and integration adapters, but must retain separate navigation, permissions, data boundaries and user experiences.
-- Existing GitHub repository and Supabase project remain authoritative. Vercel remains enabled. Cloudflare Pages is a secondary deployment target; do not switch DNS or remove either host without verified parity.
+- Existing GitHub repository and Supabase project remain authoritative. Cloudflare Pages is the sole production frontend host. Vercel is retired and must not be used for new deployments.
 - Prefer standards-based, portable components: PostgreSQL, REST/HTTP APIs, webhooks, OAuth 2.0, OpenAPI, Docker/OCI, and documented environment configuration. Do not couple core business logic to a single proprietary AI provider.
 
 ## Mandatory safety and acceptance rules
@@ -32,8 +32,8 @@ Working branch: `chore/integration-registry-audit`
 |---|---|---|
 | GitHub | Main repository and Actions workflows | Primary source of truth |
 | Supabase | Existing project, Auth, PostgreSQL, RLS, Storage and Edge Function | Existing backend; preserve |
-| Vercel | Existing production project/deployment history | Keep enabled; deployment may be quota-blocked |
-| Cloudflare Pages | Existing deployment workflow | Secondary static-host target; verify secrets and successful live parity |
+| Vercel | Historical deployment records only | Retired; no production builds or deploys |
+| Cloudflare Pages | Production static frontend host | Primary production target; GitHub Actions workflow deploys `main` to project `suhasgroup` |
 | GitHub Pages | Existing deploy workflow | Legacy/secondary output; review commercial suitability before relying on it |
 | CodeQL | Existing workflow | Security scanning |
 | Site quality checks | Existing workflow | Static validation |
@@ -68,7 +68,7 @@ These are candidates, not claims of installation or production activation.
 - GitHub Actions runners are temporary CI workers, not a permanent application server.
 - Cloudflare Workers/Pages and Supabase Edge Functions are useful serverless execution options but have plan quotas and runtime constraints.
 - A self-hosted service requires persistent compute, storage, backups, patching, monitoring and secure network exposure. A free trial or free tier is not an unlimited production host.
-- Keep the current frontend deployment targets; verify Cloudflare deployment workflow secrets and project variable before treating the backup as operational.
+- Use Cloudflare Pages as the only production frontend target; confirm the deployment workflow and production URL after every release.
 - Review GitHub Pages workflow separately: GitHub Pages is not the default production host for a commercial SaaS application.
 - Do not duplicate the production Supabase database or migrate user data as part of this registry task.
 
