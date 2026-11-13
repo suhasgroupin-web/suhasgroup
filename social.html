@@ -2618,6 +2618,34 @@ body.suhas-reels-open #reels-list .post-menu{z-index:12!important}
 #profile-cover-change[hidden],#profile-avatar-change[hidden]{display:none!important}
 @media(max-width:560px){#profile-cover-change.profile-owner-cover-edit{right:12px!important;bottom:10px!important;width:38px!important;height:38px!important}#profile-avatar-change.profile-owner-avatar-edit{right:5px!important;left:auto!important;top:auto!important;bottom:5px!important;width:24px!important;height:24px!important}}
 </style>
+<style id="suhas-max-profile-controls-final-override-20261113">
+/* Final override: keep only the cover-toolbar overflow menu and use floating camera glyphs. */
+#profile-viewer .profile-viewer-head>.profile-viewer-menu-wrap{display:none!important}
+#profile-viewer .profile-cover-toolbar{display:flex!important}
+#profile-viewer #profile-cover-more{display:grid!important}
+#profile-viewer #profile-cover-change.profile-owner-cover-edit{
+ display:grid!important;place-items:center!important;position:absolute!important;
+ right:14px!important;bottom:12px!important;left:auto!important;top:auto!important;
+ width:40px!important;height:40px!important;padding:0!important;margin:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;
+ box-shadow:none!important;color:inherit!important
+}
+#profile-viewer #profile-avatar-change.profile-owner-avatar-edit{
+ display:grid!important;place-items:center!important;position:absolute!important;
+ right:3px!important;left:auto!important;top:auto!important;bottom:3px!important;
+ width:27px!important;height:27px!important;padding:0!important;margin:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;
+ box-shadow:none!important;color:inherit!important
+}
+#profile-viewer #profile-cover-change svg{display:block!important;width:34px!important;height:34px!important;filter:drop-shadow(0 2px 3px #0007)!important}
+#profile-viewer #profile-avatar-change svg{display:block!important;width:25px!important;height:25px!important;filter:drop-shadow(0 2px 3px #0007)!important}
+#profile-viewer #profile-cover-change[hidden],#profile-viewer #profile-avatar-change[hidden]{display:none!important}
+#profile-viewer #profile-image-edit-panel[hidden]{display:none!important}
+@media(max-width:560px){
+ #profile-viewer #profile-cover-change.profile-owner-cover-edit{right:12px!important;bottom:10px!important}
+ #profile-viewer #profile-avatar-change.profile-owner-avatar-edit{right:3px!important;bottom:3px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation"><button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="desktop-nav-icon">⌂</span><span>Home</span></button><button data-tab="friends" type="button" aria-label="Friends"><span class="desktop-nav-icon">♙</span><span>Friends</span></button><button data-tab="groups" type="button" aria-label="Groups"><span class="desktop-nav-icon">▦</span><span>Groups</span></button><button data-tab="reels" type="button" aria-label="Reels"><span class="desktop-nav-icon">▣</span><span>Reels</span></button><button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="desktop-nav-icon">▱</span><span>Marketplace</span></button><button data-tab="notifications" type="button" aria-label="Notifications"><span class="desktop-nav-icon">♧</span><span>Notifications</span></button></nav>
