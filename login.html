@@ -43,13 +43,14 @@ body{background:#f0f2f5!important;min-height:100vh}
 .site-header .nav-links,.site-header .nav-cta,.site-header .auth-switch,.site-header .auth-actions{display:none!important}
 .auth-form form>.auth-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important;margin-top:4px!important}
 .auth-form form>.auth-actions>.btn{min-width:0!important;width:100%!important}
-</style>
+html.suhas-max-login .site-header,html.suhas-max-login .site-footer,html.suhas-max-login .auth-brand,html.suhas-max-login .auth-actions a[href="signup.html"],html.suhas-max-login .linkline,html.suhas-max-login a[href="reset.html"]{display:none!important}</style>
 <style id="suhas-public-auth-nav-hide">
 html,body{min-height:100%;padding-bottom:0!important}
 body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,body .app-bottom-nav,body nav[aria-label="App navigation"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 </style>
 </head><body>
 <script id="suhas-max-login-mode">
+if(new URLSearchParams(location.search).get('max')==='1')document.documentElement.classList.add('suhas-max-login');
 document.addEventListener('DOMContentLoaded',function(){if(new URLSearchParams(location.search).get('max')!=='1')return;document.title='Log in | SUHAS-MAX';document.querySelector('.site-header')?.remove();document.querySelector('.site-footer')?.remove();document.querySelector('.auth-brand')?.remove();const signup=document.querySelector('.auth-actions a[href="signup.html"]');signup?.remove();document.querySelector('.linkline')?.remove();const forgot=document.querySelector('a[href="reset.html"]');forgot?.parentElement?.remove();const copy=document.querySelector('.form-card>p:first-of-type');if(copy)copy.textContent='Sign in to your independent SUHAS-MAX account. Your SUHAS-MAX and Messenger profile stay connected.';const heading=document.querySelector('.form-card h1');if(heading)heading.textContent='Welcome to SUHAS-MAX';});
 </script>
 
