@@ -1,12 +1,12 @@
 {
-  "id": "./",
+  "id": "/",
   "name": "SUHAS-MAX — Powered by SUHAS GROUP",
   "short_name": "SUHAS-MAX",
   "description": "SUHAS-MAX is the social and corporate community platform powered by SUHAS GROUP.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "display_override": [
     "standalone",
