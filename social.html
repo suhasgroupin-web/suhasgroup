@@ -5595,6 +5595,118 @@ html.suhas-authenticated .tabbar{display:none!important}
  }
 }
 </style>
+<style id="suhas-max-profile-mobile-layout-hotfix-20261113">
+/* Stable mobile profile header: prevent flex/grid cascade collisions and vertical text wrapping. */
+@media(max-width:650px){
+ html body #profile-viewer.profile-viewer.open>.profile-viewer-card{
+  display:block!important;width:100vw!important;min-width:0!important;max-width:100vw!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  margin:0!important;border:0!important;border-radius:0!important;overflow-x:hidden!important;overflow-y:auto!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-cover{
+  display:block!important;position:relative!important;width:100%!important;height:220px!important;min-height:220px!important;
+  margin:0!important;border-radius:0!important;background-size:cover!important;background-position:center!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head{
+  display:grid!important;position:relative!important;grid-template-columns:104px minmax(0,1fr) 40px!important;
+  grid-template-rows:auto!important;align-items:start!important;justify-content:stretch!important;
+  flex-wrap:initial!important;gap:10px!important;width:100%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0 14px 16px!important;background:#fff!important;color:#1c1e21!important;
+  box-sizing:border-box!important;overflow:visible!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
+  position:relative!important;grid-column:1!important;grid-row:1!important;display:block!important;
+  flex:none!important;width:104px!important;min-width:104px!important;max-width:104px!important;
+  height:104px!important;margin:-48px 0 0 0!important;padding:0!important;overflow:visible!important;
+  border:4px solid #fff!important;border-radius:50%!important;background:#e8eef8!important;
+  box-shadow:0 4px 16px #10294b30!important;box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap .profile-viewer-avatar{
+  position:static!important;display:block!important;width:100%!important;height:100%!important;
+  min-width:0!important;max-width:none!important;min-height:0!important;max-height:none!important;
+  margin:0!important;border:0!important;border-radius:50%!important;object-fit:cover!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>#profile-image-edit-panel+div{
+  display:block!important;grid-column:2!important;grid-row:1!important;align-self:start!important;
+  flex:none!important;width:auto!important;min-width:0!important;max-width:none!important;
+  margin:0!important;padding:8px 0 0!important;overflow:visible!important;box-sizing:border-box!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-copy{display:block!important;min-width:0!important;width:100%!important;max-width:none!important;flex:none!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-name{
+  display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;
+  color:#1c1e21!important;font-size:clamp(18px,5vw,23px)!important;font-weight:800!important;
+  line-height:1.2!important;white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;
+  text-overflow:clip!important;overflow:visible!important;text-shadow:none!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-name .verified-badge,
+ html body #profile-viewer.profile-viewer.open #profile-viewer-name .verification-badge,
+ html body #profile-viewer.profile-viewer.open #profile-viewer-name .profile-verified-badge{display:inline-flex!important;flex:0 0 auto!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-sub{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:4px!important;
+  width:100%!important;min-width:0!important;margin:7px 0 0!important;padding:0!important;
+  color:#65676b!important;font-size:12px!important;line-height:1.4!important;white-space:normal!important;
+  word-break:normal!important;overflow-wrap:anywhere!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-sub .profile-detail-line{
+  display:flex!important;align-items:baseline!important;flex-wrap:wrap!important;gap:4px 7px!important;
+  width:100%!important;min-width:0!important;line-height:1.4!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-sub .profile-detail-label{flex:0 0 auto!important;min-width:0!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-sub strong{min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-stats{
+  display:flex!important;grid-column:auto!important;grid-row:auto!important;flex-wrap:wrap!important;
+  align-items:center!important;gap:8px 14px!important;width:100%!important;margin:12px 0 0!important;
+  padding:10px 0 0!important;border-top:1px solid #e8edf3!important;color:#65676b!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-stats>div{display:inline-flex!important;align-items:baseline!important;gap:4px!important;font-size:12px!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-stats strong{font-size:16px!important;color:#172b4d!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-actions{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;
+  width:100%!important;margin:12px 0 0!important;padding:0!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-actions .action{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;min-width:0!important;min-height:42px!important;padding:7px 8px!important;
+  border-radius:10px!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-menu-wrap{
+  position:relative!important;grid-column:3!important;grid-row:1!important;align-self:start!important;
+  justify-self:end!important;flex:none!important;width:40px!important;min-width:40px!important;
+  margin:6px 0 0!important;padding:0!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-viewer-menu-trigger{
+  display:grid!important;place-items:center!important;width:38px!important;height:38px!important;
+  border-radius:50%!important;background:#eef2f7!important;color:#1c1e21!important;border:1px solid #e2e8f0!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-avatar-change.profile-owner-avatar-edit{
+  position:absolute!important;left:auto!important;right:-5px!important;top:auto!important;bottom:-3px!important;
+  display:grid!important;place-items:center!important;width:34px!important;height:34px!important;
+  border:3px solid #fff!important;border-radius:50%!important;background:#e4eaf4!important;color:#173b78!important;z-index:8!important;
+ }
+ html body #profile-viewer.profile-viewer.open #profile-cover-change.profile-owner-cover-edit{
+  position:absolute!important;left:auto!important;right:14px!important;top:auto!important;bottom:14px!important;
+  display:grid!important;place-items:center!important;width:42px!important;height:42px!important;padding:0!important;
+  border:3px solid #fff!important;border-radius:50%!important;background:#fff!important;color:#173b78!important;z-index:8!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-tabs{
+  display:flex!important;flex-wrap:nowrap!important;gap:0!important;width:100%!important;max-width:100%!important;
+  overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;scrollbar-width:none!important;
+  background:#fff!important;padding:0 8px!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-tabs::-webkit-scrollbar{display:none!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-tabs button{
+  flex:0 0 auto!important;min-width:max-content!important;min-height:48px!important;padding:0 14px!important;
+  white-space:nowrap!important;font-size:13px!important;
+ }
+ html body #profile-viewer.profile-viewer.open .profile-viewer-body{display:block!important;width:100%!important;min-width:0!important;padding:12px!important;box-sizing:border-box!important;background:#f0f2f5!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-info{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;width:100%!important;min-width:0!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-info>.profile-info-card{width:100%!important;min-width:0!important;margin:0!important;box-sizing:border-box!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-info .profile-summary-value{overflow-wrap:anywhere!important;word-break:normal!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-info #profile-friends{order:2!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-posts{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+}
+</style>
 </body></html>
 
 
