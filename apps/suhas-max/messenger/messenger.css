@@ -484,3 +484,32 @@ html,body,.messenger-app{background:#fff!important;color:var(--m-text)!important
  .messenger-head-actions>button{flex-basis:38px!important;width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important;max-height:38px!important}
  .messenger-bottom button,.messenger-bottom button.selected,.messenger-bottom button#messenger-menu{height:54px!important;min-height:54px!important;max-height:54px!important}
 }
+
+
+/* Alignment and story-avatar refinement requested for Messenger. */
+.messenger-bottom #messenger-menu{
+ top:3px!important;transform:translateY(3px)!important;
+}
+.messenger-bottom #messenger-menu.selected{transform:translateY(3px)!important}
+.messenger-bottom button[data-dest="friends"] svg{
+ width:25px!important;height:25px!important;transform:none!important;
+}
+.messenger-bottom button[data-dest="friends"]{transform:none!important}
+.messenger-head-actions #messenger-compose{
+ width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important;
+ max-height:34px!important;flex:0 0 34px!important;font-size:20px!important;
+}
+.story-create .story-avatar{
+ border:3px solid #e5edf8!important;
+ background:#e9eff8!important;
+ box-shadow:0 2px 8px rgba(22,54,95,.10)!important;
+}
+.story-create .story-avatar>img{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:cover!important;border-radius:50%!important;
+}
+.story-create .story-avatar:after{
+ z-index:2!important;right:-1px!important;bottom:0!important;
+ background:#0866ff!important;color:#fff!important;
+ border:3px solid #fff!important;
+}
