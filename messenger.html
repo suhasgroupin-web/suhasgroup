@@ -204,24 +204,37 @@
 
  const pop=document.getElementById('messenger-popover');
  const moreButton=document.getElementById('messenger-more');
+ // Portal the popover out of the clipped .messenger-app flex container.
+ // A fixed child inside that app can be positioned relative to the app/viewport incorrectly.
+ if(pop&&pop.parentElement!==document.body)document.body.appendChild(pop);
  function positionMorePopover(){
   if(!pop||!moreButton||pop.hidden)return;
   const r=moreButton.getBoundingClientRect();
   const gap=8;
   const width=Math.min(290,window.innerWidth-24);
+  const height=pop.offsetHeight||180;
   const left=Math.max(12,Math.min(window.innerWidth-width-12,r.right-width));
-  const top=Math.min(r.bottom+gap,window.innerHeight-pop.offsetHeight-12);
+  const below=r.bottom+gap;
+  const top=below+height<=window.innerHeight-12?below:Math.max(12,r.top-gap-height);
+  pop.style.position='fixed';
   pop.style.left=left+'px';
   pop.style.right='auto';
-  pop.style.top=Math.max(12,top)+'px';
+  pop.style.top=top+'px';
+  pop.style.bottom='auto';
+  pop.style.zIndex='2147483000';
  }
  moreButton?.addEventListener('click',()=>{
   if(!pop)return;
   pop.hidden=!pop.hidden;
-  if(!pop.hidden)requestAnimationFrame(positionMorePopover);
+  if(!pop.hidden)requestAnimationFrame(()=>requestAnimationFrame(positionMorePopover));
  });
  window.addEventListener('resize',positionMorePopover,{passive:true});
  window.addEventListener('scroll',positionMorePopover,{passive:true,capture:true});
+ document.addEventListener('click',e=>{
+  if(!pop||pop.hidden)return;
+  if(pop.contains(e.target)||moreButton?.contains(e.target))return;
+  pop.hidden=true;
+ });
  document.getElementById('messenger-settings')?.addEventListener('click',()=>{pop.hidden=true;});
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
  document.getElementById('messenger-search').addEventListener('input',e=>{try{const d=frame.contentDocument;const v=e.target.value;const q=d.getElementById('message-thread-search');const m=d.getElementById('message-member-search');if(q){q.value=v;q.dispatchEvent(new Event('input',{bubbles:true}));}if(m){m.value=v;m.dispatchEvent(new Event('input',{bubbles:true}));}}catch(err){}});
