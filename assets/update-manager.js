@@ -40,6 +40,14 @@
    if(!release.version||!release.published_at)throw new Error('Invalid release information');
    var workerUrl=new URL('sw.js?v='+encodeURIComponent(release.version),root).href;
    var registration=await navigator.serviceWorker.register(workerUrl,{scope:root.pathname,updateViaCache:'none'});
+   function watchInstalling(worker){
+    if(!worker)return;
+    worker.addEventListener('statechange',function(){
+     if(worker.state==='installed'&&navigator.serviceWorker.controller)showNotice(release,registration);
+    });
+   }
+   registration.addEventListener('updatefound',function(){watchInstalling(registration.installing);});
+   watchInstalling(registration.installing);
    await registration.update().catch(function(){});
    var pending=read('suhas-pending-installed-release');
    if(pending&&pending===release.version){
@@ -50,14 +58,6 @@
    }
    if(registration.waiting){
     showNotice(release,registration);
-   }else{
-    registration.addEventListener('updatefound',function(){
-     var installing=registration.installing;
-     if(!installing)return;
-     installing.addEventListener('statechange',function(){
-      if(installing.state==='installed'&&navigator.serviceWorker.controller)showNotice(release,registration);
-     });
-    });
    }
    navigator.serviceWorker.addEventListener('controllerchange',function(){
     if(read('suhas-pending-installed-release')===release.version)location.reload();
