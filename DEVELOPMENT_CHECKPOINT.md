@@ -1227,3 +1227,16 @@ Date: 2026-11-10
 - Verified active Supabase `ai-assistant` Edge Function version 75 is byte-for-byte identical to `main` source and includes multimodal vision, empathy/tone matching, private memory and current world-knowledge instructions. No unnecessary backend redeploy was performed.
 - Bumped release metadata to `2026.11.13.2`, service-worker fallback cache key to `v121`, and added `suhas-max-ai.html` to the precache list so both AI pages receive the next Cloudflare update.
 - Pending: confirm Cloudflare production deployment and live release metadata, then test saved voice preference restore and Android microphone permission in an authenticated real-device session.
+
+
+## 2026-11-13 — SUHAS-MAX Home navigation, Reels, Videos, Notifications and profile isolation
+
+- Branch: `fix/suhas-max-home-navigation-reels-profile-20261113`.
+- Root cause of the six-button bottom navigation issue: the mobile handler routed Profile to root `profile.html`, which is a redirect into the independent SUHAS GROUP career-profile app. The six-tab delegated handler also only targeted one mobile nav variant. Updated routing to support both MAX mobile nav variants and keep Profile inside the SUHAS-MAX profile viewer; added a compact header avatar shortcut that opens the same profile.
+- Connected the MAX Profile header/menu/settings entry points to the in-app SUHAS-MAX profile viewer and the dedicated `max-profile.html?embed=1` editor. The editor now sends same-origin save/cancel events to its parent, updates the profile view, uses the `suhas-max-media` bucket, and no longer injects the SUHAS GROUP global navigation.
+- Removed direct SUHAS GROUP profile/reset/contact/privacy links and mailto links from the SUHAS-MAX social page. Updated MAX-only page metadata and visible labels. Messenger metadata/branding now identifies it as SUHAS-MAX Messenger; its profile links still open `social.html?profile=me`, so it uses the same MAX profile.
+- Reels now opens a fixed full-screen, vertical scroll-snap viewer with a close control, autoplay-on-visible/pause-offscreen, existing Like/Comment/Share actions and the existing three-dot menu. The Reel upload form is hidden while browsing.
+- Separated newly published regular videos and Reels using `suhas_posts.metadata.content_format` (`video` or `reel`). Normal video uploads from the composer and Create → Video are tagged as `video`; Reel uploads are tagged as `reel`. Existing untagged legacy videos are intentionally kept visible in both views until they can be safely classified; no media records were changed or discarded.
+- Notifications continue to use `suhas_notifications`, with a dedicated page, realtime list refresh, unread count badge and read-state refresh.
+- Release metadata bumped to `2026.11.13.3`; service-worker cache fallback bumped to `v122`; `max-profile.html` added to the precache list.
+- Pending before merge/deploy: pass the repository Site quality workflow (inline JavaScript syntax + local-link validation), inspect the PR diff, then merge and verify Cloudflare Pages production version. Pending after deployment: authenticated two-account navigation/profile/Messenger/Reels/notifications tests and Android device scroll/autoplay tests. Do not claim those real-device tests complete until performed.
