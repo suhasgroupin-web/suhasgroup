@@ -5933,6 +5933,31 @@ html body #profile-viewer.profile-viewer.open #profile-avatar-change svg{
 }
 html body #profile-viewer.profile-viewer.open #profile-avatar-change[hidden]{display:none!important}
 </style>
+
+<style id="suhas-profile-avatar-3d-camera-corner-v1">
+/* Small, colorful 3D camera directly on the lower-right edge of the circular avatar. */
+#profile-avatar-change.profile-owner-avatar-edit{
+ position:absolute!important;right:-1px!important;left:auto!important;top:auto!important;bottom:-1px!important;
+ display:grid!important;place-items:center!important;width:23px!important;height:23px!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;color:inherit!important;box-shadow:none!important;
+ font-size:0!important;line-height:0!important;z-index:12!important;cursor:pointer!important;
+}
+#profile-avatar-change svg{
+ display:block!important;width:23px!important;height:23px!important;overflow:visible!important;
+ fill:initial!important;stroke:initial!important;filter:drop-shadow(0 1px 1px #0005)!important;
+}
+#profile-avatar-change svg path:first-of-type{fill:url(#suhasAvatarCam3D)!important;stroke:#fff!important;stroke-width:1.7!important}
+#profile-avatar-change svg path:nth-of-type(2){fill:#fff!important;stroke:none!important}
+#profile-avatar-change svg circle:nth-of-type(1){fill:#fff!important;stroke:none!important}
+#profile-avatar-change svg circle:nth-of-type(2){fill:url(#suhasAvatarLens3D)!important;stroke:#173e91!important}
+#profile-avatar-change svg circle:nth-of-type(3),#profile-avatar-change svg circle:nth-of-type(4){fill:#fff!important;stroke:none!important}
+@media(max-width:560px){
+ #profile-avatar-change.profile-owner-avatar-edit{right:-1px!important;bottom:-1px!important;width:23px!important;height:23px!important}
+ #profile-avatar-change svg{width:23px!important;height:23px!important}
+}
+</style>
+
 </body></html>
 
 
