@@ -72,13 +72,13 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 .gate>img{display:block;width:104px;height:104px;object-fit:contain;margin:0 auto 19px;padding:7px;border-radius:23px;background:#fff;box-shadow:0 12px 26px #0005}
 .gate h1{margin:0;color:#fff;font-size:clamp(23px,6vw,30px);font-weight:900;line-height:1.2;letter-spacing:.01em}
 .gate .tagline{margin:10px 0 24px;color:#e3edff;font-size:15px;font-weight:650;line-height:1.5}
-.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:11px 10px}.actions .create{grid-column:1 / -1}
 .actions a,.actions button{min-width:0;min-height:47px;display:flex;align-items:center;justify-content:center;padding:10px 7px;border-radius:12px;font:800 13px/1.2 'DM Sans',Arial,sans-serif;text-decoration:none;cursor:pointer}
 .actions .create{background:linear-gradient(180deg,#ffe08a 0%,#e6b442 55%,#bf8522 100%);color:#241802;border:1px solid #ffebad;box-shadow:0 5px 0 #885b16,0 9px 18px #0005,inset 0 1px 0 #fff9}
 .actions .signup{background:linear-gradient(180deg,#fff,#e8eef8);color:#17345f;border:1px solid #fff;box-shadow:0 5px 0 #aab8ce,0 9px 18px #0004,inset 0 1px 0 #fff}
 .actions .login{background:linear-gradient(180deg,#285da3,#12376f);color:#fff;border:1px solid #86a9d8;box-shadow:0 5px 0 #071c3c,0 9px 18px #0005,inset 0 1px 0 #ffffff55}
-.install-button{width:100%;min-height:55px;margin-top:19px;padding:13px 12px;border:1px solid #ffe6a1;border-radius:14px;background:linear-gradient(180deg,#ffe59b 0%,#e9b944 48%,#bd8120 100%);color:#211600;font-size:16px;font-weight:900;letter-spacing:.01em;box-shadow:0 7px 0 #805414,0 13px 24px #0006,inset 0 2px 0 #fff9;cursor:pointer;transition:transform .12s,box-shadow .12s}
-.install-button:active{transform:translateY(5px);box-shadow:0 2px 0 #805414,0 5px 10px #0005,inset 0 2px 0 #fff8}
+.install-row{display:flex;justify-content:flex-end;margin-top:17px}.install-button{width:auto;min-width:142px;min-height:39px;padding:8px 15px;border:1px solid #ffe6a1;border-radius:11px;background:linear-gradient(180deg,#ffe59b 0%,#e9b944 48%,#bd8120 100%);color:#211600;font-size:13px;font-weight:900;letter-spacing:.01em;box-shadow:0 4px 0 #805414,0 7px 14px #0005,inset 0 2px 0 #fff9;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.install-button:active{transform:translateY(3px);box-shadow:0 1px 0 #805414,0 3px 7px #0005,inset 0 2px 0 #fff8}
 .welcome-signup-panel{margin-top:20px;text-align:left;background:#fff;color:#17233a;padding:18px;border-radius:16px;box-shadow:0 14px 40px #0005}
 .welcome-signup-panel[hidden]{display:none}
 .welcome-signup-panel h2{margin:0 0 14px;font-size:20px}
@@ -103,7 +103,7 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 <a class="signup" href="signup.html">Sign up</a>
 <a class="login" href="login.html?next=profile.html">Login</a>
 </div>
-<button id="welcome-install" class="install-button" type="button">Software Install</button>
+<div class="install-row"><button id="welcome-install" class="install-button" type="button">Software Install</button></div>
 <section id="welcome-signup-panel" class="welcome-signup-panel" hidden>
 <h2>Create Account</h2>
 <form id="welcome-signup-form">
