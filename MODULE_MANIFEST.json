@@ -135,6 +135,15 @@
           "id": "ai",
           "legacyEntry": "ai.html",
           "status": "inventory"
+        },
+        {
+          "id": "settings",
+          "legacyEntry": "social.html#settings",
+          "stylesheet": "apps/suhas-max/settings/settings.css",
+          "status": "presentation-isolated-existing-settings-functionality-retained",
+          "sharedDependencies": [
+            "social.html existing settings markup and Supabase settings handlers"
+          ]
         }
       ]
     }
