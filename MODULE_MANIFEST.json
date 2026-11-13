@@ -45,7 +45,19 @@
         {
           "id": "career-profile",
           "legacyEntry": "profile.html",
-          "status": "inventory"
+          "status": "module-entry-isolated-legacy-route-retained",
+          "moduleEntry": "apps/suhas-group/career-profile/profile.html",
+          "moduleReadme": "apps/suhas-group/career-profile/README.md",
+          "compatibility": "root URL forwards query string and hash",
+          "sharedDependencies": [
+            "assets/styles.css",
+            "assets/config.js",
+            "assets/auth.js",
+            "assets/script.js",
+            "assets/display-mode.js",
+            "Supabase: suhas_member_profiles and existing public profile sync",
+            "Storage: member-avatars"
+          ]
         },
         {
           "id": "career-content",
