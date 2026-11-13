@@ -6381,3 +6381,41 @@ document.addEventListener('click',event=>{
 });
 })();
 </script>
+
+
+<style id="suhas-max-persistent-mobile-bottom-nav-20261113">
+/* Keep the main mobile navigation above profile/settings overlays on every app section. */
+@media (max-width:760px), (pointer:coarse) {
+  html body nav.social-mobile-nav,
+  html body.suhas-desktop-mode nav.social-mobile-nav {
+    position:fixed!important;
+    inset:auto 0 0 0!important;
+    z-index:100200!important;
+    display:grid!important;
+    visibility:visible!important;
+    opacity:1!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))!important;
+    pointer-events:auto!important;
+  }
+  html body #profile-viewer.profile-viewer.open {
+    padding-bottom:0!important;
+  }
+  html body #profile-viewer.profile-viewer.open > .profile-viewer-card {
+    padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!important;
+  }
+  html body #profile-viewer.profile-viewer.open .profile-viewer-body {
+    padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important;
+  }
+  html body nav.social-mobile-nav button {
+    position:relative!important;
+    z-index:1!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+  }
+}
+</style>
