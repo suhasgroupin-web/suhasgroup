@@ -8,8 +8,8 @@ const CORE = [
 ];
 
 self.addEventListener('install', function(e){
-  // Activate the current release immediately; do not leave a stale worker controlling refreshes.
-  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }).then(function(){ return self.skipWaiting(); }));
+  // Keep an updated worker waiting until the member explicitly chooses Install.
+  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }));
 });
 
 self.addEventListener('message', function(e){
