@@ -5540,3 +5540,24 @@ html.suhas-authenticated .tabbar{display:none!important}
 }
 </style>
 </body></html>
+
+
+<style id="suhas-messenger-inbox-left-alignment-20261113">
+/* Keep the conversation list anchored at the left and directly below its heading. */
+#messages .social-grid,
+#messages .social-grid>div:first-child{
+ display:block!important;width:100%!important;max-width:none!important;
+ margin:0!important;padding-top:0!important;align-items:start!important;
+}
+#messages #threads{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ justify-content:start!important;align-content:start!important;justify-items:stretch!important;
+ width:100%!important;max-width:none!important;margin:0!important;padding:0!important;
+}
+#messages .message-thread{
+ display:flex!important;justify-self:stretch!important;align-self:start!important;
+ width:100%!important;max-width:none!important;margin:3px 0!important;
+ text-align:left!important;justify-content:flex-start!important;
+}
+#messages .message-thread-copy{text-align:left!important;align-items:flex-start!important}
+</style>
