@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.14.1",
-  "published_at": "2026-11-13T18:00:00.000Z",
+  "version": "2026.11.14.2",
+  "published_at": "2026-11-13T18:08:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Refresh stability fix: SUHAS-MAX mobile styles now load before the page is displayed.",
+  "update_message": "Refresh stability fix: service worker precache now uses the explicit barcode entry page.",
   "mandatory": true
 }
