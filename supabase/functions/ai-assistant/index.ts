@@ -119,6 +119,17 @@ function localCareerIntent(prompt: string, priorHistory: any[] = []) {
   }
   return null;
 }
+function localOwnerPhotoRequest(prompt: string) {
+  const p = prompt.trim().toLowerCase();
+  const asksPhoto = /(picture|photo|photograph|image|portrait|pic|ছবি|পিকচার|ফটো|ছবি দেখাও|ছবি দাও|পিক দাও|ছবি আছে|ছবি পাঠাও|ছবি আপলোড)/i.test(p);
+  const asksOwner = /(owner|md\\.? hasnain|suhas group|মালিক|এমডি|md|হাসনাইন|হাসনাইনের|মোঃ হাসনাইন)/i.test(p);
+  if (!asksPhoto || !asksOwner) return null;
+  const lang = detectReplyLanguage(prompt);
+  if (lang.startsWith("Bangla in")) return "অবশ্যই। SUHAS GROUP-এর Owner ও MD Md. Hasnain-এর প্রকাশিত ছবি নিচে দেওয়া হলো।\\n[SUHAS_OWNER_PHOTO]";
+  if (lang.startsWith("Banglish")) return "Obosshoi. SUHAS GROUP-er Owner o MD Md. Hasnain-er published photo niche dilam.\\n[SUHAS_OWNER_PHOTO]";
+  return "Certainly. Here is the published portrait of SUHAS GROUP owner and MD, Md. Hasnain.\\n[SUHAS_OWNER_PHOTO]";
+}
+
 function localOwnerAwareness(prompt: string, hasImage: boolean) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const asksKnow = /\b(do you know him|do you know her|do you know this person|know about him|know about her)\b/.test(p)
@@ -168,6 +179,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
 
     // Keep simple owner-awareness questions short; only provide biography or links when explicitly requested.
     const hasImageAttachment = (rawAttachments as any[]).some((item: any) => /^data:image\//i.test(cleanText(item?.dataUrl, 100)));
+    const ownerPhotoReply = localOwnerPhotoRequest(prompt);
+    if (ownerPhotoReply) {
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-owner-photo", status: "success", usage_data: { source: "published_owner_portrait" } });
+      return json({ output: ownerPhotoReply, provider: "local", model: "local-owner-photo" });
+    }
     const ownerAwareness = localOwnerAwareness(prompt, hasImageAttachment);
     if (ownerAwareness) {
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-owner-awareness", status: "success", usage_data: { source: "concise_owner_acknowledgement" } });
@@ -230,7 +246,7 @@ TECHNICAL KNOWLEDGE: Fabric consumption estimate = marker length x fabric width 
 
 IMAGE REQUESTS: Never pretend a text description is a generated image. Only generate images if a genuinely free image-generation provider is configured, available, and has no paid fallback. The currently documented Gemini API image-generation models have no free API tier, so do not call them or create unexpected charges. If no verified free image provider is available, explain in the user's language that free image generation is not currently enabled and offer a ready-to-use prompt. If a free provider is later configured, SUHAS-branded images must carry the official SUHAS GROUP logo as a visible watermark and a small "SUHAS GROUP | Owner: Md. Hasnain" attribution, without covering faces or important content. Never imply owner approval.
 
-OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS AI to share the official owner portrait and to use the owner photos supplied for this project as visual references. If a user asks for the owner's picture/photo, first offer the original published portrait unchanged: https://suhasgroup.pages.dev/assets/owner.jpg . Do not substitute a generated face when the user asks for the original photo. If an image-generation service is actually connected and can accept the approved owner reference photo(s), the assistant may create a requested creative variation using the source photo as the identity reference. Preserve the same real person's face and identity: facial structure, proportions, eyes, eyebrows, nose, lips, jawline, skin tone and distinctive facial features must remain recognizably unchanged. Do not face-swap, invent a different person, merge identities, or beautify/reshape the face. Changes may be made to background, lighting, clothing, styling, body presentation, pose, crop and scene, including clearly creative SUHAS GROUP factory-front or company-car settings. Never imply a generated scene is a documentary photograph of a real company property or vehicle unless verified. If exact identity preservation cannot be achieved reliably, do not present the generated image as the owner; share the original photo instead and explain the limitation. Use only owner-authorized reference photos; do not use unrelated people's photos as owner references. For SUHAS-branded image outputs, include the official SUHAS GROUP logo as a visible watermark and a small "SUHAS GROUP | Owner: Md. Hasnain" attribution, without obscuring the face or important content.\n\nBe concise, practical, step-by-step. For calculations, show formula, units and assumptions. Never claim to submit, hire, approve, update or contact anyone unless a connected tool confirms it.`;
+OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS AI to share the official owner portrait. If a user asks for the owner's picture/photo, display the original published portrait inline in the chat using the [SUHAS_OWNER_PHOTO] response marker. Never send a photo URL or hyperlink instead of displaying the picture. Do not substitute a generated face when the user asks for the original photo. If an image-generation service is actually connected and can accept the approved owner reference photo(s), the assistant may create a requested creative variation using the source photo as the identity reference. Preserve the same real person's face and identity: facial structure, proportions, eyes, eyebrows, nose, lips, jawline, skin tone and distinctive facial features must remain recognizably unchanged. Do not face-swap, invent a different person, merge identities, or beautify/reshape the face. Changes may be made to background, lighting, clothing, styling, body presentation, pose, crop and scene, including clearly creative SUHAS GROUP factory-front or company-car settings. Never imply a generated scene is a documentary photograph of a real company property or vehicle unless verified. If exact identity preservation cannot be achieved reliably, do not present the generated image as the owner; share the original photo instead and explain the limitation. Use only owner-authorized reference photos; do not use unrelated people's photos as owner references. For SUHAS-branded image outputs, include the official SUHAS GROUP logo as a visible watermark and a small "SUHAS GROUP | Owner: Md. Hasnain" attribution, without obscuring the face or important content.\n\nBe concise, practical, step-by-step. For calculations, show formula, units and assumptions. Never claim to submit, hire, approve, update or contact anyone unless a connected tool confirms it.`;
     const asksAboutJobs = /job|career|vacanc|recruit|employment|apply|application|চাকরি|নিয়োগ|নিয়োগ|কাজের সুযোগ|জব|আবেদন/i.test(prompt);
     const liveJobsResult = asksAboutJobs
       ? await ctx.supabase.from("jobs")
