@@ -4,11 +4,11 @@ SUHAS GROUP community and social platform.
 
 ## Hosting strategy — no-cost first
 
-The project keeps a free-tier static hosting path so production does not depend on Vercel:
+Cloudflare Pages is the sole production deployment target for the public SUHAS GROUP / SUHAS-MAX web app. Vercel is retired for this project; do not use it for builds, deployment, domains, or release decisions:
 
-1. **Cloudflare Pages — preferred free production host after live verification.** Project: `suhasgroup`; expected site: [https://suhasgroup.pages.dev](https://suhasgroup.pages.dev). Static HTML/PWA deployment; Framework preset: None; build command: empty; output directory: `.`.
-2. **GitHub Pages — automatic free fallback.** The repository already includes `.github/workflows/pages-deploy.yml`, which deploys the repository root on pushes to `main` and on manual dispatch.
-3. **Vercel — keep unchanged temporarily as a recovery option.** Do not delete the project or detach its domain until Cloudflare Pages and the fallback have been tested end-to-end. The existing `*.vercel.app` hostname cannot simply be transferred to another provider.
+1. **Cloudflare Pages — production host.** Project: `suhasgroup`; production site: [https://suhasgroup.pages.dev](https://suhasgroup.pages.dev). Static HTML/PWA deployment; Framework preset: None; build command: empty; output directory: `.`.
+2. **GitHub Pages — non-production emergency fallback only.** It may remain available for recovery testing, but it is not the canonical production URL.
+3. **Vercel — retired.** Do not deploy to it or use its deployment status as a release gate. The canonical public app URL is `https://suhasgroup.pages.dev`.
 
 ### Cloudflare deployment setup
 
@@ -25,6 +25,6 @@ Cloudflare currently lists its Free plan at $0/month. Pages currently allows up 
 
 ### Production safety
 
-- Do not cancel Vercel until the Cloudflare production URL has been verified for login, feed, profiles, Messenger, media, and all protected routes.
+- Use Cloudflare Pages only for production. Verify login, feed, profiles, Messenger, media, and protected routes on the Cloudflare URL before announcing a release.
 - Keep Supabase project, database, authentication, storage, and user records unchanged during hosting migration.
-- Keep both free-host workflows intact; a failed Cloudflare deployment must not disable GitHub Pages.
+- Keep GitHub Pages only as a separate emergency fallback; it must never replace or override the Cloudflare production URL.
