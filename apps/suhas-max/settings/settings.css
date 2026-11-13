@@ -1,0 +1,49 @@
+/* SUHAS-MAX Settings module — presentation only; existing handlers/data contracts stay in social.html. */
+#settings{max-width:900px;margin-inline:auto}
+#settings>h2{font-size:clamp(22px,3vw,28px);font-weight:800;letter-spacing:-.45px;margin:2px 0 5px}
+#settings>p.post-meta{font-size:14px;line-height:1.55;margin:0 0 14px}
+#settings-search{position:sticky;top:62px;z-index:8;width:100%;min-height:46px;padding:11px 14px;border:1px solid #d8dee8;border-radius:12px;background:#fff;color:#1c1e21;box-shadow:0 3px 12px #1c1e2110}
+#settings-search:focus{outline:3px solid #0866ff26;border-color:#0866ff}
+#settings .settings-group{margin:13px 0;padding:16px 18px;border:1px solid #e2e7ef;border-radius:14px;background:linear-gradient(180deg,#fff 0%,#fcfdff 100%);box-shadow:0 2px 8px #14213b08;transition:border-color .16s ease,box-shadow .16s ease}
+#settings .settings-group:focus-within{border-color:#b9d1ff;box-shadow:0 4px 16px #0866ff10}
+#settings .settings-group>h3{display:flex;align-items:center;gap:9px;margin:0 0 5px;padding:0 0 11px;border-bottom:1px solid #edf0f4;color:#182230;font-size:16px;font-weight:800;letter-spacing:-.15px}
+#settings .settings-row{min-height:58px;padding:12px 2px;border-top:1px solid #f0f2f5;gap:14px}
+#settings .settings-row span:first-child{min-width:0;gap:4px}
+#settings .settings-row b{font-size:14px;line-height:1.35;font-weight:750;color:#202b3b}
+#settings .settings-row small{font-size:12px;line-height:1.4;color:#687386}
+#settings .settings-row select{min-width:118px;max-width:170px;min-height:38px;padding:7px 30px 7px 10px;border:1px solid #d7deea;border-radius:9px;background-color:#f8faff;color:#263246;font-size:13px;font-weight:650}
+#settings .settings-row a:not(.settings-link){color:#0866ff;font-size:13px;font-weight:750;text-decoration:none}
+#settings .settings-row a:not(.settings-link):hover{text-decoration:underline}
+#settings .settings-row input[type=checkbox]{appearance:none;-webkit-appearance:none;position:relative;flex:0 0 44px;width:44px;height:26px;margin:0;border:1px solid #c6ceda;border-radius:999px;background:#e7ebf1;cursor:pointer;transition:background .16s ease,border-color .16s ease}
+#settings .settings-row input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .16s ease}
+#settings .settings-row input[type=checkbox]:checked{background:#0866ff;border-color:#0866ff}
+#settings .settings-row input[type=checkbox]:checked::after{transform:translateX(18px)}
+#settings .settings-row input[type=checkbox]:focus-visible{outline:3px solid #0866ff40;outline-offset:3px}
+#settings .settings-note{margin:10px 0 0;padding:10px 11px;border-radius:9px;background:#f5f8fc;color:#667286;font-size:12px;line-height:1.55}
+#settings .settings-actions{gap:9px;margin:15px 0}
+#settings .settings-actions .action{min-height:42px;padding:0 16px;border-radius:9px;font-size:13px;font-weight:750}
+#settings #settings-save{box-shadow:0 3px 8px #0866ff25}
+#settings #settings-status,#settings #settings-password-status{font-size:12px;line-height:1.45}
+#settings .settings-link{border-radius:8px}
+#settings .settings-link:hover{background:#f4f7fc}
+#settings .suhas-monetization-card{border-color:#d5e2f6;background:linear-gradient(145deg,#f7faff,#fff 72%)}
+body.suhas-dark #settings .settings-group{background:#242526;border-color:#3e4042}
+body.suhas-dark #settings .settings-group>h3,body.suhas-dark #settings .settings-row b{color:#e4e6eb}
+body.suhas-dark #settings .settings-row{border-color:#3a3b3c}
+body.suhas-dark #settings .settings-row small,body.suhas-dark #settings .settings-note{color:#b0b3b8}
+body.suhas-dark #settings .settings-note{background:#303236}
+body.suhas-dark #settings-search,body.suhas-dark #settings .settings-row select{background:#3a3b3c;color:#e4e6eb;border-color:#555}
+body.suhas-dark #settings .settings-link:hover{background:#303236}
+@media(max-width:560px){
+ #settings{padding:13px!important}
+ #settings-search{top:58px;min-height:44px}
+ #settings .settings-group{margin:10px 0;padding:13px 13px;border-radius:12px}
+ #settings .settings-group>h3{font-size:15px}
+ #settings .settings-row{min-height:56px;gap:9px;padding:11px 1px}
+ #settings .settings-row b{font-size:13px}
+ #settings .settings-row small{font-size:11px}
+ #settings .settings-row select{min-width:108px;max-width:42%;font-size:12px}
+ #settings .settings-actions{align-items:stretch}
+ #settings .settings-actions .action{flex:1 1 auto}
+}
+@media(prefers-reduced-motion:reduce){#settings .settings-group,#settings .settings-row input[type=checkbox],#settings .settings-row input[type=checkbox]::after{transition:none}}
