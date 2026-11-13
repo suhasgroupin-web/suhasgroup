@@ -2700,6 +2700,34 @@ html body #profile-viewer.profile-viewer.open .profile-viewer-menu-wrap {
   display: none !important;
 }
 </style>
+
+<style id="suhas-dashboard-inline-actions-v1">
+/* Keep Dashboard in the same action row, immediately before Add to story and Edit profile. */
+#profile-viewer #profile-viewer-actions{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:8px!important;
+ align-items:stretch!important;
+ width:100%!important;
+}
+#profile-viewer #profile-viewer-actions>.action{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:46px!important;
+ margin:0!important;
+ padding:8px 6px!important;
+ white-space:normal!important;
+ text-align:center!important;
+ line-height:1.2!important;
+}
+@media(max-width:560px){
+ #profile-viewer #profile-viewer-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+ #profile-viewer #profile-viewer-actions>.action{min-height:48px!important;font-size:12px!important;padding:7px 3px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation"><button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="desktop-nav-icon">⌂</span><span>Home</span></button><button data-tab="friends" type="button" aria-label="Friends"><span class="desktop-nav-icon">♙</span><span>Friends</span></button><button data-tab="groups" type="button" aria-label="Groups"><span class="desktop-nav-icon">▦</span><span>Groups</span></button><button data-tab="reels" type="button" aria-label="Reels"><span class="desktop-nav-icon">▣</span><span>Reels</span></button><button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="desktop-nav-icon">▱</span><span>Marketplace</span></button><button data-tab="notifications" type="button" aria-label="Notifications"><span class="desktop-nav-icon">♧</span><span>Notifications</span></button></nav>
