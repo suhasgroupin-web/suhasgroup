@@ -122,12 +122,12 @@ function localCareerIntent(prompt: string, priorHistory: any[] = []) {
 function localOwnerPhotoRequest(prompt: string) {
   const p = prompt.trim().toLowerCase();
   const asksPhoto = /(picture|photo|photograph|image|portrait|pic|ছবি|পিকচার|ফটো|ছবি দেখাও|ছবি দাও|পিক দাও|ছবি আছে|ছবি পাঠাও|ছবি আপলোড)/i.test(p);
-  const asksOwner = /(owner|md\\.? hasnain|suhas group|মালিক|এমডি|md|হাসনাইন|হাসনাইনের|মোঃ হাসনাইন)/i.test(p);
+  const asksOwner = /(owner|md\.? hasnain|suhas group|মালিক|এমডি|md|হাসনাইন|হাসনাইনের|মোঃ হাসনাইন)/i.test(p);
   if (!asksPhoto || !asksOwner) return null;
   const lang = detectReplyLanguage(prompt);
-  if (lang.startsWith("Bangla in")) return "অবশ্যই। SUHAS GROUP-এর Owner ও MD Md. Hasnain-এর প্রকাশিত ছবি নিচে দেওয়া হলো।\\n[SUHAS_OWNER_PHOTO]";
-  if (lang.startsWith("Banglish")) return "Obosshoi. SUHAS GROUP-er Owner o MD Md. Hasnain-er published photo niche dilam.\\n[SUHAS_OWNER_PHOTO]";
-  return "Certainly. Here is the published portrait of SUHAS GROUP owner and MD, Md. Hasnain.\\n[SUHAS_OWNER_PHOTO]";
+  if (lang.startsWith("Bangla in")) return "অবশ্যই। SUHAS GROUP-এর Owner ও MD Md. Hasnain-এর প্রকাশিত ছবি নিচে দেওয়া হলো।\n[SUHAS_OWNER_PHOTO]";
+  if (lang.startsWith("Banglish")) return "Obosshoi. SUHAS GROUP-er Owner o MD Md. Hasnain-er published photo niche dilam.\n[SUHAS_OWNER_PHOTO]";
+  return "Certainly. Here is the published portrait of SUHAS GROUP owner and MD, Md. Hasnain.\n[SUHAS_OWNER_PHOTO]";
 }
 
 function localOwnerAwareness(prompt: string, hasImage: boolean) {
