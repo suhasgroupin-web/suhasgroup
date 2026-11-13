@@ -1155,3 +1155,11 @@ Date: 2026-11-10
 - No database schema, user records, storage objects, auth settings, or unrelated pages were changed.
 - Static verification pending in this branch: compatibility route, base URL, profile form/upsert/sync and logout hooks. Browser/mobile and authenticated profile-save/photo/logout tests still require live testing before merge/deployment.
 - No production deployment performed.
+
+
+## Career Content module isolation — 2026-11-13
+- Added module-owned copies of Departments, Factories, Quality, Religion & Faith, and Technical Tools under `apps/suhas-group/career-content/`.
+- Preserved the five existing root URLs as compatibility redirects, forwarding query strings and URL fragments.
+- Added a root base URL to each module page so existing root-level assets, child routes, factory unit parameters, and shared auth/Supabase dependencies continue resolving.
+- Existing page implementations and inline tool logic were copied without redesign; no database, storage, authentication settings, shared assets, or linked child pages were changed.
+- Static source checks are required before merge; authenticated browser/mobile regression remains outstanding. No deployment performed.

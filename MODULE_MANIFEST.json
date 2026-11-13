@@ -68,7 +68,14 @@
             "religion.html",
             "technical.html"
           ],
-          "status": "inventory"
+          "status": "module-entry-isolated-legacy-routes-retained",
+          "moduleEntries": [
+            "apps/suhas-group/career-content/departments.html",
+            "apps/suhas-group/career-content/factories.html",
+            "apps/suhas-group/career-content/quality.html",
+            "apps/suhas-group/career-content/religion.html",
+            "apps/suhas-group/career-content/technical.html"
+          ]
         },
         {
           "id": "contact",
