@@ -58,7 +58,10 @@ function localGreeting(prompt: string) {
 function localSmallTalk(prompt: string) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const language = detectReplyLanguage(prompt);
-  if (/^(how are you|how are you doing|how r you|how r u|hows it going|are you fine)$/.test(p)) return "I'm doing well, thank you for asking! How can I help you today?";
+  if (/^(how are you|how are you doing|how r you|how r u|hows it going|are you fine)$/.test(p)) return "Alhamdulillah, I'm doing well! How are you?";
+  if (language.startsWith("Bangla in") && /^(কেমন আছো|কেমন আছেন|তুমি কেমন আছো|আপনি কেমন আছেন|কেমন আছিস|কি খবর)$/.test(p)) return "আলহামদুলিল্লাহ, আমি ভালো আছি। আপনি কেমন আছেন?";
+  if (language.startsWith("Banglish") && /^(kemon acho|kmn acho|kemon achen|kmn achen|apni kemon achen|tumi kemon acho|ki khobor)$/.test(p)) return "Alhamdulillah, ami bhalo achi! Apni kemon achen?";
+
   if (/^(what is your name|who are you)$/.test(p)) return "I'm SUHAS AI, the official AI assistant for SUHAS GROUP. How can I help you?";
   if (language.startsWith("Banglish") && /^(kmn acho|kemon acho|kemon acho tumi|kmn aso|kemon aso|kemon achen|kmn achen|tumi kemon acho|apni kemon achen|ki obostha|tumi k|tumi ke|tumi kmn|tumi kemon|valo acho|bhalo acho)$/.test(p)) return "Ami bhalo achi, dhonnobad! Tumi kemon acho? SUHAS GROUP niye ba onno kichu jante chaile bolo.";
   if (language.startsWith("Bangla in") && /^(কেমন আছো|কেমন আছেন|তুমি কেমন আছো|আপনি কেমন আছেন|কি খবর)$/.test(p)) return "আমি ভালো আছি, ধন্যবাদ! তুমি কেমন আছো? কীভাবে সাহায্য করতে পারি?";
@@ -69,6 +72,17 @@ function localSmallTalk(prompt: string) {
 
 
 
+function localBangladeshKnowledge(prompt: string) {
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
+  const lang = detectReplyLanguage(prompt);
+  const districts = /(জেলা কয়টা|জেলা কয়টা|কয়টি জেলা|কয়টি জেলা|কত জেলা|districts? (in )?bangladesh|how many districts)/i.test(p);
+  const divisions = /(বিভাগ কয়টা|বিভাগ কয়টা|কয়টি বিভাগ|কয়টি বিভাগ|কত বিভাগ|divisions? (in )?bangladesh|how many divisions)/i.test(p);
+  const government = /(বাংলাদেশের (বর্তমান )?(সরকার|সরকারের নাম)|বাংলাদেশে (বর্তমান )?সরকার|government of bangladesh|bangladesh government|who is the prime minister of bangladesh|bangladesh prime minister)/i.test(p);
+  if (districts) return lang.startsWith("Banglish") ? "Bangladesh-e 64ti jela ache." : lang.startsWith("Bangla in") ? "বাংলাদেশে ৬৪টি জেলা আছে।" : "Bangladesh has 64 districts.";
+  if (divisions) return lang.startsWith("Banglish") ? "Bangladesh-e 8ti bibhag ache." : lang.startsWith("Bangla in") ? "বাংলাদেশে ৮টি বিভাগ আছে।" : "Bangladesh has 8 administrative divisions.";
+  if (government) return lang.startsWith("Banglish") ? "১৩ নভেম্বর ২০২৬ অনুযায়ী Bangladesh-e BNP-led government; Prime Minister Tarique Rahman." : lang.startsWith("Bangla in") ? "১৩ নভেম্বর ২০২৬ অনুযায়ী বাংলাদেশে বিএনপি নেতৃত্বাধীন সরকার; প্রধানমন্ত্রী তারেক রহমান।" : "As of 13 November 2026, Bangladesh has a BNP-led government headed by Prime Minister Tarique Rahman.";
+  return null;
+}
 function localCareerIntent(prompt: string, priorHistory: any[] = []) {
   const p = prompt.trim().toLowerCase().replace(/[!?.,،]+$/g, "").replace(/\s+/g, " ");
   const lang = detectReplyLanguage(prompt);
@@ -166,6 +180,11 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-smalltalk", status: "success", usage_data: { source: "instant-smalltalk" } });
       return json({ output: smallTalk, provider: "local", model: "instant-smalltalk" });
     }
+    const bangladeshFact = localBangladeshKnowledge(prompt);
+    if (bangladeshFact) {
+      void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-bangladesh-knowledge", status: "success", usage_data: { source: "verified_quick_facts_2026_11_13" } });
+      return json({ output: bangladeshFact, provider: "local", model: "local-bangladesh-knowledge" });
+    }
     const careerReply = localCareerIntent(prompt, Array.isArray(body.history) ? body.history.slice(-6) : []);
     if (careerReply) {
       void ctx.supabaseAdmin.from("ai_usage_logs").insert({ user_id: ctx.userClaims?.sub ?? null, request_type: requestType, model: "local-career-clarification", status: "success", usage_data: { source: "short_job_navigation_reply" } });
@@ -184,7 +203,7 @@ const authenticatedHandler = withSupabase({ auth: "user" }, async (req, ctx) => 
       return role && content ? [{ role, content }] : [];
     }) : [];
     const replyLanguage = detectReplyLanguage(prompt);
-    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. CAREER CONVERSATION RULES: For ANY job-related question (job search, vacancy, CV, interview, salary, application, recruitment, LinkedIn, job portals or needing work), reply naturally and briefly. Mention that SUHAS Career PLC has a LinkedIn recruiting page and offer to share its relevant job post or page link IF the user wants it; do not include the URL unless explicitly requested or the user accepts the offer. Ask only one useful follow-up question, matched to what they asked (role/sector, location, experience, CV/interview, etc.). If the user only says they need a job, ask what role/sector they want while briefly offering SUHAS Career PLC recruiting-page help. If they ask where/how to search on LinkedIn or a job portal, recommend SUHAS Career PLC's LinkedIn recruiting page first and ask whether they want its link; do not send a generic collection of external portals. If they explicitly request a job/recruiting page link or accept the offer, provide exactly one relevant SUHAS Career PLC LinkedIn page: https://www.linkedin.com/company/suhasgroup/jobs/ . Never send multiple links or unrelated URLs. Keep the exchange conversational, short, and one question at a time. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions.
+    const system = `You are SUHAS AI, the official public-facing AI assistant for SUHAS GROUP. Be warm, natural, respectful, helpful and accurate. DEFAULT RESPONSE LENGTH: answer the exact question directly in 1-3 short sentences. A short question deserves a short answer. Do not add a biography, social links, contact details, lists or unrelated background unless the user explicitly asks for those details. CAREER CONVERSATION RULES: For ANY job-related question (job search, vacancy, CV, interview, salary, application, recruitment, LinkedIn, job portals or needing work), reply naturally and briefly. Mention that SUHAS Career PLC has a LinkedIn recruiting page and offer to share its relevant job post or page link IF the user wants it; do not include the URL unless explicitly requested or the user accepts the offer. Ask only one useful follow-up question, matched to what they asked (role/sector, location, experience, CV/interview, etc.). If the user only says they need a job, ask what role/sector they want while briefly offering SUHAS Career PLC recruiting-page help. If they ask where/how to search on LinkedIn or a job portal, recommend SUHAS Career PLC's LinkedIn recruiting page first and ask whether they want its link; do not send a generic collection of external portals. If they explicitly request a job/recruiting page link or accept the offer, provide exactly one relevant SUHAS Career PLC LinkedIn page: https://www.linkedin.com/company/suhasgroup/jobs/ . Never send multiple links or unrelated URLs. Keep the exchange conversational, short, and one question at a time. If asked a yes/no or recognition-style question, answer briefly and invite one relevant follow-up instead of dumping the person's profile. Expand only when the user asks for details, a full explanation, a list, or step-by-step instructions. Never repeat public links unless the user asks for a link or the link is necessary to answer. Answer general knowledge, education, language, writing, maths, technology, creative and everyday questions, as well as SUHAS GROUP, careers, CV and SUHAS MAX questions. WORLD KNOWLEDGE: Act as a broadly knowledgeable general-purpose assistant across countries, governments, geography, history, science, culture, economics and everyday life. Answer stable facts directly and confidently when well-established. For current office-holders, governments, laws, prices, conflicts, statistics or other changing facts, state the date and avoid guessing; explain uncertainty when you cannot verify current information. Never invent country government names, district counts or statistics. For Bangladesh, the country has 8 divisions and 64 districts. As of 13 November 2026, Bangladesh has a BNP-led government headed by Prime Minister Tarique Rahman. Keep short spoken answers concise, warm and natural; for casual chat use gentle humor where appropriate, never fake emotions or claim to be human.
 
 LANGUAGE MATCHING IS MANDATORY. Detected language hint: ${replyLanguage}. Always reply in the same language and script as the user's current message. Bengali script -> Bengali script. Banglish/Romanized Bangla -> Banglish in Latin letters. English -> English. Arabic -> Arabic. Chinese -> Chinese, matching the user's script. Also match Hindi, Japanese, Korean, Russian, Spanish, French, German, Portuguese, Italian, Indonesian, Malay, Turkish and any other language you understand. If a Latin-script language is not explicitly identified, infer it from the actual wording; do not assume English. For mixed-language messages, reply in the dominant language/script. Never default to English when the user writes another language.
 
@@ -238,7 +257,7 @@ OWNER PHOTO AND FACE-IDENTITY RULES: The owner has explicitly authorized SUHAS A
           ...history.map((m: any) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
           { role: "user", parts: [{ text: prompt }, ...attachmentParts] },
         ],
-        generationConfig: { maxOutputTokens: 450, temperature: 0.35 },
+        generationConfig: { maxOutputTokens: 240, temperature: 0.45 },
       };
     } else if (AI_PROVIDER === "anthropic") {
       endpoint = (Deno.env.get("AI_BASE_URL") || "https://api.anthropic.com").replace(/\/$/, "") + "/v1/messages";
