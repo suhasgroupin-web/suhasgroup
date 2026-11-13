@@ -1208,3 +1208,12 @@ Date: 2026-11-10
 - Added `public.suhas_friend_requests` to the existing `supabase_realtime` publication. Verified publication membership after migration. No rows or user data were changed.
 - Navigation source audit: mobile six-tab navigation targets existing Home/Friends/Video/Reels/Notifications/Profile routes; desktop, side and Main Menu destinations map to existing route panels and loaders. Static route audit passed; live Android/browser interaction remains to be tested.
 - No deployment performed. Two-account send/receive/accept and real-device navigation tests remain required before merge/deployment.
+
+
+## 2026-11-13 — Cloudflare-only production release and SUHAS-MAX update notice
+- PR #91 merged to `main` as commit `995ef2b7bc90cac51196c357e083ddcd79244d60`.
+- Cloudflare Pages workflow run `43418125675` completed successfully for the merged main commit; the Cloudflare deploy step returned success. Production URL: `https://suhasgroup.pages.dev`.
+- Cloudflare is the sole production deployment target. Vercel is retired; old Vercel deployment records are historical only and are not to be used for new releases. GitHub Pages remains a non-production emergency fallback only.
+- Published SUHAS-MAX release metadata version `2026.11.13.1`, `notify_after_days: 0`, and updated `sw.js` fallback cache key to `v120` so signed-in app sessions can receive the staged update card after the new worker is installed.
+- The release update message describes the Home friend-request/live status improvements and navigation reliability updates. In-app database broadcast notification is pending production deployment verification.
+- Pending validation: verify Cloudflare-served `release.json` returns version `2026.11.13.1`, confirm worker/cache update and update card on a signed-in Android session, and test Friend Request send/accept using two accounts.
