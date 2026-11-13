@@ -6503,9 +6503,65 @@ document.addEventListener('click',event=>{
     touch-action:manipulation!important;
   }
 }
+
 </style>
 
 <style id="suhas-profile-camera-icons-final-20261113">
+/* Keep the avatar camera above the portrait and visibly outside its circular frame. */
+html body #profile-viewer.profile-viewer.open .profile-viewer-avatar-wrap{
+  position:relative!important;
+  overflow:visible!important;
+  isolation:isolate!important;
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-avatar-wrap .profile-viewer-avatar{
+  position:relative!important;
+  z-index:1!important;
+}
+html body #profile-viewer.profile-viewer.open #profile-avatar-change.profile-owner-avatar-edit:not([hidden]){
+  display:grid!important;
+  place-items:center!important;
+  position:absolute!important;
+  right:-13px!important;
+  bottom:12%!important;
+  left:auto!important;
+  top:auto!important;
+  z-index:50!important;
+  width:42px!important;
+  height:42px!important;
+  min-width:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  outline:0!important;
+  overflow:visible!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+}
+html body #profile-viewer.profile-viewer.open #profile-avatar-change svg{
+  display:block!important;
+  width:40px!important;
+  height:40px!important;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.48))!important;
+}
+html body #profile-viewer.profile-viewer.open #profile-cover-change.profile-owner-cover-edit:not([hidden]){
+  display:grid!important;place-items:center!important;position:absolute!important;
+  right:13px!important;bottom:11px!important;left:auto!important;
+  z-index:30!important;width:40px!important;height:40px!important;
+  min-width:40px!important;min-height:40px!important;padding:0!important;margin:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;overflow:visible!important;cursor:pointer!important;
+  pointer-events:auto!important;touch-action:manipulation!important;
+}
+html body #profile-viewer.profile-viewer.open #profile-cover-change svg{
+  display:block!important;width:36px!important;height:36px!important;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.42))!important;
+}
+</style>
 /* Final requested camera-only controls: no circular button backgrounds. */
 html body #profile-viewer.profile-viewer.open .profile-viewer-avatar-wrap{
   position:relative!important;overflow:visible!important;
