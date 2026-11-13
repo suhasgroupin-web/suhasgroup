@@ -1246,3 +1246,10 @@ Date: 2026-11-10
 - SUHAS-MAX routes no longer load the SUHAS GROUP display/navigation drawer. The shared auth gate now treats MAX as a separate profile boundary: MAX pages check `suhas_public_profiles` only; Group pages check `suhas_member_profiles` only. MAX users are no longer redirected to the Group career-profile setup.
 - Unauthenticated MAX routes now return to the login screen in MAX mode (`login.html?max=1`), which hides Group header/footer/signup/reset links and skips the Group bottom navigation. Successful sign-in returns to the original MAX destination or the MAX profile setup page.
 - The dedicated MAX profile editor no longer loads Group global auth/navigation scripts and stores profile photos in the MAX-only `suhas-max-media` bucket, whose owner-folder upload/update/delete policies were verified.
+
+
+## 2026-11-13 — SUHAS-MAX profile mobile layout hotfix
+- Updated `social.html` with a final mobile-only profile layout override: full-width cover, overlapping circular avatar and camera controls, stable name/verification row, readable education/work details, connection counts, action buttons, and horizontally scrollable profile tabs.
+- Made the Friends section idempotent so repeated or overlapping profile loads cannot append duplicate Friends cards.
+- Bumped service-worker cache fallback to `v123` and release metadata to `2026.11.13.4`.
+- Pending: Cloudflare Preview deployment and authenticated Android verification of the profile page at narrow viewport widths. Do not mark the fix production-live until verified.
