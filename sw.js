@@ -8,8 +8,8 @@ const CORE = [
 ];
 
 self.addEventListener('install', function(e){
-  // Updated workers wait until the member chooses Install update.
-  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }));
+  // Activate the current release immediately; do not leave a stale worker controlling refreshes.
+  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }).then(function(){ return self.skipWaiting(); }));
 });
 
 self.addEventListener('message', function(e){
@@ -31,6 +31,21 @@ self.addEventListener('fetch', function(e){
   if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1 || url.indexOf('edit-suhas.html') > -1) return;
   var requestUrl = new URL(url);
   if (requestUrl.origin !== self.location.origin) return;
+
+  // Versioned CSS and JavaScript must never be served from an older query-string variant.
+  // Fetch current assets first so a refresh cannot mix the latest HTML with stale styling or behavior.
+  if (/\\.(?:css|js)$/i.test(requestUrl.pathname)) {
+    e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
+      if (response && response.ok) {
+        var assetCache = await caches.open(CACHE);
+        await assetCache.put(e.request, response.clone());
+      }
+      return response;
+    }).catch(async function() {
+      return (await caches.open(CACHE)).match(e.request) || Response.error();
+    }));
+    return;
+  }
 
   // Page refreshes must stay on the exact requested URL and fetch the latest HTML.
   // If the network is unavailable, fall back only to that same page (never index.html).
