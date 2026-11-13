@@ -3636,7 +3636,29 @@ document.addEventListener('input',function suhasCommentInputLiveContrast(e){
  input.style.setProperty('color',dark?'#f9fafb':'#111827','important');
  input.style.setProperty('-webkit-text-fill-color',dark?'#f9fafb':'#111827','important');
 });
-document.addEventListener('submit',async e=>{const form=e.target.closest('[data-comment-form]');if(!form)return;e.preventDefault();const input=form.querySelector('input'),content=input.value.trim();if(!content)return;const r=await client.from('suhas_post_comments').insert({post_id:Number(form.dataset.commentForm),user_id:me,content});if(r.error){notice(r.error.message,true);return;}await loadFeed();});
+document.addEventListener('submit',async e=>{
+ const form=e.target.closest('[data-comment-form]');if(!form)return;e.preventDefault();
+ const input=form.querySelector('input,textarea'),content=input?.value.trim();if(!content)return;
+ const submit=form.querySelector('button[type="submit"]');if(submit?.disabled)return;
+ if(submit){submit.disabled=true;submit.dataset.originalText=submit.textContent;submit.textContent='Sending…';}
+ try{
+  const result=await client.from('suhas_post_comments').insert({post_id:Number(form.dataset.commentForm),user_id:me,content}).select('id,post_id,user_id,content,created_at').single();
+  if(result.error)throw result.error;
+  const comment=result.data,card=form.closest('.post-card'),list=card?.querySelector('.comment-list');
+  if(list){
+   const row=document.createElement('p');row.className='post-meta';
+   const name=document.createElement('b');name.className='profile-comment-name';name.dataset.profileOpen=me;name.textContent=(profile(me)?.full_name||'You')+':';
+   row.append(name,document.createTextNode(' '+comment.content));list.append(row);
+  }
+  if(input)input.value='';
+  const count=card?.querySelector('[data-focus-comment] .suhas-action-count');
+  if(count)count.textContent=String((Number(count.textContent)||0)+1);
+  const summary=card?.querySelector('.suhas-engagement-details summary');
+  if(summary){const spans=summary.querySelectorAll('span');const commentsLabel=[...spans].find(x=>/comments$/.test(x.textContent.trim()));if(commentsLabel){const n=Number(commentsLabel.textContent.match(/\d+/)?.[0]||0)+1;commentsLabel.textContent=n+' comments';}}
+  notice('Comment added.');
+ }catch(err){notice(err.message||'Comment could not be sent.',true);}
+ finally{if(submit){submit.disabled=false;submit.textContent=submit.dataset.originalText||'Comment';delete submit.dataset.originalText;}}
+});
 document.addEventListener('click',async e=>{
  const profileFilter=e.target.closest('[data-profile-filter]');if(profileFilter){const filter=profileFilter.dataset.profileFilter;document.querySelectorAll('.profile-viewer-tabs [data-profile-filter],.profile-viewer-tabs [data-profile-jump]').forEach(b=>b.classList.toggle('active',b===profileFilter));const list=$('profile-viewer-posts')?.querySelector('.profile-viewer-post-list');const events=$('profile-events-panel');if(events)events.hidden=filter!=='events';if(list){list.querySelectorAll('[data-profile-kind]').forEach(card=>{const kinds=(card.dataset.profileKind||'').split(' ');card.hidden=filter==='all'||filter==='events'?true:filter==='memories'?!kinds.includes('memories'):filter==='reels'?!kinds.includes('reels'):filter==='photos'?!kinds.includes('photos'):false;});list.querySelector('[data-profile-filter-empty]')?.remove();if(filter==='all')list.querySelectorAll('[data-profile-kind]').forEach(card=>card.hidden=false);else if(filter!=='events'&&!list.querySelector('[data-profile-kind]:not([hidden])'))list.insertAdjacentHTML('beforeend','<div class="empty" data-profile-filter-empty>No '+filter+' to show yet.</div>');}if(filter!=='events')$('profile-viewer-posts').scrollIntoView({behavior:'smooth',block:'start'});else events?.scrollIntoView({behavior:'smooth',block:'start'});return;}const profileJump=e.target.closest('[data-profile-jump]');if(profileJump){const target=document.getElementById(profileJump.dataset.profileJump);if(target){document.querySelectorAll('.profile-viewer-tabs [data-profile-filter],.profile-viewer-tabs [data-profile-jump]').forEach(b=>b.classList.toggle('active',b===profileJump));target.scrollIntoView({behavior:'smooth',block:'start'});}return;}const dashboard=e.target.closest('[data-profile-dashboard]');if(dashboard){const panel=$('profile-dashboard-panel');if(panel){panel.hidden=!panel.hidden;if(!panel.hidden){const stats=[...$('profile-viewer-stats').children].map(x=>x.innerText);const posts=$('profile-viewer-posts').querySelectorAll('[data-profile-kind]').length;panel.innerHTML='<h3>Professional dashboard</h3><p class="profile-dashboard-intro">Your profile overview and creator tools, using live SUHAS-MAX account data.</p><div class="profile-dashboard-grid"><div><strong>'+posts+'</strong><span>Published posts</span></div>'+stats.map((x,i)=>'<div><strong>'+safe((x.match(/[\\d,.KM]+/)||['0'])[0])+'</strong><span>'+['Followers','Following','Friends'][i]+'</span></div>').join('')+'</div><div class="profile-dashboard-shortcuts"><button type="button" data-profile-jump="profile-viewer-posts">▤ Content library</button><button type="button" data-profile-jump="profile-friends">♧ Audience & friends</button><button type="button" data-profile-jump="profile-about">✦ Profile details</button></div><section class="profile-dashboard-note"><strong>Insights</strong><p>Post reach, engagement and audience trends will appear here when reliable SUHAS-MAX analytics are available. No estimated figures are shown.</p></section><section class="profile-dashboard-note"><strong>Creator tools</strong><p>Update your profile category, edit your identity, and create a story from your profile.</p></section>';panel.scrollIntoView({behavior:'smooth',block:'nearest'});}}return;}const addStory=e.target.closest('[data-profile-add-story]');if(addStory){if(typeof window.openSuhasStoryCreator==='function')window.openSuhasStoryCreator();else notice('Story creator is not ready. Please try again.',true);return;}const seeAll=e.target.closest('#profile-bio-see-all');if(seeAll){const bio=$('profile-viewer-bio');bio.classList.toggle('profile-bio-expanded');seeAll.textContent=bio.classList.contains('profile-bio-expanded')?'See less':'See more';return;}const glanceSee=e.target.closest('[data-profile-see-all]');if(glanceSee){const summary=glanceSee.closest('.profile-info-card')?.querySelector('.profile-summary');if(summary){summary.classList.toggle('profile-summary-expanded');glanceSee.textContent=summary.classList.contains('profile-summary-expanded')?'See less':'See all';}return;}
  const confirmRequest=e.target.closest('[data-request-confirm]');
@@ -4115,7 +4137,19 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
   catch(err){notice('Could not open this section. Please refresh and try again.',true);return;}
   activateMaxTab(tab).catch(err=>notice(err.message||'Could not open this section.',true));
  },true);
- window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){await render({...state,profile:null});history.pushState({...state,guard:true},'',makeUrl(state.tab,null,false));return;}await render(state);return;}await render(current);history.pushState({...current,profile:null,editor:false,guard:true},'',makeUrl(current.tab,null,false));});
+ window.addEventListener('popstate',async e=>{
+  const state=e.state;
+  try{
+   if(state&&state.suhasMax&&allowed.includes(state.tab)){
+    await render({...state,profile:state.profile||null,editor:!!state.editor});
+    if(state.guard){history.pushState({...state,profile:null,editor:false,guard:true},'',makeUrl(state.tab,null,false));}
+    return;
+   }
+   const fallback={suhasMax:true,tab:current.tab||'feed',profile:null,editor:false,guard:true};
+   await render(fallback);
+   history.pushState(fallback,'',makeUrl(fallback.tab,null,false));
+  }catch(err){notice(err.message||'Could not return to the previous SUHAS-MAX screen.',true);}
+ });
  // Do not persist a non-Home tab as the next login landing page.
  render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
@@ -4180,10 +4214,12 @@ $('compose').addEventListener('submit',async e=>{
    else throw new Error('একটি conversation খুলে তারপর message পাঠান।');
   }
   const conversationId=activeConversation;
-  const r=await client.from('suhas_messages').insert({conversation_id:conversationId,sender_id:me,body});
+  const r=await client.from('suhas_messages').insert({conversation_id:conversationId,sender_id:me,body}).select('*').single();
   if(r.error)throw r.error;
   if(input.value.trim()===body)input.value='';
-  await loadMessages();
+  appendMessage(r.data);
+  const activeRow=document.querySelector('#threads [data-open="'+CSS.escape(String(conversationId))+'"] .message-thread-preview');
+  if(activeRow)activeRow.textContent='You: '+body;
   notice('Message sent.');
  }catch(err){
   console.error('SUHAS-MAX message send failed:',err);
