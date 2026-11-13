@@ -73,7 +73,7 @@ function localSmallTalk(prompt: string) {
 
 
 function localBangladeshKnowledge(prompt: string) {
-  const p = prompt.trim().toLowerCase().replace(/[!?.,،\\s]+$/g, "").replace(/\\s+/g, " ");
+  const p = prompt.trim().toLowerCase().replace(/[!?.,،\s]+$/g, "").replace(/\s+/g, " ");
   const lang = detectReplyLanguage(prompt);
   const districts = /(জেলা কয়টা|জেলা কয়টা|কয়টি জেলা|কয়টি জেলা|কত জেলা|districts? (in )?bangladesh|how many districts)/i.test(p);
   const divisions = /(বিভাগ কয়টা|বিভাগ কয়টা|কয়টি বিভাগ|কয়টি বিভাগ|কত বিভাগ|divisions? (in )?bangladesh|how many divisions)/i.test(p);
