@@ -6137,7 +6137,15 @@ html body #profile-viewer.profile-viewer.open .profile-viewer-menu-trigger{
  box-shadow:0 3px 0 #cbd4e1,0 5px 10px rgba(20,40,70,.12)!important;
 }
 html body #profile-viewer.profile-viewer.open #profile-viewer-sub{
- display:none!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;
+ grid-column:2!important;grid-row:1!important;margin:7px 0 0!important;padding:0!important;
+ color:#526176!important;font-size:12px!important;line-height:1.3!important;
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-sub .profile-detail-line{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-sub .profile-category-label{
+ display:inline-flex!important;width:max-content!important;max-width:100%!important;
+ padding:4px 10px!important;border:1px solid #dbeafe!important;border-radius:999px!important;
+ background:#eff6ff!important;color:#1d4ed8!important;font-size:11px!important;font-weight:800!important;
 }
 html body #profile-viewer.profile-viewer.open #profile-viewer-stats{
  grid-column:1/4!important;grid-row:2!important;display:flex!important;
