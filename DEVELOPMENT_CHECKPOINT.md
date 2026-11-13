@@ -1255,3 +1255,10 @@ Date: 2026-11-10
 - Four distinct SUHAS-MAX public-profile accounts received the `software_update` notification for `2026.11.13.3`.
 - Preview validation: Site quality checks passed (inline JavaScript syntax and local links); Datadog Synthetic tests passed; Cloudflare PR preview deployment passed.
 - Remaining verification: authenticated two-account Friend Request → Accept → Friends flow, live Notification interactions, Reels scroll/Like/Comment/Share, profile editor save, Messenger shared-profile route and Android physical-device testing. These remain pending until exercised with real signed-in accounts/devices.
+
+
+## SUHAS-MAX mobile profile layout hotfix — 2026-11-13
+- Applied the reviewed mobile-only profile layout correction to the current `main` baseline: full-width cover photo, overlapping circular avatar with anchored camera controls, stable profile name and verification badge, readable education/work details, connection counts, two-column profile actions, horizontal profile tabs and correctly sized profile content.
+- Kept the existing `social.html` profile viewer, `max-profile.html` editor, SUHAS-MAX-only profile/auth boundary, Messenger profile connection, and all existing Group modules intact.
+- Bumped release metadata to `2026.11.13.4` and service-worker fallback cache to `v123`; `max-profile.html` remains in the precache list.
+- Cloudflare Pages production deployment and the in-app software-update notification are pending until the Cloudflare production deployment is verified. No claim of live release is made yet.
