@@ -34,7 +34,7 @@ self.addEventListener('fetch', function(e){
 
   // Versioned CSS and JavaScript must never be served from an older query-string variant.
   // Fetch current assets first so a refresh cannot mix the latest HTML with stale styling or behavior.
-  if (/\\.(?:css|js)$/i.test(requestUrl.pathname)) {
+  if (/\.(?:css|js)$/i.test(requestUrl.pathname)) {
     e.respondWith(fetch(e.request, { cache: 'no-store' }).then(async function(response) {
       if (response && response.ok) {
         var assetCache = await caches.open(CACHE);
