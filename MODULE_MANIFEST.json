@@ -80,7 +80,17 @@
         {
           "id": "contact",
           "legacyEntry": "contact.html",
-          "status": "legacy-isolated"
+          "status": "module-entry-isolated-legacy-route-retained",
+          "moduleEntry": "apps/suhas-group/contact/contact.html",
+          "moduleReadme": "apps/suhas-group/contact/README.md",
+          "compatibility": "root URL forwards query string and hash",
+          "sharedDependencies": [
+            "assets/styles.css",
+            "assets/config.js",
+            "assets/auth.js",
+            "assets/script.js",
+            "Supabase JS client"
+          ]
         }
       ]
     },
