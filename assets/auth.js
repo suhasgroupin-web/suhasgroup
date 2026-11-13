@@ -8,6 +8,7 @@
     return name || 'index.html';
   }
   var routeEarly=canonicalPageName(routeParts[routeParts.length-1]||'index.html');
+  var isSuhasMaxRoute=['home.html','social.html','messenger.html','suhas-max-ai.html','max-profile.html'].indexOf(routeEarly)!==-1 || (routeEarly==='login.html' && new URLSearchParams(location.search).get('max')==='1');
   // Public authentication pages live only at the site root.
   var isRootAuthRoute=routeParts.length<=1;
   var publicEarly=['index.html','login.html','signup.html','reset.html'];
@@ -30,7 +31,7 @@
   navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}html.suhas-authenticated body:has(#login-form) .tabbar,html.suhas-authenticated body:has(#signup-form) .tabbar{display:none!important}html.suhas-authenticated body:has(#login-form) .social-mobile-nav,html.suhas-authenticated body:has(#signup-form) .social-mobile-nav{display:none!important}';
   (document.head||document.documentElement).appendChild(navGateStyle);
 
-  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=9';displayScript.defer=true;document.head.appendChild(displayScript);
+  if(!isSuhasMaxRoute){var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=9';displayScript.defer=true;document.head.appendChild(displayScript);}
 
   var cfg = window.SUHAS_CONFIG;
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
@@ -77,7 +78,8 @@
   function requireWorkspaceSession(session){
     if(!isPublicAuthPage() && !session){
       var next = location.pathname + location.search + location.hash;
-      location.replace(appRootPath+'login.html?next=' + encodeURIComponent(next));
+      var loginTarget=isSuhasMaxRoute?'login.html?max=1&next=':'login.html?next=';
+      location.replace(appRootPath+loginTarget+encodeURIComponent(next));
       return false;
     }
     return true;
@@ -132,23 +134,23 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='profile.html' || page==='main-menu.html' || isPublicAuthPage()) return true;
+    if(!session || page==='main-menu.html' || (isPublicAuthPage()&&!isSuhasMaxRoute)) return true;
     try{
-      // Every authenticated account, including OWNER/admin, must have the same completed member profile.
-      var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-      if(result.error || !result.data || result.data.profile_complete!==true){location.replace(appRootPath+'profile.html?setup=1');return false;}
-      // SUHAS-MAX is an independent platform: require its own profile only when opening its app launcher, feed, or Messenger.
-      if(['home.html','social.html','messenger.html'].indexOf(page)!==-1){
+      if(isSuhasMaxRoute){
+        if(page==='max-profile.html') return true;
         var maxProfile=await sb.from('suhas_public_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
         if(maxProfile.error || !maxProfile.data || maxProfile.data.profile_complete!==true){
           location.replace(appRootPath+'max-profile.html?setup=1');
           return false;
         }
+        return true;
       }
+      var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
+      if(result.error || !result.data || result.data.profile_complete!==true){location.replace(appRootPath+'profile.html?setup=1');return false;}
       return true;
     }catch(e){
-      if(['home.html','social.html','messenger.html'].indexOf(page)!==-1){location.replace(appRootPath+'max-profile.html?setup=1');return false;}
-      location.replace('profile.html?setup=1');return false;
+      if(isSuhasMaxRoute){if(page!=='max-profile.html')location.replace(appRootPath+'max-profile.html?setup=1');return page==='max-profile.html';}
+      location.replace(appRootPath+'profile.html?setup=1');return false;
     }
   }
 
@@ -200,10 +202,10 @@
       var profileReady=await enforceMemberProfile(session);
       if(profileReady) revealAuthenticatedPage();
     }else if(isPublicAuthPage()){document.documentElement.classList.remove('suhas-auth-pending');}
-    if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
-      sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){
-        location.replace('main-menu.html');
-      }).catch(function(){ location.replace('profile.html?setup=1'); });
+    if(session && page==='login.html' && isSuhasMaxRoute){
+      enforceMemberProfile(session).then(function(ok){if(ok){var next=window.safeNext(new URLSearchParams(location.search).get('next'));if(next==='main-menu.html')next='/home.html';location.replace(next);}});
+    }else if(session && (page === 'index.html' || page === 'login.html' || page === 'signup.html')){
+      sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle().then(function(pr){location.replace('main-menu.html');}).catch(function(){location.replace('profile.html?setup=1');});
     }
   }).catch(function(error){
     console.warn('SUHAS-MAX session restoration failed:',error);

@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.13.2",
+  "version": "2026.11.13.3",
   "published_at": "2026-11-13T12:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS AI update: save your preferred voice and language, choose a device voice style, and get clearer Android microphone permission handling. SUHAS-MAX AI has the same saved voice settings. Tap Install to load the latest version.",
+  "update_message": "SUHAS-MAX update: all Home navigation tabs are connected; Notifications has its own page and unread badge; Reels opens a full-screen vertical scroll viewer with Like, Comment, Share and menu actions; regular Videos are separated from Reels; header and bottom Profile buttons open the same SUHAS-MAX profile; Messenger uses that same profile. SUHAS GROUP remains separate. Tap Install to update.",
   "mandatory": false
 }
