@@ -1171,3 +1171,13 @@ Date: 2026-11-10
 - Preserved the existing contact form, topic preselection, company/email links and shared Supabase/auth/config/script dependencies.
 - Added root base URL to retain original root-relative asset and route resolution.
 - No database, storage, auth configuration or shared assets changed. Browser/mobile and authenticated form submission regression remains required. No production deployment performed.
+
+
+## SUHAS GROUP Team / Leadership module — 2026-11-13
+- Audited `about.html`: the existing Leadership section contains the Company Owner profile; there is no separate `team.html` source or standalone Team page in the current navigation search.
+- Added an independent Team / Leadership entry at `apps/suhas-group/team/team.html`, preserving the existing owner name, role, biography, credentials and LinkedIn destination from the current About section.
+- Kept the existing `about.html#leadership` section untouched for backward compatibility; the new page is additive and does not replace or redirect the About page.
+- Reuses the existing corporate stylesheet, Supabase client/config/auth/shared script and owner image. Root base URL preserves existing asset paths.
+- No database, storage, auth, shared assets, existing routes or user records changed. No production deployment performed.
+- Static verification: confirm module markup, dependencies, owner image reference, manifest JSON and legacy About anchor. Browser/mobile and authenticated route checks remain pending.
+- Navigation note: this increment adds the standalone Team module entry only. The current Main Menu does not expose a verified Team route; wire the master Team button only after the actual master-menu routing is mapped, without changing other buttons.
