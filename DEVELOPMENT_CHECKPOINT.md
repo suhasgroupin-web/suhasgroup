@@ -1198,3 +1198,13 @@ Date: 2026-11-10
 - Updated `MODULE_MANIFEST.json` to record the Settings presentation module.
 - Static source checks: stylesheet link is registered once; all referenced setting control IDs and handlers remain in the existing page; responsive and reduced-motion CSS rules are present; JSON manifest parses.
 - Pending: browser rendering at 360px/412px/desktop, real signed-in save/reload test, and keyboard/screen-reader interaction. No deployment performed; do not mark live until Cloudflare Pages production is checked.
+
+
+## SUHAS-MAX Home Friend Suggestions + Live Relationship Refresh — 2026-11-13
+- Updated `social.html` Home "People you may know" cards to read each member's actual `suhas_friend_requests` relationship before rendering the action.
+- Cards now show `Add friend` only when no relationship exists, `Request sent` while an outgoing request is pending, a request-response status for incoming requests, and `Friends ✓` after acceptance.
+- After sending a request, refreshes Home suggestions, People and Friend Requests so the button does not remain stuck on `Sending…`.
+- Added Supabase Realtime listeners for both sender and recipient sides of `suhas_friend_requests`; sender Home cards and Friends/People views refresh when the recipient accepts, while recipient request views refresh on new or changed requests.
+- Added `public.suhas_friend_requests` to the existing `supabase_realtime` publication. Verified publication membership after migration. No rows or user data were changed.
+- Navigation source audit: mobile six-tab navigation targets existing Home/Friends/Video/Reels/Notifications/Profile routes; desktop, side and Main Menu destinations map to existing route panels and loaders. Static route audit passed; live Android/browser interaction remains to be tested.
+- No deployment performed. Two-account send/receive/accept and real-device navigation tests remain required before merge/deployment.
