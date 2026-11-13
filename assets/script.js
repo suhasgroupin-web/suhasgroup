@@ -129,6 +129,7 @@ SG.loginThenReturn = function () {
 /* mobile bottom tab bar (shown on phones only) */
 document.addEventListener('DOMContentLoaded', function () {
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  if(page==='login.html' && new URLSearchParams(location.search).get('max')==='1') return;
   function ic(d) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>'; }
   var nav = document.createElement('nav'); nav.className = 'tabbar'; nav.setAttribute('aria-label', 'SUHAS GROUP navigation');
   var tabs = [
