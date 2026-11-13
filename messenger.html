@@ -169,7 +169,6 @@
    if(!frame.contentDocument||!frame.contentDocument.querySelector('#messages'))openInboxDirectly();
   }catch(e){openInboxDirectly();}
  },10000);
- document.getElementById('messenger-back').addEventListener('click',function(){location.href='social.html?tab=feed';});
 
  const settingsPanel=document.getElementById('messenger-settings-panel');
  const settingsKey='suhas-messenger-preferences-v1';
@@ -178,7 +177,6 @@
  settingsPanel.querySelectorAll('[data-pref]').forEach(el=>{el.checked=!!prefs[el.dataset.pref];el.addEventListener('change',()=>{prefs[el.dataset.pref]=el.checked;localStorage.setItem(settingsKey,JSON.stringify(prefs));if(el.dataset.pref==='notifications'&&el.checked&&'Notification'in window&&Notification.permission==='default'){Notification.requestPermission().then(p=>{if(p!=='granted'){el.checked=false;prefs.notifications=false;localStorage.setItem(settingsKey,JSON.stringify(prefs));}});}});});
  document.getElementById('messenger-settings-close').addEventListener('click',()=>{settingsPanel.hidden=true;});
  settingsPanel.addEventListener('click',e=>{if(e.target===settingsPanel)settingsPanel.hidden=true;});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'){settingsPanel.hidden=true;pop.hidden=true;}});
  function populateStories(){
   try{const d=frame.contentDocument,track=document.getElementById('messenger-story-track');if(!d||!track)return;
    const seen=new Set(),threads=[...d.querySelectorAll('#threads .message-thread')];track.innerHTML='';
@@ -190,7 +188,6 @@
  document.getElementById('messenger-create-story').addEventListener('click',()=>{try{const d=frame.contentDocument;const composer=d.querySelector('[data-tab="feed"]');if(composer)composer.click();else alert('Story creation will open from your SUHAS-MAX feed.');}catch(e){}});
 
  const pop=document.getElementById('messenger-popover');
- document.getElementById('messenger-menu').addEventListener('click',()=>{pop.hidden=true;openMessengerMenu();});
  document.getElementById('messenger-more')?.addEventListener('click',()=>{pop.hidden=!pop.hidden;});
  document.getElementById('messenger-settings')?.addEventListener('click',()=>{pop.hidden=true;});
  document.getElementById('messenger-compose').addEventListener('click',()=>{try{const d=frame.contentDocument;const q=d.getElementById('message-member-search');q?.focus();q?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}});
