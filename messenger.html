@@ -214,7 +214,7 @@
  menuScreen.querySelectorAll('[data-menu-action]').forEach(b=>b.addEventListener('click',()=>{
   const action=b.dataset.menuAction;const map={communities:'groups',friends:'requests',requests:'requests',marketplace:'marketplace',reels:'reels',saved:'saved',following:'following',gaming:'gaming'};
   if(action==='settings'){closeMessengerMenu();settingsPanel.hidden=false;return;}
-  if(action==='profile'){closeMessengerMenu();location.href='profile.html';return;}
+  if(action==='profile'){closeMessengerMenu();location.href='social.html?profile=me';return;}
   if(action==='support'){closeMessengerMenu();activateChildTab('settings');return;}
   
   if(action==='archive'){closeMessengerMenu();alert('Archive is not available yet. Your existing conversations have not been changed or deleted.');return;}
