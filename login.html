@@ -49,6 +49,10 @@ html,body{min-height:100%;padding-bottom:0!important}
 body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,body .app-bottom-nav,body nav[aria-label="App navigation"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 </style>
 </head><body>
+<script id="suhas-max-login-mode">
+(function(){if(new URLSearchParams(location.search).get('max')!=='1')return;document.title='Log in | SUHAS-MAX';document.querySelector('.site-header')?.remove();document.querySelector('.site-footer')?.remove();document.querySelector('.auth-brand')?.remove();const signup=document.querySelector('.auth-actions a[href="signup.html"]');signup?.remove();document.querySelector('.linkline')?.remove();const forgot=document.querySelector('a[href="reset.html"]');forgot?.parentElement?.remove();const copy=document.querySelector('.form-card>p:first-of-type');if(copy)copy.textContent='Sign in to your independent SUHAS-MAX account. Your SUHAS-MAX and Messenger profile stay connected.';const heading=document.querySelector('.form-card h1');if(heading)heading.textContent='Welcome to SUHAS-MAX';})();
+</script>
+
 <header class="site-header"><div class="nav-wrap">
 <a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP logo"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a>
 <nav class="nav-links"><a href="index.html">Home</a><a href="jobs.html">Find Jobs</a><a href="group.html">Our Companies</a><a href="about.html">About</a><a href="employers.html">For Employers</a><a href="contact.html">Contact</a></nav>
@@ -80,9 +84,11 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 <script src="assets/script.js"></script>
 <script>
 (async function(){
+ var maxLoginMode=new URLSearchParams(location.search).get('max')==='1';
+ function maxDestination(){var next=window.safeNext(new URLSearchParams(location.search).get('next'));return next==='main-menu.html'?'/home.html':next;}
  var sessionResult=await sb.auth.getSession();
  var session=sessionResult.data&&sessionResult.data.session;
- if(!session)return;
+ if(!session||maxLoginMode)return;
  var box=document.createElement('div');
  box.id='existing-session-choice';
  box.style.cssText='border:1px solid #dbe4f0;background:#f4f7fc;border-radius:16px;padding:16px;margin:0 0 18px';
@@ -123,7 +129,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   try{
     var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
-    window.location.replace('main-menu.html');
+    if(maxLoginMode){const p=await sb.from('suhas_public_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();if(p.error)throw p.error;if(!p.data||p.data.profile_complete!==true){window.location.replace('max-profile.html?setup=1');return;}window.location.replace(maxDestination());}else window.location.replace('main-menu.html');
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
 });
 </script>
