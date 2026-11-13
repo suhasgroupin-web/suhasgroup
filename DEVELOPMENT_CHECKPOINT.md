@@ -1181,3 +1181,11 @@ Date: 2026-11-10
 - No database, storage, auth, shared assets, existing routes or user records changed. No production deployment performed.
 - Static verification: confirm module markup, dependencies, owner image reference, manifest JSON and legacy About anchor. Browser/mobile and authenticated route checks remain pending.
 - Navigation note: this increment adds the standalone Team module entry only. The current Main Menu does not expose a verified Team route; wire the master Team button only after the actual master-menu routing is mapped, without changing other buttons.
+
+
+## SUHAS Messenger shell event-binding cleanup — 2026-11-13
+- Audited the active root Messenger compatibility entry and isolated module bridge on `main`.
+- Found redundant shell listeners: the SUHAS-MAX home-logo action was registered twice, the Menu action was registered twice, and Escape-key handling was split across duplicate document listeners.
+- Prepared a Messenger-only cleanup removing the redundant registrations while retaining one home-logo handler, one Menu handler (including active-tab state), and one Escape handler that closes Menu, Settings and the popover.
+- No social.html, Supabase schema/data, auth/session, shared GROUP/MAX routes or Vercel configuration changed.
+- Static source checks are pending; browser/mobile and authenticated inbox verification remain required before merge/deployment.
