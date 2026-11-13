@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.13.12",
-  "published_at": "2026-11-13T17:42:00.000Z",
+  "version": "2026.11.14.1",
+  "published_at": "2026-11-13T18:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Home feed videos now try sound playback when allowed; tap a playing video to enable sound. Browser autoplay restrictions may require a tap.",
+  "update_message": "Refresh stability fix: SUHAS-MAX mobile styles now load before the page is displayed.",
   "mandatory": true
 }
