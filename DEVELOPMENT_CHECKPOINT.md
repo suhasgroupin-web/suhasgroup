@@ -1163,3 +1163,11 @@ Date: 2026-11-10
 - Added a root base URL to each module page so existing root-level assets, child routes, factory unit parameters, and shared auth/Supabase dependencies continue resolving.
 - Existing page implementations and inline tool logic were copied without redesign; no database, storage, authentication settings, shared assets, or linked child pages were changed.
 - Static source checks are required before merge; authenticated browser/mobile regression remains outstanding. No deployment performed.
+
+
+## SUHAS GROUP Contact module isolation — 2026-11-13
+- Added `apps/suhas-group/contact/contact.html` and module README.
+- Kept `/contact.html` as a compatibility redirect forwarding query strings and URL fragments.
+- Preserved the existing contact form, topic preselection, company/email links and shared Supabase/auth/config/script dependencies.
+- Added root base URL to retain original root-relative asset and route resolution.
+- No database, storage, auth configuration or shared assets changed. Browser/mobile and authenticated form submission regression remains required. No production deployment performed.
