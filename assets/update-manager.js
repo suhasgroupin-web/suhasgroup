@@ -1,52 +1,39 @@
-/* SUHAS-MAX staged app updates: notify 15 days after each published release. */
+/* SUHAS-MAX automatic software update notice and service-worker registration. */
 (function(){
  'use strict';
  if(!('serviceWorker' in navigator))return;
  var script=document.currentScript;
  var root=new URL('../',script&&script.src?script.src:location.href);
- var release=null,registration=null,card=null,applying=false;
- function getInstalled(){try{return localStorage.getItem('suhas-installed-release')||'';}catch(e){return '';}}
- function setInstalled(v){try{localStorage.setItem('suhas-installed-release',v);}catch(e){}}
- function buildCard(){
-  if(card||!document.body)return;
+ function read(key){try{return localStorage.getItem(key)||'';}catch(e){return '';}}
+ function write(key,value){try{localStorage.setItem(key,value);}catch(e){}}
+ function showNotice(release){
+  if(document.getElementById('suhas-software-updated'))return;
   var style=document.createElement('style');
-  style.textContent='.suhas-update-card{position:fixed;z-index:100000;left:16px;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));max-width:560px;margin:auto;padding:17px 18px;border:1px solid #d8e3f3;border-radius:18px;background:linear-gradient(145deg,#fff,#f4f8ff);color:#14233d;box-shadow:0 18px 55px #061a3b35;font:14px/1.5 Arial,sans-serif}.suhas-update-card strong{display:block;font-size:16px;margin-bottom:4px}.suhas-update-card p{margin:0 0 13px;color:#52627b}.suhas-update-actions{display:flex;gap:9px;align-items:center;justify-content:flex-end}.suhas-update-actions button{border:0;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}.suhas-update-install{background:#17439a;color:#fff}.suhas-update-later{background:#e9eef6;color:#34445e}.suhas-update-card[hidden]{display:none}';
+  style.textContent='.suhas-software-updated{position:fixed;z-index:100001;left:16px;right:16px;top:calc(14px + env(safe-area-inset-top));max-width:480px;margin:auto;padding:13px 16px;border:1px solid #cfe1ff;border-radius:14px;background:#fff;color:#152b4b;box-shadow:0 12px 36px #10294a2b;font:14px/1.45 Arial,sans-serif;display:flex;gap:12px;align-items:center}.suhas-software-updated strong{display:block;font-size:15px}.suhas-software-updated small{display:block;color:#52627b;margin-top:2px}.suhas-software-updated button{margin-left:auto;border:0;background:transparent;color:#52627b;font-size:22px;line-height:1;cursor:pointer;padding:4px 7px}';
   document.head.appendChild(style);
-  card=document.createElement('section');card.className='suhas-update-card';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
-  card.innerHTML='<strong>Software Updated</strong><p id="suhas-update-copy">A new SUHAS-MAX version is ready. Install it to use the latest features and improvements.</p><div class="suhas-update-actions"><button type="button" class="suhas-update-later">Later</button><button type="button" class="suhas-update-install">Install</button></div>';
-  document.body.appendChild(card);
-  card.querySelector('.suhas-update-later').addEventListener('click',function(){card.hidden=true;});
-  card.querySelector('.suhas-update-install').addEventListener('click',function(){
-   if(!registration||!registration.waiting)return;
-   applying=true;var button=card.querySelector('.suhas-update-install');button.disabled=true;button.textContent='Installing…';
-   registration.waiting.postMessage({type:'SUHAS_SKIP_WAITING'});
-  });
- }
- function maybeNotify(){
-  if(!release||!registration||!registration.waiting)return;
-  if(getInstalled()===release.version)return;
-  buildCard();if(card){card.hidden=false;var copy=card.querySelector('#suhas-update-copy');if(copy)copy.textContent=release.update_message||('Version '+release.version+' is ready. Install the update to get the latest SUHAS-MAX features and improvements.');}
+  var toast=document.createElement('div');toast.id='suhas-software-updated';toast.className='suhas-software-updated';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');
+  var copy=document.createElement('span');
+  var title=document.createElement('strong');title.textContent='Software Updated';
+  var detail=document.createElement('small');detail.textContent=release.update_message||('SUHAS-MAX is now updated to version '+release.version+'.');
+  copy.append(title,detail);
+  var close=document.createElement('button');close.type='button';close.setAttribute('aria-label','Dismiss update notification');close.textContent='×';close.addEventListener('click',function(){toast.remove();});
+  toast.append(copy,close);
+  (document.body||document.documentElement).appendChild(toast);
+  window.setTimeout(function(){toast.remove();},9000);
  }
  async function start(){
   try{
+   var hadController=!!navigator.serviceWorker.controller;
    var response=await fetch(new URL('release.json',root).href,{cache:'no-store'});
    if(!response.ok)throw new Error('Release information unavailable');
-   release=await response.json();
+   var release=await response.json();
    if(!release.version||!release.published_at)throw new Error('Invalid release information');
+   var previous=read('suhas-last-seen-release');
+   if(hadController&&previous!==release.version)showNotice(release);
+   write('suhas-last-seen-release',release.version);
    var workerUrl=new URL('sw.js?v='+encodeURIComponent(release.version),root).href;
-   registration=await navigator.serviceWorker.register(workerUrl,{scope:root.pathname,updateViaCache:'none'});
-   await registration.update().catch(function(){});
-   if(registration.waiting)maybeNotify();
-   registration.addEventListener('updatefound',function(){
-    var worker=registration.installing;if(!worker)return;
-    worker.addEventListener('statechange',function(){if(worker.state==='installed'&&navigator.serviceWorker.controller)maybeNotify();});
-   });
-   navigator.serviceWorker.addEventListener('controllerchange',function(){
-    if(applying){setInstalled(release.version);location.reload();}
-   });
-   window.addEventListener('focus',function(){registration.update().catch(function(){});maybeNotify();});
-   document.addEventListener('visibilitychange',function(){if(!document.hidden){registration.update().catch(function(){});maybeNotify();}});
-   if(registration.waiting)maybeNotify();
+   var registration=await navigator.serviceWorker.register(workerUrl,{scope:root.pathname,updateViaCache:'none'});
+   registration.update().catch(function(){});
   }catch(error){console.warn('SUHAS-MAX update service:',error);}
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
