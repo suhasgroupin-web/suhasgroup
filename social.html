@@ -3353,7 +3353,7 @@ async function loadVideos(){
  const host=$('videos-list');if(!host)return;
  const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(100);
  if(r.error)throw r.error;
- const videoRows=(r.data||[]).filter(x=>x.metadata?.content_format==='video');
+ const videoRows=(r.data||[]).filter(x=>x.metadata?.content_format==='video'||!x.metadata?.content_format);
  const ids=[...new Set(videoRows.map(x=>x.user_id))];let prof=[];
  if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',ids);if(p.error)throw p.error;prof=p.data||[];}
  const byId=Object.fromEntries(prof.map(x=>[x.user_id,x]));
