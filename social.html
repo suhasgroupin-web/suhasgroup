@@ -2728,6 +2728,31 @@ html body #profile-viewer.profile-viewer.open .profile-viewer-menu-wrap {
  #profile-viewer #profile-viewer-actions>.action{min-height:48px!important;font-size:12px!important;padding:7px 3px!important}
 }
 </style>
+
+<style id="suhas-avatar-camera-final-override-20261113">
+/* Keep the 3D camera above and outside the avatar frame edge, never inset inside the photo. */
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
+ position:relative!important;overflow:visible!important;isolation:isolate!important;
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change.profile-owner-avatar-edit:not([hidden]){
+ display:grid!important;place-items:center!important;position:absolute!important;
+ right:-9px!important;bottom:-9px!important;left:auto!important;top:auto!important;
+ z-index:9999!important;width:32px!important;height:32px!important;
+ min-width:32px!important;min-height:32px!important;max-width:32px!important;max-height:32px!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;outline:0!important;
+ opacity:1!important;visibility:visible!important;overflow:visible!important;
+ cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change svg{
+ display:block!important;width:30px!important;height:30px!important;
+ max-width:none!important;max-height:none!important;opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 1px 2px rgba(0,0,0,.48))!important;
+}
+html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
+</style>
+
+
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SUHAS-MAX Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SUHAS-MAX</div><div class="brand-tag">SUHAS-MAX COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation"><button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="desktop-nav-icon">⌂</span><span>Home</span></button><button data-tab="friends" type="button" aria-label="Friends"><span class="desktop-nav-icon">♙</span><span>Friends</span></button><button data-tab="groups" type="button" aria-label="Groups"><span class="desktop-nav-icon">▦</span><span>Groups</span></button><button data-tab="reels" type="button" aria-label="Reels"><span class="desktop-nav-icon">▣</span><span>Reels</span></button><button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="desktop-nav-icon">▱</span><span>Marketplace</span></button><button data-tab="notifications" type="button" aria-label="Notifications"><span class="desktop-nav-icon">♧</span><span>Notifications</span></button></nav>
@@ -6645,28 +6670,6 @@ html body #profile-viewer.profile-viewer.open #profile-avatar-change svg{
 html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
 </style>
 
-<style id="suhas-avatar-camera-final-override-20261113">
-/* Keep the 3D camera above and outside the avatar frame edge, never inset inside the photo. */
-html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
- position:relative!important;overflow:visible!important;isolation:isolate!important;
-}
-html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change.profile-owner-avatar-edit:not([hidden]){
- display:grid!important;place-items:center!important;position:absolute!important;
- right:-9px!important;bottom:-9px!important;left:auto!important;top:auto!important;
- z-index:9999!important;width:32px!important;height:32px!important;
- min-width:32px!important;min-height:32px!important;max-width:32px!important;max-height:32px!important;
- padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;outline:0!important;
- opacity:1!important;visibility:visible!important;overflow:visible!important;
- cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;
-}
-html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change svg{
- display:block!important;width:30px!important;height:30px!important;
- max-width:none!important;max-height:none!important;opacity:1!important;visibility:visible!important;
- filter:drop-shadow(0 1px 2px rgba(0,0,0,.48))!important;
-}
-html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
-</style>
 
 </body>
 </html>
