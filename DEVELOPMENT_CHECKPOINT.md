@@ -1246,3 +1246,12 @@ Date: 2026-11-10
 - SUHAS-MAX routes no longer load the SUHAS GROUP display/navigation drawer. The shared auth gate now treats MAX as a separate profile boundary: MAX pages check `suhas_public_profiles` only; Group pages check `suhas_member_profiles` only. MAX users are no longer redirected to the Group career-profile setup.
 - Unauthenticated MAX routes now return to the login screen in MAX mode (`login.html?max=1`), which hides Group header/footer/signup/reset links and skips the Group bottom navigation. Successful sign-in returns to the original MAX destination or the MAX profile setup page.
 - The dedicated MAX profile editor no longer loads Group global auth/navigation scripts and stores profile photos in the MAX-only `suhas-max-media` bucket, whose owner-folder upload/update/delete policies were verified.
+
+
+## Production verification — 2026-11-13
+- PR #92 merged to `main` at `4f20b884d06d339adbd810bd5322adcfc267ac97`.
+- Cloudflare Pages production deployment workflow run `43422511692` completed successfully.
+- Live `release.json` reports `2026.11.13.3`; live `sw.js` reports fallback cache `v122` and precaches `max-profile.html`.
+- Four distinct SUHAS-MAX public-profile accounts received the `software_update` notification for `2026.11.13.3`.
+- Preview validation: Site quality checks passed (inline JavaScript syntax and local links); Datadog Synthetic tests passed; Cloudflare PR preview deployment passed.
+- Remaining verification: authenticated two-account Friend Request → Accept → Friends flow, live Notification interactions, Reels scroll/Like/Comment/Share, profile editor save, Messenger shared-profile route and Android physical-device testing. These remain pending until exercised with real signed-in accounts/devices.
