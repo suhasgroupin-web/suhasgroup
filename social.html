@@ -3904,7 +3904,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
 /* SUHAS-MAX has its own refresh-safe routes and a Back guard at the app boundary. */
 (function(){
  const allowed=['feed','people','friends','saved','groups','marketplace','videos','reels','gaming','requests','following','notifications','messages','settings'];
- const readRoute=()=>{const q=new URLSearchParams(location.search);const t=q.get('tab')||'feed';return {suhasMax:true,tab:allowed.includes(t)?t:'feed',profile:q.get('profile')||null,editor:q.get('edit')==='1',guard:false};};
+ const readRoute=()=>{const q=new URLSearchParams(location.search);const t=q.get('tab')||'feed';return {suhasMax:true,tab:allowed.includes(t)?t:'feed',profile:(q.get('profile')==='me'?me:(q.get('profile')||null)),editor:q.get('edit')==='1',guard:false};};
  const makeUrl=(tab,profile,editor)=>{const q=new URLSearchParams(location.search);q.set('tab',tab);if(profile)q.set('profile',profile);else q.delete('profile');if(editor)q.set('edit','1');else q.delete('edit');return location.pathname+'?'+q.toString();};
  let current=readRoute();
  const editor=$('suhas-profile-editor'),editorFrame=$('suhas-profile-editor-frame');
@@ -3940,7 +3940,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  },true);
  window.addEventListener('popstate',async e=>{const state=e.state;if(state&&state.suhasMax&&allowed.includes(state.tab)){if(state.guard){await render({...state,profile:null});history.pushState({...state,guard:true},'',makeUrl(state.tab,null,false));return;}await render(state);return;}await render(current);history.pushState({...current,profile:null,editor:false,guard:true},'',makeUrl(current.tab,null,false));});
  // Do not persist a non-Home tab as the next login landing page.
- render(current).then(()=>{const profileId=new URLSearchParams(location.search).get('profile');if(profileId)openMemberProfile(profileId).catch(err=>notice(err.message||'Could not restore profile.',true));}).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
+ render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
