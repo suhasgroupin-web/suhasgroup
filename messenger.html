@@ -225,7 +225,9 @@
  function refreshUnreadBadge(){try{const d=frame.contentDocument;if(!d||!unreadBadge)return;const rows=[...d.querySelectorAll('#threads .message-thread')];let count=0;rows.forEach(row=>{const badge=row.querySelector('.message-thread-unread');if(!badge)return;const n=parseInt((badge.textContent||'1').replace(/[^0-9]/g,''),10);count+=Number.isFinite(n)&&n>0?n:1;});unreadBadge.textContent=count>99?'99+':String(count);unreadBadge.dataset.count=String(count);unreadBadge.hidden=count===0;}catch(e){}}
  frame.addEventListener('load',()=>{refreshUnreadBadge();setTimeout(refreshUnreadBadge,500);setTimeout(refreshUnreadBadge,1600);});
  setInterval(refreshUnreadBadge,5000);
- // Header SUHAS logo is the only home shortcut: open SUHAS-MAX social home, never SUHAS GROUP landing page.\n document.getElementById('messenger-back')?.addEventListener('click',()=>{location.href='social.html?tab=feed';});\n const bottomButtons=[...document.querySelectorAll('.messenger-bottom button')];
+ // Header SUHAS logo is the only home shortcut: open SUHAS-MAX social home, never SUHAS GROUP landing page.
+ document.getElementById('messenger-back')?.addEventListener('click',()=>{location.href='social.html?tab=feed';});
+ const bottomButtons=[...document.querySelectorAll('.messenger-bottom button')];
  function setActiveBottom(button){bottomButtons.forEach(x=>{const on=x===button;x.classList.toggle('selected',on);if(on)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});}
  function activateChildTab(tab){try{const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return false;if(typeof w.activateMaxTab==='function'){w.activateMaxTab(tab);return true;}const target=d.querySelector('[data-tab="'+tab+'"]');if(target){target.click();return true;}}catch(e){console.warn('Messenger navigation failed',tab,e);}return false;}
  document.querySelectorAll('.messenger-bottom [data-dest]').forEach(b=>b.addEventListener('click',()=>{if(activateChildTab(b.dataset.dest))setActiveBottom(b);}));
