@@ -8,6 +8,7 @@
     return name || 'index.html';
   }
   var routeEarly=canonicalPageName(routeParts[routeParts.length-1]||'index.html');
+  var isSuhasMaxRoute=['home.html','social.html','messenger.html','suhas-max-ai.html','max-profile.html'].indexOf(routeEarly)!==-1;
   // Public authentication pages live only at the site root.
   var isRootAuthRoute=routeParts.length<=1;
   var publicEarly=['index.html','login.html','signup.html','reset.html'];
@@ -30,7 +31,7 @@
   navGateStyle.textContent='.tabbar,.social-mobile-nav{display:none!important}html.suhas-authenticated .tabbar{display:grid!important}html.suhas-authenticated .social-mobile-nav{display:grid!important}html.suhas-authenticated body.suhas-desktop-mode .tabbar,html.suhas-authenticated body.suhas-desktop-mode .social-mobile-nav{display:none!important}html.suhas-authenticated body:has(#login-form) .tabbar,html.suhas-authenticated body:has(#signup-form) .tabbar{display:none!important}html.suhas-authenticated body:has(#login-form) .social-mobile-nav,html.suhas-authenticated body:has(#signup-form) .social-mobile-nav{display:none!important}';
   (document.head||document.documentElement).appendChild(navGateStyle);
 
-  var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=9';displayScript.defer=true;document.head.appendChild(displayScript);
+  if(!isSuhasMaxRoute){var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=9';displayScript.defer=true;document.head.appendChild(displayScript);}
 
   var cfg = window.SUHAS_CONFIG;
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
