@@ -1240,3 +1240,9 @@ Date: 2026-11-10
 - Notifications continue to use `suhas_notifications`, with a dedicated page, realtime list refresh, unread count badge and read-state refresh.
 - Release metadata bumped to `2026.11.13.3`; service-worker cache fallback bumped to `v122`; `max-profile.html` added to the precache list.
 - Pending before merge/deploy: pass the repository Site quality workflow (inline JavaScript syntax + local-link validation), inspect the PR diff, then merge and verify Cloudflare Pages production version. Pending after deployment: authenticated two-account navigation/profile/Messenger/Reels/notifications tests and Android device scroll/autoplay tests. Do not claim those real-device tests complete until performed.
+
+
+## Additional isolation hardening — 2026-11-13
+- SUHAS-MAX routes no longer load the SUHAS GROUP display/navigation drawer. The shared auth gate now treats MAX as a separate profile boundary: MAX pages check `suhas_public_profiles` only; Group pages check `suhas_member_profiles` only. MAX users are no longer redirected to the Group career-profile setup.
+- Unauthenticated MAX routes now return to the login screen in MAX mode (`login.html?max=1`), which hides Group header/footer/signup/reset links and skips the Group bottom navigation. Successful sign-in returns to the original MAX destination or the MAX profile setup page.
+- The dedicated MAX profile editor no longer loads Group global auth/navigation scripts and stores profile photos in the MAX-only `suhas-max-media` bucket, whose owner-folder upload/update/delete policies were verified.
