@@ -6608,3 +6608,26 @@ html body #profile-viewer.profile-viewer.open #profile-avatar-change svg{
 }
 html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
 </style>
+
+<style id="suhas-avatar-camera-final-override-20261113">
+/* Final authoritative avatar-camera placement: compact 3D icon inside portrait lower-right. */
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
+ position:relative!important;overflow:visible!important;isolation:isolate!important;
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change.profile-owner-avatar-edit:not([hidden]){
+ display:grid!important;place-items:center!important;position:absolute!important;
+ right:5px!important;bottom:5px!important;left:auto!important;top:auto!important;
+ z-index:100!important;width:25px!important;height:25px!important;
+ min-width:25px!important;min-height:25px!important;max-width:25px!important;max-height:25px!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;outline:0!important;
+ opacity:1!important;visibility:visible!important;overflow:visible!important;
+ cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap #profile-avatar-change svg{
+ display:block!important;width:24px!important;height:24px!important;
+ max-width:none!important;max-height:none!important;opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 1px 2px rgba(0,0,0,.42))!important;
+}
+html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
+</style>
