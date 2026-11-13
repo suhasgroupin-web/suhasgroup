@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.13.11",
-  "published_at": "2026-11-13T17:48:00.000Z",
+  "version": "2026.11.13.12",
+  "published_at": "2026-11-13T17:42:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS-MAX software has been updated. Video autoplay and tap-to-pause controls are now active.",
+  "update_message": "Home feed videos now try sound playback when allowed; tap a playing video to enable sound. Browser autoplay restrictions may require a tap.",
   "mandatory": true
 }
