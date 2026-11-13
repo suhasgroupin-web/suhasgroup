@@ -375,3 +375,55 @@ html,body,.messenger-app{background:#fff!important;color:var(--m-text)!important
 @media(prefers-reduced-motion:reduce){
  .messenger-head button,.messenger-shortcuts .shortcut,.messenger-bottom button{transition:none!important}
 }
+
+
+/* SUHAS Messenger navigation — refined dimensional icon system */
+.messenger-bottom{
+ background:linear-gradient(180deg,#ffffff 0%,#f8faff 100%)!important;
+ border-top:1px solid #e4eaf4!important;
+ box-shadow:0 -5px 22px rgba(25,55,105,.09),inset 0 1px 0 #fff!important;
+}
+.messenger-bottom button{
+ position:relative!important;isolation:isolate!important;
+ color:#69778d!important;border:1px solid transparent!important;
+ transition:transform .2s ease,background .2s ease,box-shadow .2s ease!important;
+}
+.messenger-bottom button svg{
+ width:25px!important;height:25px!important;
+ filter:drop-shadow(0 2px 1px rgba(18,38,75,.18))!important;
+ transform:translateY(0)!important;
+}
+.messenger-bottom button[data-dest="messages"] svg{color:#1478ed!important}
+.messenger-bottom button[data-dest="friends"] svg{color:#16a58a!important}
+.messenger-bottom button[data-dest="notifications"] svg{color:#e5a126!important}
+.messenger-bottom button#messenger-menu svg{color:#7458d8!important}
+.messenger-bottom button small{font-weight:750!important;letter-spacing:.12px!important}
+.messenger-bottom button.selected{
+ color:#155fc5!important;
+ background:linear-gradient(145deg,#eaf3ff 0%,#dceaff 100%)!important;
+ border-color:#c9ddfb!important;
+ box-shadow:inset 0 2px 3px rgba(255,255,255,.95),inset 0 -2px 4px rgba(64,116,190,.10),0 3px 9px rgba(40,91,160,.12)!important;
+}
+.messenger-bottom button.selected svg{
+ filter:drop-shadow(0 2px 1px rgba(15,75,155,.24))!important;
+ transform:translateY(-1px)!important;
+}
+.messenger-bottom button:not(.selected):active{
+ background:linear-gradient(145deg,#f2f6fc,#e7edf7)!important;
+ transform:translateY(1px) scale(.96)!important;
+}
+.messenger-bottom .nav-badge{
+ box-shadow:0 2px 5px rgba(20,30,50,.22),0 0 0 2px #fff!important;
+}
+.messenger-bottom button:focus-visible{
+ outline:3px solid rgba(28,111,232,.35)!important;outline-offset:2px!important;
+}
+@media(max-width:600px){
+ .messenger-bottom{padding-left:8px!important;padding-right:8px!important}
+ .messenger-bottom button{border-radius:16px!important}
+ .messenger-bottom button svg{width:26px!important;height:26px!important}
+ .messenger-bottom button small{font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .messenger-bottom button,.messenger-bottom button svg{transition:none!important}
+}
