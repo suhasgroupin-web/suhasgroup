@@ -3349,11 +3349,17 @@ async function loadMarketplace(){
 }
 async function loadVideos(){
  const host=$('videos-list');if(!host)return;
- const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(100);if(r.error)throw r.error;const videoRows=(r.data||[]).filter(x=>x.metadata?.content_format==='video');
- const ids=[...new Set((r.data||[]).map(x=>x.user_id))];let prof=[];
+ const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(100);
+ if(r.error)throw r.error;
+ const videoRows=(r.data||[]).filter(x=>x.metadata?.content_format==='video');
+ const ids=[...new Set(videoRows.map(x=>x.user_id))];let prof=[];
  if(ids.length){const p=await client.from('suhas_public_profiles').select('user_id,full_name,profile_photo_url,email_verified').in('user_id',ids);if(p.error)throw p.error;prof=p.data||[];}
  const byId=Object.fromEntries(prof.map(x=>[x.user_id,x]));
- host.innerHTML=videoRows.map(x=>{const p=byId[x.user_id]||{};return '<article class="post-card"><div class="post-meta"><b>'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+' · '+safe(new Date(x.created_at).toLocaleString())+'</div><video controls playsinline preload="metadata" style="display:block;width:100%;max-height:70vh;background:#000;border-radius:10px;margin-top:10px" src="'+safe(x.media_url)+'"></video><p>'+safe(x.content||'')+'</p><div class="social-actions"><button type="button" class="action" data-post-action="share" data-post-id="'+x.id+'">Share</button><button type="button" class="action" data-post-action="save" data-post-id="'+x.id+'">Save</button></div></article>';}).join('')||'<div class="empty">No videos have been shared yet.</div>';
+ const postIds=videoRows.map(x=>x.id);let likes=[],comments=[];
+ if(postIds.length){const [lr,cr]=await Promise.all([client.from('suhas_post_likes').select('id,post_id,user_id').in('post_id',postIds),client.from('suhas_post_comments').select('id,post_id,user_id,content,created_at').in('post_id',postIds).order('created_at')]);if(lr.error)throw lr.error;if(cr.error)throw cr.error;likes=lr.data||[];comments=cr.data||[];}
+ const commentUsers=[...new Set(comments.map(x=>x.user_id).filter(id=>!byId[id]))];
+ if(commentUsers.length){const cp=await client.from('suhas_public_profiles').select('user_id,full_name').in('user_id',commentUsers);if(cp.error)throw cp.error;(cp.data||[]).forEach(p=>byId[p.user_id]=p);}
+ host.innerHTML=videoRows.map(x=>{const p=byId[x.user_id]||{},pl=likes.filter(l=>l.post_id===x.id),pc=comments.filter(c=>c.post_id===x.id);return '<article class="post-card"><div class="post-meta"><b data-profile-open="'+safe(x.user_id)+'">'+safe(p.full_name||'SUHAS Member')+'</b>'+verifiedBadge(p)+' · '+safe(new Date(x.created_at).toLocaleString())+'</div><video controls playsinline preload="metadata" style="display:block;width:100%;max-height:70vh;background:#000;border-radius:10px;margin-top:10px" src="'+safe(x.media_url)+'"></video><p>'+safe(x.content||'')+'</p><div class="social-actions"><button type="button" class="action" data-like="'+x.id+'" aria-pressed="'+(pl.some(l=>l.user_id===me)?'true':'false')+'">'+(pl.some(l=>l.user_id===me)?'Liked':'Like')+' · '+pl.length+'</button><button type="button" class="action" data-focus-comment="'+x.id+'">Comment · '+pc.length+'</button><button type="button" class="action" data-post-action="share" data-post-id="'+x.id+'">Share</button><button type="button" class="action" data-post-action="save" data-post-id="'+x.id+'">Save</button></div><details class="suhas-comments-panel" id="suhas-comments-'+safe(x.id)+'"><div class="comment-list">'+pc.map(c=>'<p class="post-meta"><b class="profile-comment-name" data-profile-open="'+safe(c.user_id)+'">'+safe(byId[c.user_id]?.full_name||'Member')+':</b> '+safe(c.content)+'</p>').join('')+'</div><form class="compose" data-comment-form="'+x.id+'"><input maxlength="2000" placeholder="Write a comment…" required><button class="action" type="submit">Comment</button></form></details></article>';}).join('')||'<div class="empty">No regular videos have been shared yet.</div>';
 }
 async function loadReels(){
  const r=await client.from('suhas_posts').select('id,user_id,content,created_at,media_url,media_type,metadata').in('media_type',['video/mp4','video/webm']).order('created_at',{ascending:false}).limit(100);if(r.error)throw r.error;const reelRows=(r.data||[]).filter(x=>!x.metadata?.content_format||x.metadata.content_format==='reel');
@@ -3710,6 +3716,7 @@ $('post-form').addEventListener('submit',async e=>{
  try{
   for(const file of files)uploaded.push(await uploadMedia(file));
   const primary=uploaded[0]||null,metadata={...(window.suhasPostMetadata||{})};
+  if(videos.length)metadata.content_format='video';
   delete metadata.media_gallery;
   if(uploaded.length>1)metadata.media_gallery=uploaded.map(item=>({url:item.url,path:item.path,type:item.type}));
   const r=await client.from('suhas_posts').insert({
@@ -3987,7 +3994,7 @@ document.querySelectorAll('.social-mobile-nav button').forEach(b=>{b.type='butto
  render(current).catch(err=>notice(err.message||'Could not restore SUHAS-MAX page.',true));
 })();
 
-document.getElementById('reels-close')?.addEventListener('click',()=>activateMaxTab('feed').catch(e=>notice(e.message||'Could not close Reels.',true)));
+document.getElementById('reels-close')?.addEventListener('click',()=>document.querySelector('.social-mobile-nav button[data-tab="feed"]')?.click());
 window.addEventListener('message',e=>{if(e.origin!==location.origin)return;const editor=document.getElementById('suhas-profile-editor');if(e.data?.type==='suhas-max-profile-cancel'){if(editor)editor.hidden=true;return;}if(e.data?.type!=='suhas-max-profile-updated')return;if(editor)editor.hidden=true;openMemberProfile(me).then(()=>notice('SUHAS-MAX profile updated.')).catch(err=>notice(err.message||'Profile refreshed with an error.',true));});
 window.addEventListener('error',e=>{if(e.message)notice('App error: '+e.message,true);});
 // Clear a previous section error as soon as the user retries an action.
