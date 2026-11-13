@@ -7,7 +7,7 @@ Project: existing SUHAS-MAX application (preserve; no replacement)
 - Reviewed repository root, permanent development rules, latest development checkpoint, social.html structure, Supabase public table inventory, migration history, selected RLS policies, and Vercel production deployment history.
 - No user data, database records, storage objects, authentication settings, or production configuration were modified during this audit.
 - Existing visual design is the baseline. Preserve it where it already meets the requested Facebook-inspired behavior; improve only inconsistent or incomplete areas.
-- Vercel remains enabled. Do not switch hosting or remove any existing modules.
+- Hosting policy superseded on 2026-11-13: Cloudflare Pages is the production target; Vercel is retired for new deployments. Existing historical deployment records are audit evidence only.
 
 ## Repository inventory
 - Root entries: 55 (directories and files).
