@@ -91,6 +91,21 @@
             "assets/script.js",
             "Supabase JS client"
           ]
+        },
+        {
+          "id": "team-leadership",
+          "legacyEntry": "about.html#leadership",
+          "status": "module-entry-added-legacy-anchor-retained",
+          "moduleEntry": "apps/suhas-group/team/team.html",
+          "moduleReadme": "apps/suhas-group/team/README.md",
+          "compatibility": "Existing /about.html#leadership section remains unchanged; dedicated Team page is additive.",
+          "sharedDependencies": [
+            "assets/styles.css",
+            "assets/config.js",
+            "assets/auth.js",
+            "assets/script.js",
+            "assets/owner.jpg"
+          ]
         }
       ]
     },
