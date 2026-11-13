@@ -1189,3 +1189,12 @@ Date: 2026-11-10
 - Prepared a Messenger-only cleanup removing the redundant registrations while retaining one home-logo handler, one Menu handler (including active-tab state), and one Escape handler that closes Menu, Settings and the popover.
 - No social.html, Supabase schema/data, auth/session, shared GROUP/MAX routes or Vercel configuration changed.
 - Static source checks are pending; browser/mobile and authenticated inbox verification remain required before merge/deployment.
+
+
+## SUHAS-MAX Settings visual refinement — 2026-11-13
+- Audited the existing Settings & Privacy panel and confirmed the existing controls, cloud preference persistence, account privacy settings and password update flow are already implemented in the legacy social entry.
+- Added an isolated presentation-only stylesheet at `apps/suhas-max/settings/settings.css` and registered it from `social.html`; grouped settings now have clearer card hierarchy, responsive spacing, readable labels, accessible switch styling, focus states, and light/dark theme support.
+- Existing control IDs, search filtering, Supabase table writes, RLS dependencies, password handler, routes, and user data contracts were not changed. No database migration or user data mutation was made.
+- Updated `MODULE_MANIFEST.json` to record the Settings presentation module.
+- Static source checks: stylesheet link is registered once; all referenced setting control IDs and handlers remain in the existing page; responsive and reduced-motion CSS rules are present; JSON manifest parses.
+- Pending: browser rendering at 360px/412px/desktop, real signed-in save/reload test, and keyboard/screen-reader interaction. No deployment performed; do not mark live until Cloudflare Pages production is checked.
