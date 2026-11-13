@@ -83,9 +83,9 @@ document.addEventListener('DOMContentLoaded',function(){if(new URLSearchParams(l
 <script src="assets/auth.js?v=20261111-independent-max"></script>
 <script src="assets/script.js"></script>
 <script>
+var maxLoginMode=new URLSearchParams(location.search).get('max')==='1';
+function maxDestination(){var next=window.safeNext(new URLSearchParams(location.search).get('next'));return next==='main-menu.html'?'/home.html':next;}
 (async function(){
- var maxLoginMode=new URLSearchParams(location.search).get('max')==='1';
- function maxDestination(){var next=window.safeNext(new URLSearchParams(location.search).get('next'));return next==='main-menu.html'?'/home.html':next;}
  var sessionResult=await sb.auth.getSession();
  var session=sessionResult.data&&sessionResult.data.session;
  if(!session||maxLoginMode)return;
