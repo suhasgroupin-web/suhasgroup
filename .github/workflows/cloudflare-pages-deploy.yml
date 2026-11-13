@@ -18,9 +18,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Deploy static SUHAS-MAX site to Cloudflare Pages
+      - name: Read Cloudflare Pages production branch
+        id: pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          response=$(curl --fail --silent --show-error \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/suhasgroup")
+          branch=$(printf '%s' "$response" | jq -er '.result.production_branch')
+          echo "Cloudflare Pages production branch: $branch"
+          echo "production_branch=$branch" >> "$GITHUB_OUTPUT"
+      - name: Deploy static SUHAS-MAX site to Cloudflare Pages production
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=suhasgroup --branch=main
+          command: pages deploy . --project-name=suhasgroup --branch=${{ steps.pages.outputs.production_branch }}
