@@ -22,8 +22,7 @@ jobs:
           python3 - <<'PY'
           from html.parser import HTMLParser
           from pathlib import Path
-          from urllib.parse import urlsplit
-          import re
+          from urllib.parse import urljoin, urlsplit
           import subprocess
           import sys
 
@@ -38,9 +37,12 @@ jobs:
                   self.in_script = False
                   self.script_type = ""
                   self.script_src = ""
+                  self.base_href = ""
 
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
+                  if tag == "base" and attrs.get("href"):
+                      self.base_href = attrs["href"]
                   for attr in ("href", "src", "action"):
                       value = attrs.get(attr)
                       if value:
@@ -70,16 +72,23 @@ jobs:
                   errors.append(f"{page}: cannot parse HTML: {exc}")
                   continue
 
+              # Resolve links the same way browsers do: honor <base href>, then
+              # resolve against the document URL. This supports standalone app
+              # modules stored in nested folders but intentionally rooted at /.
+              document_url = "/" + page.relative_to(root).as_posix()
+              base_url = urljoin(document_url, parser.base_href) if parser.base_href else document_url
+
               for tag, attr, raw in parser.refs:
                   value = raw.strip()
                   if not value or value.startswith(("#", "//", "data:", "mailto:", "tel:", "javascript:")):
                       continue
-                  parsed = urlsplit(value)
+                  resolved = urljoin(base_url, value)
+                  parsed = urlsplit(resolved)
                   if parsed.scheme or parsed.netloc:
                       continue
-                  target = (root / parsed.path.lstrip("/")).resolve() if parsed.path.startswith("/") else (page.parent / parsed.path).resolve()
                   if not parsed.path:
                       continue
+                  target = (root / parsed.path.lstrip("/")).resolve()
                   if target.is_dir():
                       target = target / "index.html"
                   if not target.exists():
