@@ -3011,7 +3011,7 @@ async function openMemberProfile(id){
  const modal=$('profile-viewer');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
  $('profile-viewer-name').textContent='Loading profile…';$('profile-viewer-sub').textContent='';$('profile-viewer-bio').textContent='';$('profile-viewer-info').innerHTML='';$('profile-viewer-stats').innerHTML='';$('profile-viewer-actions').innerHTML='';
  const r=await client.from('suhas_public_profiles').select('user_id,full_name,company,position,location,skills,bio,school,college,university,major,education_level,graduation_year,study_status,linkedin_url,profile_photo_url,cover_photo_url,email_verified,profile_complete').eq('user_id',id).maybeSingle();
- if(r.error)throw r.error;let profileData=r.data;if(!profileData){const fallback=await client.from('suhas_member_profiles').select('*').eq('user_id',id).maybeSingle();if(fallback.error)throw fallback.error;profileData=fallback.data;}if(!profileData){$('profile-viewer-name').textContent='Profile unavailable';$('profile-viewer-sub').textContent='This member profile is not available.';return;}
+ if(r.error)throw r.error;const profileData=r.data;if(!profileData){$('profile-viewer-name').textContent='SUHAS-MAX profile unavailable';$('profile-viewer-sub').textContent='This SUHAS-MAX profile is not available. SUHAS GROUP profile data is kept separate.';return;}
  const p=profileData;
  $('profile-viewer-name').innerHTML=safe(p.full_name||'SUHAS Member')+verifiedBadge(p);
  $('profile-viewer-avatar').src=p.profile_photo_url||'assets/logo.png';
@@ -3110,13 +3110,11 @@ async function saveOwnProfileImage(){
   const url=client.storage.from('member-avatars').getPublicUrl(path).data.publicUrl;
   const field=kind==='cover'?'cover_photo_url':'profile_photo_url';
   const payload={user_id:me,[field]:url,updated_at:new Date().toISOString()};
-  const [privateSave,publicSave]=await Promise.all([
-   client.from('suhas_member_profiles').upsert(payload,{onConflict:'user_id'}).select('user_id').single(),
-   client.from('suhas_public_profiles').upsert(payload,{onConflict:'user_id'}).select('user_id').single()
-  ]);
-  if(privateSave.error)throw privateSave.error;
+  // SUHAS-MAX profile media belongs only to the SUHAS-MAX public profile.
+  // Never mirror these changes into the independent SUHAS GROUP member profile.
+  const publicSave=await client.from('suhas_public_profiles').upsert(payload,{onConflict:'user_id'}).select('user_id').single();
   if(publicSave.error)throw publicSave.error;
-  if(!privateSave.data||!publicSave.data)throw new Error('The photo was uploaded, but the profile record was not confirmed. Please try again.');
+  if(!publicSave.data)throw new Error('The photo was uploaded, but the SUHAS-MAX profile update was not confirmed. Please try again.');
   const freshUrl=url+(url.includes('?')?'&':'?')+'v='+Date.now();
   if(kind==='cover')$('profile-viewer-cover').style.setProperty('background-image','url('+JSON.stringify(freshUrl)+')','important');
   else{
@@ -4056,7 +4054,7 @@ document.addEventListener('click',async e=>{
 });
 const failedLoads=homeResults.filter(x=>x.status==='rejected'||(x.status==='fulfilled'&&!x.value.ok));
 if(failedLoads.length)console.warn('SUHAS-MAX home sections failed:',failedLoads);
-const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile);
+const requestedProfile=new URLSearchParams(location.search).get('profile');if(requestedProfile)await openMemberProfile(requestedProfile==='me'?me:requestedProfile);
 let arcadeKind='bike',arcadeFrame=0,arcadeRunning=false,arcadeRAF=0,arcadeScore=0,arcadeBest=0,arcadeState={},arcadeKeys={};
 const arcadeNames={bike:'🏍️ Bike Ride',rickshaw:'🛺 Rickshaw Ride',hill:'⛰️ Hill Climb',city:'🚗 City Car Drive',mountain:'🚙 Mountain SUV',highway:'🏎️ Highway Racer'};
 function arcadeStoreKey(){return 'suhas-max-arcade-best-v1';}
