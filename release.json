@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.13.8",
-  "published_at": "2026-11-13T17:24:00.000Z",
+  "version": "2026.11.13.9",
+  "published_at": "2026-11-13T18:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Software Updated — the latest SUHAS-MAX refresh and display fixes are ready. Tap Install to apply the update and reopen the latest version.",
-  "mandatory": false
+  "update_message": "SUHAS-MAX refresh stability update. Latest CSS and JavaScript are now fetched without stale cached versions.",
+  "mandatory": true
 }
