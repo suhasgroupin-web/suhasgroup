@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.13.5",
-  "published_at": "2026-11-13T17:30:00.000Z",
+  "version": "2026.11.13.6",
+  "published_at": "2026-11-13T14:52:00.000Z",
   "notify_after_days": 0,
-  "update_message": "A new SUHAS-MAX software update is ready. Tap Install to refresh the app and use the latest features and improvements.",
+  "update_message": "Software Updated — a new SUHAS-MAX update is ready. Tap Install to apply the update and reopen the latest version.",
   "mandatory": false
 }
