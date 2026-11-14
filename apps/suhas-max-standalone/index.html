@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071b3b"><meta name="description" content="SUHAS MAX — independent social platform">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>SUHAS MAX · Sign in</title>
+<style>
+:root{color-scheme:dark;--bg:#06152f;--panel:#0d2850;--line:#294c79;--gold:#ffd34f;--muted:#a9bdd8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f5f8ff;background:radial-gradient(ellipse at 50% 0,#173e70 0,#091d3d 42%,#041126 100%);display:grid;place-items:center;padding:24px}
+main{width:min(100%,440px)}.brand{text-align:center;margin:8px 0 26px}.mark{width:76px;height:76px;margin:auto;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#a8c2e8 55%,#496c9d);box-shadow:0 12px 35px #0008;color:#08234a;font-size:39px;font-weight:900;text-shadow:0 1px #fff}.brand h1{letter-spacing:.16em;font-size:25px;margin:14px 0 4px}.brand p{color:#c1d3ec;margin:0;font-size:13px;letter-spacing:.08em}
+.card{background:linear-gradient(155deg,#12335eeb,#091d39f5);border:1px solid #52749a66;border-radius:25px;padding:26px;box-shadow:0 24px 70px #0007;backdrop-filter:blur(16px)}.tabs{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:#06152f;margin-bottom:22px}.tabs button{border:0;border-radius:11px;padding:12px;color:#b9cbe2;background:transparent;font-weight:700}.tabs button.active{background:linear-gradient(135deg,#ffe987,#e7a923);color:#142642}
+h2{font-size:22px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 22px}label{display:block;font-size:13px;color:#d9e5f5;margin:14px 0 7px}input{width:100%;border:1px solid #42648c;background:#061a36;color:white;border-radius:12px;padding:14px;font:inherit;outline:none}input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ffd34f20}.primary{width:100%;border:0;border-radius:13px;padding:14px;margin-top:20px;background:linear-gradient(135deg,#ffe77c,#e5a51d);color:#152846;font-size:15px;font-weight:850}.primary:disabled{opacity:.6}.msg{min-height:22px;margin:14px 0 0;color:#d9e5f5;font-size:13px;line-height:1.5}.msg.error{color:#ffaaa8}.msg.ok{color:#9ff0c4}.fine{margin:20px 0 0;text-align:center;color:#93abc9;font-size:11px;line-height:1.6}.hidden{display:none!important}.userbox{padding:18px;border:1px solid var(--line);border-radius:15px;background:#071a34}.userbox strong{display:block;font-size:18px;margin-bottom:8px;overflow-wrap:anywhere}.secondary{border:1px solid #6b87a9;background:transparent;color:#eaf2ff;padding:11px 16px;border-radius:11px;margin-top:14px;width:100%}
+</style></head>
+<body><main>
+<div class="brand"><div class="mark">M</div><h1>SUHAS MAX</h1><p>YOUR WORLD · YOUR COMMUNITY</p></div>
+<section class="card">
+<div id="auth">
+<div class="tabs"><button id="loginTab" class="active" type="button">LOGIN</button><button id="signupTab" type="button">CREATE ACCOUNT</button></div>
+<div id="loginPanel"><h2>Welcome back</h2><p class="sub">Sign in to your independent SUHAS MAX account.</p>
+<form id="loginForm"><label for="loginEmail">Email address</label><input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="Your password"><button class="primary" type="submit">LOGIN TO SUHAS MAX</button></form></div>
+<div id="signupPanel" class="hidden"><h2>Create your account</h2><p class="sub">Your SUHAS MAX account is separate from SUHAS GROUP.</p>
+<form id="signupForm"><label for="fullName">Your name</label><input id="fullName" autocomplete="name" required maxlength="70" placeholder="Full name"><label for="signupEmail">Email address</label><input id="signupEmail" type="email" autocomplete="email" required placeholder="you@example.com"><label for="signupPassword">Create password</label><input id="signupPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters"><button class="primary" type="submit">CREATE SUHAS MAX ACCOUNT</button></form></div>
+<p id="message" class="msg" role="status" aria-live="polite"></p></div>
+<div id="signedIn" class="hidden"><h2>You're signed in</h2><p class="sub">This session belongs to SUHAS MAX.</p><div class="userbox"><strong id="userName">SUHAS MAX member</strong><span id="userEmail" class="sub"></span></div><button id="logout" class="secondary" type="button">Sign out</button></div>
+</section><p class="fine">Independent SUHAS MAX authentication and profile storage.<br>SUHAS GROUP account is not used here.</p>
+</main>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL='https://pokxiylebwzoxunccuwm.supabase.co';
+const SUPABASE_KEY='sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850';
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:'suhas-max-auth-v1',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id), msg=$('message');
+function say(text,type=''){msg.textContent=text;msg.className='msg '+type}
+function tab(which){const login=which==='login';$('loginPanel').classList.toggle('hidden',!login);$('signupPanel').classList.toggle('hidden',login);$('loginTab').classList.toggle('active',login);$('signupTab').classList.toggle('active',!login);say('')}
+$('loginTab').onclick=()=>tab('login');$('signupTab').onclick=()=>tab('signup');
+async function ensureProfile(user){const display_name=user.user_metadata?.display_name||user.email?.split('@')[0]||'SUHAS MAX member';const {error}=await supabase.from('max_profiles').upsert({user_id:user.id,display_name},{onConflict:'user_id'});if(error)console.error('Profile initialization:',error.message);$('userName').textContent=display_name;$('userEmail').textContent=user.email||''}
+function showSession(user){$('auth').classList.toggle('hidden',!!user);$('signedIn').classList.toggle('hidden',!user);if(user)ensureProfile(user)}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;say('Signing in…');const {data,error}=await supabase.auth.signInWithPassword({email:$('loginEmail').value.trim(),password:$('loginPassword').value});b.disabled=false;if(error){say(error.message,'error');return}showSession(data.user);say('Signed in successfully.','ok')});
+$('signupForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;say('Creating your account…');const {data,error}=await supabase.auth.signUp({email:$('signupEmail').value.trim(),password:$('signupPassword').value,options:{data:{display_name:$('fullName').value.trim()}}});b.disabled=false;if(error){say(error.message,'error');return}if(data.session){await ensureProfile(data.user);showSession(data.user);say('Your SUHAS MAX account is ready.','ok')}else{say('Account request created. Check your email to confirm, then log in.','ok')}});
+$('logout').onclick=async()=>{await supabase.auth.signOut();showSession(null);tab('login');say('You have signed out.')};
+const {data:{session}}=await supabase.auth.getSession();showSession(session?.user||null);
+supabase.auth.onAuthStateChange((_event,session)=>showSession(session?.user||null));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(console.error);
+</script></body></html>
