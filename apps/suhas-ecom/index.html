@@ -71,7 +71,7 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 <header class="nav"><div class="navin">
 <div class="logo"><img src="logo.png" alt="Suhas logo" width="38" height="38">SUHAS <span>E-COM</span></div>
 <form class="search" id="searchForm" role="search"><input id="search" type="search" placeholder="Search products, brands and sellers..." aria-label="Search products"><button type="submit">Search</button></form>
-<button class="navbtn" id="sellBtn">Sell on Suhas</button>
+<a class="navbtn" href="manage.html">Admin / Seller Centre</a>
 <button class="navbtn gold" id="cartBtn">Cart<span class="badge" id="cartCount">0</span></button>
 </div></header>
 
@@ -79,7 +79,7 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 <div><div class="eyebrow">BANGLADESH'S GROWING MARKETPLACE</div>
 <h1>Everything you need.<br>Trusted sellers. One place.</h1>
 <p>Shop thousands of products from verified local sellers. Order as a guest in under a minute and pay on delivery.</p>
-<a class="cta" href="#catalog">Start shopping</a><button class="cta ghost" id="sellBtn2">Become a seller</button></div>
+<a class="cta" href="#catalog">Start shopping</a><a class="cta ghost" href="manage.html">Become a seller</a></div>
 <div class="stats"><div class="stat"><b>0%</b><span>Seller joining fee</span></div><div class="stat"><b>COD</b><span>Pay when you receive</span></div><div class="stat"><b>64</b><span>Districts, one platform</span></div><div class="stat"><b>24/7</b><span>Browse &amp; order anytime</span></div></div>
 </div></section>
 
@@ -114,6 +114,7 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 <label for="cName">Full name</label><input id="cName" name="name" required minlength="2" maxlength="80" autocomplete="name">
 <label for="cPhone">Mobile number</label><input id="cPhone" name="phone" required inputmode="tel" pattern="[0-9+ ]{6,20}" autocomplete="tel" placeholder="01XXXXXXXXX">
 <label for="cAddress">Delivery address</label><textarea id="cAddress" name="address" required minlength="5" maxlength="300" autocomplete="street-address"></textarea>
+<label for="cEmail">Email address (order confirmation) *</label><input id="cEmail" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com">
 <label>Payment method</label>
 <div class="pay"><label><input type="radio" name="pay" value="cod" checked><span>Cash on Delivery</span></label><label><input type="radio" name="pay" value="bkash"><span>bKash</span></label><label><input type="radio" name="pay" value="nagad"><span>Nagad</span></label></div>
 <div id="payBox" class="hidden"><div class="notice">Send the total amount to the merchant number shown after you place the order, then enter your transaction ID below.</div>
@@ -215,13 +216,16 @@ async function placeOrder(e){
       p_name:f.elements.name.value.trim(),
       p_phone:f.elements.phone.value.trim(),
       p_address:f.elements.address.value.trim(),
+      p_email:f.elements.email.value.trim().toLowerCase(),
       p_pay:pay,
       p_ref:ref,
       p_items:t.items.map(x=>({id:x.p.id,qty:x.qty}))
     });
     if(error)throw error;
     if(!data||!data.order_code||data.total==null)throw new Error('The store did not confirm your order. Please try again.');
-    const customer=f.elements.name.value.trim();
+    const customer=f.elements.name.value.trim(),customerEmail=f.elements.email.value.trim();
+    let emailNotice='Order confirmed. Your confirmation email is being processed.';
+    try{const mail=await fetch('/api/ecom-order-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:data.email_token})});const mailData=await mail.json().catch(()=>({}));if(mail.ok&&mailData.ok)emailNotice='Confirmation email sent to '+esc(customerEmail)+'.';else emailNotice='Order confirmed, but the email could not be sent yet. Please contact SUHAS E-COM support.'}catch(_){emailNotice='Order confirmed, but email service is temporarily unavailable. Please contact SUHAS E-COM support.'}
     cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
     $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice">Your order has been saved to the live store database and routed to the relevant seller. SUHAS MAX will contact you to confirm delivery.</div>';
     close('checkoutModal');open('doneModal');
@@ -256,7 +260,7 @@ document.addEventListener('click',e=>{
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
 $('cartBtn').onclick=()=>{renderCart();open('cartModal')};
 $('toCheckout').onclick=()=>{$('coSummary').innerHTML=totalsHtml(totals());close('cartModal');open('checkoutModal')};
-['sellBtn','sellBtn2','sellBtn3'].forEach(id=>$(id).onclick=()=>open('sellModal'));
+
 $('searchForm').addEventListener('submit',e=>{e.preventDefault();query=$('search').value.trim().toLowerCase();renderGrid();$('catalog').scrollIntoView()});
 $('search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderGrid()});
 $('sort').onchange=e=>{sortBy=e.target.value;renderGrid()};
