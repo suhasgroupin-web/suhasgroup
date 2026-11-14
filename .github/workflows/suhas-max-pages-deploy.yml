@@ -34,8 +34,13 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
-          if ! wrangler pages project list --json | jq -e '.[] | select(.name == "suhasmax")' >/dev/null; then
-            wrangler pages project create suhasmax --production-branch suhas-max/standalone-product-20261114
+          # Create only when missing; tolerate "already exists" (code 8000002).
+          if ! output=$(wrangler pages project create suhasmax --production-branch suhas-max/standalone-product-20261114 2>&1); then
+            echo "$output"
+            echo "$output" | grep -q "already exists" || exit 1
+            echo "Pages project suhasmax already exists - continuing."
+          else
+            echo "$output"
           fi
       - name: Deploy only the standalone SUHAS MAX app
         env:
