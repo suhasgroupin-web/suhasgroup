@@ -159,7 +159,7 @@ const DEMO=[
 {id:'d11',name:'Women Printed Cotton Kurti',category:'Fashion',price_bdt:1250,compare_at_bdt:1700,stock:28,icon:'👗',shop:'Urban Thread'},
 {id:'d12',name:'Wooden Educational Puzzle',category:'Kids & Books',price_bdt:430,compare_at_bdt:null,stock:45,icon:'🧩',shop:'Little Minds'}
 ];
-let products=[],demoMode=false,cat='All',query='',sortBy='new',cart=loadCart();
+let products=[],catalogError='',cat='All',query='',sortBy='new',cart=loadCart();
 function loadCart(){try{const v=JSON.parse(localStorage.getItem(CART_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
 function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}catch(e){}}
 const tint=p=>TINTS[(String(p.id).split('').reduce((a,c)=>a+c.charCodeAt(0),0))%TINTS.length];
@@ -167,10 +167,10 @@ const disc=p=>p.compare_at_bdt&&p.compare_at_bdt>p.price_bdt?Math.round(100-p.pr
 function picHtml(p){return p.image_url?'<img src="'+esc(p.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">':esc(p.icon||'🛍️')}
 async function loadProducts(){
   try{
-    const {data,error}=await db.from('ecom_products').select('*, ecom_vendors(shop_name)').eq('is_active',true).order('created_at',{ascending:false});
-    if(error||!data||!data.length)throw error||new Error('empty');
-    products=data.map(p=>({...p,shop:p.ecom_vendors?.shop_name||'Suhas E-Com'}));demoMode=false;
-  }catch(e){products=DEMO.slice();demoMode=true}
+    const {data,error}=await db.from('ecom_products').select('*').eq('is_active',true).order('created_at',{ascending:false});
+    if(error)throw error;
+    products=(data||[]).map(p=>({...p,shop:'Verified seller'}));catalogError='';
+  }catch(e){products=[];catalogError=e?.message||'Store database is temporarily unavailable.'}
   renderChips();renderGrid();
 }
 function renderChips(){
@@ -183,7 +183,7 @@ function renderGrid(){
   if(sortBy==='high')list.sort((a,b)=>b.price_bdt-a.price_bdt);
   if(sortBy==='deal')list.sort((a,b)=>disc(b)-disc(a));
   $('listTitle').textContent=cat==='All'?'All products':cat;
-  $('grid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="pic" style="background:'+tint(p)+'" data-view="'+esc(p.id)+'">'+(disc(p)?'<span class="off">-'+disc(p)+'%</span>':'')+picHtml(p)+'</div><div class="body"><div class="name" data-view="'+esc(p.id)+'">'+esc(p.name)+'</div><div class="shop">Sold by '+esc(p.shop)+'</div><div class="price">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><button class="add" data-add="'+esc(p.id)+'"'+(p.stock<1?' disabled':'')+'>'+(p.stock<1?'Out of stock':'Add to cart')+'</button></div></article>').join(''):'<div class="empty">No products found. Try another search or category.</div>';
+  $('grid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="pic" style="background:'+tint(p)+'" data-view="'+esc(p.id)+'">'+(disc(p)?'<span class="off">-'+disc(p)+'%</span>':'')+picHtml(p)+'</div><div class="body"><div class="name" data-view="'+esc(p.id)+'">'+esc(p.name)+'</div><div class="shop">Sold by '+esc(p.shop)+'</div><div class="price">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><button class="add" data-add="'+esc(p.id)+'"'+(p.stock<1?' disabled':'')+'>'+(p.stock<1?'Out of stock':'Add to cart')+'</button></div></article>').join(''):'<div class="empty">'+(catalogError?'Store unavailable: '+esc(catalogError):'No products are listed yet. Seller products will appear here once approved.')+'</div>';
 }
 function find(id){return products.find(p=>String(p.id)===String(id))}
 function addToCart(id){
@@ -218,21 +218,32 @@ function viewProduct(id){
   $('pmBody').innerHTML='<div class="pic" style="background:'+tint(p)+';height:200px;border-radius:12px;font-size:80px;cursor:default">'+picHtml(p)+'</div><p class="shop" style="margin:12px 0 4px">Sold by <b>'+esc(p.shop)+'</b> · '+esc(p.category)+'</p><div class="price" style="font-size:24px">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><p>'+esc(p.description||'Quality product from a verified Suhas E-Com seller.')+'</p><p class="muted">'+(p.stock>0?p.stock+' in stock':'Out of stock')+'</p><button class="primary" data-add="'+esc(p.id)+'" data-closeafter="1"'+(p.stock<1?' disabled':'')+'>Add to cart</button>';
   open('productModal');
 }
-function orderCode(){const a=new Uint32Array(1);crypto.getRandomValues(a);return 'SE-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+(a[0]%90000+10000)}
 async function placeOrder(e){
   e.preventDefault();$('coErr').textContent='';
   const f=e.currentTarget,t=totals();if(!t.items.length){$('coErr').textContent='Your cart is empty.';return}
   const pay=f.elements.pay.value,ref=f.elements.ref.value.trim();
   if(pay!=='cod'&&ref.length<4){$('coErr').textContent='Please enter your payment transaction ID.';return}
-  const row={order_code:orderCode(),customer_name:f.elements.name.value.trim(),phone:f.elements.phone.value.trim(),address:f.elements.address.value.trim(),payment_method:pay,payment_ref:pay==='cod'?null:ref,items:t.items.map(x=>({id:x.p.id,name:x.p.name,shop:x.p.shop,price:x.p.price_bdt,qty:x.qty})),subtotal_bdt:t.sub,delivery_bdt:t.ship,total_bdt:t.total};
   $('placeBtn').disabled=true;$('placeBtn').textContent='Placing order...';
-  let saved=false;
-  if(!demoMode){const {error}=await db.from('ecom_orders').insert(row);if(error){$('coErr').textContent='Could not place the order: '+error.message;$('placeBtn').disabled=false;$('placeBtn').textContent='Place order';return}saved=true}
-  else{try{const k='suhas-ecom-demo-orders';const arr=JSON.parse(localStorage.getItem(k)||'[]');arr.push({...row,created_at:new Date().toISOString()});localStorage.setItem(k,JSON.stringify(arr))}catch(x){}}
-  cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
-  $('placeBtn').disabled=false;$('placeBtn').textContent='Place order';
-  $('doneBody').innerHTML='<p>Thank you, <b>'+esc(row.customer_name)+'</b>! Your order number is <b>'+esc(row.order_code)+'</b>.</p><p>Total: <b>'+money(row.total_bdt)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p>'+(saved?'<div class="notice">Our team will call you on '+esc(row.phone)+' to confirm delivery.</div>':'<div class="notice warn"><b>Demo mode:</b> the live store database is not connected yet, so this order was saved on this device only and was not sent to a seller.</div>');
-  close('checkoutModal');open('doneModal');
+  try{
+    const {data,error}=await db.rpc('ecom_place_order',{
+      p_name:f.elements.name.value.trim(),
+      p_phone:f.elements.phone.value.trim(),
+      p_address:f.elements.address.value.trim(),
+      p_pay:pay,
+      p_ref:ref,
+      p_items:t.items.map(x=>({id:x.p.id,qty:x.qty}))
+    });
+    if(error)throw error;
+    if(!data||!data.order_code||data.total==null)throw new Error('The store did not confirm your order. Please try again.');
+    const customer=f.elements.name.value.trim();
+    cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
+    $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice">Your order has been saved to the live store database and routed to the relevant seller. SUHAS MAX will contact you to confirm delivery.</div>';
+    close('checkoutModal');open('doneModal');
+  }catch(error){
+    $('coErr').textContent='Order was not placed: '+(error?.message||'Store connection error. Please try again.');
+  }finally{
+    $('placeBtn').disabled=false;$('placeBtn').textContent='Place order';
+  }
 }
 async function submitSeller(e){
   e.preventDefault();$('sellErr').textContent='';const f=e.currentTarget.elements;
