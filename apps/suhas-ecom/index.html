@@ -98,7 +98,7 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 <div class="grid" id="grid"></div>
 
 <section class="seller"><div><h2>Start selling on Suhas E-Com</h2><p>Open your shop for free, list your products and reach customers across Bangladesh. We review every application within 48 hours.</p></div>
-<div><button class="cta" id="sellBtn3" style="width:100%">Apply as a seller</button></div></section>
+<div><a class="cta" href="manage.html" style="width:100%">Open Seller Centre</a></div></section>
 </main>
 <footer class="footer">© <span id="year"></span> Suhas E-Com · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · <a href="../../privacy-policy.html">Privacy Policy</a></footer>
 
@@ -227,7 +227,7 @@ async function placeOrder(e){
     let emailNotice='Order confirmed. Your confirmation email is being processed.';
     try{const mail=await fetch('/api/ecom-order-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:data.email_token})});const mailData=await mail.json().catch(()=>({}));if(mail.ok&&mailData.ok)emailNotice='Confirmation email sent to '+esc(customerEmail)+'.';else emailNotice='Order confirmed, but the email could not be sent yet. Please contact SUHAS E-COM support.'}catch(_){emailNotice='Order confirmed, but email service is temporarily unavailable. Please contact SUHAS E-COM support.'}
     cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
-    $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice">Your order has been saved to the live store database and routed to the relevant seller. SUHAS MAX will contact you to confirm delivery.</div>';
+    $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice">Your order is confirmed in the live store database. '+emailNotice+'</div>';
     close('checkoutModal');open('doneModal');
   }catch(error){
     $('coErr').textContent='Order was not placed: '+(error?.message||'Store connection error. Please try again.');
