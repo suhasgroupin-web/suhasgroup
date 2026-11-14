@@ -25,3 +25,11 @@ Standalone public storefront for SUHAS MAX. This app is separate from SUHAS AI a
 
 ## Deployment
 Deploy this directory as a separate Cloudflare Pages project with no build command and output directory set to this directory. Use a free `*.pages.dev` hostname. Do not deploy to the existing SUHAS GROUP Pages project. A separate Cloudflare Pages project/account authorization is required before a live URL can be claimed.
+
+## Seller accounts
+- Sellers can create an account from the **Seller Centre** button using email and password.
+- New shops are created with **pending** status and must be approved by the SUHAS MAX administrator.
+- Approved sellers can sign in to their seller dashboard and submit product listings.
+- The admin dashboard includes a **Sellers** tab to approve, reject, or suspend seller accounts.
+- Seller approval status is protected by a database trigger; sellers cannot approve themselves.
+- Seller profile and product access is controlled by Supabase Auth and row-level security.
