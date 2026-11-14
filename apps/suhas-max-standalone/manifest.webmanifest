@@ -1,0 +1,12 @@
+{
+  "id": "/",
+  "name": "SUHAS MAX",
+  "short_name": "SUHAS MAX",
+  "description": "Independent SUHAS MAX social platform",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#06152f",
+  "theme_color": "#071b3b",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
