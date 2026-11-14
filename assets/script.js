@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ['group.html#careers', 'Careers', page === 'group.html' || page === 'profile.html', ic('<path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>'), ''],
     ['home.html', 'SUHAS MAX', page === 'home.html' || page === 'social.html' || page === 'messenger.html', ic('<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/>'), '']
   ];  nav.innerHTML = tabs.map(function (t) {
-    return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
+    return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + (t[1] === 'SUHAS MAX' ? 'suhas-max-launch ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
   }).join('');
   document.body.appendChild(nav); document.body.classList.add('has-tabbar');
   // Load the shared SUHAS GROUP overflow menu on every destination except the Welcome Main Menu.
