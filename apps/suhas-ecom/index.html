@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#081a35">
+<meta name="description" content="Suhas E-Com — Bangladesh's multi-vendor online marketplace. Shop from trusted sellers, pay with Cash on Delivery, bKash or Nagad.">
+<link rel="icon" type="image/png" href="favicon.png"><title>Suhas E-Com — Online Marketplace</title>
+<style>
+:root{--navy:#081a35;--navy2:#102b50;--gold:#f4c84b;--ink:#15243a;--muted:#6b7890;--paper:#f3f5f9;--line:#e1e7f0;--white:#fff;--green:#16794b;--red:#b3261e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.45}
+button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}
+.hidden{display:none!important}.muted{color:var(--muted)}
+.top{background:var(--navy);color:#cdd8ea;font-size:12px;padding:7px 16px;text-align:center;letter-spacing:.04em}
+.nav{background:var(--navy2);position:sticky;top:0;z-index:20;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.navin{max-width:1240px;margin:auto;padding:12px 18px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;white-space:nowrap}.logo span{color:var(--gold)}
+.search{flex:1;max-width:620px;display:flex}.search input{flex:1;border:0;border-radius:8px 0 0 8px;padding:11px 14px;outline:none}
+.search button{border:0;background:var(--gold);color:var(--navy);font-weight:700;padding:0 18px;border-radius:0 8px 8px 0}
+.navbtn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:8px;padding:10px 14px;font-weight:600;white-space:nowrap}
+.navbtn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.badge{background:var(--red);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:5px}
+.hero{background:linear-gradient(120deg,var(--navy) 0%,#17396b 100%);color:#fff}
+.heroin{max-width:1240px;margin:auto;padding:54px 18px;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center}
+.eyebrow{color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.18em}
+.hero h1{font-size:44px;line-height:1.1;margin:10px 0 14px}.hero p{color:#cdd8ea;max-width:520px;margin:0 0 22px}
+.cta{display:inline-block;background:var(--gold);color:var(--navy);font-weight:800;padding:13px 24px;border-radius:10px;text-decoration:none;border:0}
+.cta.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);margin-left:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:18px}
+.stat b{display:block;font-size:26px;color:var(--gold)}.stat span{font-size:13px;color:#cdd8ea}
+.trust{background:#fff;border-bottom:1px solid var(--line)}.trustin{max-width:1240px;margin:auto;padding:14px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-size:13px}
+.trustin div{display:flex;gap:10px;align-items:center}.trustin i{font-style:normal;font-size:22px}
+.wrap{max-width:1240px;margin:auto;padding:26px 18px}
+.sec{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:0 0 14px}.sec h2{margin:0;font-size:22px}
+.deal{background:linear-gradient(90deg,#fff7dc,#fff);border:1px solid #f1deaa;border-radius:14px;padding:14px 18px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.deal b{font-size:17px}.timer{font-variant-numeric:tabular-nums;background:var(--navy);color:var(--gold);padding:6px 12px;border-radius:8px;font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:13px}
+.chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+select.sort{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 8px 24px rgba(8,26,53,.12);transform:translateY(-2px)}
+.pic{height:150px;display:grid;place-items:center;font-size:58px;position:relative;cursor:pointer}
+.off{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:3px 7px}
+.body{padding:12px;display:flex;flex-direction:column;gap:5px;flex:1}.name{font-weight:600;font-size:14px;cursor:pointer;min-height:38px}
+.shop{font-size:12px;color:var(--muted)}.price{font-weight:800;font-size:17px;color:var(--navy)}.price s{font-weight:400;font-size:12px;color:var(--muted);margin-left:6px}
+.add{margin-top:auto;border:0;background:var(--navy);color:#fff;border-radius:9px;padding:9px;font-weight:700}.add:disabled{background:#b9c2d1;cursor:not-allowed}
+.empty{grid-column:1/-1;text-align:center;padding:50px 10px;color:var(--muted)}
+.seller{background:var(--navy);color:#fff;border-radius:18px;padding:34px;display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:center;margin-top:30px}
+.seller h2{margin:0 0 8px;font-size:26px}.seller p{color:#cdd8ea;margin:0}
+.footer{background:var(--navy);color:#9fb0cb;font-size:13px;padding:30px 18px;text-align:center;margin-top:30px}
+.overlay{position:fixed;inset:0;background:rgba(8,26,53,.6);z-index:50;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 12px}
+.overlay.open{display:flex}.modal{background:#fff;border-radius:16px;width:100%;max-width:560px;padding:22px}.modal.wide{max-width:760px}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.mh h2{margin:0;font-size:20px}.x{border:0;background:var(--paper);border-radius:8px;width:34px;height:34px;font-size:20px}
+.line{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.thumb{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-size:26px}
+.qty{display:inline-flex;align-items:center;gap:8px;margin-top:4px}.qty button{width:26px;height:26px;border:1px solid var(--line);background:#fff;border-radius:6px}
+.tot{display:flex;justify-content:space-between;padding:6px 0}.tot.big{font-weight:800;font-size:18px;border-top:2px solid var(--navy);margin-top:6px;padding-top:10px}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px}textarea{min-height:70px}
+.pay{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pay label{margin:0;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-weight:600;cursor:pointer}
+.pay input{display:none}.pay input:checked+span{color:var(--navy)}.pay label:has(input:checked){border-color:var(--navy);background:#eef3fb}
+.notice{background:#eef6ff;border:1px solid #cfe2fb;border-radius:10px;padding:10px 12px;font-size:13px;margin:10px 0}.notice.warn{background:#fff6e5;border-color:#f3dba6}
+.primary{width:100%;border:0;background:var(--gold);color:var(--navy);font-weight:800;border-radius:10px;padding:13px;margin-top:14px}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-top:6px}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}.heroin,.seller{grid-template-columns:1fr}.hero h1{font-size:34px}.trustin{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.navin{flex-wrap:wrap;padding:10px 12px;gap:9px}.search{order:3;flex-basis:100%;max-width:none}.navbtn{margin-left:auto}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.pic{height:120px;font-size:46px}.heroin{padding:36px 16px}.cta.ghost{margin:10px 0 0}}
+</style>
+</head>
+<body>
+<div class="top">FREE DELIVERY ON ORDERS OVER ৳2,000 · CASH ON DELIVERY · BKASH · NAGAD</div>
+<header class="nav"><div class="navin">
+<div class="logo"><img src="logo.png" alt="Suhas logo" width="38" height="38">SUHAS <span>E-COM</span></div>
+<form class="search" id="searchForm" role="search"><input id="search" type="search" placeholder="Search products, brands and sellers..." aria-label="Search products"><button type="submit">Search</button></form>
+<button class="navbtn" id="sellBtn">Sell on Suhas</button>
+<button class="navbtn gold" id="cartBtn">Cart<span class="badge" id="cartCount">0</span></button>
+</div></header>
+
+<section class="hero"><div class="heroin">
+<div><div class="eyebrow">BANGLADESH'S GROWING MARKETPLACE</div>
+<h1>Everything you need.<br>Trusted sellers. One place.</h1>
+<p>Shop thousands of products from verified local sellers. Order as a guest in under a minute and pay on delivery.</p>
+<a class="cta" href="#catalog">Start shopping</a><button class="cta ghost" id="sellBtn2">Become a seller</button></div>
+<div class="stats"><div class="stat"><b>0%</b><span>Seller joining fee</span></div><div class="stat"><b>COD</b><span>Pay when you receive</span></div><div class="stat"><b>64</b><span>Districts, one platform</span></div><div class="stat"><b>24/7</b><span>Browse &amp; order anytime</span></div></div>
+</div></section>
+
+<section class="trust"><div class="trustin">
+<div><i>🛡️</i><span><b>Verified sellers</b><br>Every shop is reviewed</span></div>
+<div><i>🚚</i><span><b>Nationwide delivery</b><br>Dhaka &amp; all districts</span></div>
+<div><i>💵</i><span><b>Cash on Delivery</b><br>Plus bKash &amp; Nagad</span></div>
+<div><i>↩️</i><span><b>Easy returns</b><br>7-day return policy</span></div>
+</div></section>
+
+<main class="wrap" id="catalog">
+<div class="deal"><div><b>⚡ Flash Sale</b> <span class="muted">— extra savings on selected items</span></div><div class="timer" id="timer">00:00:00</div></div>
+<div class="sec"><h2 id="listTitle">All products</h2>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="chips" id="chips"></div>
+<select class="sort" id="sort" aria-label="Sort products"><option value="new">Newest</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="deal">Biggest discount</option></select></div></div>
+<div class="grid" id="grid"></div>
+
+<section class="seller"><div><h2>Start selling on Suhas E-Com</h2><p>Open your shop for free, list your products and reach customers across Bangladesh. We review every application within 48 hours.</p></div>
+<div><button class="cta" id="sellBtn3" style="width:100%">Apply as a seller</button></div></section>
+</main>
+<footer class="footer">© <span id="year"></span> Suhas E-Com · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · <a href="../../privacy-policy.html">Privacy Policy</a></footer>
+
+<div class="overlay" id="productModal"><section class="modal"><div class="mh"><h2 id="pmName"></h2><button class="x" data-close="productModal" aria-label="Close">×</button></div><div id="pmBody"></div></section></div>
+
+<div class="overlay" id="cartModal"><section class="modal"><div class="mh"><h2>Your cart</h2><button class="x" data-close="cartModal" aria-label="Close">×</button></div>
+<div id="cartLines"></div>
+<div id="cartTotals"></div>
+<button class="primary" id="toCheckout">Proceed to checkout</button></section></div>
+
+<div class="overlay" id="checkoutModal"><section class="modal"><div class="mh"><h2>Guest checkout</h2><button class="x" data-close="checkoutModal" aria-label="Close">×</button></div>
+<form id="checkoutForm" autocomplete="on">
+<label for="cName">Full name</label><input id="cName" name="name" required minlength="2" maxlength="80" autocomplete="name">
+<label for="cPhone">Mobile number</label><input id="cPhone" name="phone" required inputmode="tel" pattern="[0-9+ ]{6,20}" autocomplete="tel" placeholder="01XXXXXXXXX">
+<label for="cAddress">Delivery address</label><textarea id="cAddress" name="address" required minlength="5" maxlength="300" autocomplete="street-address"></textarea>
+<label>Payment method</label>
+<div class="pay"><label><input type="radio" name="pay" value="cod" checked><span>Cash on Delivery</span></label><label><input type="radio" name="pay" value="bkash"><span>bKash</span></label><label><input type="radio" name="pay" value="nagad"><span>Nagad</span></label></div>
+<div id="payBox" class="hidden"><div class="notice">Send the total amount to the merchant number shown after you place the order, then enter your transaction ID below.</div>
+<label for="cRef">Transaction ID</label><input id="cRef" name="ref" maxlength="40"></div>
+<div id="coSummary" style="margin-top:12px"></div>
+<div class="err" id="coErr" role="alert"></div>
+<button class="primary" type="submit" id="placeBtn">Place order</button></form></section></div>
+
+<div class="overlay" id="doneModal"><section class="modal"><div class="mh"><h2>Order received ✅</h2><button class="x" data-close="doneModal" aria-label="Close">×</button></div><div id="doneBody"></div></section></div>
+
+<div class="overlay" id="sellModal"><section class="modal"><div class="mh"><h2>Seller application</h2><button class="x" data-close="sellModal" aria-label="Close">×</button></div>
+<form id="sellForm"><label for="sShop">Shop name</label><input id="sShop" name="shop" required minlength="2" maxlength="80">
+<label for="sOwner">Owner name</label><input id="sOwner" name="owner" required minlength="2" maxlength="80">
+<label for="sPhone">Mobile number</label><input id="sPhone" name="phone" required pattern="[0-9+ ]{6,20}" inputmode="tel">
+<label for="sEmail">Email (optional)</label><input id="sEmail" name="email" type="email" maxlength="120">
+<label for="sCity">City / District</label><input id="sCity" name="city" maxlength="60">
+<label for="sCat">What will you sell?</label><input id="sCat" name="cat" maxlength="80" placeholder="e.g. Fashion, Electronics, Home">
+<label for="sNote">Tell us about your business</label><textarea id="sNote" name="note" maxlength="500"></textarea>
+<div class="err" id="sellErr" role="alert"></div>
+<button class="primary" type="submit">Submit application</button></form></section></div>
+
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.0';
+const SB_URL='https://pokxiylebwzoxunccuwm.supabase.co';
+const SB_KEY='sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850';
+const db=createClient(SB_URL,SB_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+const $=id=>document.getElementById(id);
+const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const FREE_SHIP=2000,SHIP_FEE=120,CART_KEY='suhas-ecom-cart-v1';
+const TINTS=['#e8f0fe','#fff4d6','#e6f6ec','#fde8ee','#efe9fb','#e3f4f6'];
+const DEMO=[
+{id:'d1',name:'Premium Cotton Polo Shirt',category:'Fashion',price_bdt:850,compare_at_bdt:1200,stock:40,icon:'👕',shop:'Urban Thread'},
+{id:'d2',name:'Wireless Bluetooth Earbuds',category:'Electronics',price_bdt:1450,compare_at_bdt:2100,stock:25,icon:'🎧',shop:'Gadget Hub BD'},
+{id:'d3',name:'Stainless Steel Water Bottle 750ml',category:'Home & Living',price_bdt:480,compare_at_bdt:650,stock:60,icon:'🧴',shop:'Home Nest'},
+{id:'d4',name:'Genuine Leather Wallet',category:'Fashion',price_bdt:690,compare_at_bdt:null,stock:30,icon:'👛',shop:'Urban Thread'},
+{id:'d5',name:'Smart Fitness Band',category:'Electronics',price_bdt:1890,compare_at_bdt:2600,stock:18,icon:'⌚',shop:'Gadget Hub BD'},
+{id:'d6',name:'Non-stick Cookware Set (5 pcs)',category:'Home & Living',price_bdt:3200,compare_at_bdt:4100,stock:12,icon:'🍳',shop:'Home Nest'},
+{id:'d7',name:'Organic Honey 500g',category:'Grocery',price_bdt:520,compare_at_bdt:600,stock:80,icon:'🍯',shop:'Pure Harvest'},
+{id:'d8',name:'Premium Basmati Rice 5kg',category:'Grocery',price_bdt:780,compare_at_bdt:null,stock:50,icon:'🍚',shop:'Pure Harvest'},
+{id:'d9',name:'Kids Learning Story Book Set',category:'Kids & Books',price_bdt:640,compare_at_bdt:900,stock:35,icon:'📚',shop:'Little Minds'},
+{id:'d10',name:'Rechargeable Desk Lamp',category:'Electronics',price_bdt:990,compare_at_bdt:1350,stock:22,icon:'💡',shop:'Gadget Hub BD'},
+{id:'d11',name:'Women Printed Cotton Kurti',category:'Fashion',price_bdt:1250,compare_at_bdt:1700,stock:28,icon:'👗',shop:'Urban Thread'},
+{id:'d12',name:'Wooden Educational Puzzle',category:'Kids & Books',price_bdt:430,compare_at_bdt:null,stock:45,icon:'🧩',shop:'Little Minds'}
+];
+let products=[],demoMode=false,cat='All',query='',sortBy='new',cart=loadCart();
+function loadCart(){try{const v=JSON.parse(localStorage.getItem(CART_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
+function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}catch(e){}}
+const tint=p=>TINTS[(String(p.id).split('').reduce((a,c)=>a+c.charCodeAt(0),0))%TINTS.length];
+const disc=p=>p.compare_at_bdt&&p.compare_at_bdt>p.price_bdt?Math.round(100-p.price_bdt*100/p.compare_at_bdt):0;
+function picHtml(p){return p.image_url?'<img src="'+esc(p.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">':esc(p.icon||'🛍️')}
+async function loadProducts(){
+  try{
+    const {data,error}=await db.from('ecom_products').select('*, ecom_vendors(shop_name)').eq('is_active',true).order('created_at',{ascending:false});
+    if(error||!data||!data.length)throw error||new Error('empty');
+    products=data.map(p=>({...p,shop:p.ecom_vendors?.shop_name||'Suhas E-Com'}));demoMode=false;
+  }catch(e){products=DEMO.slice();demoMode=true}
+  renderChips();renderGrid();
+}
+function renderChips(){
+  const cats=['All',...new Set(products.map(p=>p.category))];
+  $('chips').innerHTML=cats.map(c=>'<button class="chip'+(c===cat?' active':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
+}
+function renderGrid(){
+  let list=products.filter(p=>(cat==='All'||p.category===cat)&&(!query||(p.name+' '+p.category+' '+p.shop).toLowerCase().includes(query)));
+  if(sortBy==='low')list.sort((a,b)=>a.price_bdt-b.price_bdt);
+  if(sortBy==='high')list.sort((a,b)=>b.price_bdt-a.price_bdt);
+  if(sortBy==='deal')list.sort((a,b)=>disc(b)-disc(a));
+  $('listTitle').textContent=cat==='All'?'All products':cat;
+  $('grid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="pic" style="background:'+tint(p)+'" data-view="'+esc(p.id)+'">'+(disc(p)?'<span class="off">-'+disc(p)+'%</span>':'')+picHtml(p)+'</div><div class="body"><div class="name" data-view="'+esc(p.id)+'">'+esc(p.name)+'</div><div class="shop">Sold by '+esc(p.shop)+'</div><div class="price">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><button class="add" data-add="'+esc(p.id)+'"'+(p.stock<1?' disabled':'')+'>'+(p.stock<1?'Out of stock':'Add to cart')+'</button></div></article>').join(''):'<div class="empty">No products found. Try another search or category.</div>';
+}
+function find(id){return products.find(p=>String(p.id)===String(id))}
+function addToCart(id){
+  const p=find(id);if(!p||p.stock<1)return;
+  const l=cart.find(x=>String(x.id)===String(id));
+  if(l){if(l.qty<p.stock)l.qty++}else cart.push({id:p.id,qty:1});
+  saveCart();renderCart();
+}
+function cartItems(){return cart.map(l=>({p:find(l.id),qty:l.qty})).filter(x=>x.p)}
+function totals(){
+  const items=cartItems(),sub=items.reduce((s,x)=>s+x.p.price_bdt*x.qty,0);
+  const ship=!items.length||sub>=FREE_SHIP?0:SHIP_FEE;return{items,sub,ship,total:sub+ship};
+}
+function totalsHtml(t){return '<div class="tot"><span>Subtotal</span><span>'+money(t.sub)+'</span></div><div class="tot"><span>Delivery</span><span>'+(t.ship?money(t.ship):'Free')+'</span></div><div class="tot big"><span>Total</span><span>'+money(t.total)+'</span></div>'}
+function renderCart(){
+  const t=totals();
+  $('cartCount').textContent=t.items.reduce((s,x)=>s+x.qty,0);
+  $('cartLines').innerHTML=t.items.length?t.items.map(({p,qty})=>'<div class="line"><div class="thumb" style="background:'+tint(p)+'">'+picHtml(p)+'</div><div><b>'+esc(p.name)+'</b><div class="shop">'+esc(p.shop)+'</div><div class="qty"><button data-dec="'+esc(p.id)+'" aria-label="Decrease">−</button>'+qty+'<button data-inc="'+esc(p.id)+'" aria-label="Increase">+</button></div></div><b>'+money(p.price_bdt*qty)+'</b></div>').join(''):'<p class="muted">Your cart is empty.</p>';
+  $('cartTotals').innerHTML=t.items.length?totalsHtml(t)+(t.sub<FREE_SHIP?'<div class="notice">Add '+money(FREE_SHIP-t.sub)+' more for free delivery.</div>':''):'';
+  $('toCheckout').classList.toggle('hidden',!t.items.length);
+}
+function changeQty(id,d){
+  const l=cart.find(x=>String(x.id)===String(id)),p=find(id);if(!l||!p)return;
+  l.qty+=d;if(l.qty>p.stock)l.qty=p.stock;
+  if(l.qty<1)cart=cart.filter(x=>x!==l);
+  saveCart();renderCart();
+}
+function open(id){$(id).classList.add('open')}function close(id){$(id).classList.remove('open')}
+function viewProduct(id){
+  const p=find(id);if(!p)return;
+  $('pmName').textContent=p.name;
+  $('pmBody').innerHTML='<div class="pic" style="background:'+tint(p)+';height:200px;border-radius:12px;font-size:80px;cursor:default">'+picHtml(p)+'</div><p class="shop" style="margin:12px 0 4px">Sold by <b>'+esc(p.shop)+'</b> · '+esc(p.category)+'</p><div class="price" style="font-size:24px">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><p>'+esc(p.description||'Quality product from a verified Suhas E-Com seller.')+'</p><p class="muted">'+(p.stock>0?p.stock+' in stock':'Out of stock')+'</p><button class="primary" data-add="'+esc(p.id)+'" data-closeafter="1"'+(p.stock<1?' disabled':'')+'>Add to cart</button>';
+  open('productModal');
+}
+function orderCode(){const a=new Uint32Array(1);crypto.getRandomValues(a);return 'SE-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+(a[0]%90000+10000)}
+async function placeOrder(e){
+  e.preventDefault();$('coErr').textContent='';
+  const f=e.currentTarget,t=totals();if(!t.items.length){$('coErr').textContent='Your cart is empty.';return}
+  const pay=f.elements.pay.value,ref=f.elements.ref.value.trim();
+  if(pay!=='cod'&&ref.length<4){$('coErr').textContent='Please enter your payment transaction ID.';return}
+  const row={order_code:orderCode(),customer_name:f.elements.name.value.trim(),phone:f.elements.phone.value.trim(),address:f.elements.address.value.trim(),payment_method:pay,payment_ref:pay==='cod'?null:ref,items:t.items.map(x=>({id:x.p.id,name:x.p.name,shop:x.p.shop,price:x.p.price_bdt,qty:x.qty})),subtotal_bdt:t.sub,delivery_bdt:t.ship,total_bdt:t.total};
+  $('placeBtn').disabled=true;$('placeBtn').textContent='Placing order...';
+  let saved=false;
+  if(!demoMode){const {error}=await db.from('ecom_orders').insert(row);if(error){$('coErr').textContent='Could not place the order: '+error.message;$('placeBtn').disabled=false;$('placeBtn').textContent='Place order';return}saved=true}
+  else{try{const k='suhas-ecom-demo-orders';const arr=JSON.parse(localStorage.getItem(k)||'[]');arr.push({...row,created_at:new Date().toISOString()});localStorage.setItem(k,JSON.stringify(arr))}catch(x){}}
+  cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
+  $('placeBtn').disabled=false;$('placeBtn').textContent='Place order';
+  $('doneBody').innerHTML='<p>Thank you, <b>'+esc(row.customer_name)+'</b>! Your order number is <b>'+esc(row.order_code)+'</b>.</p><p>Total: <b>'+money(row.total_bdt)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p>'+(saved?'<div class="notice">Our team will call you on '+esc(row.phone)+' to confirm delivery.</div>':'<div class="notice warn"><b>Demo mode:</b> the live store database is not connected yet, so this order was saved on this device only and was not sent to a seller.</div>');
+  close('checkoutModal');open('doneModal');
+}
+async function submitSeller(e){
+  e.preventDefault();$('sellErr').textContent='';const f=e.currentTarget.elements;
+  const row={shop_name:f.shop.value.trim(),owner_name:f.owner.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()||null,city:f.city.value.trim()||null,category:f.cat.value.trim()||null,note:f.note.value.trim()||null};
+  const {error}=await db.from('ecom_vendors').insert(row);
+  if(error){$('sellErr').textContent='Could not submit right now. Please try again later or call us. ('+error.message+')';return}
+  e.currentTarget.reset();close('sellModal');
+  $('doneBody').innerHTML='<p>Thank you! Your seller application for <b>'+esc(row.shop_name)+'</b> has been received. We will contact you within 48 hours.</p>';open('doneModal');
+}
+function tick(){
+  const n=new Date(),end=new Date(n);end.setHours(24,0,0,0);
+  const s=Math.max(0,Math.floor((end-n)/1000)),p=v=>String(v).padStart(2,'0');
+  $('timer').textContent=p(Math.floor(s/3600))+':'+p(Math.floor(s%3600/60))+':'+p(s%60);
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-view]');if(!t)return;
+  if(t.dataset.close)close(t.dataset.close);
+  else if(t.dataset.cat!==undefined){cat=t.dataset.cat;renderChips();renderGrid()}
+  else if(t.dataset.add){addToCart(t.dataset.add);if(t.dataset.closeafter){close('productModal');open('cartModal')}}
+  else if(t.dataset.view)viewProduct(t.dataset.view);
+  else if(t.dataset.inc)changeQty(t.dataset.inc,1);
+  else if(t.dataset.dec)changeQty(t.dataset.dec,-1);
+});
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+$('cartBtn').onclick=()=>{renderCart();open('cartModal')};
+$('toCheckout').onclick=()=>{$('coSummary').innerHTML=totalsHtml(totals());close('cartModal');open('checkoutModal')};
+['sellBtn','sellBtn2','sellBtn3'].forEach(id=>$(id).onclick=()=>open('sellModal'));
+$('searchForm').addEventListener('submit',e=>{e.preventDefault();query=$('search').value.trim().toLowerCase();renderGrid();$('catalog').scrollIntoView()});
+$('search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderGrid()});
+$('sort').onchange=e=>{sortBy=e.target.value;renderGrid()};
+$('checkoutForm').addEventListener('submit',placeOrder);
+$('checkoutForm').addEventListener('change',e=>{if(e.target.name==='pay')$('payBox').classList.toggle('hidden',e.target.value==='cod')});
+$('sellForm').addEventListener('submit',submitSeller);
+$('year').textContent=new Date().getFullYear();
+tick();setInterval(tick,1000);
+await loadProducts();renderCart();
+</script>
+</body>
+</html>
