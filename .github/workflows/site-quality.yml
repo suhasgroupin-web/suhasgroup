@@ -60,7 +60,7 @@ jobs:
 
               def handle_data(self, data):
                   if self.in_script and not self.script_src and self.script_type not in ("application/ld+json", "application/json", "importmap"):
-                      self.scripts.append(data)
+                      self.scripts.append((self.script_type, data))
 
           pages = sorted(root.rglob("*.html"))
           for page in pages:
@@ -94,11 +94,14 @@ jobs:
                   if not target.exists():
                       errors.append(f"{page}: broken local {attr}={value}")
 
-              for index, script in enumerate(parser.scripts, 1):
+              for index, (script_type, script) in enumerate(parser.scripts, 1):
                   if not script.strip():
                       continue
+                  node_cmd = ["node", "--check"]
+                  if script_type == "module":
+                      node_cmd.append("--input-type=module")
                   result = subprocess.run(
-                      ["node", "--check"],
+                      node_cmd,
                       input=script,
                       text=True,
                       capture_output=True,
