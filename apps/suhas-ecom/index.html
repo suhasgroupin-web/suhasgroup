@@ -145,20 +145,6 @@ const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FREE_SHIP=2000,SHIP_FEE=120,CART_KEY='suhas-ecom-cart-v1';
 const TINTS=['#e8f0fe','#fff4d6','#e6f6ec','#fde8ee','#efe9fb','#e3f4f6'];
-const DEMO=[
-{id:'d1',name:'Premium Cotton Polo Shirt',category:'Fashion',price_bdt:850,compare_at_bdt:1200,stock:40,icon:'👕',shop:'Urban Thread'},
-{id:'d2',name:'Wireless Bluetooth Earbuds',category:'Electronics',price_bdt:1450,compare_at_bdt:2100,stock:25,icon:'🎧',shop:'Gadget Hub BD'},
-{id:'d3',name:'Stainless Steel Water Bottle 750ml',category:'Home & Living',price_bdt:480,compare_at_bdt:650,stock:60,icon:'🧴',shop:'Home Nest'},
-{id:'d4',name:'Genuine Leather Wallet',category:'Fashion',price_bdt:690,compare_at_bdt:null,stock:30,icon:'👛',shop:'Urban Thread'},
-{id:'d5',name:'Smart Fitness Band',category:'Electronics',price_bdt:1890,compare_at_bdt:2600,stock:18,icon:'⌚',shop:'Gadget Hub BD'},
-{id:'d6',name:'Non-stick Cookware Set (5 pcs)',category:'Home & Living',price_bdt:3200,compare_at_bdt:4100,stock:12,icon:'🍳',shop:'Home Nest'},
-{id:'d7',name:'Organic Honey 500g',category:'Grocery',price_bdt:520,compare_at_bdt:600,stock:80,icon:'🍯',shop:'Pure Harvest'},
-{id:'d8',name:'Premium Basmati Rice 5kg',category:'Grocery',price_bdt:780,compare_at_bdt:null,stock:50,icon:'🍚',shop:'Pure Harvest'},
-{id:'d9',name:'Kids Learning Story Book Set',category:'Kids & Books',price_bdt:640,compare_at_bdt:900,stock:35,icon:'📚',shop:'Little Minds'},
-{id:'d10',name:'Rechargeable Desk Lamp',category:'Electronics',price_bdt:990,compare_at_bdt:1350,stock:22,icon:'💡',shop:'Gadget Hub BD'},
-{id:'d11',name:'Women Printed Cotton Kurti',category:'Fashion',price_bdt:1250,compare_at_bdt:1700,stock:28,icon:'👗',shop:'Urban Thread'},
-{id:'d12',name:'Wooden Educational Puzzle',category:'Kids & Books',price_bdt:430,compare_at_bdt:null,stock:45,icon:'🧩',shop:'Little Minds'}
-];
 let products=[],catalogError='',cat='All',query='',sortBy='new',cart=loadCart();
 function loadCart(){try{const v=JSON.parse(localStorage.getItem(CART_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
 function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart))}catch(e){}}
