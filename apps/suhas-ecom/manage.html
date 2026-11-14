@@ -32,7 +32,7 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 <div class="tabs"><button class="tab active" id="loginTab">Sign in</button><button class="tab" id="signupTab">Create seller account</button></div>
 <form id="loginForm"><label>Email address</label><input name="email" type="email" required autocomplete="username"><label>Password</label><input name="password" type="password" required autocomplete="current-password"><button style="width:100%;margin-top:16px" type="submit">Sign in</button></form>
 <form id="signupForm" class="hidden">
-<div class="grid"><div><label>Shop name *</label><input name="shop" required minlength="2" maxlength="100"></div><div><label>Owner full name *</label><input name="owner" required minlength="2" maxlength="100"></div><div><label>Mobile number *</label><input name="phone" required minlength="6" maxlength="20" inputmode="tel"></div><div><label>Email address *</label><input name="email" type="email" required autocomplete="email"></div><div><label>City / District</label><input name="city" maxlength="80"></div><div><label>Product category</label><input name="category" maxlength="80" placeholder="Fashion, electronics..."></div></div>
+<div class="grid"><div><label>Shop name *</label><input name="shop" required minlength="2" maxlength="80"></div><div><label>Owner full name *</label><input name="owner" required minlength="2" maxlength="80"></div><div><label>Mobile number *</label><input name="phone" required minlength="6" maxlength="20" inputmode="tel"></div><div><label>Email address *</label><input name="email" type="email" required autocomplete="email"></div><div><label>City / District</label><input name="city" maxlength="80"></div><div><label>Product category</label><input name="category" maxlength="80" placeholder="Fashion, electronics..."></div></div>
 <label>About your shop</label><textarea name="description" maxlength="1000"></textarea><label>Create password *</label><input name="password" type="password" required minlength="8" autocomplete="new-password"><button style="width:100%;margin-top:16px" type="submit" id="signupBtn">Create seller account</button>
 </form><div id="authMsg" class="alert hidden" role="status"></div>
 </div></section>
@@ -64,7 +64,7 @@ async function ensureVendor(u){
  if(error)throw error;
  if(data)return data;
  const m=u.user_metadata||{};
- const row={user_id:u.id,shop_name:String(m.shop_name||'My Shop').slice(0,100),owner_name:String(m.owner_name||u.email?.split('@')[0]||'Seller').slice(0,100),phone:String(m.phone||'000000').slice(0,20),email:u.email,city:m.city||null,category:m.category||null,description:m.description||null,status:'pending'};
+ const row={user_id:u.id,shop_name:String(m.shop_name||'My Shop').slice(0,80),owner_name:String(m.owner_name||u.email?.split('@')[0]||'Seller').slice(0,80),phone:String(m.phone||'000000').slice(0,20),email:u.email,city:m.city||null,category:m.category||null,description:m.description||null,status:'pending'};
  const ins=await db.from('ecom_vendors').insert(row).select('*').single();
  if(ins.error)throw ins.error;return ins.data;
 }
