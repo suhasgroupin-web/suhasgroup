@@ -1,35 +1,29 @@
-# SUHAS MAX Online Store
+# SUHAS MAX — Store module
 
-Standalone public storefront for SUHAS MAX. This app is separate from SUHAS AI and SUHAS GROUP.
+This is the E-Commerce module inside the single SUHAS MAX app. Customers open it from the SUHAS MAX website; it is not a separate installable app or PWA.
 
-## Public shopping
-- No customer account or login required.
-- Product catalog, search, category filters, cart and guest checkout.
+## Customer shopping
+- Public product catalogue with category filters, search, cart and guest checkout.
 - Cash on Delivery, bKash and Nagad selection.
-- bKash/Nagad payment number is shared by the store admin after order confirmation; no payment gateway is configured.
-- Delivery fee currently set to BDT 80 in the order RPC.
+- Category filters include common shopping categories and automatically add any custom category used by products.
+- Checkout prices and stock are validated by the Supabase order RPC before an order is created.
+- Customers do not need to create an account to place an order.
 
-## Admin
+## Owner management
 - Open the store URL with `?admin=1` to access the admin sign-in.
-- Admin access is restricted by database RLS to the email `Suhasmax.in@gmail.com`.
-- Use the same SUHAS MAX Supabase Auth account/password; customer checkout does not require an account.
-- Admin can add/edit/hide products and update order status.
-- Product images are currently entered as public HTTPS image URLs.
+- Admin access is restricted by database RLS to the configured SUHAS MAX admin account.
+- Admin can add, edit, hide products and update order status.
+- Product categories can be selected from suggestions or entered as a custom category.
+- Product images are entered as public HTTPS image URLs.
+- Admin should publish only real products with verified prices, available stock and accurate photos.
 
 ## Backend
-- Supabase project: `pokxiylebwzoxunccuwm` (SUHAS MAX only).
+- Supabase project: `pokxiylebwzoxunccuwm`.
 - Tables: `suhas_max_products`, `suhas_max_orders`.
-- Guest orders use the `place_suhas_max_order` RPC, which looks up product prices in the database before creating an order.
-- Public users can read active products and submit orders only. Order reads/updates and product management are admin-only via RLS.
-- The frontend uses the public publishable key only. No Supabase secret/service-role key is included.
+- Guest orders use `place_suhas_max_order`, which reads authoritative product prices and stock from the database.
+- Public users can read active products and submit orders only. Product management and order access are restricted by RLS.
+- Frontend uses the public publishable key only. Never expose a service-role key.
 
 ## Deployment
-Deploy this directory as a separate Cloudflare Pages project with no build command and output directory set to this directory. Use a free `*.pages.dev` hostname. Do not deploy to the existing SUHAS GROUP Pages project. A separate Cloudflare Pages project/account authorization is required before a live URL can be claimed.
-
-## Seller accounts
-- Sellers can create an account from the **Seller Centre** button using email and password.
-- New shops are created with **pending** status and must be approved by the SUHAS MAX administrator.
-- Approved sellers can sign in to their seller dashboard and submit product listings.
-- The admin dashboard includes a **Sellers** tab to approve, reject, or suspend seller accounts.
-- Seller approval status is protected by a database trigger; sellers cannot approve themselves.
-- Seller profile and product access is controlled by Supabase Auth and row-level security.
+- Served as a path inside the existing SUHAS MAX Cloudflare Pages deployment: `/apps/suhas-max-ecommerce/`.
+- The root Pages workflow deploys the repository; no second app or separate install is created.
