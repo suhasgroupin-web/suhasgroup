@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (careersTab) {
     careersTab.addEventListener('click', function (e) {
       e.preventDefault();
-      var menu = SG.sheet('<h3>Careers</h3><p>Choose where you want to go.</p><div class="stack"><a class="btn btn-primary" href="group.html#careers">Careers</a><a class="btn btn-outline" href="profile.html">Profile</a></div>');
+      var menu = SG.sheet('<h3>Careers</h3><p>Choose a workspace.</p><div class="stack"><a class="btn btn-primary" href="group.html#careers">Careers</a><a class="btn btn-outline" href="app.html#career-tools">Departments &amp; Tools</a><a class="btn btn-outline" href="profile.html">Profile</a></div>');
       menu.el.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { menu.close(); }); });
     });
   }
