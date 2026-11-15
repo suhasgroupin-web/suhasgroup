@@ -325,6 +325,11 @@ html body.entry-locked #entryGate .entry-card{position:relative!important;z-inde
 .app-copy strong{font-size:14px;line-height:1.35;color:#142b4d}.app-copy small{font-size:12px;line-height:1.5;color:#718096}
 @media(max-width:760px){.workspace{padding:20px 14px 96px}.w-top{align-items:center;margin-bottom:10px}.w-brand img{width:54px;height:54px}.w-hero{padding:22px 4px 28px}.w-panel{padding:14px;border-radius:24px}.w-section summary{padding:16px 13px}.app-grid{padding:0 11px 16px;gap:12px}.app-tile{min-height:104px;padding:13px;gap:10px}}
 @media(max-width:390px){.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app-tile{align-items:flex-start;flex-direction:column;min-height:126px}.app-copy strong{font-size:13px}}
+
+/* Nested Careers workspace: visually group recruitment and existing department tools. */
+.w-section [data-folder="careers"]>details{margin:10px 12px 14px;border:1px solid #dce5f2;border-radius:15px;background:linear-gradient(145deg,#fff,#f7faff);box-shadow:0 3px 0 #e3eaf4;overflow:hidden}
+.w-section [data-folder="careers"]>details>summary{padding:13px 14px;background:linear-gradient(110deg,#f4f7fd,#fff)}
+.w-section [data-folder="careers"]>details>.app-grid{padding:0 12px 13px}
 </style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script><style id="suhas-max-mobile-first-menu">
 /* Mobile-first main menu: readable single-column cards on phones and narrow tablets. */
 @media(max-width:760px){
@@ -432,15 +437,6 @@ body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!impo
 <form class="w-search" id="appSearch"><input id="searchInput" type="search" placeholder="Search apps, tools or departments…" aria-label="Search apps"><button type="submit">Search</button></form></section>
 <section class="w-panel" id="workspacePanel">
 <div class="w-section">
-<details open data-folder="quality"><summary><span class="folder-icon">📐</span><span class="folder-title"><strong data-folder-title>Departments</strong><small>Quality Department first, then technical and department tools</small></span><span class="folder-count">5 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
-<a class="app-tile" href="quality.html"><span class="app-ico">✅</span><span class="app-copy"><strong>Quality Department</strong><small>AQL, inspection, RCA, CAPA and Lean tools</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="technical.html"><span class="app-ico">🧮</span><span class="app-copy"><strong>Technical Department</strong><small>Fabric, GSM and production calculators</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="measurement-studio.html"><span class="app-ico">📏</span><span class="app-copy"><strong>Measurement Studio</strong><small>Measurement sheet and tolerance workspace</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="suhas-calculator.html"><span class="app-ico">🔢</span><span class="app-copy"><strong>Suhas Calculator</strong><small>Standard and scientific calculator</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="apps/suhas-ecom/index.html"><span class="app-ico">🛒</span><span class="app-copy"><strong>Suhas E-Com</strong><small>Multi-vendor online marketplace</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="apps/suhas-max-ecommerce/index.html"><span class="app-ico">🛍️</span><span class="app-copy"><strong>SUHAS MAX Store</strong><small>Online store with guest checkout</small></span><button class="edit-app" type="button">Edit</button></a>
-<a class="app-tile" href="departments.html"><span class="app-ico">🗂️</span><span class="app-copy"><strong>Department Work Zones</strong><small>Department tools and work references</small></span><button class="edit-app" type="button">Edit</button></a>
-</div></details>
 <details open data-folder="work"><summary><span class="folder-icon">🏢</span><span class="folder-title"><strong data-folder-title>Company, Factories & Operations</strong><small>Group companies, factory directory, leadership and business operations</small></span><span class="folder-count">5 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
 <a class="app-tile" href="group.html"><span class="app-ico">🏭</span><span class="app-copy"><strong>Group Companies</strong><small>Companies and business units</small></span><button class="edit-app" type="button">Edit</button></a>
 <a class="app-tile" href="factories.html"><span class="app-ico">🏗️</span><span class="app-copy"><strong>Factory Directory</strong><small>All factory and business-unit profiles, galleries and details</small></span><button class="edit-app" type="button">Edit</button></a>
@@ -462,12 +458,24 @@ body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!impo
 <a class="app-tile" href="contact.html"><span class="app-ico">🎧</span><span class="app-copy"><strong>Call & Support</strong><small>Contact and helpdesk</small></span><button class="edit-app" type="button">Edit</button></a>
 </div></details>
  
-<details open data-folder="careers"><summary><span class="folder-icon">💼</span><span class="folder-title"><strong data-folder-title>Careers & Recruitment</strong><small>Jobs, employers and recruitment workspace</small></span><span class="folder-count">3 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
+<details open data-folder="careers"><summary><span class="folder-icon">💼</span><span class="folder-title"><strong data-folder-title>Careers</strong><small>Careers, recruitment, departments and business tools</small></span><span class="folder-count">2 sections</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary>
+<details open data-folder="careers-recruitment"><summary><span class="folder-icon">💼</span><span class="folder-title"><strong data-folder-title>Careers</strong><small>Jobs, employers and recruitment workspace</small></span><span class="folder-count">3 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
 <a class="app-tile" href="jobs.html"><span class="app-ico">🔎</span><span class="app-copy"><strong>Find Jobs</strong><small>Browse published job listings</small></span><button class="edit-app" type="button">Edit</button></a>
 <a class="app-tile" href="employers.html"><span class="app-ico">🏢</span><span class="app-copy"><strong>Employer Portal</strong><small>Employer information and services</small></span><button class="edit-app" type="button">Edit</button></a>
 <a class="app-tile" href="apply-for-job.html"><span class="app-ico">📨</span><span class="app-copy"><strong>Recruitment Desk</strong><small>Job application and recruitment tools</small></span><button class="edit-app" type="button">Edit</button></a>
 </div></details>
-<details open data-folder="o5"><summary><span class="folder-icon">🌐</span><span class="folder-title"><strong data-folder-title>O5'Intl & Barcode</strong><small>O5 workspace, bill tools and barcode utilities</small></span><span class="folder-count">2 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
+
+<details open id="career-tools" data-folder="career-tools"><summary><span class="folder-icon">📐</span><span class="folder-title"><strong data-folder-title>Departments & Tools</strong><small>Quality, technical, measurement, calculator and marketplace tools</small></span><span class="folder-count">5 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
+<a class="app-tile" href="quality.html"><span class="app-ico">✅</span><span class="app-copy"><strong>Quality Department</strong><small>AQL, inspection, RCA, CAPA and Lean tools</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="technical.html"><span class="app-ico">🧮</span><span class="app-copy"><strong>Technical Department</strong><small>Fabric, GSM and production calculators</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="measurement-studio.html"><span class="app-ico">📏</span><span class="app-copy"><strong>Measurement Studio</strong><small>Measurement sheet and tolerance workspace</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="suhas-calculator.html"><span class="app-ico">🔢</span><span class="app-copy"><strong>Suhas Calculator</strong><small>Standard and scientific calculator</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="apps/suhas-ecom/index.html"><span class="app-ico">🛒</span><span class="app-copy"><strong>Suhas E-Com</strong><small>Multi-vendor online marketplace</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="apps/suhas-max-ecommerce/index.html"><span class="app-ico">🛍️</span><span class="app-copy"><strong>SUHAS MAX Store</strong><small>Online store with guest checkout</small></span><button class="edit-app" type="button">Edit</button></a>
+<a class="app-tile" href="departments.html"><span class="app-ico">🗂️</span><span class="app-copy"><strong>Department Work Zones</strong><small>Department tools and work references</small></span><button class="edit-app" type="button">Edit</button></a>
+</div></details>
+
+</details><details open data-folder="o5"><summary><span class="folder-icon">🌐</span><span class="folder-title"><strong data-folder-title>O5'Intl & Barcode</strong><small>O5 workspace, bill tools and barcode utilities</small></span><span class="folder-count">2 apps</span><button class="folder-edit" type="button">Rename</button><span class="chev">›</span></summary><div class="app-grid">
 <a class="app-tile" href="o5-desk.html"><span class="app-ico">🌐</span><span class="app-copy"><strong>O5'Intl Desk</strong><small>O5 international workspace</small></span><button class="edit-app" type="button">Edit</button></a>
 <a class="app-tile" href="barcode/"><span class="app-ico">▥</span><span class="app-copy"><strong>Barcode</strong><small>Create and print report barcodes</small></span><button class="edit-app" type="button">Edit</button></a>
 </div></details>
