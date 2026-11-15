@@ -41,6 +41,7 @@ select.sort{border:1px solid var(--line);border-radius:8px;padding:8px 10px;back
 .card:hover{box-shadow:0 8px 24px rgba(8,26,53,.12);transform:translateY(-2px)}
 .pic{height:150px;display:grid;place-items:center;font-size:58px;position:relative;cursor:pointer}
 .off{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:3px 7px}
+.demoFlag{position:absolute;top:8px;left:8px;background:#17396b;color:#fff;font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:6px;padding:4px 7px}
 .body{padding:12px;display:flex;flex-direction:column;gap:5px;flex:1}.name{font-weight:600;font-size:14px;cursor:pointer;min-height:38px}
 .shop{font-size:12px;color:var(--muted)}.price{font-weight:800;font-size:17px;color:var(--navy)}.price s{font-weight:400;font-size:12px;color:var(--muted);margin-left:6px}
 .add{margin-top:auto;border:0;background:var(--navy);color:#fff;border-radius:9px;padding:9px;font-weight:700}.add:disabled{background:#b9c2d1;cursor:not-allowed}
@@ -180,7 +181,8 @@ async function loadProducts(){
   try{
     const {data,error}=await db.from('ecom_products').select('*').eq('is_active',true).order('created_at',{ascending:false});
     if(error)throw error;
-    products=(data||[]).map(p=>({...p,shop:'Verified seller'}));catalogError='';
+    const demoIcons={'Fashion & Clothing':'👕','Footwear':'👟','Bags & Luggage':'🎒','Jewellery & Accessories':'💍','Electronics':'🎧','Mobile & Accessories':'📱','Home & Kitchen':'🏠','Grocery & Food':'🛒','Beauty & Personal Care':'🧴','Health & Wellness':'🌿','Baby & Kids':'🧸','Books & Stationery':'📚','Sports & Outdoors':'⚽','Toys & Games':'🧩','Automotive':'🚗','Office Supplies':'🖊️','Other':'✨','General':'🛍️'};
+    products=(data||[]).map(p=>{const demo=String(p.name||'').startsWith('DEMO ·');return {...p,isDemo:demo,shop:demo?'SUHAS MAX Demo Catalogue':'Verified seller',icon:demo?(demoIcons[p.category]||'🛍️'):undefined}});catalogError='';
   }catch(e){products=[];catalogError=e?.message||'Store database is temporarily unavailable.'}
   renderChips();renderGrid();
 }
@@ -196,7 +198,7 @@ function renderGrid(){
   if(sortBy==='high')list.sort((a,b)=>b.price_bdt-a.price_bdt);
   if(sortBy==='deal')list.sort((a,b)=>disc(b)-disc(a));
   $('listTitle').textContent=cat==='All'?'All products':cat;
-  $('grid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="pic" style="background:'+tint(p)+'" data-view="'+esc(p.id)+'">'+(disc(p)?'<span class="off">-'+disc(p)+'%</span>':'')+picHtml(p)+'</div><div class="body"><div class="name" data-view="'+esc(p.id)+'">'+esc(p.name)+'</div><div class="shop">Sold by '+esc(p.shop)+'</div><div class="price">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><button class="add" data-add="'+esc(p.id)+'"'+(p.stock<1?' disabled':'')+'>'+(p.stock<1?'Out of stock':'Add to cart')+'</button></div></article>').join(''):'<div class="empty">'+(catalogError?'Store unavailable: '+esc(catalogError):'No products are listed yet. Seller products will appear here once approved.')+'</div>';
+  $('grid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="pic" style="background:'+tint(p)+'" data-view="'+esc(p.id)+'">'+(p.isDemo?'<span class="demoFlag">DEMO PREVIEW</span>':(disc(p)?'<span class="off">-'+disc(p)+'%</span>':''))+picHtml(p)+'</div><div class="body"><div class="name" data-view="'+esc(p.id)+'">'+esc(p.name.replace(/^DEMO · /,''))+'</div><div class="shop">Sold by '+esc(p.shop)+'</div><div class="price">'+(p.isDemo?'Sample price ':'')+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><button class="add" data-add="'+esc(p.id)+'"'+(p.stock<1?' disabled':'')+'>'+(p.isDemo?'Preview only':(p.stock<1?'Out of stock':'Add to cart'))+'</button></div></article>').join(''):'<div class="empty">'+(catalogError?'Store unavailable: '+esc(catalogError):'No products are listed yet. Seller products will appear here once approved.')+'</div>';
 }
 function find(id){return products.find(p=>String(p.id)===String(id))}
 function addToCart(id){
@@ -228,7 +230,7 @@ function open(id){$(id).classList.add('open')}function close(id){$(id).classList
 function viewProduct(id){
   const p=find(id);if(!p)return;
   $('pmName').textContent=p.name;
-  $('pmBody').innerHTML='<div class="pic" style="background:'+tint(p)+';height:200px;border-radius:12px;font-size:80px;cursor:default">'+picHtml(p)+'</div><p class="shop" style="margin:12px 0 4px">Sold by <b>'+esc(p.shop)+'</b> · '+esc(p.category)+'</p><div class="price" style="font-size:24px">'+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><p>'+esc(p.description||'Quality product from a verified Suhas E-Com seller.')+'</p><p class="muted">'+(p.stock>0?p.stock+' in stock':'Out of stock')+'</p><button class="primary" data-add="'+esc(p.id)+'" data-closeafter="1"'+(p.stock<1?' disabled':'')+'>Add to cart</button>';
+  $('pmBody').innerHTML='<div class="pic" style="background:'+tint(p)+';height:200px;border-radius:12px;font-size:80px;cursor:default">'+picHtml(p)+'</div>'+(p.isDemo?'<div class="notice warn"><b>DEMO PREVIEW · NOT FOR SALE</b><br>This sample listing is for website display only. It cannot be ordered.</div>':'')+'<p class="shop" style="margin:12px 0 4px">Sold by <b>'+esc(p.shop)+'</b> · '+esc(p.category)+'</p><div class="price" style="font-size:24px">'+(p.isDemo?'Sample price ':'')+money(p.price_bdt)+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div><p>'+esc(p.description||'Quality product from a verified Suhas E-Com seller.')+'</p><p class="muted">'+(p.isDemo?'Demo listing · not available for purchase':(p.stock>0?p.stock+' in stock':'Out of stock'))+'</p><button class="primary" data-add="'+esc(p.id)+'" data-closeafter="1"'+(p.stock<1?' disabled':'')+'>'+(p.isDemo?'Preview only':'Add to cart')+'</button>';
   open('productModal');
 }
 async function placeOrder(e){
