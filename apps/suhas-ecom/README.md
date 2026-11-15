@@ -4,6 +4,7 @@ Multi-vendor marketplace using GitHub, Cloudflare Pages and Supabase.
 
 ## Storefront
 - `index.html` — public catalogue, search, cart and guest checkout (COD / bKash / Nagad).
+- Category filters always show 18 standard shopping categories, even when no products are listed; custom seller categories are added automatically.
 - Customer checkout requires a contact email. Successful orders are written to Supabase, stock is decremented transactionally, and the order is automatically marked Confirmed.
 - Orders that fail database validation are not shown as successful.
 
@@ -15,6 +16,7 @@ Multi-vendor marketplace using GitHub, Cloudflare Pages and Supabase.
 - Approved sellers can add, hide and delete their own products. Their products become live immediately in the public catalogue.
 - Seller accounts remain pending until an Admin approves them.
 - Seller product and order access is restricted by Supabase RLS.
+- Admin and seller dashboards subscribe to Supabase Realtime order and order-item changes; visible orders refresh automatically under existing RLS permissions.
 
 ## Supabase
 - Project ref: `pokxiylebwzoxunccuwm`.
