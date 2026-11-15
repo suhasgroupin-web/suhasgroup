@@ -184,9 +184,11 @@ async function loadProducts(){
   }catch(e){products=[];catalogError=e?.message||'Store database is temporarily unavailable.'}
   renderChips();renderGrid();
 }
+const DEFAULT_CATEGORIES=['Fashion & Clothing','Footwear','Bags & Luggage','Jewellery & Accessories','Electronics','Mobile & Accessories','Home & Kitchen','Grocery & Food','Beauty & Personal Care','Health & Wellness','Baby & Kids','Books & Stationery','Sports & Outdoors','Toys & Games','Automotive','Office Supplies','Other','General'];
 function renderChips(){
-  const cats=['All',...new Set(products.map(p=>p.category))];
-  $('chips').innerHTML=cats.map(c=>'<button class="chip'+(c===cat?' active':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
+  const custom=[...new Set(products.map(p=>String(p.category||'').trim()).filter(Boolean))].filter(c=>!DEFAULT_CATEGORIES.includes(c));
+  const cats=['All',...DEFAULT_CATEGORIES,...custom];
+  $('chips').innerHTML=cats.map(c=>'<button class="chip'+(c===cat?' active':'')+'" data-cat="'+esc(c)+'">'+esc(c==='All'?'All products':c)+'</button>').join('');
 }
 function renderGrid(){
   let list=products.filter(p=>(cat==='All'||p.category===cat)&&(!query||(p.name+' '+p.category+' '+p.shop).toLowerCase().includes(query)));
