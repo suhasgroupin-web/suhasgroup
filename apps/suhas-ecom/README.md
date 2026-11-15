@@ -24,10 +24,16 @@ Multi-vendor marketplace using GitHub, Cloudflare Pages and Supabase.
 - Frontend uses only the public publishable key. No service-role key is exposed.
 
 ## Confirmation email setup (Cloudflare)
-The Pages Function `/functions/api/ecom-order-email.js` sends a confirmation using Cloudflare Email Sending REST API. To enable real delivery, configure these variables/secrets on the Cloudflare Pages project that serves this repository:
-- `CLOUDFLARE_EMAIL_API_TOKEN` — encrypted secret with Email Sending: Edit permission.
-- `CLOUDFLARE_ACCOUNT_ID` — Cloudflare account ID.
-- `EMAIL_FROM` — sender address on a domain onboarded and verified in Cloudflare Email Service (SPF/DKIM configured).
+The Pages Function `/functions/api/ecom-order-email.js` sends a confirmation using Cloudflare Email Sending REST API. To enable real delivery:
+1. Add a custom sending domain to Cloudflare Email Service and complete its DNS verification (SPF/DKIM).
+2. Create a Cloudflare API token with **Email Sending: Edit** permission.
+3. In GitHub repository Settings → Secrets and variables → Actions, add:
+   - Secret `CLOUDFLARE_EMAIL_API_TOKEN` — the Email Sending token.
+   - Variable `EMAIL_FROM` — a sender address on the verified domain (for example, `orders@your-verified-domain`).
+   - Existing deployment secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are used to sync the email settings to Cloudflare Pages.
+4. Run the **Deploy Cloudflare Pages** workflow again. Its optional email-setup step copies these values into Cloudflare Pages secrets.
+
+Do not paste API tokens or passwords into chat or commit them to GitHub source.
 
 Cloudflare Email Sending requires Workers Paid for arbitrary customer recipient addresses. On the Free plan, sends are limited to verified destination addresses, which is not suitable for arbitrary shoppers. Until the three settings and domain are configured, orders still save and confirm, but the page reports that the confirmation email could not be sent. Never put the Cloudflare API token in frontend code or GitHub source.
 
