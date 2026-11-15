@@ -63,23 +63,47 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 .primary{width:100%;border:0;background:var(--gold);color:var(--navy);font-weight:800;border-radius:10px;padding:13px;margin-top:14px}
 .err{color:var(--red);font-size:13px;min-height:18px;margin-top:6px}
 @media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}.heroin,.seller{grid-template-columns:1fr}.hero h1{font-size:34px}.trustin{grid-template-columns:1fr 1fr}}
+.menuBtn{width:46px;height:46px;border:1px solid #ffffff55;border-radius:12px;background:transparent;color:#fff;font-size:26px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}.menuShade{position:fixed;inset:0;background:#07162dcc;z-index:80;opacity:0;pointer-events:none;transition:opacity .2s}.menuShade.open{opacity:1;pointer-events:auto}.menuPanel{position:absolute;right:0;top:0;height:100%;width:min(340px,88vw);background:#fff;color:var(--ink);padding:22px 18px;box-shadow:-12px 0 40px #0003;transform:translateX(100%);transition:transform .22s;overflow:auto}.menuShade.open .menuPanel{transform:translateX(0)}.menuHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;font-size:20px;font-weight:850}.menuClose{width:40px;height:40px;border:0;border-radius:10px;background:#edf2f8;color:#17243a;font-size:24px}.menuGroup{padding:8px 0;border-top:1px solid #e5eaf1}.menuLink{display:flex;align-items:center;gap:12px;padding:13px 10px;border-radius:10px;text-decoration:none;color:#17243a;font-weight:650}.menuLink:hover{background:#f1f5fa}.menuLink.primaryLink{background:#fff5d8;color:#604600}.menuLabel{font-size:11px;letter-spacing:.12em;font-weight:800;color:#718096;padding:10px}.navin .navbtn{display:none}
 @media(max-width:650px){.navin{flex-wrap:wrap;padding:10px 12px;gap:9px}.search{order:3;flex-basis:100%;max-width:none}.navbtn{margin-left:auto}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.pic{height:120px;font-size:46px}.heroin{padding:36px 16px}.cta.ghost{margin:10px 0 0}}
 </style>
 </head>
 <body>
 <div class="top">FREE DELIVERY ON ORDERS OVER ৳2,000 · CASH ON DELIVERY · BKASH · NAGAD</div>
 <header class="nav"><div class="navin">
+<button class="menuBtn" id="menuOpen" aria-label="Open menu" aria-expanded="false">☰</button>
 <div class="logo"><img src="logo.png" alt="Suhas logo" width="38" height="38">SUHAS <span>E-COM</span></div>
 <form class="search" id="searchForm" role="search"><input id="search" type="search" placeholder="Search products, brands and sellers..." aria-label="Search products"><button type="submit">Search</button></form>
-<a class="navbtn" href="manage.html">Admin / Seller Centre</a>
 <button class="navbtn gold" id="cartBtn">Cart<span class="badge" id="cartCount">0</span></button>
 </div></header>
+<div class="menuShade" id="menuShade" aria-hidden="true"><aside class="menuPanel" role="dialog" aria-modal="true" aria-label="Main menu">
+<div class="menuHead"><span>SUHAS E-COM Menu</span><button class="menuClose" id="menuClose" aria-label="Close menu">×</button></div>
+<div class="menuGroup">
+<a class="menuLink" href="./index.html">🏠 Home</a>
+<a class="menuLink" href="#catalog" data-menu-close>🛍️ Shop all products</a>
+<a class="menuLink" href="#catalog" data-menu-close>🏷️ Categories & offers</a>
+<a class="menuLink" href="#" id="menuCart">🛒 My Cart</a>
+</div>
+<div class="menuGroup">
+<div class="menuLabel">SELL ON SUHAS</div>
+<a class="menuLink primaryLink" href="manage.html#seller">🏪 Become a Seller</a>
+</div>
+<div class="menuGroup">
+<div class="menuLabel">ACCOUNT & MANAGEMENT</div>
+<a class="menuLink" href="manage.html#admin">🔐 Admin Login</a>
+<a class="menuLink" href="manage.html#seller">📦 Seller Login</a>
+</div>
+<div class="menuGroup">
+<div class="menuLabel">HELP & INFORMATION</div>
+<a class="menuLink" href="#catalog" data-menu-close>☎️ Customer Support</a>
+<a class="menuLink" href="../../privacy-policy.html">🔒 Privacy Policy</a>
+</div>
+</aside></div>
 
 <section class="hero"><div class="heroin">
 <div><div class="eyebrow">BANGLADESH'S GROWING MARKETPLACE</div>
 <h1>Everything you need.<br>Trusted sellers. One place.</h1>
 <p>Shop thousands of products from verified local sellers. Order as a guest in under a minute and pay on delivery.</p>
-<a class="cta" href="#catalog">Start shopping</a><a class="cta ghost" href="manage.html">Become a seller</a></div>
+<a class="cta" href="#catalog">Start shopping</a></div>
 <div class="stats"><div class="stat"><b>0%</b><span>Seller joining fee</span></div><div class="stat"><b>COD</b><span>Pay when you receive</span></div><div class="stat"><b>64</b><span>Districts, one platform</span></div><div class="stat"><b>24/7</b><span>Browse &amp; order anytime</span></div></div>
 </div></section>
 
@@ -258,6 +282,13 @@ document.addEventListener('click',e=>{
   else if(t.dataset.dec)changeQty(t.dataset.dec,-1);
 });
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+const menuShade=$('menuShade');
+function closeMenu(){menuShade.classList.remove('open');menuShade.setAttribute('aria-hidden','true');$('menuOpen').setAttribute('aria-expanded','false')}
+$('menuOpen').onclick=()=>{menuShade.classList.add('open');menuShade.setAttribute('aria-hidden','false');$('menuOpen').setAttribute('aria-expanded','true')};
+$('menuClose').onclick=closeMenu;
+menuShade.addEventListener('click',e=>{if(e.target===menuShade||e.target.closest('[data-menu-close]'))closeMenu()});
+$('menuCart').onclick=e=>{e.preventDefault();closeMenu();renderCart();open('cartModal')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
 $('cartBtn').onclick=()=>{renderCart();open('cartModal')};
 $('toCheckout').onclick=()=>{$('coSummary').innerHTML=totalsHtml(totals());close('cartModal');open('checkoutModal')};
 
