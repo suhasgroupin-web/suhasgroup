@@ -8,8 +8,9 @@ Multi-vendor marketplace using GitHub, Cloudflare Pages and Supabase.
 - Orders that fail database validation are not shown as successful.
 
 ## Admin & Seller Centre
-- `manage.html` — Supabase Auth sign-in and seller registration.
+- `manage.html` — Supabase Auth sign-in, first-time Admin account setup, and seller registration.
 - Admin access is checked against `public.ecom_admins`; current authorized admin email: `suhasmax.in@gmail.com`.
+- The first-time Admin setup tab lets the authorized email create its own password; complete the Supabase email-verification step, then sign in. The application does not store or expose the password in GitHub.
 - Admin can create an official store, add/hide/delete products, approve/reject/suspend seller accounts, and update order status.
 - Approved sellers can add, hide and delete their own products. Their products become live immediately in the public catalogue.
 - Seller accounts remain pending until an Admin approves them.
