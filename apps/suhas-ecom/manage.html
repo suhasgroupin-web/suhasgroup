@@ -57,7 +57,7 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.0';
 const db=createClient('https://pokxiylebwzoxunccuwm.supabase.co','sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
-let user=null,vendor=null,isAdmin=false,stores=[];
+let user=null,vendor=null,isAdmin=false,stores=[],orderChannel=null,orderRefreshTimer=null;
 function message(id,text,type=''){const el=$(id);el.textContent=text;el.className='alert'+(type?' '+type:'');el.classList.remove('hidden')}
 function setAuthMode(mode){const login=mode==='login',seller=mode==='signup',admin=mode==='admin';$('loginForm').classList.toggle('hidden',!login);$('signupForm').classList.toggle('hidden',!seller);$('adminSetupForm').classList.toggle('hidden',!admin);$('loginTab').classList.toggle('active',login);$('signupTab').classList.toggle('active',seller);$('adminSetupTab').classList.toggle('active',admin);$('authMsg').classList.add('hidden')}
 function applyAccessRoute(){if(location.hash==='#seller')setAuthMode('signup');else if(location.hash==='#admin')setAuthMode('admin');else setAuthMode('login')}
@@ -88,8 +88,27 @@ async function startDashboard(u){
  if(!isAdmin&&vendor.status!=='approved')message('dashboardMsg','Your seller account is awaiting SUHAS E-COM Admin approval. Product publishing will unlock after approval.');
  else $('dashboardMsg').classList.add('hidden');
  await refreshAll();
+ watchOrderUpdates();
 }
 async function refreshAll(){if(!user)return;await loadStores();await loadProducts();await loadOrders();if(isAdmin)await loadSellers()}
+function watchOrderUpdates(){
+ if(orderChannel){db.removeChannel(orderChannel);orderChannel=null}
+ if(!user)return;
+ orderChannel=db.channel('suhas-ecom-order-updates-'+(isAdmin?'admin':vendor?.id||'seller'))
+  .on('postgres_changes',{event:'*',schema:'public',table:'ecom_orders'},()=>scheduleOrderRefresh())
+  .on('postgres_changes',{event:'*',schema:'public',table:'ecom_order_items'},()=>scheduleOrderRefresh())
+  .subscribe(status=>{
+   if(status==='SUBSCRIBED')message('dashboardMsg','Live order updates connected. New orders and status changes will appear automatically.','success');
+   if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')message('dashboardMsg','Live updates disconnected. Use Refresh data to check the latest orders.','error');
+  });
+}
+function scheduleOrderRefresh(){
+ clearTimeout(orderRefreshTimer);
+ orderRefreshTimer=setTimeout(async()=>{
+  await loadOrders();
+  message('dashboardMsg','Order activity updated just now.','success');
+ },350);
+}
 async function loadStores(){
  if(!isAdmin){stores=vendor?[vendor]:[];return}
  const {data,error}=await db.from('ecom_vendors').select('*').order('created_at',{ascending:false});
@@ -131,6 +150,6 @@ $('sellersBody').addEventListener('click',async e=>{const b=e.target.closest('[d
 $('ordersBody').addEventListener('click',async e=>{const b=e.target.closest('[data-order-save]');if(!b)return;const id=b.dataset.orderSave,status=document.querySelector('[data-order-status="'+id+'"]').value;const {error}=await db.from('ecom_orders').update({status}).eq('id',id);if(error)message('dashboardMsg',error.message,'error');else{message('dashboardMsg','Order status updated.','success');await loadOrders()}});
 $('storeForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget.elements;const row={shop_name:f.shop.value.trim(),owner_name:f.owner.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()||null,city:f.city.value.trim()||null,category:f.category.value.trim()||'General',description:'Official SUHAS E-COM store',status:'approved',user_id:null};const {error}=await db.from('ecom_vendors').insert(row);$('storeMsg').textContent=error?error.message:'Official store created.';if(!error){e.currentTarget.reset();await loadStores()}});
 $('refreshBtn').onclick=async()=>{await refreshAll();message('dashboardMsg','Data refreshed.','success')};
-$('logoutBtn').onclick=async()=>{await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
+$('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
 const {data:{session}}=await db.auth.getSession();if(session?.user){try{await startDashboard(session.user)}catch(e){message('authMsg',e.message,'error')}}else applyAccessRoute();
 </script></body></html>
