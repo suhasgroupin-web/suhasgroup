@@ -50,8 +50,9 @@ body .tabbar,body .social-mobile-nav,body .mobile-bottom-nav,body .bottom-nav,bo
 </style>
 </head><body>
 <script id="suhas-max-login-mode">
-if(new URLSearchParams(location.search).get('max')==='1')document.documentElement.classList.add('suhas-max-login');
-document.addEventListener('DOMContentLoaded',function(){if(new URLSearchParams(location.search).get('max')!=='1')return;document.title='Log in | SUHAS-MAX';document.querySelector('.site-header')?.remove();document.querySelector('.site-footer')?.remove();document.querySelector('.auth-brand')?.remove();const signup=document.querySelector('.auth-actions a[href="signup.html"]');signup?.remove();document.querySelector('.linkline')?.remove();const forgot=document.querySelector('a[href="reset.html"]');forgot?.parentElement?.remove();const copy=document.querySelector('.form-card>p:first-of-type');if(copy)copy.textContent='Sign in to your independent SUHAS-MAX account. Your SUHAS-MAX and Messenger profile stay connected.';const heading=document.querySelector('.form-card h1');if(heading)heading.textContent='Welcome to SUHAS-MAX';});
+function suhasMaxAuthContext(){const p=new URLSearchParams(location.search);const n=(p.get('next')||'').toLowerCase();return p.get('max')==='1'||/(^|\/)(home|social|messenger|suhas-max-ai|max-profile)\.html/.test(n);}
+if(suhasMaxAuthContext())document.documentElement.classList.add('suhas-max-login');
+document.addEventListener('DOMContentLoaded',function(){if(!suhasMaxAuthContext())return;document.title='Log in | SUHAS-MAX';document.querySelector('.site-header')?.remove();document.querySelector('.site-footer')?.remove();document.querySelector('.auth-brand')?.remove();const signup=document.querySelector('.auth-actions a[href="signup.html"]');signup?.remove();document.querySelector('.linkline')?.remove();const forgot=document.querySelector('a[href="reset.html"]');if(forgot){const p=new URLSearchParams(location.search);const next=p.get('next')||'/home.html';forgot.href='reset.html?max=1&next='+encodeURIComponent(next);forgot.parentElement.style.display='';}const copy=document.querySelector('.form-card>p:first-of-type');if(copy)copy.textContent='Sign in to SUHAS-MAX and connect with your community.';const heading=document.querySelector('.form-card h1');if(heading)heading.textContent='Welcome back';});
 </script>
 
 <header class="site-header"><div class="nav-wrap">
