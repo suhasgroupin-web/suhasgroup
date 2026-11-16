@@ -23,12 +23,22 @@
 <script>
 (function(){
  var promptEvent=null,button=document.getElementById('install'),status=document.getElementById('status');
- window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();promptEvent=e;});
+ function say(t){status.textContent=t;}
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();promptEvent=e;button.disabled=false;button.textContent='Install SUHAS MAX';});
+ window.addEventListener('appinstalled',function(){promptEvent=null;say('SUHAS MAX সফলভাবে ইনস্টল হয়েছে।');});
  button.addEventListener('click',async function(){
-  if(promptEvent){promptEvent.prompt();var result=await promptEvent.userChoice;status.textContent=result.outcome==='accepted'?'SUHAS MAX ইনস্টল হচ্ছে।':'ইনস্টল বাতিল করা হয়েছে।';promptEvent=null;return;}
-  status.textContent='Chrome-এর ⋮ মেনু থেকে Install app নির্বাচন করুন।';
+  if(promptEvent){var p=promptEvent;promptEvent=null;try{await p.prompt();var result=await p.userChoice;say(result.outcome==='accepted'?'SUHAS MAX ইনস্টল হচ্ছে।':'ইনস্টল বাতিল করা হয়েছে।');}catch(err){say('Chrome menu থেকে Install app নির্বাচন করুন।');}return;}
+  say('এই Browser এখন Install Prompt দেয়নি। Chrome-এর ⋮ মেনু → Install app / Add to Home screen নির্বাচন করুন।');
  });
- window.addEventListener('appinstalled',function(){status.textContent='SUHAS MAX সফলভাবে ইনস্টল হয়েছে।';});
+ if(!('serviceWorker' in navigator)){say('এই Browser PWA Install সমর্থন করছে না। Android Chrome ব্যবহার করুন।');return;}
+ navigator.serviceWorker.register('/sw.js?v=2026.11.16.2',{scope:'/'}).then(function(reg){
+   return navigator.serviceWorker.ready;
+ }).then(function(reg){
+   say('SUHAS MAX প্রস্তুত। Install Prompt আসতে কয়েক সেকেন্ড অপেক্ষা করুন; না এলে Chrome menu ব্যবহার করুন।');
+ }).catch(function(err){
+   say('Service Worker চালু হয়নি। Chrome-এ পেজটি খুলে আবার চেষ্টা করুন।');
+   console.error('SUHAS MAX service worker registration failed',err);
+ });
 })();
 </script>
 </body></html>
