@@ -126,6 +126,7 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e;});
  installBtn.addEventListener('click',async function(){if(!installPrompt){alert('Open Chrome menu ⋮ and choose Install app or Add to Home screen.');return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;});
  window.addEventListener('appinstalled',function(){installPrompt=null;});
+ if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js?v=2026.11.16.4',{scope:'/'}).catch(function(err){console.error('SUHAS MAX service worker registration failed',err);});}
  var panel=document.getElementById('welcome-signup-panel'),gate=document.querySelector('.gate'),form=document.getElementById('welcome-signup-form'),btn=document.getElementById('welcome-submit'),msg=document.getElementById('welcome-signup-msg');
  function say(t,ok){msg.textContent=t;msg.style.display='block';msg.style.background=ok?'#e7f6ec':'#fdecea';msg.style.color=ok?'#17633a':'#9e2c20';}
  document.getElementById('welcome-signup-open').onclick=function(){panel.hidden=false;gate.classList.add('signup-open');document.getElementById('welcome-fullname').focus();};
