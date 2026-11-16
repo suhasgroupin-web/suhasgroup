@@ -29,9 +29,9 @@
       "purpose": "any"
     },
     {
-      "src": "/assets/suhas-max-app-icon.svg",
+      "src": "/assets/suhas-max-icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
