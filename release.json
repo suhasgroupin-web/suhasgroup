@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.14.3",
-  "published_at": "2026-11-13T18:15:00.000Z",
+  "version": "2026.11.16.1",
+  "published_at": "2026-11-16T00:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "An install button is now available when a new SUHAS release is waiting.",
+  "update_message": "SUHAS MAX app identity and install icon updated.",
   "mandatory": true
 }
