@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.16.2",
+  "version": "2026.11.16.3",
   "published_at": "2026-11-16T00:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS MAX PWA install page now registers its service worker and uses the dedicated app identity.",
+  "update_message": "Improved PWA install reliability, added SUHAS MAX PNG icon, and made optional precache failures non-blocking.",
   "mandatory": true
 }
