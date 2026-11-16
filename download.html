@@ -7,13 +7,13 @@
 <title>SUHAS MAX – Install App</title>
 <meta name="description" content="Install the official SUHAS MAX app on your Android phone.">
 <link rel="manifest" href="/manifest.json">
-<link rel="icon" href="/assets/suhas-max-app-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/suhas-max-icon-192.png" type="image/png"><link rel="apple-touch-icon" href="/assets/suhas-max-icon-192.png">
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#fff3a0,#ffc400 55%,#f29a00);font-family:Arial,sans-serif;color:#10214b}.card{width:min(100%,440px);padding:28px 24px 30px;text-align:center;border-radius:28px;background:#fff;box-shadow:0 18px 55px #80500035;border:1px solid #fff8}.logo{width:156px;height:156px;object-fit:contain;border-radius:28px;box-shadow:0 8px 24px #73500026}h1{margin:18px 0 8px;font-size:30px;font-weight:900;color:#082b85}p{line-height:1.65;color:#4c5870}.install{display:block;width:100%;margin:22px 0 12px;padding:16px;border:0;border-radius:15px;background:linear-gradient(#2588ff,#0757df);color:white;font-size:19px;font-weight:900;box-shadow:0 5px 0 #0640a5;cursor:pointer}.hint{font-size:14px;background:#fff7d7;padding:14px;border-radius:12px;text-align:left}.status{min-height:24px;font-weight:700;color:#0a4a9c}
 </style>
 </head>
 <body><main class="card">
-<img class="logo" src="/assets/suhas-max-app-icon.svg" alt="SUHAS MAX app logo">
+<img class="logo" src="/assets/suhas-max-icon-192.png" alt="SUHAS MAX app logo">
 <h1>SUHAS MAX</h1>
 <p>আপনার ফোনে SUHAS MAX অ্যাপ ইনস্টল করুন।</p>
 <button class="install" id="install" type="button">Install SUHAS MAX</button>
@@ -31,7 +31,7 @@
   say('এই Browser এখন Install Prompt দেয়নি। Chrome-এর ⋮ মেনু → Install app / Add to Home screen নির্বাচন করুন।');
  });
  if(!('serviceWorker' in navigator)){say('এই Browser PWA Install সমর্থন করছে না। Android Chrome ব্যবহার করুন।');return;}
- navigator.serviceWorker.register('/sw.js?v=2026.11.16.2',{scope:'/'}).then(function(reg){
+ navigator.serviceWorker.register('/sw.js?v=2026.11.16.3',{scope:'/'}).then(function(reg){
    return navigator.serviceWorker.ready;
  }).then(function(reg){
    say('SUHAS MAX প্রস্তুত। Install Prompt আসতে কয়েক সেকেন্ড অপেক্ষা করুন; না এলে Chrome menu ব্যবহার করুন।');
