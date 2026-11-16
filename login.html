@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded',function(){if(!suhasMaxAuthContext(
 <script src="assets/auth.js?v=20261111-independent-max"></script>
 <script src="assets/script.js"></script>
 <script>
-var maxLoginMode=new URLSearchParams(location.search).get('max')==='1';
+var maxLoginMode=typeof suhasMaxAuthContext==='function'&&suhasMaxAuthContext();
 function maxDestination(){var next=window.safeNext(new URLSearchParams(location.search).get('next'));return next==='main-menu.html'?'/home.html':next;}
 (async function(){
  var sessionResult=await sb.auth.getSession();
