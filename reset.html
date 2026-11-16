@@ -12,6 +12,10 @@
 <meta name="apple-mobile-web-app-title" content="SUHAS GROUP">
 <link rel="stylesheet" href="assets/styles.css">
 <style>.auth-switch{width:100%;max-width:460px;margin:18px auto 0;padding:0 16px;display:flex;gap:12px;box-sizing:border-box}.auth-switch .btn{flex:1;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none!important;border-radius:9px!important;font-weight:700!important}.auth-wrap{min-height:calc(100vh - 150px)!important}.site-header .nav-cta{display:none!important}@media(max-width:600px){.auth-switch{margin-top:14px;padding:0 14px;gap:10px}.auth-switch .btn{min-height:46px}.auth-wrap{min-height:calc(100dvh - 130px)!important}}</style>
+<script>
+(function(){const p=new URLSearchParams(location.search);if(p.get('max')!=='1')return;document.documentElement.classList.add('suhas-max-reset');document.title='Reset password | SUHAS-MAX';document.addEventListener('DOMContentLoaded',function(){document.querySelector('.site-header')?.remove();document.querySelector('.site-footer')?.remove();document.querySelector('.auth-switch')?.remove();document.querySelector('.auth-brand')?.remove();const copy=document.querySelector('#req>p');if(copy)copy.textContent='Enter your SUHAS-MAX email and we will send a secure password reset link.';const back=document.querySelector('.linkline a');if(back)back.href='login.html?max=1&next='+encodeURIComponent(p.get('next')||'/home.html');});})();
+</script>
+<style>.suhas-max-reset .site-header,.suhas-max-reset .site-footer,.suhas-max-reset .auth-brand{display:none!important}</style>
 </head><body>
 <header class="site-header"><div class="nav-wrap">
 <a href="index.html" class="brand"><img src="assets/logo.png" alt="SUHAS GROUP logo"><div><div class="brand-name">SUHAS GROUP</div><div class="brand-tag">Global Opportunities, Trusted Quality</div></div></a>
@@ -54,7 +58,7 @@ sb.auth.onAuthStateChange(function(ev){ if(ev==='PASSWORD_RECOVERY'){ showNew();
 document.getElementById('req-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var btn=document.getElementById('sub'); btn.disabled=true;
-  var r = await sb.auth.resetPasswordForEmail(document.getElementById('email').value.trim(), { redirectTo: new URL('reset.html', window.location.href).href });
+  var resetParams=new URLSearchParams(location.search);var resetTarget='reset.html'+(resetParams.get('max')==='1'?'?max=1&next='+encodeURIComponent(resetParams.get('next')||'/home.html'):'');var r = await sb.auth.resetPasswordForEmail(document.getElementById('email').value.trim(), { redirectTo: new URL(resetTarget, window.location.href).href });
   btn.disabled=false;
   if(r.error){ showMsg('msg', r.error.message, false); } else { showMsg('msg','If this email is registered, a reset link has been sent.', true); }
 });
@@ -67,7 +71,7 @@ document.getElementById('new-form').addEventListener('submit', async function(e)
   }
   var r = await sb.auth.updateUser({ password: newPassword });
   btn.disabled=false;
-  if(r.error){ showMsg('msg2', r.error.message, false); } else { showMsg('msg2','Password updated. Redirecting...', true); setTimeout(function(){ location.href='profile.html'; }, 1200); }
+  if(r.error){ showMsg('msg2', r.error.message, false); } else { showMsg('msg2','Password updated. Redirecting to SUHAS-MAX...', true); setTimeout(function(){ var p=new URLSearchParams(location.search);location.href=p.get('max')==='1'?(p.get('next')||'/home.html'):'profile.html'; }, 1200); }
 });
 </script>
 </body></html>
