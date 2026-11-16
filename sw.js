@@ -4,12 +4,12 @@ const CORE = [
   'index.html','home.html','social.html','max-profile.html','suhas-max-ai.html','messenger.html','messenger.js','messenger.css','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
   'login.html','signup.html','main-menu.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','factories.html','factory-profile.html','job-portals.html','resume-builder.html','privacy-policy.html','religion.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
   'assets/styles.css','assets/welcome-onboarding.js','assets/ambient-scenes/manifest.json','assets/suhas-max-composer-v1.css','assets/suhas-max-fb-mobile-v1.css','assets/suhas-max-bottom-nav-locked-v1.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/hrm.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
-  'barcode/index.html','assets/suhas-max-app-icon.svg','manifest.json','download.html'
+  'barcode/index.html','assets/suhas-max-app-icon.svg','assets/suhas-max-icon-192.png','manifest.json','download.html'
 ];
 
 self.addEventListener('install', function(e){
   // Keep an updated worker waiting until the member explicitly chooses Install.
-  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(CORE); }));
+  e.waitUntil(caches.open(CACHE).then(function(c){ return Promise.all(CORE.map(function(path){ return c.add(path).catch(function(err){ console.warn('SUHAS MAX optional cache skipped:', path, err); return null; }); })); }));
 });
 
 self.addEventListener('message', function(e){
