@@ -31,6 +31,13 @@ jobs:
           branch=$(printf '%s' "$response" | jq -er '.result.production_branch')
           echo "Cloudflare Pages production branch: $branch"
           echo "production_branch=$branch" >> "$GITHUB_OUTPUT"
+      - name: Generate required 512px SUHAS MAX PNG install icon
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y imagemagick
+          convert assets/suhas-max-icon-192.png -filter Lanczos -resize 512x512\! PNG32:assets/suhas-max-icon-512.png
+          identify -format '%wx%h %m\\n' assets/suhas-max-icon-512.png
       - name: Deploy static SUHAS-MAX site to Cloudflare Pages production
         uses: cloudflare/wrangler-action@v3
         with:
