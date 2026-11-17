@@ -1,4 +1,10 @@
 (function(){
+  // Keep the retired GitHub Pages fallback from accepting new sessions or signup callbacks.
+  // Preserve the exact route and query while moving visitors to the canonical Cloudflare app.
+  if(location.hostname==='suhasgroupin-web.github.io'){
+    location.replace('https://suhasgroup.pages.dev'+location.pathname.replace(/^\/suhasgroup(?=\/|$)/,'')+location.search+location.hash);
+    return;
+  }
   var authScriptUrl=document.currentScript&&document.currentScript.src?document.currentScript.src:location.href;
   var appRootPath=new URL('../',authScriptUrl).pathname;
   var routeParts=location.pathname.split('/').filter(Boolean);
