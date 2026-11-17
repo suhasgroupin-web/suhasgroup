@@ -140,7 +140,9 @@
   };
 
   async function enforceMemberProfile(session){
-    if(!session || page==='main-menu.html' || (isPublicAuthPage()&&!isSuhasMaxRoute)) return true;
+    // The profile page must remain reachable so members can complete a missing/incomplete profile.
+    // Blocking it until profile_complete is true creates a redirect loop through the legacy profile.html route.
+    if(!session || page==='main-menu.html' || page==='profile.html' || (isPublicAuthPage()&&!isSuhasMaxRoute)) return true;
     try{
       if(isSuhasMaxRoute){
         if(page==='max-profile.html') return true;
