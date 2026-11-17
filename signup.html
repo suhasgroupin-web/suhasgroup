@@ -104,7 +104,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
   e.preventDefault();
   var btn=document.getElementById('sub'); btn.disabled=true; btn.textContent='Creating account...';
   var fullName=document.getElementById('name').value.trim();
-  var emailVal=document.getElementById('email').value.trim();
+  var emailVal=document.getElementById('email').value.trim().toLowerCase();
   var passVal=document.getElementById('password').value;
   var isO5 = checkO5Email();
   var roleVal = isO5 ? 'o5_employee' : document.getElementById('role').value;
