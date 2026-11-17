@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.17.3",
-  "published_at": "2026-11-17T09:20:00.000Z",
+  "version": "2026.11.17.4",
+  "published_at": "2026-11-17T09:50:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Fixes: buttons no longer force the profile screen (a gentle reminder is shown instead) and the profile cover photo now stays in place when a profile photo is set.",
+  "update_message": "Profile header redesigned: cover photo sits on top, profile photo and name are now clearly visible below it.",
   "mandatory": true
 }
