@@ -133,10 +133,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function ic(d) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>'; }
   var nav = document.createElement('nav'); nav.className = 'tabbar'; nav.setAttribute('aria-label', 'SUHAS GROUP navigation');
   var tabs = [
-    ['main-menu.html', 'Main Menu', page === 'main-menu.html' || page === 'app.html', ic('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'), ''],
+    ['app.html', 'Main Menu', page === 'app.html' || page === 'main-menu.html', ic('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'), ''],
     ['jobs.html', 'Job', page === 'jobs.html' || page === 'job.html', ic('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), ''],
     ['o5-desk.html', "O5'Intl", page === 'o5-desk.html' || page.startsWith('barcode'), '<img class="brand-icon o5-international-icon" src="assets/icons/o5-international-logo.svg?v=6" alt="O5 International" />', 'o5-international'],
-    ['group.html#careers', 'Careers', page === 'group.html' || page === 'profile.html', ic('<path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>'), ''],
+    ['group.html#careers', 'Careers', page === 'group.html', ic('<path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>'), ''],
+    ['apps/suhas-group/career-profile/profile.html', 'User', page === 'profile.html', ic('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'), ''],
     ['home.html', 'SUHAS MAX', page === 'home.html' || page === 'social.html' || page === 'messenger.html', ic('<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/>'), '']
   ];  nav.innerHTML = tabs.map(function (t) {
     return '<a href="' + t[0] + '" class="' + (t[2] ? 'on ' : '') + (t[1] === 'SUHAS MAX' ? 'suhas-max-launch ' : '') + t[4] + '"' + (t[1] === 'Account' ? ' id="sg-acct"' : '') + (t[2] ? ' aria-current="page"' : '') + (t[4] === 'o5-international' ? ' aria-label="O5 International" title="O5 International"' : '') + '>' + t[3] + '<span>' + t[1] + '</span></a>';
@@ -150,15 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
     displayLoader.defer = true;
     document.body.appendChild(displayLoader);
   }
-  // Careers opens a compact submenu so Profile remains accessible without taking a bottom-nav slot.
-  var careersTab = Array.prototype.find.call(nav.querySelectorAll('a'), function (a) { return a.textContent.trim() === 'Careers'; });
-  if (careersTab) {
-    careersTab.addEventListener('click', function (e) {
-      e.preventDefault();
-      var menu = SG.sheet('<h3>Careers</h3><p>Choose where you want to go.</p><div class="stack"><a class="btn btn-primary" href="group.html#careers">Careers</a><a class="btn btn-outline" href="profile.html">Profile</a></div>');
-      menu.el.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { menu.close(); }); });
-    });
-  }
+  // Careers and User are direct destinations: every bottom tab navigates on the first tap.
   if (window.sb && sb.auth) {
     sb.auth.getSession().then(async function (r) {
       var a = document.getElementById('sg-acct');
