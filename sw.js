@@ -1,4 +1,4 @@
-const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v126';
+const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v127';
 const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
 const CORE = [
   'index.html','home.html','social.html','max-profile.html','suhas-max-ai.html','messenger.html','messenger.js','messenger.css','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
@@ -7,8 +7,33 @@ const CORE = [
   'barcode/index.html','assets/suhas-max-app-icon.svg','assets/suhas-max-icon-192.png','assets/suhas-max-icon-512.png','manifest.json','download.html'
 ];
 
+var OFFLINE_HTML = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A2A66"><title>SUHAS MAX</title></head><body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a2a66;font-family:Arial,sans-serif;padding:20px;box-sizing:border-box"><div style="max-width:360px;width:100%;background:#fff;color:#152b4b;border-radius:18px;padding:26px 22px;text-align:center"><h2 style="margin:0 0 8px;color:#0a2a66">SUHAS MAX</h2><p style="margin:0 0 16px;font-size:14px;line-height:1.5;color:#52627b">No connection right now. Please check your internet and try again.</p><button onclick="location.reload()" style="width:100%;padding:13px;border:0;border-radius:10px;background:#1877f2;color:#fff;font-size:15px;font-weight:700">Try again</button></div></body></html>';
+
+function offlineResponse(request){
+  if (request && request.mode === 'navigate') {
+    return new Response(OFFLINE_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
+  return Response.error();
+}
+
+async function cachedOrOffline(request, options){
+  try {
+    var cache = await caches.open(CACHE);
+    var hit = await cache.match(request, options);
+    if (hit) return hit;
+  } catch (err) {}
+  return offlineResponse(request);
+}
+
+// The Supabase library lives on a public CDN. Keep a copy so the app still opens when that CDN is slow or blocked.
+function isSupabaseLibrary(url){
+  return /^https:\/\/(cdn\.jsdelivr\.net|unpkg\.com)\/.*supabase-js/i.test(url);
+}
+
 self.addEventListener('install', function(e){
-  // Keep an updated worker waiting until the member explicitly chooses Install.
+  // Releases flagged "mandatory" in release.json activate immediately so a broken version never stays installed.
+  // Other releases wait until the member explicitly chooses Install.
+  e.waitUntil(fetch('release.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(info){ if (info && info.mandatory === true) return self.skipWaiting(); }).catch(function(){}));
   e.waitUntil(caches.open(CACHE).then(function(c){ return Promise.all(CORE.map(function(path){ return c.add(path).catch(function(err){ console.warn('SUHAS MAX optional cache skipped:', path, err); return null; }); })); }));
 });
 
@@ -27,6 +52,19 @@ self.addEventListener('activate', function(e){
 self.addEventListener('fetch', function(e){
   var url = e.request.url;
   if (e.request.method !== 'GET') return;
+  if (isSupabaseLibrary(url)) {
+    e.respondWith(caches.open(CACHE).then(async function(cache){
+      var cached = await cache.match(e.request);
+      var network = fetch(e.request).then(function(response){
+        if (response && (response.ok || response.type === 'opaque')) { cache.put(e.request, response.clone()).catch(function(){}); }
+        return response;
+      }).catch(function(){ return null; });
+      if (cached) { e.waitUntil(network); return cached; }
+      var fresh = await network;
+      return fresh || Response.error();
+    }));
+    return;
+  }
   // Never cache Supabase API/auth calls or privileged pages.
   if (url.indexOf('supabase.co') > -1 || url.indexOf('admin.html') > -1 || url.indexOf('edit-suhas.html') > -1) return;
   var requestUrl = new URL(url);
@@ -42,7 +80,7 @@ self.addEventListener('fetch', function(e){
       }
       return response;
     }).catch(async function() {
-      return (await caches.open(CACHE)).match(e.request) || Response.error();
+      return cachedOrOffline(e.request);
     }));
     return;
   }
@@ -57,7 +95,7 @@ self.addEventListener('fetch', function(e){
       }
       return response;
     }).catch(async function() {
-      return (await caches.open(CACHE)).match(e.request) || Response.error();
+      return cachedOrOffline(e.request);
     }));
     return;
   }
@@ -71,7 +109,7 @@ self.addEventListener('fetch', function(e){
       }
       return response;
     }).catch(async function() {
-      return (await caches.open(CACHE)).match(e.request, { ignoreSearch: true }) || Response.error();
+      return cachedOrOffline(e.request, { ignoreSearch: true });
     }));
     return;
   }
@@ -85,7 +123,7 @@ self.addEventListener('fetch', function(e){
       }
       return response;
     }).catch(async function() {
-      return (await caches.open(CACHE)).match(e.request, { ignoreSearch: true }) || Response.error();
+      return cachedOrOffline(e.request, { ignoreSearch: true });
     }));
     return;
   }
@@ -100,7 +138,7 @@ self.addEventListener('fetch', function(e){
         if (response && response.ok) await cache.put(e.request, response.clone());
         return response;
       } catch (error) {
-        return (await cache.match('index.html', { ignoreSearch: true })) || Response.error();
+        return e.request.mode === 'navigate' ? ((await cache.match('index.html', { ignoreSearch: true })) || offlineResponse(e.request)) : Response.error();
       }
     })
   );

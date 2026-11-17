@@ -25,7 +25,59 @@
     gateStyle.textContent='html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}';
     (document.head||document.documentElement).appendChild(gateStyle);
   }
+
+  // ---- Blank-screen protection -------------------------------------------------
+  // Protected pages stay hidden until a verified session exists. If that check can never
+  // finish (CDN blocked, slow network, stale cache, storage error), show a visible recovery
+  // card instead of an empty white screen. The protected page itself stays hidden.
+  var authRescueTimer=null;
+  function removeAuthRescue(){
+    if(authRescueTimer){clearTimeout(authRescueTimer);authRescueTimer=null;}
+    var old=document.getElementById('suhas-auth-rescue');
+    if(old&&old.parentNode)old.parentNode.removeChild(old);
+  }
+  function repairAppAndReload(){
+    var tasks=[];
+    try{if('serviceWorker' in navigator)tasks.push(navigator.serviceWorker.getRegistrations().then(function(list){return Promise.all(list.map(function(r){return r.unregister();}));}));}catch(e){}
+    try{if(window.caches)tasks.push(caches.keys().then(function(keys){return Promise.all(keys.map(function(k){return caches.delete(k);}));}));}catch(e){}
+    Promise.all(tasks.map(function(t){return t.catch(function(){});})).then(function(){location.reload();},function(){location.reload();});
+  }
+  function showAuthRescue(){
+    if(document.getElementById('suhas-auth-rescue'))return;
+    if(!document.documentElement.classList.contains('suhas-auth-pending'))return;
+    var wrap=document.createElement('div');
+    wrap.id='suhas-auth-rescue';
+    wrap.setAttribute('role','alert');
+    wrap.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,#0a2a66,#050f22);font-family:Arial,sans-serif';
+    var card=document.createElement('div');
+    card.style.cssText='width:100%;max-width:380px;padding:26px 22px;border-radius:20px;background:#fff;color:#152b4b;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45)';
+    var h=document.createElement('h2');h.textContent='SUHAS MAX';h.style.cssText='margin:0 0 8px;font-size:22px;color:#0a2a66';
+    var p=document.createElement('p');p.textContent='The page could not finish loading. Your connection may be slow, or the app files may be outdated.';p.style.cssText='margin:0 0 18px;font-size:14px;line-height:1.5;color:#52627b';
+    function btn(label,primary,fn){
+      var b=document.createElement('button');b.type='button';b.textContent=label;
+      b.style.cssText='display:block;width:100%;margin:8px 0 0;padding:13px;border:0;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;'+(primary?'background:#1877f2;color:#fff':'background:#e9eef6;color:#17345f');
+      b.addEventListener('click',fn);return b;
+    }
+    card.appendChild(h);card.appendChild(p);
+    card.appendChild(btn('Try again',true,function(){location.reload();}));
+    card.appendChild(btn('Go to Login',false,function(){location.replace(appRootPath+'login.html?next='+encodeURIComponent(location.pathname+location.search));}));
+    card.appendChild(btn('Repair app (clear old files)',false,repairAppAndReload));
+    wrap.appendChild(card);
+    document.documentElement.appendChild(wrap);
+  }
+  if(document.documentElement.classList.contains('suhas-auth-pending')){
+    authRescueTimer=setTimeout(showAuthRescue,9000);
+  }
+  // Last-resort safety net: scripts that crash before the session check starts.
+  window.addEventListener('error',function(ev){
+    if(ev&&ev.filename&&/supabase|auth\.js/i.test(ev.filename))showAuthRescue();
+  });
+  window.addEventListener('unhandledrejection',function(){
+    window.setTimeout(function(){showAuthRescue();},4000);
+  });
+
   function revealAuthenticatedPage(){
+    removeAuthRescue();
     document.documentElement.classList.add('suhas-authenticated');
     document.dispatchEvent(new Event('suhas-auth-ready'));
     document.documentElement.classList.remove('suhas-auth-pending');
@@ -39,6 +91,41 @@
 
   if(!isSuhasMaxRoute){var displayScript=document.createElement('script');displayScript.src='assets/display-mode.js?v=9';displayScript.defer=true;document.head.appendChild(displayScript);}
 
+  // The Supabase client normally comes from the CDN <script> tag in the page. If that file is
+  // blocked or slow on the visitor's network, try alternate mirrors before giving up, so the
+  // page never dies silently on a blank screen.
+  function supabaseReady(){return !!(window.supabase&&window.supabase.createClient);}
+  function loadSupabaseFallbacks(done){
+    var mirrors=[
+      'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
+    ];
+    var index=0;
+    (function next(){
+      if(supabaseReady()){done(true);return;}
+      if(index>=mirrors.length){done(false);return;}
+      var s=document.createElement('script');
+      s.src=mirrors[index++];
+      s.async=true;
+      s.onload=function(){next();};
+      s.onerror=function(){next();};
+      (document.head||document.documentElement).appendChild(s);
+    })();
+  }
+  if(supabaseReady()){
+    startAuth();
+  }else{
+    loadSupabaseFallbacks(function(ok){
+      if(ok){startAuth();}
+      else{
+        console.warn('SUHAS-MAX: Supabase library could not be loaded from any source.');
+        if(document.documentElement.classList.contains('suhas-auth-pending'))showAuthRescue();
+        else document.documentElement.classList.remove('suhas-auth-pending');
+      }
+    });
+  }
+
+  function startAuth(){
   var cfg = window.SUHAS_CONFIG;
   window.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
     auth: {
@@ -202,6 +289,7 @@
     if(r && r.error && !session){
       console.warn('SUHAS-MAX could not verify the saved login session yet:',r.error.message);
       if(isPublicAuthPage())document.documentElement.classList.remove('suhas-auth-pending');
+      else showAuthRescue();
       return;
     }
     if(!requireWorkspaceSession(session)) return;
@@ -218,6 +306,7 @@
   }).catch(function(error){
     console.warn('SUHAS-MAX session restoration failed:',error);
     if(isPublicAuthPage())document.documentElement.classList.remove('suhas-auth-pending');
+    else showAuthRescue();
   });
 
   sb.auth.onAuthStateChange(function(event, session){
@@ -240,4 +329,5 @@
   suhasUpdateManager.src=appRootPath+'assets/update-manager.js?v=1';
   suhasUpdateManager.async=true;
   (document.head||document.documentElement).appendChild(suhasUpdateManager);
+  }
 })();

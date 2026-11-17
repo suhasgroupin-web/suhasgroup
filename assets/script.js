@@ -41,7 +41,7 @@ if ('serviceWorker' in navigator) {
     fetch('release.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('release metadata unavailable'); return r.json(); }).then(function (release) {
       var version = encodeURIComponent(release.version || 'current');
       return navigator.serviceWorker.register('sw.js?v=' + version, { updateViaCache: 'none' });
-    }).catch(function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    }).catch(function () { /* never register an unversioned worker: it would conflict with the versioned one */ });
   });
 }
 

@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.17.1",
-  "published_at": "2026-11-17T00:00:00.000Z",
+  "version": "2026.11.17.2",
+  "published_at": "2026-11-17T09:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Software updated: mobile navigation now opens Main Menu, Job, O5'Intl, Careers, User Profile and SUHAS MAX directly. CV Studio remains available from Job tools with PDF download/print.",
+  "update_message": "Reliability fix: pages no longer stay blank when the connection is slow; automatic recovery screen and offline-safe loading added.",
   "mandatory": true
 }

@@ -499,7 +499,7 @@ footer{margin:26px 16px 0;text-align:center;color:#5c6574;font-size:13px}
   var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
   if (isIOS && !standalone && $('iosHint')) $('iosHint').hidden = false;
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { /* offline cache optional */ }); });
+    /* service worker is registered once, with its release version, by the main app */
   }
   els.nums.setAttribute('placeholder', SAMPLE);
   refresh();

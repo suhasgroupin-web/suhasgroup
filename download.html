@@ -32,7 +32,7 @@
   if(!navigator.serviceWorker.controller){say('প্রথমবার Service Worker চালু হয়েছে। একবার পেজ Reload করুন, তারপর Install চাপুন।');return;} say('Chrome এখনো Install Prompt দেয়নি। Chrome-এর ⋮ মেনু → Install app / Add to Home screen নির্বাচন করুন।');
  });
  if(!('serviceWorker' in navigator)){say('এই Browser PWA Install সমর্থন করছে না। Android Chrome ব্যবহার করুন।');return;}
- navigator.serviceWorker.register('/sw.js?v=2026.11.16.4',{scope:'/'}).then(function(reg){
+ fetch('/release.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():{};}).catch(function(){return {};}).then(function(rel){return navigator.serviceWorker.register('/sw.js?v='+encodeURIComponent(rel.version||'current'),{scope:'/',updateViaCache:'none'});}).then(function(reg){
    return navigator.serviceWorker.ready;
  }).then(function(reg){
    if(!navigator.serviceWorker.controller && !sessionStorage.getItem(reloadKey)){
