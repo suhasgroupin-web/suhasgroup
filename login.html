@@ -129,7 +129,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   e.preventDefault();
   var btn=document.getElementById('sub'); btn.disabled=true; btn.textContent='Logging in...';
   try{
-    var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim(), password: document.getElementById('password').value });
+    var r = await sb.auth.signInWithPassword({ email: document.getElementById('email').value.trim().toLowerCase(), password: document.getElementById('password').value });
     if(r.error){ showMsg('msg', r.error.message, false); btn.disabled=false; btn.textContent='Login'; return; }
     if(maxLoginMode){const p=await sb.from('suhas_public_profiles').select('profile_complete').eq('user_id',r.data.user.id).maybeSingle();if(p.error)throw p.error;if(!p.data||p.data.profile_complete!==true){window.location.replace('max-profile.html?setup=1');return;}window.location.replace(maxDestination());}else window.location.replace('main-menu.html');
   }catch(err){ showMsg('msg','Error: '+err.message,false); btn.disabled=false; btn.textContent='Login'; }
