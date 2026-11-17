@@ -234,19 +234,42 @@
       if(isSuhasMaxRoute){
         if(page==='max-profile.html') return true;
         var maxProfile=await sb.from('suhas_public_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-        if(maxProfile.error || !maxProfile.data || maxProfile.data.profile_complete!==true){
+        // Only send the member to profile setup when the database confirms the profile is incomplete.
+        // A temporary network/database error must never bounce the member to the profile screen.
+        if(!maxProfile.error && (!maxProfile.data || maxProfile.data.profile_complete!==true)){
           location.replace(appRootPath+'max-profile.html?setup=1');
           return false;
         }
         return true;
       }
+      // Corporate pages (Job, Careers, O5'Intl, ...) must stay usable. An incomplete profile, or a
+      // temporary network/database error, is shown as a gentle reminder instead of forcing every
+      // button to open the profile screen.
       var result=await sb.from('suhas_member_profiles').select('profile_complete').eq('user_id',session.user.id).maybeSingle();
-      if(result.error || !result.data || result.data.profile_complete!==true){location.replace(appRootPath+'profile.html?setup=1');return false;}
+      if(!result.error && (!result.data || result.data.profile_complete!==true)) showProfileReminder();
       return true;
     }catch(e){
-      if(isSuhasMaxRoute){if(page!=='max-profile.html')location.replace(appRootPath+'max-profile.html?setup=1');return page==='max-profile.html';}
-      location.replace(appRootPath+'profile.html?setup=1');return false;
+      // A failed profile check is not proof that the profile is incomplete: never redirect on errors.
+      return true;
     }
+  }
+
+  function showProfileReminder(){
+    try{
+      if(page==='profile.html'||page==='max-profile.html')return;
+      if(sessionStorage.getItem('suhas-profile-reminder-dismissed')==='1')return;
+    }catch(e){}
+    if(document.getElementById('suhas-profile-reminder'))return;
+    var bar=document.createElement('div');
+    bar.id='suhas-profile-reminder';
+    bar.setAttribute('role','status');
+    bar.style.cssText='position:fixed;left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:2147483000;display:flex;align-items:center;gap:10px;max-width:520px;margin:0 auto;padding:11px 12px;border-radius:12px;background:#0a2a66;color:#fff;font:600 13px/1.35 Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.28)';
+    var text=document.createElement('span');text.style.cssText='flex:1;min-width:0';text.textContent='Complete your profile to unlock all features.';
+    var go=document.createElement('a');go.href=appRootPath+'profile.html?setup=1';go.textContent='Complete';go.style.cssText='flex:none;padding:8px 12px;border-radius:9px;background:#f5c542;color:#241802;font-weight:800;text-decoration:none';
+    var close=document.createElement('button');close.type='button';close.setAttribute('aria-label','Dismiss');close.textContent='×';close.style.cssText='flex:none;border:0;background:transparent;color:#fff;font-size:22px;line-height:1;padding:2px 6px;cursor:pointer';
+    close.addEventListener('click',function(){try{sessionStorage.setItem('suhas-profile-reminder-dismissed','1');}catch(e){}if(bar.parentNode)bar.parentNode.removeChild(bar);});
+    bar.appendChild(text);bar.appendChild(go);bar.appendChild(close);
+    (document.body||document.documentElement).appendChild(bar);
   }
 
   async function paintNav(session){
