@@ -104,7 +104,8 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 <a class="signup" href="signup.html">Sign up</a>
 <a class="login" href="login.html?next=profile.html">Login</a>
 </div>
-<div class="install-row"><button id="welcome-install" class="install-button" type="button">Software Install</button></div>
+<div class="install-row"><button id="welcome-install" class="install-button" type="button">Install SUHAS GROUP</button></div>
+<p id="welcome-install-status" role="status" aria-live="polite" style="margin:10px 0 0;color:#e3edff;font-size:12px;line-height:1.5;text-align:center"></p>
 <section id="welcome-signup-panel" class="welcome-signup-panel" hidden>
 <h2>Create Account</h2>
 <form id="welcome-signup-form">
@@ -122,10 +123,25 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 <script src="assets/auth.js?v=private-gate-1"></script>
 <script>
 (function(){
- var installPrompt=null,installBtn=document.getElementById('welcome-install');
- window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e;});
- installBtn.addEventListener('click',async function(){if(!installPrompt){alert('Open Chrome menu ⋮ and choose Install app or Add to Home screen.');return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;});
- window.addEventListener('appinstalled',function(){installPrompt=null;});
+ var installPrompt=null,installBtn=document.getElementById('welcome-install'),installStatus=document.getElementById('welcome-install-status');
+ function installMessage(message){if(installStatus)installStatus.textContent=message;}
+ function isInstalled(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+ if(isInstalled()){installBtn.textContent='SUHAS GROUP Installed';installBtn.disabled=true;installMessage('অ্যাপটি ইতিমধ্যে ইনস্টল করা আছে। Home Screen থেকে খুলুন।');}
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installPrompt=e;installMessage('ইনস্টল করার জন্য প্রস্তুত। Install বাটনে চাপুন।');});
+ installBtn.addEventListener('click',async function(){
+  if(isInstalled()){installMessage('SUHAS GROUP ইতিমধ্যে ইনস্টল করা আছে।');return;}
+  if(installPrompt){
+   var promptEvent=installPrompt;installPrompt=null;
+   try{await promptEvent.prompt();var choice=await promptEvent.userChoice;installMessage(choice.outcome==='accepted'?'ইনস্টল প্রক্রিয়া শুরু হয়েছে।':'ইনস্টল বাতিল করা হয়েছে।');}
+   catch(error){installMessage('এই ব্রাউজারে সরাসরি ইনস্টল চালু হয়নি। Chrome-এর menu থেকে Install app নির্বাচন করুন।');}
+   return;
+  }
+  var ua=navigator.userAgent||'',isIOS=/iphone|ipad|ipod/i.test(ua),isAndroid=/android/i.test(ua);
+  if(isIOS){installMessage('iPhone/iPad: Share বাটন চাপুন → Add to Home Screen → Add।');}
+  else if(isAndroid){installMessage('Chrome-এ পেজটি খুলুন, তারপর ⋮ menu → Install app বা Add to Home screen নির্বাচন করুন। APK ডাউনলোড করবেন না।');}
+  else{installMessage('Browser menu থেকে Install SUHAS GROUP / Install app নির্বাচন করুন, যদি অপশনটি পাওয়া যায়।');}
+ });
+ window.addEventListener('appinstalled',function(){installPrompt=null;installBtn.textContent='SUHAS GROUP Installed';installBtn.disabled=true;installMessage('SUHAS GROUP সফলভাবে ইনস্টল হয়েছে।');});
  // Service worker registration is handled by assets/update-manager.js (one registration URL only, so versions never conflict).
  var panel=document.getElementById('welcome-signup-panel'),gate=document.querySelector('.gate'),form=document.getElementById('welcome-signup-form'),btn=document.getElementById('welcome-submit'),msg=document.getElementById('welcome-signup-msg');
  function say(t,ok){msg.textContent=t;msg.style.display='block';msg.style.background=ok?'#e7f6ec':'#fdecea';msg.style.color=ok?'#17633a':'#9e2c20';}
