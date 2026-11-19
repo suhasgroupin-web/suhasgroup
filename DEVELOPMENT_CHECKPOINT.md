@@ -1262,3 +1262,22 @@ Date: 2026-11-10
 - Kept the existing `social.html` profile viewer, `max-profile.html` editor, SUHAS-MAX-only profile/auth boundary, Messenger profile connection, and all existing Group modules intact.
 - Bumped release metadata to `2026.11.13.4` and service-worker fallback cache to `v123`; `max-profile.html` remains in the precache list.
 - Cloudflare Pages production deployment and the in-app software-update notification are pending until the Cloudflare production deployment is verified. No claim of live release is made yet.
+
+## 2026-11-19 — CV Studio upgrade (resume-builder.html) + Home Job / Create CV buttons
+### Done in this increment
+- `resume-builder.html` (patched additively, no feature removed): "Download / Print PDF" is now **Download PDF** (real .pdf file, 10pt, selectable text) plus new **Download DOC** (.docx). Print path via Saved CVs / Records is unchanged.
+- **Upload Previous CV** now also auto-fills the form from a PDF or DOCX (new CV record, existing records untouched) and shows it in the live preview; the file is still saved privately to `cv-previous-documents` as before. .doc/.rtf are saved only (no auto-fill).
+- CV font standard = 10pt in PDF, DOC, print and (proportionally scaled) live preview.
+- Signature upload: adaptive paper-to-transparent background removal + crop; fixed the broken empty "Transparent signature preview" image (CSS `[hidden]`).
+- Auto-save: existing local + Supabase auto-save kept; added save on tab hide / page unload.
+- `home.html` Apps grid: added **Job** (jobs.html) and **Create CV** (resume-builder.html).
+- Update notice wording: "Software Updated" + **Install** (`assets/update-manager.js`); update manager now also loaded on resume-builder, jobs, home and main-menu pages. `release.json` bumped to 2026.11.19.1.
+- New files: `assets/cv-studio-plus.js`, `assets/vendor/` (pdf-lib, docx, JSZip, pdf.js — free/open source, lazy-loaded on click).
+### Tests actually run (local static server, login/Supabase stubbed)
+- Download PDF and DOC produce valid files (rendered and visually checked); import round-trip from PDF and from a different-format DOCX; auto-save restores after leaving and returning; signature background removal; Home buttons render and link correctly; inline JS syntax checks pass.
+### Not verified / pending
+- Real signed-in Supabase flow (cloud auto-save row, previous-CV upload to storage) not exercised with a real account.
+- Live URL verification after Cloudflare Pages deploy (see release notes below).
+- PDF export uses Helvetica (Latin text only); Bangla/Arabic characters appear as "?" in PDF (DOC keeps them). Scanned-image PDFs cannot be auto-filled.
+### Rollback
+- Revert this commit; the previous `resume-builder.html` is preserved in git history (5adbc83).

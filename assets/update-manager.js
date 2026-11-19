@@ -13,8 +13,8 @@
   document.head.appendChild(style);
   var toast=document.createElement('div');toast.id='suhas-software-updated';toast.className='suhas-software-updated';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');
   var copy=document.createElement('span');
-  var title=document.createElement('strong');title.textContent='Software Update Available';
-  var detail=document.createElement('small');detail.textContent='Version '+release.version+' is ready to install.';
+  var title=document.createElement('strong');title.textContent='Software Updated';
+  var detail=document.createElement('small');detail.textContent='Version '+release.version+' is ready. Tap Install to finish.';
   copy.append(title,detail);
   var actions=document.createElement('span');actions.className='suhas-update-actions';
   var install=document.createElement('button');install.type='button';install.className='suhas-update-install';install.textContent='Install';

@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.17.4",
-  "published_at": "2026-11-17T09:50:00.000Z",
+  "version": "2026.11.19.1",
+  "published_at": "2026-11-19T01:09:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Profile header redesigned: cover photo sits on top, profile photo and name are now clearly visible below it.",
+  "update_message": "CV Studio: Download PDF and DOC, auto-fill from old CV, transparent signature, 10pt CV font and automatic saving. New Job and Create CV buttons on Home.",
   "mandatory": true
 }

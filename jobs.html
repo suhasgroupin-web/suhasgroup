@@ -203,4 +203,4 @@ configureCareerTools();
 (async function(){try{var result=await sb.from("jobs").select("*").order("created_at",{ascending:false});if(result.error)throw result.error;all=result.data||[];await loadSaved();render()}catch(e){$("count").textContent="Job listings could not be loaded";$("job-list").innerHTML='<div class="job-empty">We could not load opportunities right now. Please refresh the page. <br><small>'+esc(e.message||"Connection error")+'</small></div>';}})();
 })();
 </script>
-</body></html>
+<script src="assets/update-manager.js" defer></script></body></html>
