@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.19.1",
-  "published_at": "2026-11-19T01:09:00.000Z",
+  "version": "2026.11.19.2",
+  "published_at": "2026-11-19T01:24:00.000Z",
   "notify_after_days": 0,
-  "update_message": "CV Studio: Download PDF and DOC, auto-fill from old CV, transparent signature, 10pt CV font and automatic saving. New Job and Create CV buttons on Home.",
+  "update_message": "CV Studio: Professional Experience now has separate fields for Company, Position, Start/End or Running and Job responsibility, with an Add company button. PDF and DOC downloads show experience in a professional layout.",
   "mandatory": true
 }

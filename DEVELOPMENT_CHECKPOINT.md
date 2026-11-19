@@ -1281,3 +1281,15 @@ Date: 2026-11-10
 - PDF export uses Helvetica (Latin text only); Bangla/Arabic characters appear as "?" in PDF (DOC keeps them). Scanned-image PDFs cannot be auto-filled.
 ### Rollback
 - Revert this commit; the previous `resume-builder.html` is preserved in git history (5adbc83).
+
+## 2026-11-19 (2) — CV Studio: structured Professional Experience
+### Done
+- `resume-builder.html`: the single "Professional experience" textarea is replaced by one block per company: Company name, Position / Designation, Start and End month (or **Running** checkbox = "Present"), Job responsibility (one point per line), remove (×) and an **＋ Add company** button. The hidden `#cv-experience` textarea is still the stored value (same save/draft/Supabase `resume_data.experience` key), written as `Company / Position | Jun 2026 – Present / • bullets`, blocks separated by a blank line. Old free-text experience still loads (parsed into blocks; unparseable dates are kept as typed).
+- Live preview, **Download PDF** and **Download DOC** render experience professionally (bold company, italic position, dates right-aligned, bullet responsibilities). Download system unchanged.
+- Old-CV import now fills the experience blocks (company/position/dates/responsibilities); PDF two-column detection made more reliable; `release.json` 2026.11.19.2.
+### Tests run (local, login stubbed)
+- Two companies incl. one Running: text composed correctly; reload restores rows; PDF and DOCX rendered and checked visually; import round-trip from the exported PDF and from a differently formatted DOCX; JS syntax checks.
+### Not verified
+- Real signed-in cloud save; live URL after deploy. Backward compatibility with previously saved CVs relies on the text parser (tested on the legacy "Company / Position | Dates / bullets" format only).
+### Rollback
+- Revert this commit (previous state eeb2f56).

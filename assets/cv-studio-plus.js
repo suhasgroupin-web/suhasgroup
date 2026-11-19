@@ -53,6 +53,51 @@
     return ((d.name || d.title || 'CV').replace(/[^\w\-]+/g, '_').replace(/^_+|_+$/g, '') || 'CV') + '_CV';
   }
 
+
+  /* ---------- structured Professional Experience (company / position | dates / responsibilities) ---------- */
+  function parseExperience(text) {
+    return String(text || '').split(/\n\s*\n/).map(toLines).filter(function (b) { return b.length; }).map(function (ls) {
+      var company = '', role = '', period = '', i = 0;
+      var looksHead = function (l) { return !BUL.test(l) && (/\s\|\s/.test(l) || RE_RANGE.test(l)); };
+      if (!looksHead(ls[0])) { company = ls[0].replace(BUL, ''); i = 1; }
+      if (ls[i] && looksHead(ls[i])) {
+        var parts = ls[i].split(/\s\|\s/);
+        if (parts.length > 1) { role = parts[0].trim(); period = parts.slice(1).join(' | ').trim(); }
+        else { var m = ls[i].match(RE_RANGE); if (m) { period = m[0].trim(); role = ls[i].replace(m[0], '').replace(/[|,\-–—()\s]+$/, '').trim(); } else role = ls[i]; }
+        i++;
+      }
+      return { company: company, role: role, period: period, details: ls.slice(i).map(function (l) { return l.replace(BUL, ''); }) };
+    });
+  }
+  function formatExperience(entries) {
+    return entries.map(function (e) {
+      return [e.company, [e.role, e.period].filter(Boolean).join(' | ')].concat((e.details || []).map(function (d) { return '• ' + d; })).filter(Boolean).join('\n');
+    }).filter(Boolean).join('\n\n');
+  }
+  function parseEmployment(ls) {
+    var idx = [];
+    ls.forEach(function (l, i) { if (RE_RANGE.test(l)) idx.push(i); });
+    if (!idx.length) return ls.length ? [{ company: '', role: '', period: '', details: ls.map(function (l) { return l.replace(BUL, ''); }) }] : [];
+    var isHdr = function (l) { return l && l.length <= 80 && !BUL.test(l) && !/[.;]$/.test(l) && !RE_RANGE.test(l); };
+    var entries = [], starts = [];
+    idx.forEach(function (di, k) {
+      var prev = k ? idx[k - 1] : -1, hs = [], j = di - 1;
+      while (j > prev && hs.length < 2 && isHdr(ls[j])) { hs.unshift(ls[j]); j--; }
+      var line = ls[di], m = line.match(RE_RANGE), rest = line.replace(m[0], '').replace(/[|,\-–—()]+/g, ' ').trim(), hasRest = rest && rest.length > 2;
+      var firstHdr = di - hs.length;
+      if (hasRest) hs.push(rest);
+      starts.push(firstHdr);
+      var DES = /\b(engineer|manager|merchandiser|officer|executive|supervisor|director|head|analyst|coordinator|assistant|inspector|controller|specialist|lead|consultant|technician|incharge|in-charge|auditor|chief)\b/i;
+      if (hs.length > 1 && DES.test(hs[0]) && !DES.test(hs[1])) hs = [hs[1], hs[0]].concat(hs.slice(2));
+      entries.push({ company: hs[0] || '', role: hs.slice(1).join(' | '), period: m[0].trim(), details: [] });
+    });
+    idx.forEach(function (di, k) {
+      var end = k + 1 < idx.length ? starts[k + 1] : ls.length;
+      entries[k].details = ls.slice(di + 1, Math.max(di + 1, end)).map(function (l) { return l.replace(BUL, ''); });
+    });
+    return entries;
+  }
+
   /* ---------- section model shared by PDF and DOC (same order as the live preview) ---------- */
   function model(d) {
     var contact = [d.phone, d.email, d.linkedin, d.location].filter(Boolean);
@@ -68,7 +113,7 @@
     ].filter(function (b) { return b[1].length; });
     var main = [
       ['Professional Summary', toLines(d.summary)],
-      ['Professional Experience', toLines(d.experience)],
+      ['Professional Experience', toLines(d.experience), 'exp', parseExperience(d.experience)],
       ['Key Achievement', toLines(d.achievements)],
       ['Professional Expertise', toLines(d.expertise)],
       ['Employment History', toLines(d.employment)],
@@ -85,10 +130,10 @@
     await loadScript('pdf-lib.min.js', 'PDFLib');
     var P = PDFLib, m = model(d);
     var doc = await P.PDFDocument.create();
-    var F = await doc.embedFont(P.StandardFonts.Helvetica), B = await doc.embedFont(P.StandardFonts.HelveticaBold);
+    var F = await doc.embedFont(P.StandardFonts.Helvetica), B = await doc.embedFont(P.StandardFonts.HelveticaBold), O = await doc.embedFont(P.StandardFonts.HelveticaOblique);
     var cs = [new Set(F.getCharacterSet()), new Set(B.getCharacterSet())];
     var safe = function (t, f) {
-      var set = cs[f === F ? 0 : 1];
+      var set = cs[f === B ? 1 : 0];
       t = String(t).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/ /g, ' ').replace(/[\r\n\t]+/g, ' ');
       return Array.from(t).map(function (ch) { return set.has(ch.codePointAt(0)) ? ch : '?'; }).join('');
     };
@@ -165,7 +210,24 @@
     m.side.forEach(function (b) { head(S, b[0]); lines(S, b[1], b[2] === 'bullet'); });
 
     /* main */
-    m.main.forEach(function (b) { head(M, b[0]); lines(M, b[1], false); M.y -= 4; });
+    function expPdf(entries) {
+      entries.forEach(function (e, idx) {
+        if (idx) M.y -= 5;
+        if (e.company) { M.need(LH * 3); text(M, e.company, { bold: true }); }
+        if (e.role || e.period) {
+          var pw = e.period ? F.widthOfTextAtSize(safe(e.period, F), SZ) : 0;
+          var rl = e.role ? wrap(e.role, O, SZ, M.w - pw - 10) : [''];
+          rl.forEach(function (ln, k) {
+            M.need(LH);
+            if (ln) M.page().drawText(ln, { x: M.x0, y: M.y - SZ, size: SZ, font: O, color: NAVY });
+            if (k === 0 && e.period) M.page().drawText(safe(e.period, F), { x: M.x0 + M.w - pw, y: M.y - SZ, size: SZ, font: F, color: MUTE });
+            M.y -= LH;
+          });
+        }
+        M.y -= 1; lines(M, e.details || [], true);
+      });
+    }
+    m.main.forEach(function (b) { head(M, b[0]); if (b[2] === 'exp') expPdf(b[3]); else lines(M, b[1], false); M.y -= 4; });
     if (d.signatureImage) {
       M.need(86); M.y -= 18;
       var si = await doc.embedPng(await bytes(d.signatureImage));
@@ -210,7 +272,19 @@
     if (d.company) side.push(para(d.company, { color: '44506A' }, { alignment: X.AlignmentType.CENTER }));
     m.side.forEach(function (b) { side.push(head(b[0])); body(b[1], b[2] === 'bullet').forEach(function (p) { side.push(p); }); });
     if (!side.length) side.push(para(''));
-    m.main.forEach(function (b) { main.push(head(b[0])); body(b[1], false).forEach(function (p) { main.push(p); }); });
+    var expDocx = function (entries) {
+      var out = [];
+      entries.forEach(function (e, idx) {
+        if (e.company) out.push(new X.Paragraph({ children: [run(e.company, { bold: true })], keepNext: true, spacing: { before: idx ? 130 : 20, after: 10 } }));
+        if (e.role || e.period) {
+          out.push(new X.Paragraph({ keepNext: !!(e.details && e.details.length), tabStops: [{ type: X.TabStopType.RIGHT, position: 6880 }], spacing: { after: 40 },
+            children: [run(e.role || '', { italics: true, color: NAVY })].concat(e.period ? [new X.TextRun({ children: [new X.Tab(), e.period], font: 'Arial', size: SIZE, color: '44506A' })] : []) }));
+        }
+        (e.details || []).forEach(function (t) { out.push(bullet(t)); });
+      });
+      return out;
+    };
+    m.main.forEach(function (b) { main.push(head(b[0])); (b[2] === 'exp' ? expDocx(b[3]) : body(b[1], false)).forEach(function (p) { main.push(p); }); });
     if (d.signatureImage) {
       var im = await loadImg(d.signatureImage), sc = Math.min(120 / im.width, 42 / im.height);
       main.push(new X.Paragraph({ spacing: { before: 300, after: 20 }, children: [new X.ImageRun({ type: 'png', data: new Uint8Array(await bytes(d.signatureImage)), transformation: { width: Math.round(im.width * sc), height: Math.round(im.height * sc) } })] }));
@@ -288,7 +362,8 @@
       var cut = vp.width * 0.36;
       var left = its.filter(function (i) { return i.x < cut && i.x + i.w < cut + 20; });
       var right = its.filter(function (i) { return left.indexOf(i) < 0; });
-      var groups = (left.length >= 6 && right.length >= 6) ? [left, right] : [its];
+      var clustered = function (arr) { var b = {}, best = 0; arr.forEach(function (i) { var k = Math.round(i.x / 4); b[k] = (b[k] || 0) + 1; if (b[k] > best) best = b[k]; }); return arr.length && best / arr.length >= 0.6; };
+      var groups = (left.length >= 3 && right.length >= 3 && clustered(right) && clustered(left)) ? [left, right] : [its];
       groups.forEach(function (g) { out = out.concat(groupLines(g)); });
     }
     return out;
@@ -396,7 +471,7 @@
     if (!x.location) { var cl = (S.contact || []).filter(function (l) { return !isContact(l); }); if (cl[0]) x.location = cl[0]; }
     var J = function (k2) { return (S[k2] || []).join('\n'); };
     x.summary = (S.summary || []).join(' ');
-    x.experience = J('experience'); x.achievements = J('achievements'); x.expertise = J('expertise');
+    x.experience = formatExperience(parseEmployment(S.experience || [])); x.achievements = J('achievements'); x.expertise = J('expertise');
     x.employment = J('employment'); x.buyers = (S.buyers || []).map(function (l) { return l.replace(BUL, ''); }).join(', ');
     x.competencies = (S.competencies || []).map(function (l) { return l.replace(BUL, ''); }).join('\n');
     x.technical = (S.technical || []).map(function (l) { return l.replace(BUL, ''); }).join(', ');
@@ -420,5 +495,5 @@
     return x;
   }
 
-  window.SuhasCvPlus = { exportPdf: exportPdf, exportDocx: exportDocx, processSignature: processSignature, parseFile: parseFile, save: save, fileBase: fileBase, version: '2026.11.18.1' };
+  window.SuhasCvPlus = { exportPdf: exportPdf, exportDocx: exportDocx, processSignature: processSignature, parseFile: parseFile, parseExperience: parseExperience, formatExperience: formatExperience, save: save, fileBase: fileBase, version: '2026.11.18.1' };
 })();
