@@ -1293,3 +1293,10 @@ Date: 2026-11-10
 - Real signed-in cloud save; live URL after deploy. Backward compatibility with previously saved CVs relies on the text parser (tested on the legacy "Company / Position | Dates / bullets" format only).
 ### Rollback
 - Revert this commit (previous state eeb2f56).
+
+## 2026-11-21 — Easy install hub (download.html)
+- download.html rewritten: platform-aware Install button (beforeinstallprompt), iOS/Safari/Firefox/Edge/Chrome manual steps, in-app browser (Facebook/Messenger/Instagram/WhatsApp WebView) detection with "Open in Chrome" intent link, Copy/Share link, desktop QR code, no-APK safety note. SW registered as /sw.js?v=<release version>.
+- Added missing assets/suhas-max-icon-512.png (manifest + sw.js referenced it, was 404) and maskable 192/512 icons; manifest.json icons updated.
+- QR is static and encodes https://suhasgroup.pages.dev/download.html — regenerate if the domain changes.
+- Verified locally: Chrome CDP installability errors = none; synthetic Android/iOS/FB-in-app/desktop UA tests.
+- NOT verified: real devices, live Google Safe Browsing status of pages.dev. The "harmful (!)" warning, if it persists, is most likely Safe Browsing / APK sideload / in-app browser, not the manifest.

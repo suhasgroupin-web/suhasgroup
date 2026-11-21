@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.19.2",
-  "published_at": "2026-11-19T01:24:00.000Z",
+  "version": "2026.11.21.1",
+  "published_at": "2026-11-21T16:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "CV Studio: Professional Experience now has separate fields for Company, Position, Start/End or Running and Job responsibility, with an Add company button. PDF and DOC downloads show experience in a professional layout.",
+  "update_message": "Easy install: new install page with Install button, Android/iPhone/Desktop steps, QR code and Open-in-Chrome help. App icons fixed.",
   "mandatory": true
 }

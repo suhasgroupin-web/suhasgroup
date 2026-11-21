@@ -5,70 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffd400">
 <title>SUHAS MAX – Install App</title>
-<meta name="description" content="Install the official SUHAS MAX app on your Android phone.">
+<meta name="description" content="Install the official SUHAS MAX app on Android, iPhone, Windows, Mac or any device. No APK download needed.">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/assets/suhas-max-icon-192.png" type="image/png"><link rel="apple-touch-icon" href="/assets/suhas-max-icon-192.png">
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#fff3a0,#ffc400 55%,#f29a00);font-family:Arial,sans-serif;color:#10214b}.card{width:min(100%,440px);padding:28px 24px 30px;text-align:center;border-radius:28px;background:#fff;box-shadow:0 18px 55px #80500035;border:1px solid #fff8}.logo{width:156px;height:156px;object-fit:contain;border-radius:28px;box-shadow:0 8px 24px #73500026}h1{margin:18px 0 8px;font-size:30px;font-weight:900;color:#082b85}p{line-height:1.65;color:#4c5870}.install{display:block;width:100%;margin:22px 0 12px;padding:16px;border:0;border-radius:15px;background:linear-gradient(#2588ff,#0757df);color:white;font-size:19px;font-weight:900;box-shadow:0 5px 0 #0640a5;cursor:pointer}.hint{font-size:14px;background:#fff7d7;padding:14px;border-radius:12px;text-align:left}.status{min-height:24px;font-weight:700;color:#0a4a9c}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#fff3a0,#ffc400 55%,#f29a00);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#10214b}
+.card{width:min(100%,460px);padding:26px 22px 24px;text-align:center;border-radius:28px;background:#fff;box-shadow:0 18px 55px #80500035;border:1px solid #fff8}
+.logo{width:132px;height:132px;object-fit:contain;border-radius:28px;box-shadow:0 8px 24px #73500026}
+h1{margin:16px 0 4px;font-size:30px;font-weight:900;color:#082b85}
+.sub{margin:0 0 6px;line-height:1.5;color:#4c5870;font-size:15px}
+.install{display:block;width:100%;margin:18px 0 10px;padding:16px;border:0;border-radius:15px;background:linear-gradient(#2588ff,#0757df);color:#fff;font-size:19px;font-weight:900;box-shadow:0 5px 0 #0640a5;cursor:pointer;text-decoration:none;font-family:inherit}
+.install:active{transform:translateY(3px);box-shadow:0 2px 0 #0640a5}
+.install[disabled]{background:#9fb1d0;box-shadow:0 5px 0 #7d8fb0;cursor:default}
+.status{min-height:22px;margin:4px 0 10px;font-size:14px;line-height:1.5;color:#35507c}
+.notice{margin:14px 0 4px;padding:14px;border-radius:14px;text-align:left;font-size:14px;line-height:1.6}
+.notice.warn{background:#fff1d6;border:1px solid #f0c36a;color:#5b3b00}
+.notice.ok{background:#e9f8ee;border:1px solid #9bd7ac;color:#14502a}
+.notice[hidden],.steps[hidden],.btn[hidden],.install[hidden]{display:none}
+.steps{margin:12px 0 4px;padding:14px 14px 14px 16px;border-radius:14px;background:#f2f6ff;text-align:left;font-size:14px;line-height:1.65}
+.steps h2{margin:0 0 6px;font-size:15px;color:#082b85}
+.steps ol{margin:0;padding-left:20px}.steps li{margin:4px 0}
+.steps.flash{animation:flash 1.2s ease 1}
+@keyframes flash{0%,100%{box-shadow:0 0 0 0 #2588ff00}40%{box-shadow:0 0 0 4px #2588ff88}}
+.row{display:flex;gap:8px;margin:10px 0 0}
+.btn{flex:1;padding:11px 8px;border:1px solid #cfd9ee;border-radius:12px;background:#fff;color:#082b85;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center}
+.trust{margin-top:16px;padding:12px 14px;border-radius:12px;background:#fff7d7;text-align:left;font-size:13px;line-height:1.6;color:#4a3b00}
+.qr{display:none;margin-top:16px;text-align:center}
+.qr svg{width:148px;height:148px;border:1px solid #dfe6f5;border-radius:12px;background:#fff}
+.qr p{margin:6px 0 0;font-size:13px;color:#4c5870}
+@media (hover:hover) and (pointer:fine) and (min-width:700px){.qr{display:block}}
+kbd{padding:1px 6px;border:1px solid #c5d1ea;border-bottom-width:2px;border-radius:6px;background:#fff;font:inherit;font-size:13px}
 </style>
 </head>
 <body><main class="card">
-<img class="logo" src="/assets/suhas-max-icon-192.png" alt="SUHAS MAX app logo">
+<img class="logo" src="/assets/suhas-max-icon-192.png" alt="SUHAS MAX app logo" width="132" height="132">
 <h1>SUHAS MAX</h1>
-<p>আপনার ফোনে SUHAS MAX অ্যাপ ইনস্টল করুন।</p>
+<p class="sub">অফিসিয়াল অ্যাপ ইনস্টল করুন · Install the official app</p>
+
+<div class="notice warn" id="inapp" hidden></div>
+<div class="notice ok" id="installed" hidden>✔ SUHAS MAX ইতিমধ্যে ইনস্টল করা আছে। Home Screen / Start menu থেকে খুলুন।</div>
+
 <button class="install" id="install" type="button">Install SUHAS MAX</button>
+<a class="install" id="openchrome" href="#" hidden>Chrome-এ খুলুন (Open in Chrome)</a>
 <p class="status" id="status" role="status" aria-live="polite"></p>
-<div class="hint"><strong>নিরাপদ ইনস্টল:</strong><br>SUHAS MAX একটি Progressive Web App (PWA)। এই অফিসিয়াল সাইট থেকে কোনো APK ফাইল ডাউনলোড করার প্রয়োজন নেই।<br><br><strong>Android:</strong> Chrome-এর ⋮ মেনু → Install app / Add to Home screen।<br><strong>iPhone/iPad:</strong> Share → Add to Home Screen।<br><strong>Desktop:</strong> Browser address bar-এর Install আইকন বা menu-এর Install app ব্যবহার করুন।<br><br>অপরিচিত ওয়েবসাইটের APK ইনস্টল করবেন না।</div>
+
+<section class="steps" id="steps" aria-live="polite" hidden></section>
+
+<div class="row">
+ <button class="btn" id="copy" type="button">Copy link</button>
+ <button class="btn" id="share" type="button" hidden>Share</button>
+</div>
+
+<div class="qr" aria-label="QR code">
+ <svg viewBox="-3 -3 35 35" role="img" aria-label="QR code for this install page"><rect x="-3" y="-3" width="35" height="35" fill="#fff"/><path fill="#10214b" d="M0 0h7v1h-7zM9 0h1v1h-1zM12 0h1v1h-1zM14 0h2v1h-2zM18 0h2v1h-2zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h2v1h-2zM14 1h2v1h-2zM17 1h2v1h-2zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h5v1h-5zM16 2h2v1h-2zM19 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h3v1h-3zM15 3h1v1h-1zM18 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h1v1h-1zM14 4h3v1h-3zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h2v1h-2zM11 5h1v1h-1zM15 5h3v1h-3zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h2v1h-2zM12 7h1v1h-1zM17 7h2v1h-2zM0 8h2v1h-2zM3 8h1v1h-1zM6 8h2v1h-2zM10 8h1v1h-1zM13 8h4v1h-4zM18 8h1v1h-1zM22 8h3v1h-3zM26 8h2v1h-2zM0 9h3v1h-3zM4 9h2v1h-2zM10 9h2v1h-2zM16 9h1v1h-1zM20 9h1v1h-1zM22 9h1v1h-1zM25 9h1v1h-1zM28 9h1v1h-1zM0 10h1v1h-1zM2 10h2v1h-2zM6 10h1v1h-1zM8 10h3v1h-3zM13 10h2v1h-2zM17 10h1v1h-1zM19 10h2v1h-2zM23 10h5v1h-5zM2 11h1v1h-1zM7 11h2v1h-2zM13 11h4v1h-4zM19 11h2v1h-2zM22 11h1v1h-1zM26 11h2v1h-2zM1 12h4v1h-4zM6 12h1v1h-1zM12 12h2v1h-2zM15 12h3v1h-3zM21 12h2v1h-2zM25 12h1v1h-1zM27 12h2v1h-2zM0 13h1v1h-1zM2 13h4v1h-4zM7 13h6v1h-6zM14 13h1v1h-1zM17 13h1v1h-1zM19 13h3v1h-3zM0 14h1v1h-1zM3 14h7v1h-7zM12 14h1v1h-1zM14 14h1v1h-1zM16 14h2v1h-2zM21 14h8v1h-8zM0 15h1v1h-1zM2 15h2v1h-2zM8 15h3v1h-3zM12 15h2v1h-2zM16 15h2v1h-2zM20 15h1v1h-1zM22 15h4v1h-4zM27 15h1v1h-1zM2 16h1v1h-1zM5 16h2v1h-2zM8 16h4v1h-4zM15 16h1v1h-1zM17 16h1v1h-1zM20 16h2v1h-2zM27 16h1v1h-1zM1 17h4v1h-4zM7 17h2v1h-2zM14 17h1v1h-1zM16 17h1v1h-1zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM2 18h1v1h-1zM4 18h4v1h-4zM10 18h1v1h-1zM20 18h1v1h-1zM22 18h3v1h-3zM27 18h2v1h-2zM5 19h1v1h-1zM7 19h2v1h-2zM11 19h1v1h-1zM14 19h1v1h-1zM17 19h2v1h-2zM21 19h1v1h-1zM27 19h2v1h-2zM0 20h4v1h-4zM6 20h2v1h-2zM11 20h4v1h-4zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h1v1h-1zM10 21h3v1h-3zM16 21h3v1h-3zM20 21h1v1h-1zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM8 22h1v1h-1zM10 22h4v1h-4zM16 22h2v1h-2zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM9 23h6v1h-6zM16 23h1v1h-1zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM10 24h2v1h-2zM14 24h5v1h-5zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM19 25h1v1h-1zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM9 26h3v1h-3zM13 26h2v1h-2zM16 26h1v1h-1zM19 26h1v1h-1zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM8 27h2v1h-2zM11 27h1v1h-1zM15 27h4v1h-4zM20 27h1v1h-1zM22 27h1v1h-1zM24 27h1v1h-1zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h3v1h-3zM12 28h2v1h-2zM17 28h1v1h-1zM20 28h3v1h-3zM24 28h1v1h-1zM27 28h1v1h-1z"/></svg>
+ <p>ফোন দিয়ে স্ক্যান করুন · Scan with your phone</p>
+</div>
+
+<div class="trust"><strong>নিরাপদ ইনস্টল:</strong> SUHAS MAX একটি Web App (PWA)। কোনো APK বা ফাইল ডাউনলোড করতে হয় না, browser থেকেই সরাসরি ইনস্টল হয়, তাই APK-র মতো “harmful app” সতর্কতা আসে না। অন্য কোনো ওয়েবসাইট থেকে APK পেলে ইনস্টল করবেন না।</div>
 </main>
 <script>
 (function(){
  'use strict';
- var promptEvent=null,button=document.getElementById('install'),status=document.getElementById('status');
- var ios=/iphone|ipad|ipod/i.test(navigator.userAgent||'');
+ var ua=navigator.userAgent||'';
+ var $=function(id){return document.getElementById(id)};
+ var btn=$('install'),status=$('status'),steps=$('steps'),inapp=$('inapp'),openChrome=$('openchrome'),done=$('installed');
+ var pageUrl=location.origin+'/download.html';
+ var isIOS=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ var isAndroid=/android/i.test(ua);
+ var isInApp=/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|WhatsApp|Line\/|MicroMessenger|Snapchat|TikTok|musical_ly|Bytedance|GSA\/|; wv\)/i.test(ua);
+ var isFirefox=/firefox|fxios/i.test(ua), isEdge=/edg(e|a|ios)?\//i.test(ua), isSafariMac=!isIOS&&!isAndroid&&/^((?!chrome|chromium|android).)*safari/i.test(ua);
  var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
- function say(message){status.textContent=message;}
- function setInstalled(){button.textContent='SUHAS MAX Installed';button.disabled=true;say('SUHAS MAX ইতিমধ্যে ইনস্টল করা আছে। Home Screen থেকে খুলুন।');}
+ var promptEvent=null;
+ function say(t){status.textContent=t||''}
+ function li(a){return '<ol>'+a.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ol>'}
+ function showSteps(){
+  var h='';
+  if(isIOS){h='<h2>iPhone / iPad</h2>'+li(['Safari-তে এই পেজ খুলুন।','নিচের <b>Share</b> বাটন (□↑) চাপুন।','নিচে স্ক্রল করে <b>Add to Home Screen</b> চাপুন।','<b>Add</b> চাপুন। Home Screen-এ SUHAS MAX আইকন আসবে।']);}
+  else if(isAndroid){h='<h2>Android</h2>'+li(['Chrome-এর উপরের ডান পাশের <b>⋮</b> মেনু চাপুন।','<b>Install app</b> অথবা <b>Add to Home screen</b> চাপুন।','<b>Install</b> চাপুন। কয়েক সেকেন্ডে Home Screen-এ অ্যাপ আসবে।']);if(isFirefox)h+='<p>Firefox-এ মেনু → <b>Install</b>। না পেলে Chrome ব্যবহার করুন।</p>';}
+  else if(isSafariMac){h='<h2>Mac (Safari)</h2>'+li(['মেনু বার: <b>File → Add to Dock</b>।','<b>Add</b> চাপুন।'])+'<p>Chrome বা Edge-এ খুললে Install বাটনও পাবেন।</p>';}
+  else if(isFirefox){h='<h2>Desktop</h2><p>Firefox desktop-এ web app install সুবিধা নেই। অনুগ্রহ করে <b>Chrome</b> বা <b>Edge</b>-এ এই লিংক খুলুন।</p>';}
+  else if(isEdge){h='<h2>Windows / Mac (Edge)</h2>'+li(['Address bar-এর ডান পাশে <b>Install</b> আইকন চাপুন, অথবা <b>⋯ → Apps → Install this site as an app</b>।','<b>Install</b> চাপুন।']);}
+  else{h='<h2>Windows / Mac / Linux (Chrome)</h2>'+li(['Address bar-এর ডান পাশে <b>Install</b> আইকন (⊕ বা ফোনসহ কম্পিউটার) চাপুন, অথবা <b>⋮ → Cast, save and share → Install page as app</b>।','<b>Install</b> চাপুন। অ্যাপ আলাদা window-এ খুলবে।']);}
+  steps.innerHTML=h;steps.hidden=false;steps.classList.remove('flash');void steps.offsetWidth;steps.classList.add('flash');
+ }
+ function setInstalled(){done.hidden=false;btn.textContent='SUHAS MAX Installed';btn.disabled=true;steps.hidden=true;say('');}
+ function copyLink(){
+  var ok=function(){say('লিংক কপি হয়েছে। এখন Chrome/Safari-তে paste করে খুলুন।')};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(pageUrl).then(ok,fallback)}else fallback();
+  function fallback(){var t=document.createElement('textarea');t.value=pageUrl;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(e){say(pageUrl)}t.remove()}
+ }
+ $('copy').addEventListener('click',copyLink);
+ if(navigator.share){$('share').hidden=false;$('share').addEventListener('click',function(){navigator.share({title:'SUHAS MAX',text:'SUHAS MAX অ্যাপ ইনস্টল করুন',url:pageUrl}).catch(function(){})})}
+
  if(standalone){setInstalled();}
- window.addEventListener('beforeinstallprompt',function(event){
-  event.preventDefault();promptEvent=event;
-  button.disabled=false;button.textContent='Install SUHAS MAX';
-  say('ইনস্টল করার জন্য প্রস্তুত। Install বাটনে চাপুন।');
+ else if(isInApp){
+  btn.hidden=true;
+  inapp.hidden=false;
+  if(isAndroid){
+   inapp.innerHTML='<b>এই পেজ অ্যাপের ভিতরের browser-এ খোলা হয়েছে।</b> এখানে ইনস্টল করা যায় না এবং সতর্কতা দেখাতে পারে। নিচের বাটনে <b>Chrome-এ খুলুন</b>।';
+   openChrome.hidden=false;
+   openChrome.href='intent://'+location.host+'/download.html#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(pageUrl)+';end';
+  }else{
+   inapp.innerHTML='<b>এই পেজ অ্যাপের ভিতরের browser-এ খোলা হয়েছে।</b> ইনস্টল করতে উপরের/নিচের <b>⋯</b> মেনু থেকে <b>Open in Browser / Open in Safari</b> চাপুন, অথবা <b>Copy link</b> চেপে Safari-তে paste করুন।';
+  }
+  if(isIOS)showSteps();
+ }
+ window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();promptEvent=e;
+  if(!standalone&&!isInApp){btn.disabled=false;say('ইনস্টল করার জন্য প্রস্তুত। Install বাটনে চাপুন।');steps.hidden=true;}
  });
  window.addEventListener('appinstalled',function(){promptEvent=null;setInstalled();});
- button.addEventListener('click',async function(){
-  if(standalone){setInstalled();return;}
+ btn.addEventListener('click',function(){
+  if(standalone){setInstalled();return}
   if(promptEvent){
-   var event=promptEvent;promptEvent=null;
-   try{
-    await event.prompt();
-    var choice=await event.userChoice;
-    say(choice.outcome==='accepted'?'ইনস্টল প্রক্রিয়া শুরু হয়েছে।':'ইনস্টল বাতিল হয়েছে। চাইলে পরে আবার চেষ্টা করুন।');
-   }catch(error){showManualSteps();}
+   var ev=promptEvent;promptEvent=null;
+   ev.prompt().then(function(){return ev.userChoice}).then(function(c){say(c.outcome==='accepted'?'ইনস্টল হচ্ছে… একটু অপেক্ষা করুন।':'ইনস্টল বাতিল হয়েছে। চাইলে আবার চেষ্টা করুন।');if(c.outcome!=='accepted')promptEvent=ev;}).catch(function(){showSteps()});
    return;
   }
-  showManualSteps();
+  say('আপনার browser-এর নিয়মে ইনস্টল করুন (নিচের ধাপ দেখুন)।');showSteps();
  });
- function showManualSteps(){
-  if(ios){
-   say('iPhone/iPad: Safari-তে এই পেজ খুলুন → Share বাটন → Add to Home Screen → Add।');
-   return;
-  }
-  if(/android/i.test(navigator.userAgent||'')){
-   say('Android: Chrome বা সমর্থিত browser-এ পেজটি খুলুন → ⋮ menu → Install app / Add to Home screen। APK ডাউনলোড করবেন না।');
-   return;
-  }
-  say('সমর্থিত browser-এ address bar-এর Install আইকন অথবা browser menu-এর Install app নির্বাচন করুন। অপশন না থাকলে এই browser PWA install সমর্থন নাও করতে পারে।');
- }
- if(!('serviceWorker' in navigator)){
-  say('এই browser-এ PWA install সুবিধা নেই। Android-এ Chrome অথবা iPhone/iPad-এ Safari ব্যবহার করুন।');
-  return;
- }
- if(!standalone){
-  navigator.serviceWorker.register('/sw.js',{scope:'/',updateViaCache:'none'})
-   .then(function(){return navigator.serviceWorker.ready;})
-   .then(function(){if(!promptEvent)showManualSteps();})
-   .catch(function(){say('ইনস্টল প্রস্তুত করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পেজটি আবার খুলুন।');});
- }
+ if(!standalone&&!isInApp&&(isIOS||isSafariMac||isFirefox)){showSteps();}
+ if('serviceWorker' in navigator){
+  fetch('/release.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():{}}).catch(function(){return {}}).then(function(rel){
+   return navigator.serviceWorker.register('/sw.js?v='+encodeURIComponent((rel&&rel.version)||'current'),{scope:'/',updateViaCache:'none'});
+  }).catch(function(){});
+ }else if(!isIOS){say('এই browser-এ install সুবিধা নেই। Chrome বা Edge ব্যবহার করুন।');}
 })();
 </script>
 </body></html>
