@@ -22,10 +22,16 @@
   close.addEventListener('click',function(){toast.remove();});
   install.addEventListener('click',function(){
    var waiting=registration.waiting;
-   if(!waiting){install.disabled=true;install.textContent='Preparing…';registration.update().catch(function(){});return;}
    install.disabled=true;install.textContent='Installing…';
    write('suhas-pending-installed-release',release.version);
-   waiting.postMessage({type:'SUHAS_SKIP_WAITING'});
+   if(waiting){waiting.postMessage({type:'SUHAS_SKIP_WAITING'});return;}
+   var active=registration.active;
+   if(active&&active.state==='activated'){
+    location.reload();
+    return;
+   }
+   navigator.serviceWorker.addEventListener('controllerchange',function(){location.reload();},{once:true});
+   registration.update().catch(function(){});
   });
   actions.append(install,close);toast.append(copy,actions);
   (document.body||document.documentElement).appendChild(toast);
@@ -33,6 +39,7 @@
   window.__suhasUpdateNoticeTimer=window.setTimeout(function(){toast.remove();},30000);
  }
  async function start(){
+  var hadControllerAtStart=!!navigator.serviceWorker.controller;
   try{
    var response=await fetch(new URL('release.json',root).href,{cache:'no-store'});
    if(!response.ok)throw new Error('Release information unavailable');
@@ -56,8 +63,16 @@
     showCompleted(release);
     return;
    }
+   var previous=read('suhas-last-seen-release');
+   var activeVersion='';
+   try{activeVersion=new URL(registration.active&&registration.active.scriptURL||'').searchParams.get('v')||'';}catch(e){}
    if(registration.waiting){
     showNotice(release,registration);
+   }else if(activeVersion===release.version&&((previous&&previous!==release.version)||(!previous&&hadControllerAtStart))){
+    write('suhas-last-seen-release',release.version);
+    showCompleted(release);
+   }else if(activeVersion===release.version){
+    write('suhas-last-seen-release',release.version);
    }
    navigator.serviceWorker.addEventListener('controllerchange',function(){
     if(read('suhas-pending-installed-release')===release.version)location.reload();
