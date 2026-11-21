@@ -18,19 +18,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Read Cloudflare Pages production branch
+      - name: Read Cloudflare Pages production branches
         id: pages
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
-          response=$(curl --fail --silent --show-error \
-            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/suhasgroup")
-          branch=$(printf '%s' "$response" | jq -er '.result.production_branch')
-          echo "Cloudflare Pages production branch: $branch"
-          echo "production_branch=$branch" >> "$GITHUB_OUTPUT"
+          for project in suhasgroup suhasmax; do
+            response=$(curl --fail --silent --show-error \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$project")
+            branch=$(printf '%s' "$response" | jq -er '.result.production_branch')
+            echo "${project}_branch=$branch" >> "$GITHUB_OUTPUT"
+            echo "Cloudflare Pages project $project production branch: $branch"
+          done
       - name: Generate required 512px SUHAS MAX PNG install icon
         run: |
           set -euo pipefail
@@ -38,12 +40,39 @@ jobs:
           sudo apt-get install -y imagemagick
           convert assets/suhas-max-icon-192.png -filter Lanczos -resize 512x512\! PNG32:assets/suhas-max-icon-512.png
           identify -format '%wx%h %m\\n' assets/suhas-max-icon-512.png
-      - name: Deploy static SUHAS-MAX site to Cloudflare Pages production
+      - name: Prepare separate E-COM and SUHAS MAX site roots
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/suhasgroup-site
+          cp -a . /tmp/suhasgroup-site/
+          cat > /tmp/suhasgroup-site/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=/apps/suhas-ecom/index.html">
+            <link rel="canonical" href="https://suhasgroup.pages.dev/apps/suhas-ecom/index.html">
+            <title>SUHAS E-COM</title>
+          </head>
+          <body>
+            <p>Opening <a href="/apps/suhas-ecom/index.html">SUHAS E-COM marketplace</a>…</p>
+            <script>location.replace('/apps/suhas-ecom/index.html')</script>
+          </body>
+          </html>
+          EOF
+      - name: Deploy SUHAS E-COM to suhasgroup.pages.dev
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=suhasgroup --branch=${{ steps.pages.outputs.production_branch }}
+          command: pages deploy /tmp/suhasgroup-site --project-name=suhasgroup --branch=${{ steps.pages.outputs.suhasgroup_branch }}
+      - name: Deploy SUHAS MAX to suhasmax.pages.dev
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=suhasmax --branch=${{ steps.pages.outputs.suhasmax_branch }}
       - name: Configure SUHAS E-COM confirmation email secrets
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
