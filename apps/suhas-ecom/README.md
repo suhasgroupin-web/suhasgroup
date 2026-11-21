@@ -13,10 +13,10 @@ Multi-vendor marketplace using GitHub, Cloudflare Pages and Supabase.
 - Admin access is checked against `public.ecom_admins`; current authorized admin email: `suhasmax.in@gmail.com`.
 - The first-time Admin setup tab lets the authorized email create its own password; complete the Supabase email-verification step, then sign in. The application does not store or expose the password in GitHub.
 - Admin can create an official store, add/hide/delete products, approve/reject/suspend seller accounts, and update order status.
-- Approved sellers can add, hide and delete their own products. Their products become live immediately in the public catalogue.
+- Approved sellers can add, hide and delete their own products. Product images can be uploaded directly to the existing `ecom-products` Supabase Storage bucket (JPG / PNG / WebP, up to 2 MB) or supplied by URL. Their products become live immediately in the public catalogue.\n- Sellers can update their own order-item progress (new, packed, shipped, delivered, cancelled); Admin can update overall order status.
 - Seller accounts remain pending until an Admin approves them.
 - Seller product and order access is restricted by Supabase RLS.
-- Admin and seller dashboards subscribe to Supabase Realtime order and order-item changes; visible orders refresh automatically under existing RLS permissions.
+- Admin and seller dashboards subscribe to Supabase Realtime order and order-item changes; visible orders refresh automatically and show an in-dashboard activity alert under existing RLS permissions.\n- The public storefront includes a WhatsApp support link to `+8801862144113`; order confirmation includes the order number and a WhatsApp support action.
 
 ## Supabase
 - Project ref: `pokxiylebwzoxunccuwm`.
