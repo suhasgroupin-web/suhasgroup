@@ -44,7 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/suhasgroup-site
-          cp -a . /tmp/suhasgroup-site/
+          rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' ./ /tmp/suhasgroup-site/
           cat > /tmp/suhasgroup-site/index.html <<'EOF'
           <!doctype html>
           <html lang="en">
