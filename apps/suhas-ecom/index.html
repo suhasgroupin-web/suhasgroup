@@ -48,7 +48,7 @@ select.sort{border:1px solid var(--line);border-radius:8px;padding:8px 10px;back
 .empty{grid-column:1/-1;text-align:center;padding:50px 10px;color:var(--muted)}
 .seller{background:var(--navy);color:#fff;border-radius:18px;padding:34px;display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:center;margin-top:30px}
 .seller h2{margin:0 0 8px;font-size:26px}.seller p{color:#cdd8ea;margin:0}
-.footer{background:var(--navy);color:#9fb0cb;font-size:13px;padding:30px 18px;text-align:center;margin-top:30px}
+.wa-float{position:fixed;right:18px;bottom:20px;z-index:35;background:#20b45a;color:#fff;text-decoration:none;font-weight:800;border-radius:999px;padding:13px 18px;box-shadow:0 8px 24px #07162d35;display:flex;align-items:center;gap:8px}.wa-float:hover{filter:brightness(.96)}@media(max-width:650px){.wa-float{right:12px;bottom:14px;padding:12px 15px}}\n.footer{background:var(--navy);color:#9fb0cb;font-size:13px;padding:30px 18px;text-align:center;margin-top:30px}
 .overlay{position:fixed;inset:0;background:rgba(8,26,53,.6);z-index:50;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 12px}
 .overlay.open{display:flex}.modal{background:#fff;border-radius:16px;width:100%;max-width:560px;padding:22px}.modal.wide{max-width:760px}
 .mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.mh h2{margin:0;font-size:20px}.x{border:0;background:var(--paper);border-radius:8px;width:34px;height:34px;font-size:20px}
@@ -125,7 +125,7 @@ input,textarea,select.f{width:100%;border:1px solid var(--line);border-radius:9p
 <section class="seller"><div><h2>Start selling on Suhas E-Com</h2><p>Open your shop for free, list your products and reach customers across Bangladesh. We review every application within 48 hours.</p></div>
 <div><a class="cta" href="manage.html" style="width:100%">Open Seller Centre</a></div></section>
 </main>
-<footer class="footer">© <span id="year"></span> Suhas E-Com · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · <a href="../../privacy-policy.html">Privacy Policy</a></footer>
+<a class="wa-float" href="https://wa.me/8801862144113?text=Hello%20SUHAS%20E-COM%2C%20I%20need%20product%20support." target="_blank" rel="noopener" aria-label="Chat with SUHAS E-COM on WhatsApp">☏ WhatsApp</a>\n<footer class="footer">© <span id="year"></span> Suhas E-Com · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · <a href="../../privacy-policy.html">Privacy Policy</a></footer>
 
 <div class="overlay" id="productModal"><section class="modal"><div class="mh"><h2 id="pmName"></h2><button class="x" data-close="productModal" aria-label="Close">×</button></div><div id="pmBody"></div></section></div>
 
@@ -255,7 +255,7 @@ async function placeOrder(e){
     let emailNotice='Order confirmed. Your confirmation email is being processed.';
     try{const mail=await fetch('/api/ecom-order-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:data.email_token})});const mailData=await mail.json().catch(()=>({}));if(mail.ok&&mailData.ok)emailNotice='Confirmation email sent to '+esc(customerEmail)+'.';else emailNotice='Order confirmed, but the email could not be sent yet. Please contact SUHAS E-COM support.'}catch(_){emailNotice='Order confirmed, but email service is temporarily unavailable. Please contact SUHAS E-COM support.'}
     cart=[];saveCart();renderCart();f.reset();$('payBox').classList.add('hidden');
-    $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice">Your order is confirmed in the live store database. '+emailNotice+'</div>';
+    $('doneBody').innerHTML='<p>Thank you, <b>'+esc(customer)+'</b>! Your order number is <b>'+esc(data.order_code)+'</b>.</p><p>Subtotal: <b>'+money(data.subtotal)+'</b> · Delivery: <b>'+money(data.delivery)+'</b></p><p>Total: <b>'+money(data.total)+'</b> · '+(pay==='cod'?'Cash on Delivery':esc(pay)+' (ref '+esc(ref)+')')+'</p><div class="notice"><b>Congratulations! Your Order Are Confirmed.</b><br>Your order is confirmed in the live store database. '+emailNotice+'</div><p><a class="cta" target="_blank" rel="noopener" href="https://wa.me/8801862144113?text='+encodeURIComponent('Hello SUHAS E-COM, my order '+data.order_code+' is confirmed. Please help me with the order.')+'">Contact us on WhatsApp</a></p>';
     close('checkoutModal');open('doneModal');
   }catch(error){
     $('coErr').textContent='Order was not placed: '+(error?.message||'Store connection error. Please try again.');
