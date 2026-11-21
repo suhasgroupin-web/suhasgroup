@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.21.1",
-  "published_at": "2026-11-21T16:00:00.000Z",
+  "version": "2026.11.21.2",
+  "published_at": "2026-11-21T16:35:00.000Z",
   "notify_after_days": 0,
-  "update_message": "Easy install: new install page with Install button, Android/iPhone/Desktop steps, QR code and Open-in-Chrome help. App icons fixed.",
+  "update_message": "SUHAS MAX release update: refreshed app release and improved the install/update notification so the update is clearly shown and can be applied.",
   "mandatory": true
 }
