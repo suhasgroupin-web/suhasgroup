@@ -6,13 +6,13 @@ SUHAS GROUP community and social platform.
 
 Cloudflare Pages is the sole production deployment target for the public SUHAS GROUP / SUHAS-MAX web app. Vercel is retired for this project; do not use it for builds, deployment, domains, or release decisions:
 
-1. **Cloudflare Pages — production host.** Project: `suhasgroup`; production site: [https://suhasgroup.pages.dev](https://suhasgroup.pages.dev). Static HTML/PWA deployment; Framework preset: None; build command: empty; output directory: `.`.
+1. **Cloudflare Pages — SUHAS E-COM.** Project: `suhasgroup`; production site: [https://suhasgroup.pages.dev](https://suhasgroup.pages.dev). The root redirects to `/apps/suhas-ecom/index.html`.\n2. **Cloudflare Pages — SUHAS MAX.** Project: `suhasmax`; production site: [https://suhasmax.pages.dev](https://suhasmax.pages.dev). Deploys the repository root app separately.
 2. **GitHub Pages — non-production emergency fallback only.** It may remain available for recovery testing, but it is not the canonical production URL.
 3. **Vercel — retired.** Do not deploy to it or use its deployment status as a release gate. The canonical public app URL is `https://suhasgroup.pages.dev`.
 
 ### Cloudflare deployment setup
 
-The repository includes `.github/workflows/cloudflare-pages-deploy.yml`. It deploys the root directory to the Pages project `suhasgroup` when these GitHub Actions repository secrets are configured:
+The repository includes `.github/workflows/cloudflare-pages-deploy.yml`. It deploys the E-COM root redirect and full app files to `suhasgroup`, and the SUHAS MAX root site to `suhasmax`, when these GitHub Actions repository secrets are configured:
 
 - `CLOUDFLARE_API_TOKEN` — a Cloudflare API token with the required Pages project deployment permission.
 - `CLOUDFLARE_ACCOUNT_ID` — the Cloudflare account ID that owns the Pages project.
