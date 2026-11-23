@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.23.1",
-  "published_at": "2026-11-23T04:00:00.000Z",
+  "version": "2026.11.23.2",
+  "published_at": "2026-11-23T04:40:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS E-COM is now an Alibaba-style marketplace: full product pages, Order and WhatsApp buttons, order tracking, seller notifications, order confirmation and delivery status.",
+  "update_message": "E-Com fixes: product publishing now completes without error, and the notification bell opens correctly on phones.",
   "mandatory": true
 }

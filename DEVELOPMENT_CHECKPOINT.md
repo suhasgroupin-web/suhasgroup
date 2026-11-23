@@ -1305,3 +1305,8 @@ Date: 2026-11-10
 - Rewrote apps/suhas-ecom storefront (index, product, track, delivery, manage) + shared ecom.css/ecom-core.js. Applied order-flow migration to Supabase; verified full flow with a rolled-back SQL test and mocked-Supabase Playwright UI test (desktop + mobile).
 - Approved owner Max.com vendors (hasnain.in@outlook.com, suhasgroup.in@gmail.com) — vendor guard trigger had silently reset an earlier approval.
 - NOT verified: real signed-in seller/admin session on live site, real image upload to ecom-products bucket, live realtime, email delivery.
+
+## 2026-11-23 (2) — E-Com manage.html fixes
+- Product publish: form reset used e.currentTarget after await (null) -> showed "Cannot read properties of null (reading 'reset')" although the product was saved. Fixed (also in store form). Removed one duplicate test product created by the retry.
+- Notification panel now position:fixed and clamped to the viewport (was clipped off-screen on phones).
+- Verified: mocked-UI publish test with 2 photos, anon RLS sees published product + images, storage bucket public, realtime publication includes orders/items/notifications.

@@ -23,8 +23,8 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 @media(max-width:680px){main{margin:16px auto}.panel{padding:16px}.grid,.grid3{grid-template-columns:1fr}h1{font-size:23px}header{padding:16px}.brand{font-size:19px}}
 
 .pill.processing,.pill.shipped{background:#e6f0ff;color:#0d4fa8}
-.bellwrap{position:relative;flex:0 0 auto}.bell{background:#ffffff1f;color:#fff;border:1px solid #ffffff44;position:relative;padding:10px 14px;font-size:18px}.bell em{position:absolute;top:-6px;right:-6px;background:#ff6a00;color:#fff;border-radius:99px;font-style:normal;font-size:11px;font-weight:800;padding:1px 7px}
-.npanel{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,92vw);max-height:70vh;overflow:auto;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0a1f3a40;z-index:60}
+.bellwrap{position:relative;flex:0 0 auto}header .btn,header button{white-space:nowrap}.bell{background:#ffffff1f;color:#fff;border:1px solid #ffffff44;position:relative;padding:10px 14px;font-size:18px}.bell em{position:absolute;top:-6px;right:-6px;background:#ff6a00;color:#fff;border-radius:99px;font-style:normal;font-size:11px;font-weight:800;padding:1px 7px}
+.npanel{position:fixed;left:10px;right:10px;top:var(--ntop,80px);margin:0 auto;width:auto;max-width:420px;max-height:70vh;overflow:auto;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0a1f3a40;z-index:60}
 .npanel header{background:none;color:var(--ink);padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:800}
 .nitem{padding:11px 14px;border-bottom:1px solid #eef1f6;cursor:pointer}.nitem.unread{background:#fff7ec}.nitem b{display:block}.nitem small{color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}.stat{background:#f6f8fb;border:1px solid var(--line);border-radius:12px;padding:10px 14px}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
@@ -208,7 +208,7 @@ function watchNotifs(){
   await loadOrders();
  }).subscribe();
 }
-$('bellBtn').onclick=e=>{e.stopPropagation();$('npanel').classList.toggle('hidden')};
+$('bellBtn').onclick=e=>{e.stopPropagation();const r=$('bellBtn').getBoundingClientRect();$('npanel').style.setProperty('--ntop',(r.bottom+8)+'px');if(innerWidth>700){$('npanel').style.marginRight=Math.max(10,innerWidth-r.right)+'px';$('npanel').style.marginLeft='auto'}else{$('npanel').style.marginRight='auto'}$('npanel').classList.toggle('hidden')};
 document.addEventListener('click',e=>{if(!e.target.closest('#npanel')&&!e.target.closest('#bellBtn'))$('npanel').classList.add('hidden')});
 $('nlist').addEventListener('click',async e=>{
  if(e.target.closest('#enableN')){await Notification.requestPermission();renderNotifs();return}
@@ -231,7 +231,7 @@ $('signupForm').addEventListener('submit',async e=>{e.preventDefault();const f=n
 $('productForm').addEventListener('change',e=>{if(e.target.name!=='imageFiles')return;const fs=[...e.target.files].slice(0,5);$('imgPrev').innerHTML=fs.map(f=>'<img alt="" src="'+URL.createObjectURL(f)+'">').join('')});
 $('productForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!isAdmin&&vendor?.status!=='approved')return;
- const f=e.currentTarget.elements,vendorId=isAdmin?f.vendor.value:vendor?.id;
+ const form=e.currentTarget,f=form.elements,vendorId=isAdmin?f.vendor.value:vendor?.id;
  if(!vendorId){$('productMsg').textContent='Create or approve a store first.';return}
  const files=[...(f.imageFiles.files||[])].slice(0,5);
  for(const file of files)if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2*1024*1024){$('productMsg').textContent='Each photo must be JPG, PNG or WebP up to 2 MB.';return}
@@ -244,14 +244,14 @@ $('productForm').addEventListener('submit',async e=>{
   const row={vendor_id:vendorId,name:f.name.value.trim(),category:f.category.value.trim(),brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),min_order:Math.min(99,Math.max(1,Number(f.minorder.value)||1)),unit:f.unit.value.trim()||'piece',lead_time:f.lead.value.trim()||null,specs,images,image_url:images[0]||null,is_active:true,featured:false};
   const {error}=await db.from('ecom_products').insert(row);if(error)throw error;
   $('productMsg').textContent='✔ Product published. It is now live in the marketplace.';
-  e.currentTarget.reset();f.stock.value=1;f.minorder.value=1;f.unit.value='piece';$('imgPrev').innerHTML='';await loadProducts();
+  form.reset();f.stock.value=1;f.minorder.value=1;f.unit.value='piece';$('imgPrev').innerHTML='';await loadProducts();
  }catch(error){$('productMsg').textContent='Could not publish product: '+(error?.message||'Please try again.')}
  finally{$('addProductBtn').disabled=false}
 });
 $('productForm').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('productsBody').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('sellersBody').addEventListener('click',async e=>{const b=e.target.closest('[data-vendor-status]');if(!b)return;b.disabled=true;const {error}=await db.from('ecom_vendors').update({status:b.dataset.vendorStatus,updated_at:new Date().toISOString()}).eq('id',b.dataset.vendorId);if(error)message('dashboardMsg',error.message,'error');await loadSellers();await loadStores()});
-$('storeForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget.elements;const row={shop_name:f.shop.value.trim(),owner_name:f.owner.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()||null,city:f.city.value.trim()||null,category:f.category.value.trim()||'General',description:'Official SUHAS E-COM store',status:'approved',user_id:null};const {error}=await db.from('ecom_vendors').insert(row);$('storeMsg').textContent=error?error.message:'Official store created.';if(!error){e.currentTarget.reset();await loadStores()}});
+$('storeForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,f=form.elements;const row={shop_name:f.shop.value.trim(),owner_name:f.owner.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()||null,city:f.city.value.trim()||null,category:f.category.value.trim()||'General',description:'Official SUHAS E-COM store',status:'approved',user_id:null};const {error}=await db.from('ecom_vendors').insert(row);$('storeMsg').textContent=error?error.message:'Official store created.';if(!error){form.reset();await loadStores()}});
 $('refreshBtn').onclick=async()=>{await refreshAll();message('dashboardMsg','Data refreshed.','success')};
 $('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}if(notifChannel){await db.removeChannel(notifChannel);notifChannel=null}$('bellWrap').classList.add('hidden');clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
 const {data:{session}}=await db.auth.getSession();if(session?.user){try{await startDashboard(session.user)}catch(e){message('authMsg',e.message,'error')}}else applyAccessRoute();
