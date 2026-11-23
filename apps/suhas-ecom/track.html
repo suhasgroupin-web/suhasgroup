@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b2447">
+<link rel="icon" type="image/png" href="favicon.png"><title>Track order — SUHAS E-COM</title>
+<link rel="stylesheet" href="ecom.css">
+</head>
+<body>
+<div id="shellTop"></div>
+<div class="wrap" style="max-width:820px;padding-top:22px;padding-bottom:30px">
+ <section class="panel"><h2 style="margin-top:0">Track your order</h2>
+  <p class="muted">Enter your order number and the mobile number used for the order. This page updates automatically and notifies you when the seller confirms and when your order is delivered.</p>
+  <form id="tf" style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end">
+   <div><label class="f" for="tc">Order number</label><input class="in" id="tc" required placeholder="SE-261123-12345" autocomplete="off"></div>
+   <div><label class="f" for="tp">Mobile number</label><input class="in" id="tp" required inputmode="tel" placeholder="01XXXXXXXXX" autocomplete="tel"></div>
+   <button class="btn pri" type="submit">Track</button></form>
+  <div class="err" id="terr" role="alert"></div>
+  <div id="mine"></div>
+ </section>
+ <section class="panel hidden" id="res" style="margin-top:14px"></section>
+</div>
+<div id="shellBottom"></div>
+<script type="module">
+import {$,esc,money,db,mountShell,mountCommerce,myOrders,rememberOrder,trackOrder,STATUS_TEXT,waLink,toast} from './ecom-core.js';
+mountShell('track');mountCommerce(()=>[]);
+const FLOW=[['new','Order placed'],['confirmed','Confirmed by seller'],['processing','Packing'],['shipped','Out for delivery'],['delivered','Delivered']];
+let cur=null,timer=null;
+function renderMine(){
+  const l=myOrders();
+  $('mine').innerHTML=l.length?'<div style="margin-top:14px"><b>My recent orders</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'+l.map(o=>'<button class="btn out" style="padding:6px 14px;font-size:13px" data-c="'+esc(o.code)+'" data-p="'+esc(o.phone)+'">'+esc(o.code)+' · '+esc(o.status)+'</button>').join('')+'</div></div>':'';
+}
+function show(d){
+  const cancelled=d.status==='cancelled',idx=FLOW.findIndex(x=>x[0]===d.status),s=STATUS_TEXT[d.status]||['','',''];
+  const ev=Object.fromEntries((d.events||[]).map(e=>[e.status,e]));
+  $('res').classList.remove('hidden');
+  $('res').innerHTML='<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div><div class="muted">Order</div><h2 style="margin:0">'+esc(d.order_code)+'</h2></div><span class="stb '+esc(d.status)+'">'+esc(d.status.toUpperCase())+'</span></div>'+
+  '<div class="note '+(d.status==='confirmed'||d.status==='delivered'?'ok':cancelled?'warn':'')+'" style="font-size:15px;margin-top:14px"><b>'+s[0]+' '+esc(s[1])+'</b><br>'+esc(s[2])+(d.status==='shipped'&&d.delivery_person?'<br>Delivery person: <b>'+esc(d.delivery_person)+'</b>'+(d.delivery_phone?' · <a href="tel:'+esc(d.delivery_phone)+'">'+esc(d.delivery_phone)+'</a>':''):'')+'</div>'+
+  (cancelled?'':'<ul class="tl">'+FLOW.map((f,i)=>{const done=i<idx||d.status==='delivered',now=i===idx&&d.status!=='delivered';const e=ev[f[0]];return '<li class="'+(done?'done':now?'cur':'')+'"><i>'+(done?'✓':'')+'</i><b>'+f[1]+'</b>'+(e?'<div class="muted" style="font-size:12px">'+new Date(e.at).toLocaleString()+'</div>':'')+'</li>'}).join('')+'</ul>')+
+  '<h3>Items</h3>'+(d.items||[]).map(i=>'<div class="tot"><span>'+esc(i.name)+' × '+i.qty+'</span><b>'+money(i.price*i.qty)+'</b></div>').join('')+'<div class="tot big"><span>Total</span><span>'+money(d.total)+'</span></div>'+
+  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><a class="btn wa" target="_blank" rel="noopener" href="'+waLink('Hello SUHAS E-COM, about my order '+d.order_code)+'">💬 WhatsApp about this order</a>'+('Notification' in window&&Notification.permission==='default'?'<button class="btn out" id="notif">🔔 Enable notifications</button>':'')+'</div>';
+  if($('notif'))$('notif').onclick=async()=>{await Notification.requestPermission();$('notif').remove()};
+}
+async function load(code,phone,quiet){
+  $('terr').textContent='';
+  try{
+    const d=await trackOrder(code,phone);
+    if(!d){$('terr').textContent='No order found. Check the order number and mobile number.';return}
+    if(cur&&quiet&&cur.status!==d.status){const s=STATUS_TEXT[d.status];if(s)toast(s[0]+' '+s[1],'Order '+d.order_code+' · '+s[2])}
+    cur=d;rememberOrder(d.order_code,phone,d.status);show(d);renderMine();
+    clearInterval(timer);if(!['delivered','cancelled'].includes(d.status))timer=setInterval(()=>load(code,phone,true),10000);
+  }catch(e){$('terr').textContent=e.message||'Could not load the order. Try again.'}
+}
+$('tf').addEventListener('submit',e=>{e.preventDefault();cur=null;load($('tc').value.trim(),$('tp').value.trim())});
+$('mine').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;$('tc').value=b.dataset.c;$('tp').value=b.dataset.p;cur=null;load(b.dataset.c,b.dataset.p)});
+const q=new URLSearchParams(location.search);
+renderMine();
+if(q.get('code')&&q.get('phone')){$('tc').value=q.get('code');$('tp').value=q.get('phone');load(q.get('code'),q.get('phone'))}
+else if(myOrders()[0]){const o=myOrders()[0];$('tc').value=o.code;$('tp').value=o.phone;load(o.code,o.phone)}
+</script>
+</body>
+</html>

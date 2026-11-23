@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.21.2",
-  "published_at": "2026-11-21T16:35:00.000Z",
+  "version": "2026.11.23.1",
+  "published_at": "2026-11-23T04:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS MAX release update: refreshed app release and improved the install/update notification so the update is clearly shown and can be applied.",
+  "update_message": "SUHAS E-COM is now an Alibaba-style marketplace: full product pages, Order and WhatsApp buttons, order tracking, seller notifications, order confirmation and delivery status.",
   "mandatory": true
 }

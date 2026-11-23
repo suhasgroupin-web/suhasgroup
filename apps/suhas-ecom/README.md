@@ -42,3 +42,11 @@ Cloudflare Email Sending requires Workers Paid for arbitrary customer recipient 
 
 ## Deployment
 The repository's Cloudflare Pages workflow deploys the root site. The E-Com app is served under `/apps/suhas-ecom/`; the order-email endpoint is `/api/ecom-order-email`.
+
+## 2026-11-23 — Alibaba-style marketplace + order workflow
+- Pages: `index.html` (categories, banner, product grid, search), `product.html?id=` (gallery, price, MOQ, specs, Order now, Add to cart, WhatsApp +8801862144113), `track.html` (customer tracking with automatic status alerts), `delivery.html?t=<token>` (delivery person link, no login), `manage.html` (seller/admin).
+- Shared: `ecom.css`, `ecom-core.js`.
+- Flow: customer orders (status `new`) -> seller/admin notified (bell, sound, browser notification while the dashboard is open) -> seller confirms -> customer sees "Congratulations! Your order is confirmed." -> packing -> seller enters delivery person and sends delivery link -> delivery person taps Delivered -> seller/admin notified.
+- Backend migration `supabase/migrations/20261121_ecom_order_flow_notifications.sql` applied to project `pokxiylebwzoxunccuwm`; owner Max.com seller accounts approved.
+- Fixed a JavaScript syntax error (stray `\n`) in the old `manage.html` that could stop the dashboard from loading.
+- Limits: customer/seller alerts work while the page is open (no server push). Confirmation email still needs the Cloudflare email setup above.

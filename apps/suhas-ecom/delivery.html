@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b2447"><meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="favicon.png"><title>Delivery — SUHAS E-COM</title>
+<link rel="stylesheet" href="ecom.css">
+<style>body{background:#eef2f8}.box{max-width:480px;margin:18px auto;padding:0 14px}</style>
+</head>
+<body>
+<div class="box">
+ <div class="logo" style="margin:6px 0 14px"><img src="logo.png" alt="">SUHAS <span>E-COM</span> &nbsp;<small style="font-size:13px;color:#6b778a;font-weight:700">Delivery</small></div>
+ <section class="panel" id="card"><p class="muted">Loading delivery…</p></section>
+</div>
+<script type="module">
+import {db,$,esc,money} from './ecom-core.js';
+const t=new URLSearchParams(location.search).get('t');
+const card=$('card');
+const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+async function load(){
+  if(!uuid.test(t||'')){card.innerHTML='<h2>Invalid link</h2><p class="muted">Please open the delivery link sent by the seller.</p>';return}
+  const {data,error}=await db.rpc('ecom_delivery_view',{p_token:t});
+  if(error||!data){card.innerHTML='<h2>Delivery not available</h2><p class="muted">'+esc(error?.message||'This delivery is not open yet, or the link is invalid.')+'</p>';return}
+  const done=data.status==='delivered';
+  card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">'+esc(data.order_code)+'</h2><span class="stb '+esc(data.status)+'">'+esc(data.status.toUpperCase())+'</span></div>'+
+  '<h3 style="margin-bottom:4px">Customer</h3><div><b>'+esc(data.customer_name)+'</b></div><div><a class="btn pri" style="margin:8px 0" href="tel:'+esc(data.phone)+'">📞 Call '+esc(data.phone)+'</a></div><div>📍 '+esc(data.address)+'</div>'+
+  '<h3 style="margin-bottom:4px">Items</h3>'+(data.items||[]).map(i=>'<div class="tot"><span>'+esc(i.name)+'</span><b>× '+i.qty+'</b></div>').join('')+
+  '<div class="note '+(data.collect_cash>0?'warn':'ok')+'" style="font-size:16px">'+(data.collect_cash>0?'💵 Collect cash: <b>'+money(data.collect_cash)+'</b>':'✔ Already paid online ('+esc(data.payment_method)+')')+'</div>'+
+  (done?'<div class="note ok"><b>✅ Delivery completed.</b> Thank you!</div>':'<button class="prim" id="done">✅ Delivered to customer</button><div class="err" id="derr"></div>');
+  if(!done)$('done').onclick=async()=>{
+    if(!confirm('Confirm that the customer has received the products?'))return;
+    $('done').disabled=true;const r=await db.rpc('ecom_delivery_complete',{p_token:t});
+    if(r.error){$('derr').textContent=r.error.message;$('done').disabled=false;return}load();
+  };
+}
+load();
+</script>
+</body>
+</html>

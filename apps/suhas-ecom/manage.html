@@ -21,10 +21,23 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 .sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .authbox{max-width:580px;margin:30px auto}.authbox .panel{padding:26px}.statusline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 @media(max-width:680px){main{margin:16px auto}.panel{padding:16px}.grid,.grid3{grid-template-columns:1fr}h1{font-size:23px}header{padding:16px}.brand{font-size:19px}}
+
+.pill.processing,.pill.shipped{background:#e6f0ff;color:#0d4fa8}
+.bellwrap{position:relative;flex:0 0 auto}.bell{background:#ffffff1f;color:#fff;border:1px solid #ffffff44;position:relative;padding:10px 14px;font-size:18px}.bell em{position:absolute;top:-6px;right:-6px;background:#ff6a00;color:#fff;border-radius:99px;font-style:normal;font-size:11px;font-weight:800;padding:1px 7px}
+.npanel{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,92vw);max-height:70vh;overflow:auto;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0a1f3a40;z-index:60}
+.npanel header{background:none;color:var(--ink);padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.nitem{padding:11px 14px;border-bottom:1px solid #eef1f6;cursor:pointer}.nitem.unread{background:#fff7ec}.nitem b{display:block}.nitem small{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}.stat{background:#f6f8fb;border:1px solid var(--line);border-radius:12px;padding:10px 14px}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.oc{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;background:#fff}.oc.isnew{border-color:#ff9d52;box-shadow:0 0 0 3px #ff6a0018}
+.oc .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.oc .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.oc .box{background:#f8faff;border-radius:10px;padding:10px 12px;font-size:14px}
+.oc .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-top:12px}.oc .acts input{width:auto;flex:1;min-width:140px}
+.okb{background:#147d4a}.imgrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.imgrow img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}.pth{width:44px;height:44px;border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:8px;background:#eef2f8}
+@media(max-width:680px){.stats{grid-template-columns:1fr 1fr}.oc .cols{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><div><div class="brand">SUHAS <span>E-COM</span></div><div class="sub">Admin & Seller Centre · Marketplace Management</div></div><div class="row" style="flex:0 0 auto"><a class="btn ghost" href="./index.html">View Store</a><button id="logoutBtn" class="secondary hidden">Sign out</button></div></header>
+<header><div><div class="brand">SUHAS <span>E-COM</span></div><div class="sub">Admin & Seller Centre · Marketplace Management</div></div><div class="row" style="flex:0 0 auto"><div class="bellwrap hidden" id="bellWrap"><button class="bell" id="bellBtn" aria-label="Notifications">🔔<em id="bellCount" class="hidden">0</em></button><div class="npanel hidden" id="npanel"><header><span>Notifications</span><span><button class="secondary" id="markRead" style="padding:6px 10px;font-size:12px">Mark all read</button></span></header><div id="nlist"></div></div></div><a class="btn ghost" href="./index.html">View Store</a><button id="logoutBtn" class="secondary hidden">Sign out</button></div></header>
 <main>
 <section id="authView" class="authbox">
 <div class="panel">
@@ -43,11 +56,16 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 <section id="productsPane">
 <div class="panel" style="background:#f8faff;box-shadow:none">
 <div class="sectionhead"><div><h2>Add a new product</h2><p class="muted small" id="productHelp">Publish products to the SUHAS E-COM marketplace.</p></div><span class="pill approved">Live listing</span></div>
-<form id="productForm"><div class="grid3"><div><label>Product name *</label><input name="name" required minlength="2" maxlength="160"></div><div><label>Category *</label><input name="category" required maxlength="80" placeholder="Fashion, Grocery..."></div><div><label>Price (BDT) *</label><input name="price" type="number" min="0.01" step=".01" required></div><div><label>Compare price (BDT)</label><input name="compare" type="number" min="0" step=".01"></div><div><label>Stock quantity *</label><input name="stock" type="number" min="0" step="1" value="1" required></div><div><label>Product image URL (optional)</label><input name="image" type="url" maxlength="1000" placeholder="https://..."></div><div><label>Add image file (JPG, PNG, WebP · max 2 MB)</label><input name="imageFile" type="file" accept="image/jpeg,image/png,image/webp"></div></div><div id="adminVendorField" class="hidden"><label>Publish under store *</label><select name="vendor"></select></div><label>Product description</label><textarea name="description" maxlength="3000"></textarea><button type="submit" id="addProductBtn">Publish product live</button><span id="productMsg" class="muted small" aria-live="polite"></span></form>
+<form id="productForm"><div class="grid3"><div><label>Product name *</label><input name="name" required minlength="2" maxlength="160"></div><div><label>Category *</label><input name="category" required maxlength="80" list="catList" placeholder="Choose or type a category"><datalist id="catList"></datalist></div><div><label>Brand</label><input name="brand" maxlength="80"></div><div><label>Price per unit (BDT) *</label><input name="price" type="number" min="0.01" step=".01" required></div><div><label>Compare / old price (BDT)</label><input name="compare" type="number" min="0" step=".01"></div><div><label>Stock quantity *</label><input name="stock" type="number" min="0" step="1" value="1" required></div><div><label>Minimum order quantity</label><input name="minorder" type="number" min="1" max="99" step="1" value="1"></div><div><label>Unit</label><input name="unit" maxlength="20" value="piece" placeholder="piece, pair, kg, dozen"></div><div><label>Lead time / delivery</label><input name="lead" maxlength="80" placeholder="e.g. 2-3 days in Dhaka"></div></div>
+<div class="grid"><div><label>Product photos (up to 5 · JPG, PNG, WebP · max 2 MB each)</label><input name="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple></div><div><label>Or image URL (optional)</label><input name="image" type="url" maxlength="1000" placeholder="https://..."></div></div><div class="imgrow" id="imgPrev"></div>
+<div id="adminVendorField" class="hidden"><label>Publish under store *</label><select name="vendor"></select></div>
+<label>Product description (details, features, material, size, usage)</label><textarea name="description" maxlength="3000" style="min-height:120px"></textarea>
+<label>Specifications <span class="muted small">(one per line, format: Name: Value)</span></label><textarea name="specs" maxlength="2000" placeholder="Material: Cotton&#10;Size: M, L, XL&#10;Colour: Navy Blue&#10;Warranty: 6 months"></textarea>
+<button type="submit" id="addProductBtn" style="margin-top:14px">Publish product live</button> <span id="productMsg" class="muted small" aria-live="polite"></span></form>
 </div>
 <div class="sectionhead"><h2>Product catalogue</h2><span class="muted small" id="productCount"></span></div><div class="tablewrap"><table><thead><tr><th>Product</th><th>Store</th><th>Price</th><th>Stock</th><th>Visibility</th><th>Action</th></tr></thead><tbody id="productsBody"></tbody></table></div>
 </section>
-<section id="ordersPane" class="hidden"><div class="sectionhead"><h2>Customer orders</h2><span class="muted small">Orders are stored in the live Supabase database.</span></div><div class="tablewrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead><tbody id="ordersBody"></tbody></table></div></section>
+<section id="ordersPane" class="hidden"><div class="sectionhead"><h2>Customer orders</h2><span class="muted small">New orders appear here instantly with a notification.</span></div><div class="stats" id="ostats"></div><div id="ordersList"></div></section>
 <section id="sellersPane" class="hidden"><div class="sectionhead"><h2>Seller applications</h2><span class="muted small">Approve a shop before it can publish products.</span></div><div class="tablewrap"><table><thead><tr><th>Shop / Owner</th><th>Contact</th><th>Category</th><th>Status</th><th>Review</th></tr></thead><tbody id="sellersBody"></tbody></table></div></section>
 <section id="storesPane" class="hidden"><div class="panel" style="background:#f8faff;box-shadow:none"><h2>Create an official store</h2><p class="muted small">Use this for products added directly by SUHAS E-COM Admin.</p><form id="storeForm"><div class="grid"><div><label>Store name *</label><input name="shop" required value="SUHAS E-COM Official Store"></div><div><label>Owner / Contact name *</label><input name="owner" required value="SUHAS E-COM"></div><div><label>Contact phone *</label><input name="phone" required minlength="6"></div><div><label>Contact email</label><input name="email" type="email" value="suhasmax.in@gmail.com"></div><div><label>City / District</label><input name="city"></div><div><label>Category</label><input name="category" value="General"></div></div><button type="submit">Create approved store</button><span id="storeMsg" class="muted small"></span></form></div><h2>All stores</h2><div class="tablewrap"><table><thead><tr><th>Store</th><th>Owner</th><th>Contact</th><th>Status</th></tr></thead><tbody id="storesBody"></tbody></table></div></section>
 </div></section>
@@ -89,7 +107,10 @@ async function startDashboard(u){
  else $('dashboardMsg').classList.add('hidden');
  await refreshAll();
  watchOrderUpdates();
+ $('bellWrap').classList.remove('hidden');await loadNotifs();watchNotifs();
 }
+const CATLIST=['Fashion & Clothing','Footwear','Bags & Luggage','Jewellery & Accessories','Electronics','Mobile & Accessories','Home & Kitchen','Grocery & Food','Beauty & Personal Care','Health & Wellness','Baby & Kids','Books & Stationery','Sports & Outdoors','Toys & Games','Automotive','Office Supplies','Other'];
+$('catList').innerHTML=CATLIST.map(c=>'<option value="'+c+'">').join('');
 async function refreshAll(){if(!user)return;await loadStores();await loadProducts();await loadOrders();if(isAdmin)await loadSellers()}
 function watchOrderUpdates(){
  if(orderChannel){db.removeChannel(orderChannel);orderChannel=null}
@@ -123,17 +144,80 @@ async function loadProducts(){
  const {data,error}=await q;if(error){$('productsBody').innerHTML='<tr><td colspan="6">'+esc(error.message)+'</td></tr>';return}
  const list=data||[];$('productCount').textContent=list.length+' products';
  const storeMap=new Map(stores.map(v=>[v.id,v.shop_name]));
- $('productsBody').innerHTML=list.map(p=>'<tr><td><b>'+esc(p.name)+'</b><br><span class="muted small">'+esc(p.category)+'</span></td><td>'+esc(storeMap.get(p.vendor_id)||'Store')+'</td><td>'+money(p.price_bdt)+'</td><td>'+p.stock+'</td><td><span class="pill '+(p.is_active?'approved':'pending')+'">'+(p.is_active?'Live':'Hidden')+'</span></td><td><button class="secondary" data-product-toggle="'+p.id+'" data-active="'+(!p.is_active)+'">'+(p.is_active?'Hide':'Publish')+'</button> <button class="danger" data-product-delete="'+p.id+'">Delete</button></td></tr>').join('')||'<tr><td colspan="6">No products yet. Add the first product above.</td></tr>';
+ $('productsBody').innerHTML=list.map(p=>'<tr><td>'+((p.images&&p.images[0])||p.image_url?'<img class="pth" alt="" src="'+esc((p.images&&p.images[0])||p.image_url)+'">':'')+'<b>'+esc(p.name)+'</b><br><span class="muted small">'+esc(p.category)+'</span></td><td>'+esc(storeMap.get(p.vendor_id)||'Store')+'</td><td>'+money(p.price_bdt)+'</td><td>'+p.stock+'</td><td><span class="pill '+(p.is_active?'approved':'pending')+'">'+(p.is_active?'Live':'Hidden')+'</span></td><td><a class="btn secondary" target="_blank" href="product.html?id='+p.id+'">View</a> <button class="secondary" data-product-toggle="'+p.id+'" data-active="'+(!p.is_active)+'">'+(p.is_active?'Hide':'Publish')+'</button> <button class="danger" data-product-delete="'+p.id+'">Delete</button></td></tr>').join('')||'<tr><td colspan="6">No products yet. Add the first product above.</td></tr>';
 }
+let ordersCache=[];
 async function loadOrders(){
- let orderRows=[];
- if(isAdmin){const r=await db.from('ecom_orders').select('*').order('created_at',{ascending:false});if(r.error){$('ordersBody').innerHTML='<tr><td colspan="6">'+esc(r.error.message)+'</td></tr>';return}orderRows=r.data||[]}
- else if(vendor){const items=await db.from('ecom_order_items').select('order_id,name,qty,price_bdt,status').eq('vendor_id',vendor.id);if(items.error){$('ordersBody').innerHTML='<tr><td colspan="6">'+esc(items.error.message)+'</td></tr>';return}const ids=[...new Set((items.data||[]).map(i=>i.order_id))];if(ids.length){const r=await db.from('ecom_orders').select('*').in('id',ids).order('created_at',{ascending:false});if(r.error){$('ordersBody').innerHTML='<tr><td colspan="6">'+esc(r.error.message)+'</td></tr>';return}orderRows=r.data||[]}}
- const itemRows=await db.from('ecom_order_items').select('id,order_id,name,qty,price_bdt,vendor_id,status');
- const items=itemRows.data||[];
- $('ordersBody').innerHTML=orderRows.map(o=>{const own=items.filter(i=>i.order_id===o.id&&(isAdmin||i.vendor_id===vendor.id));const products=own.map(i=>esc(i.name)+' × '+i.qty+(isAdmin?'':'<br><label class="small">Item progress</label><select data-item-status="'+i.id+'"><option value="new" '+(i.status==='new'?'selected':'')+'>New</option><option value="packed" '+(i.status==='packed'?'selected':'')+'>Packed</option><option value="shipped" '+(i.status==='shipped'?'selected':'')+'>Shipped</option><option value="delivered" '+(i.status==='delivered'?'selected':'')+'>Delivered</option><option value="cancelled" '+(i.status==='cancelled'?'selected':'')+'>Cancelled</option></select>')).join('<br><br>');return '<tr><td><b>'+esc(o.order_code)+'</b><br><span class="muted small">'+new Date(o.created_at).toLocaleString()+'</span></td><td>'+esc(o.customer_name)+'<br>'+esc(o.phone)+'<br>'+esc(o.customer_email||'')+'<br><span class="muted small">'+esc(o.address)+'</span></td><td>'+products+'</td><td><b>'+money(isAdmin?o.total_bdt:own.reduce((s,i)=>s+Number(i.price_bdt)*i.qty,0))+'</b></td><td><span class="pill '+esc(o.status)+'">'+esc(o.status)+'</span></td><td>'+(isAdmin?'<select data-order-status="'+o.id+'"><option value="new" '+(o.status==='new'?'selected':'')+'>New</option><option value="confirmed" '+(o.status==='confirmed'?'selected':'')+'>Confirmed</option><option value="processing" '+(o.status==='processing'?'selected':'')+'>Processing</option><option value="shipped" '+(o.status==='shipped'?'selected':'')+'>Shipped</option><option value="delivered" '+(o.status==='delivered'?'selected':'')+'>Delivered</option><option value="cancelled" '+(o.status==='cancelled'?'selected':'')+'>Cancelled</option></select><button class="secondary" data-order-save="'+o.id+'">Update</button>':'Seller updates item progress above')+'</td></tr>'}).join('')||'<tr><td colspan="6">No orders received yet.</td></tr>';
+ const [o,it]=await Promise.all([db.from('ecom_orders').select('*').order('created_at',{ascending:false}),db.from('ecom_order_items').select('id,order_id,name,qty,price_bdt,vendor_id,status')]);
+ if(o.error){$('ordersList').innerHTML='<div class="alert error">'+esc(o.error.message)+'</div>';return}
+ const items=it.data||[];ordersCache=o.data||[];
+ const c=s=>ordersCache.filter(x=>x.status===s).length;
+ $('ostats').innerHTML='<div class="stat"><b>'+c('new')+'</b><span>New · need confirmation</span></div><div class="stat"><b>'+(c('confirmed')+c('processing'))+'</b><span>To pack / ship</span></div><div class="stat"><b>'+c('shipped')+'</b><span>Out for delivery</span></div><div class="stat"><b>'+c('delivered')+'</b><span>Delivered</span></div>';
+ $('ordersList').innerHTML=ordersCache.map(x=>orderCard(x,items.filter(i=>i.order_id===x.id))).join('')||'<div class="alert">No orders received yet. When a customer orders, you will be notified here.</div>';
 }
-$('ordersBody').addEventListener('change',async e=>{const select=e.target.closest('[data-item-status]');if(!select||isAdmin)return;select.disabled=true;const {error}=await db.from('ecom_order_items').update({status:select.value}).eq('id',select.dataset.itemStatus);select.disabled=false;if(error){message('dashboardMsg','Could not update item progress: '+error.message,'error');return}message('dashboardMsg','Order item progress updated. Admin will see the change live.','success');await loadOrders()});\nasync function loadSellers(){
+const phoneWa=p=>{let d=String(p||'').replace(/\D/g,'');if(d.startsWith('0'))d='880'+d.slice(1);return d};
+const base=()=>location.origin+location.pathname.replace(/[^/]*$/,'');
+function orderCard(o,items){
+ const own=isAdmin?items:items.filter(i=>i.vendor_id===vendor?.id);
+ const sum=own.reduce((s,i)=>s+Number(i.price_bdt)*i.qty,0);
+ const st=o.status,link=base()+'delivery.html?t='+o.delivery_token;
+ let acts='';
+ if(st==='new')acts='<button class="okb" data-act="confirmed" data-id="'+o.id+'">✔ Confirm order</button><button class="danger" data-act="cancelled" data-id="'+o.id+'">Cancel</button>';
+ else if(st==='confirmed'||st==='processing'){
+  acts=(st==='confirmed'?'<button class="secondary" data-act="processing" data-id="'+o.id+'">Start packing</button>':'')+
+   '<input data-person placeholder="Delivery person name *" value="'+esc(o.delivery_person||'')+'"><input data-pphone placeholder="Delivery person phone" inputmode="tel" value="'+esc(o.delivery_phone||'')+'"><button data-act="shipped" data-id="'+o.id+'">🚚 Send for delivery</button><button class="danger" data-act="cancelled" data-id="'+o.id+'">Cancel</button>';
+ }else if(st==='shipped'){
+  acts='<div class="box" style="flex:1 1 100%">Delivery person: <b>'+esc(o.delivery_person||'—')+'</b> '+esc(o.delivery_phone||'')+'<br><span class="small muted">Send this link to the delivery person. They tap “Delivered” after the customer receives the products.</span><br><input readonly value="'+esc(link)+'" onclick="this.select()" style="margin:6px 0"><button class="secondary" data-copy="'+esc(link)+'">Copy link</button> '+(o.delivery_phone?'<a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/'+phoneWa(o.delivery_phone)+'?text='+encodeURIComponent('Delivery for order '+o.order_code+': '+link)+'">Send on WhatsApp</a> ':'')+(isAdmin?'<button class="okb" data-act="delivered" data-id="'+o.id+'">Mark delivered</button>':'')+'</div>';
+ }else if(st==='delivered')acts='<span class="pill delivered">Delivery done'+(o.delivered_at?' · '+new Date(o.delivered_at).toLocaleString():'')+'</span>';
+ return '<div class="oc '+(st==='new'?'isnew':'')+'"><div class="top"><div><b style="font-size:17px">'+esc(o.order_code)+'</b> <span class="muted small">'+new Date(o.created_at).toLocaleString()+'</span></div><span class="pill '+esc(st)+'">'+esc(st.toUpperCase())+'</span></div>'+
+ '<div class="cols"><div class="box"><b>Customer</b><br>'+esc(o.customer_name)+'<br><a href="tel:'+esc(o.phone)+'">'+esc(o.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+phoneWa(o.phone)+'">WhatsApp</a><br>'+esc(o.customer_email||'')+'<br><span class="muted">'+esc(o.address)+'</span></div>'+
+ '<div class="box"><b>Items</b><br>'+own.map(i=>esc(i.name)+' × '+i.qty+' — '+money(i.price_bdt*i.qty)).join('<br>')+'<br><br><b>'+(isAdmin?'Order total: '+money(o.total_bdt):'Your total: '+money(sum))+'</b><br><span class="muted small">'+esc(o.payment_method.toUpperCase())+(o.payment_ref?' · Txn '+esc(o.payment_ref):'')+'</span></div></div>'+
+ '<div class="acts">'+acts+'</div></div>';
+}
+$('ordersList').addEventListener('click',async e=>{
+ const cp=e.target.closest('[data-copy]');if(cp){try{await navigator.clipboard.writeText(cp.dataset.copy);cp.textContent='Copied ✔'}catch(_){}return}
+ const b=e.target.closest('[data-act]');if(!b)return;
+ const card=b.closest('.oc'),status=b.dataset.act;
+ if(status==='cancelled'&&!confirm('Cancel this order? Stock will be returned.'))return;
+ const person=card.querySelector('[data-person]')?.value.trim()||null,pphone=card.querySelector('[data-pphone]')?.value.trim()||null;
+ if(status==='shipped'&&(!person||person.length<2)){message('dashboardMsg','Enter the delivery person name first.','error');return}
+ b.disabled=true;
+ const {error}=await db.rpc('ecom_set_order_status',{p_order:b.dataset.id,p_status:status,p_person:person,p_person_phone:pphone});
+ if(error){b.disabled=false;message('dashboardMsg',error.message,'error');return}
+ message('dashboardMsg',status==='confirmed'?'Order confirmed. The customer is notified.':status==='shipped'?'Order sent for delivery. Share the delivery link with the delivery person.':'Order updated.','success');
+ await loadOrders();await loadNotifs();
+});
+/* ---- notifications ---- */
+let notifs=[],notifChannel=null,audio=null;
+function beep(){try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.frequency.value=880;g.gain.value=.08;o.connect(g);g.connect(audio.destination);o.start();setTimeout(()=>o.stop(),220)}catch(_){}}
+async function loadNotifs(){
+ const {data}=await db.from('ecom_notifications').select('*').order('created_at',{ascending:false}).limit(50);
+ notifs=(data||[]).filter(n=>isAdmin?n.audience==='admin':true);renderNotifs();
+}
+function renderNotifs(){
+ const un=notifs.filter(n=>!n.is_read).length;$('bellCount').textContent=un;$('bellCount').classList.toggle('hidden',!un);
+ $('nlist').innerHTML=(('Notification' in window&&Notification.permission==='default')?'<div class="nitem" id="enableN"><b>🔔 Enable phone/desktop alerts</b><small>Tap to allow notifications while this page is open.</small></div>':'')+
+  (notifs.map(n=>'<div class="nitem '+(n.is_read?'':'unread')+'" data-n="'+n.id+'"><b>'+esc(n.title)+'</b>'+esc(n.body||'')+'<br><small>'+new Date(n.created_at).toLocaleString()+'</small></div>').join('')||'<div class="nitem muted">No notifications yet.</div>');
+}
+function watchNotifs(){
+ if(notifChannel){db.removeChannel(notifChannel);notifChannel=null}
+ notifChannel=db.channel('suhas-ecom-notifs-'+(isAdmin?'admin':vendor?.id||'seller')).on('postgres_changes',{event:'INSERT',schema:'public',table:'ecom_notifications'},async pl=>{
+  const n=pl.new;if(!n||(isAdmin&&n.audience!=='admin')||(!isAdmin&&n.vendor_id!==vendor?.id))return;
+  notifs.unshift(n);renderNotifs();beep();message('dashboardMsg','🔔 '+n.title+' — '+(n.body||''),'success');
+  try{if('Notification' in window&&Notification.permission==='granted')new Notification(n.title,{body:n.body||''})}catch(_){}
+  await loadOrders();
+ }).subscribe();
+}
+$('bellBtn').onclick=e=>{e.stopPropagation();$('npanel').classList.toggle('hidden')};
+document.addEventListener('click',e=>{if(!e.target.closest('#npanel')&&!e.target.closest('#bellBtn'))$('npanel').classList.add('hidden')});
+$('nlist').addEventListener('click',async e=>{
+ if(e.target.closest('#enableN')){await Notification.requestPermission();renderNotifs();return}
+ const it=e.target.closest('[data-n]');if(!it)return;
+ await db.from('ecom_notifications').update({is_read:true}).eq('id',it.dataset.n);
+ const n=notifs.find(x=>x.id===it.dataset.n);if(n)n.is_read=true;renderNotifs();switchTab('orders');$('npanel').classList.add('hidden');
+});
+$('markRead').onclick=async()=>{const ids=notifs.filter(n=>!n.is_read).map(n=>n.id);if(ids.length)await db.from('ecom_notifications').update({is_read:true}).in('id',ids);notifs.forEach(n=>n.is_read=true);renderNotifs()};
+async function loadSellers(){
  const {data,error}=await db.from('ecom_vendors').select('*').order('created_at',{ascending:false});
  $('sellersBody').innerHTML=error?'<tr><td colspan="5">'+esc(error.message)+'</td></tr>':(data||[]).map(v=>'<tr><td><b>'+esc(v.shop_name)+'</b><br>'+esc(v.owner_name)+'</td><td>'+esc(v.email||'')+'<br>'+esc(v.phone)+'<br>'+esc(v.city||'')+'</td><td>'+esc(v.category||'—')+'</td><td><span class="pill '+esc(v.status)+'">'+esc(v.status)+'</span></td><td>'+(v.status==='pending'?'<button class="secondary" data-vendor-status="approved" data-vendor-id="'+v.id+'">Approve</button> <button class="danger" data-vendor-status="rejected" data-vendor-id="'+v.id+'">Reject</button>':v.status==='approved'?'<button class="danger" data-vendor-status="suspended" data-vendor-id="'+v.id+'">Suspend</button>':'<button class="secondary" data-vendor-status="approved" data-vendor-id="'+v.id+'">Approve</button>')+'</td></tr>').join('')||'<tr><td colspan="5">No seller applications.</td></tr>';
 }
@@ -144,13 +228,31 @@ $('adminSetupForm').addEventListener('submit',async e=>{e.preventDefault();const
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget),email=String(f.get('email')).trim().toLowerCase();$('resendConfirmBtn').classList.add('hidden');message('authMsg','Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password:f.get('password')});if(error){message('authMsg',error.message,'error');if(String(error.message||'').toLowerCase().includes('email not confirmed'))$('resendConfirmBtn').classList.remove('hidden');return}try{await startDashboard(data.user)}catch(err){message('authMsg',err.message,'error')}});
 $('resendConfirmBtn').addEventListener('click',async()=>{const email=String($('loginForm').elements.email.value||'').trim().toLowerCase();if(!email){message('authMsg','Enter your email address first.','error');return}$('resendConfirmBtn').disabled=true;message('authMsg','Sending verification email…');const {error}=await db.auth.resend({type:'signup',email,options:{emailRedirectTo:location.origin+location.pathname}});$('resendConfirmBtn').disabled=false;if(error){message('authMsg',String(error.message||'Could not send verification email. Check Supabase email settings or wait before retrying.'),'error');return}message('authMsg','Verification email requested. Check your inbox and spam folder, open the latest confirmation link, then return and sign in.','success')});
 $('signupForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget);$('signupBtn').disabled=true;message('authMsg','Creating your seller account…');const metadata={shop_name:String(f.get('shop')).trim(),owner_name:String(f.get('owner')).trim(),phone:String(f.get('phone')).trim(),city:String(f.get('city')).trim(),category:String(f.get('category')).trim(),description:String(f.get('description')).trim()};const {data,error}=await db.auth.signUp({email:String(f.get('email')).trim().toLowerCase(),password:String(f.get('password')),options:{data:metadata}});$('signupBtn').disabled=false;if(error){message('authMsg',error.message,'error');return}if(data.session&&data.user){try{await startDashboard(data.user)}catch(err){message('authMsg',err.message,'error')}}else{message('authMsg','Account created. Check your email to verify the account, then sign in here. Your shop will enter pending approval.','success');setAuthMode('login')}});
-$('productForm').addEventListener('submit',async e=>{e.preventDefault();if(!isAdmin&&vendor?.status!=='approved')return;const f=e.currentTarget.elements;const vendorId=isAdmin?f.vendor.value:vendor?.id;if(!vendorId){$('productMsg').textContent='Create or approve a store first.';return}const file=f.imageFile.files?.[0];if(file&&(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2*1024*1024)){$('productMsg').textContent='Choose a JPG, PNG or WebP image up to 2 MB.';return}$('addProductBtn').disabled=true;$('productMsg').textContent=file?'Uploading product image…':'Publishing…';let imageUrl=f.image.value.trim()||null;try{if(file){const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=user.id+'/'+crypto.randomUUID()+'.'+ext;const upload=await db.storage.from('ecom-products').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(upload.error)throw upload.error;imageUrl=db.storage.from('ecom-products').getPublicUrl(path).data.publicUrl}const row={vendor_id:vendorId,name:f.name.value.trim(),category:f.category.value.trim(),description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),image_url:imageUrl,is_active:true,featured:false};const {error}=await db.from('ecom_products').insert(row);if(error)throw error;$('productMsg').textContent='Product published successfully. It is now live in the customer catalogue.';e.currentTarget.reset();f.stock.value=1;await loadProducts()}catch(error){$('productMsg').textContent='Could not publish product: '+(error?.message||'Please try again.')}finally{$('addProductBtn').disabled=false}});
+$('productForm').addEventListener('change',e=>{if(e.target.name!=='imageFiles')return;const fs=[...e.target.files].slice(0,5);$('imgPrev').innerHTML=fs.map(f=>'<img alt="" src="'+URL.createObjectURL(f)+'">').join('')});
+$('productForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!isAdmin&&vendor?.status!=='approved')return;
+ const f=e.currentTarget.elements,vendorId=isAdmin?f.vendor.value:vendor?.id;
+ if(!vendorId){$('productMsg').textContent='Create or approve a store first.';return}
+ const files=[...(f.imageFiles.files||[])].slice(0,5);
+ for(const file of files)if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2*1024*1024){$('productMsg').textContent='Each photo must be JPG, PNG or WebP up to 2 MB.';return}
+ $('addProductBtn').disabled=true;$('productMsg').textContent=files.length?'Uploading photos…':'Publishing…';
+ try{
+  const images=[];
+  for(const file of files){const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=user.id+'/'+crypto.randomUUID()+'.'+ext;const up=await db.storage.from('ecom-products').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(up.error)throw up.error;images.push(db.storage.from('ecom-products').getPublicUrl(path).data.publicUrl)}
+  const url=f.image.value.trim();if(url)images.push(url);
+  const specs=f.specs.value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const k=l.indexOf(':');return k>0?{k:l.slice(0,k).trim(),v:l.slice(k+1).trim()}:{k:l,v:''}}).slice(0,30);
+  const row={vendor_id:vendorId,name:f.name.value.trim(),category:f.category.value.trim(),brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),min_order:Math.min(99,Math.max(1,Number(f.minorder.value)||1)),unit:f.unit.value.trim()||'piece',lead_time:f.lead.value.trim()||null,specs,images,image_url:images[0]||null,is_active:true,featured:false};
+  const {error}=await db.from('ecom_products').insert(row);if(error)throw error;
+  $('productMsg').textContent='✔ Product published. It is now live in the marketplace.';
+  e.currentTarget.reset();f.stock.value=1;f.minorder.value=1;f.unit.value='piece';$('imgPrev').innerHTML='';await loadProducts();
+ }catch(error){$('productMsg').textContent='Could not publish product: '+(error?.message||'Please try again.')}
+ finally{$('addProductBtn').disabled=false}
+});
 $('productForm').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('productsBody').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('sellersBody').addEventListener('click',async e=>{const b=e.target.closest('[data-vendor-status]');if(!b)return;b.disabled=true;const {error}=await db.from('ecom_vendors').update({status:b.dataset.vendorStatus,updated_at:new Date().toISOString()}).eq('id',b.dataset.vendorId);if(error)message('dashboardMsg',error.message,'error');await loadSellers();await loadStores()});
-$('ordersBody').addEventListener('click',async e=>{const b=e.target.closest('[data-order-save]');if(!b)return;const id=b.dataset.orderSave,status=document.querySelector('[data-order-status="'+id+'"]').value;const {error}=await db.from('ecom_orders').update({status}).eq('id',id);if(error)message('dashboardMsg',error.message,'error');else{message('dashboardMsg','Order status updated.','success');await loadOrders()}});
 $('storeForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget.elements;const row={shop_name:f.shop.value.trim(),owner_name:f.owner.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim()||null,city:f.city.value.trim()||null,category:f.category.value.trim()||'General',description:'Official SUHAS E-COM store',status:'approved',user_id:null};const {error}=await db.from('ecom_vendors').insert(row);$('storeMsg').textContent=error?error.message:'Official store created.';if(!error){e.currentTarget.reset();await loadStores()}});
 $('refreshBtn').onclick=async()=>{await refreshAll();message('dashboardMsg','Data refreshed.','success')};
-$('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
+$('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}if(notifChannel){await db.removeChannel(notifChannel);notifChannel=null}$('bellWrap').classList.add('hidden');clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
 const {data:{session}}=await db.auth.getSession();if(session?.user){try{await startDashboard(session.user)}catch(e){message('authMsg',e.message,'error')}}else applyAccessRoute();
 </script></body></html>

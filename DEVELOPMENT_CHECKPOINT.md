@@ -1300,3 +1300,8 @@ Date: 2026-11-10
 - QR is static and encodes https://suhasgroup.pages.dev/download.html — regenerate if the domain changes.
 - Verified locally: Chrome CDP installability errors = none; synthetic Android/iOS/FB-in-app/desktop UA tests.
 - NOT verified: real devices, live Google Safe Browsing status of pages.dev. The "harmful (!)" warning, if it persists, is most likely Safe Browsing / APK sideload / in-app browser, not the manifest.
+
+## 2026-11-23 — SUHAS E-COM Alibaba-style rebuild
+- Rewrote apps/suhas-ecom storefront (index, product, track, delivery, manage) + shared ecom.css/ecom-core.js. Applied order-flow migration to Supabase; verified full flow with a rolled-back SQL test and mocked-Supabase Playwright UI test (desktop + mobile).
+- Approved owner Max.com vendors (hasnain.in@outlook.com, suhasgroup.in@gmail.com) — vendor guard trigger had silently reset an earlier approval.
+- NOT verified: real signed-in seller/admin session on live site, real image upload to ecom-products bucket, live realtime, email delivery.
