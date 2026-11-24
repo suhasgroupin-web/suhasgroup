@@ -61,7 +61,7 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 <div id="adminVendorField" class="hidden"><label>Publish under store *</label><select name="vendor"></select></div>
 <label>Product description (details, features, material, size, usage)</label><textarea name="description" maxlength="3000" style="min-height:120px"></textarea>
 <label>Specifications <span class="muted small">(one per line, format: Name: Value)</span></label><textarea name="specs" maxlength="2000" placeholder="Material: Cotton&#10;Size: M, L, XL&#10;Colour: Navy Blue&#10;Warranty: 6 months"></textarea>
-<button type="submit" id="addProductBtn" style="margin-top:14px">Publish product live</button> <span id="productMsg" class="muted small" aria-live="polite"></span></form>
+<button type="submit" id="addProductBtn" style="margin-top:14px">Publish product live</button> <button type="button" id="cancelEdit" class="secondary hidden" style="margin-top:14px">Cancel edit</button> <span id="productMsg" class="muted small" aria-live="polite"></span></form>
 </div>
 <div class="sectionhead"><h2>Product catalogue</h2><span class="muted small" id="productCount"></span></div><div class="tablewrap"><table><thead><tr><th>Product</th><th>Store</th><th>Price</th><th>Stock</th><th>Visibility</th><th>Action</th></tr></thead><tbody id="productsBody"></tbody></table></div>
 </section>
@@ -142,9 +142,9 @@ async function loadProducts(){
  let q=db.from('ecom_products').select('*').order('created_at',{ascending:false});
  if(!isAdmin&&vendor)q=q.eq('vendor_id',vendor.id);
  const {data,error}=await q;if(error){$('productsBody').innerHTML='<tr><td colspan="6">'+esc(error.message)+'</td></tr>';return}
- const list=data||[];$('productCount').textContent=list.length+' products';
+ const list=data||[];productsCache=list;$('productCount').textContent=list.length+' products';
  const storeMap=new Map(stores.map(v=>[v.id,v.shop_name]));
- $('productsBody').innerHTML=list.map(p=>'<tr><td>'+((p.images&&p.images[0])||p.image_url?'<img class="pth" alt="" src="'+esc((p.images&&p.images[0])||p.image_url)+'">':'')+'<b>'+esc(p.name)+'</b><br><span class="muted small">'+esc(p.category)+'</span></td><td>'+esc(storeMap.get(p.vendor_id)||'Store')+'</td><td>'+money(p.price_bdt)+'</td><td>'+p.stock+'</td><td><span class="pill '+(p.is_active?'approved':'pending')+'">'+(p.is_active?'Live':'Hidden')+'</span></td><td><a class="btn secondary" target="_blank" href="product.html?id='+p.id+'">View</a> <button class="secondary" data-product-toggle="'+p.id+'" data-active="'+(!p.is_active)+'">'+(p.is_active?'Hide':'Publish')+'</button> <button class="danger" data-product-delete="'+p.id+'">Delete</button></td></tr>').join('')||'<tr><td colspan="6">No products yet. Add the first product above.</td></tr>';
+ $('productsBody').innerHTML=list.map(p=>'<tr><td>'+((p.images&&p.images[0])||p.image_url?'<img class="pth" alt="" src="'+esc((p.images&&p.images[0])||p.image_url)+'">':'')+'<b>'+esc(p.name)+'</b><br><span class="muted small">'+esc(p.category)+'</span></td><td>'+esc(storeMap.get(p.vendor_id)||'Store')+'</td><td>'+money(p.price_bdt)+'</td><td>'+p.stock+'</td><td><span class="pill '+(p.is_active?'approved':'pending')+'">'+(p.is_active?'Live':'Hidden')+'</span></td><td><button class="secondary" data-product-edit="'+p.id+'">Edit</button> <a class="btn secondary" target="_blank" href="product.html?id='+p.id+'">View</a> <button class="secondary" data-product-toggle="'+p.id+'" data-active="'+(!p.is_active)+'">'+(p.is_active?'Hide':'Publish')+'</button> <button class="danger" data-product-delete="'+p.id+'">Delete</button></td></tr>').join('')||'<tr><td colspan="6">No products yet. Add the first product above.</td></tr>';
 }
 let ordersCache=[];
 async function loadOrders(){
@@ -229,25 +229,43 @@ $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const f=ne
 $('resendConfirmBtn').addEventListener('click',async()=>{const email=String($('loginForm').elements.email.value||'').trim().toLowerCase();if(!email){message('authMsg','Enter your email address first.','error');return}$('resendConfirmBtn').disabled=true;message('authMsg','Sending verification email…');const {error}=await db.auth.resend({type:'signup',email,options:{emailRedirectTo:location.origin+location.pathname}});$('resendConfirmBtn').disabled=false;if(error){message('authMsg',String(error.message||'Could not send verification email. Check Supabase email settings or wait before retrying.'),'error');return}message('authMsg','Verification email requested. Check your inbox and spam folder, open the latest confirmation link, then return and sign in.','success')});
 $('signupForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget);$('signupBtn').disabled=true;message('authMsg','Creating your seller account…');const metadata={shop_name:String(f.get('shop')).trim(),owner_name:String(f.get('owner')).trim(),phone:String(f.get('phone')).trim(),city:String(f.get('city')).trim(),category:String(f.get('category')).trim(),description:String(f.get('description')).trim()};const {data,error}=await db.auth.signUp({email:String(f.get('email')).trim().toLowerCase(),password:String(f.get('password')),options:{data:metadata}});$('signupBtn').disabled=false;if(error){message('authMsg',error.message,'error');return}if(data.session&&data.user){try{await startDashboard(data.user)}catch(err){message('authMsg',err.message,'error')}}else{message('authMsg','Account created. Check your email to verify the account, then sign in here. Your shop will enter pending approval.','success');setAuthMode('login')}});
 $('productForm').addEventListener('change',e=>{if(e.target.name!=='imageFiles')return;const fs=[...e.target.files].slice(0,5);$('imgPrev').innerHTML=fs.map(f=>'<img alt="" src="'+URL.createObjectURL(f)+'">').join('')});
+let editId=null,productsCache=[];
+function resetProductForm(form){form.reset();form.elements.stock.value=1;form.elements.minorder.value=1;form.elements.unit.value='piece';$('imgPrev').innerHTML='';editId=null;$('addProductBtn').textContent='Publish product live';$('cancelEdit').classList.add('hidden')}
 $('productForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!isAdmin&&vendor?.status!=='approved')return;
  const form=e.currentTarget,f=form.elements,vendorId=isAdmin?f.vendor.value:vendor?.id;
  if(!vendorId){$('productMsg').textContent='Create or approve a store first.';return}
  const files=[...(f.imageFiles.files||[])].slice(0,5);
  for(const file of files)if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2*1024*1024){$('productMsg').textContent='Each photo must be JPG, PNG or WebP up to 2 MB.';return}
- $('addProductBtn').disabled=true;$('productMsg').textContent=files.length?'Uploading photos…':'Publishing…';
+ const editing=editId;
+ $('addProductBtn').disabled=true;$('productMsg').textContent=files.length?'Uploading photos…':(editing?'Saving…':'Publishing…');
  try{
   const images=[];
   for(const file of files){const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=user.id+'/'+crypto.randomUUID()+'.'+ext;const up=await db.storage.from('ecom-products').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(up.error)throw up.error;images.push(db.storage.from('ecom-products').getPublicUrl(path).data.publicUrl)}
   const url=f.image.value.trim();if(url)images.push(url);
   const specs=f.specs.value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const k=l.indexOf(':');return k>0?{k:l.slice(0,k).trim(),v:l.slice(k+1).trim()}:{k:l,v:''}}).slice(0,30);
-  const row={vendor_id:vendorId,name:f.name.value.trim(),category:f.category.value.trim(),brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),min_order:Math.min(99,Math.max(1,Number(f.minorder.value)||1)),unit:f.unit.value.trim()||'piece',lead_time:f.lead.value.trim()||null,specs,images,image_url:images[0]||null,is_active:true,featured:false};
-  const {error}=await db.from('ecom_products').insert(row);if(error)throw error;
-  $('productMsg').textContent='✔ Product published. It is now live in the marketplace.';
-  form.reset();f.stock.value=1;f.minorder.value=1;f.unit.value='piece';$('imgPrev').innerHTML='';await loadProducts();
- }catch(error){$('productMsg').textContent='Could not publish product: '+(error?.message||'Please try again.')}
+  const row={name:f.name.value.trim(),category:f.category.value.trim(),brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),min_order:Math.min(99,Math.max(1,Number(f.minorder.value)||1)),unit:f.unit.value.trim()||'piece',lead_time:f.lead.value.trim()||null,specs};
+  let error;
+  if(editing){if(images.length){row.images=images;row.image_url=images[0]}({error}=await db.from('ecom_products').update(row).eq('id',editing))}
+  else{({error}=await db.from('ecom_products').insert({...row,vendor_id:vendorId,images,image_url:images[0]||null,is_active:true,featured:false}))}
+  if(error)throw error;
+  resetProductForm(form);
+  $('productMsg').textContent=editing?'✔ Product updated.':'✔ Product published. It is now live in the marketplace.';
+  await loadProducts();
+ }catch(error){$('productMsg').textContent='Could not '+(editing?'save':'publish')+' product: '+(error?.message||'Please try again.')}
  finally{$('addProductBtn').disabled=false}
 });
+$('cancelEdit').onclick=()=>{resetProductForm($('productForm'));$('productMsg').textContent=''};
+function startEdit(id){
+ const p=productsCache.find(x=>x.id===id);if(!p)return;const f=$('productForm').elements;
+ editId=id;f.name.value=p.name||'';f.category.value=p.category||'';f.brand.value=p.brand||'';f.price.value=p.price_bdt;f.compare.value=p.compare_at_bdt||'';f.stock.value=p.stock;f.minorder.value=p.min_order||1;f.unit.value=p.unit||'piece';f.lead.value=p.lead_time||'';f.description.value=p.description||'';
+ f.specs.value=(Array.isArray(p.specs)?p.specs:[]).map(x=>x.k+(x.v?': '+x.v:'')).join('\n');f.image.value='';f.imageFiles.value='';
+ const imgs=(p.images&&p.images.length?p.images:(p.image_url?[p.image_url]:[]));
+ $('imgPrev').innerHTML=imgs.map(u=>'<img alt="" src="'+esc(u)+'">').join('')+(imgs.length?'<span class="muted small" style="align-self:center">Current photos are kept unless you choose new ones.</span>':'');
+ $('addProductBtn').textContent='Save changes';$('cancelEdit').classList.remove('hidden');$('productMsg').textContent='Editing “'+p.name+'”';
+ $('productForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('productsBody').addEventListener('click',e=>{const b=e.target.closest('[data-product-edit]');if(b)startEdit(b.dataset.productEdit)});
 $('productForm').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('productsBody').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('sellersBody').addEventListener('click',async e=>{const b=e.target.closest('[data-vendor-status]');if(!b)return;b.disabled=true;const {error}=await db.from('ecom_vendors').update({status:b.dataset.vendorStatus,updated_at:new Date().toISOString()}).eq('id',b.dataset.vendorId);if(error)message('dashboardMsg',error.message,'error');await loadSellers();await loadStores()});

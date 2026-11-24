@@ -1310,3 +1310,8 @@ Date: 2026-11-10
 - Product publish: form reset used e.currentTarget after await (null) -> showed "Cannot read properties of null (reading 'reset')" although the product was saved. Fixed (also in store form). Removed one duplicate test product created by the retry.
 - Notification panel now position:fixed and clamped to the viewport (was clipped off-screen on phones).
 - Verified: mocked-UI publish test with 2 photos, anon RLS sees published product + images, storage bucket public, realtime publication includes orders/items/notifications.
+
+## 2026-11-24 — E-COM seller centre follow-up
+- Root cause of "product upload fails": product was saved, but `e.currentTarget.reset()` ran after an await (currentTarget is null) and threw; fixed by capturing the form. Mobile bell panel now fixed-positioned inside the screen.
+- Added Edit product (price, stock, MOQ, details, replace photos) in manage.html.
+- Mocked-Supabase Playwright test on Pixel 7 viewport: seller (publish, edit, hide, delete, orders confirm/cancel, bell, sign out) and admin (approve seller, create store) all pass. NOT verified against live signed-in session.
