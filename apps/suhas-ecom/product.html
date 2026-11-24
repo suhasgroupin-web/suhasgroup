@@ -35,12 +35,18 @@ function render(p){
   '<dl class="kv">'+details.map(x=>'<dt>'+x[0]+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
   (ok?'<div class="qrow"><b>Quantity</b><div class="qty"><button id="qm" aria-label="Decrease">−</button><span id="qv">'+p.min+'</span><button id="qp" aria-label="Increase">+</button></div><span class="muted" id="qsub"></span></div>':'')+
   '<div class="acts">'+(ok?'<button class="btn pri" id="orderNow">Order now</button><button class="btn out" id="addCart">Add to cart</button>':'<button class="btn" disabled>'+(p.isDemo?'Preview only':'Out of stock')+'</button>')+'<a class="btn wa" id="waBtn" target="_blank" rel="noopener">💬 WhatsApp</a></div>'+
-  '<p class="muted" style="margin-top:12px">🛡️ Order protection · seller confirms your order · Cash on Delivery available</p></div>'+
+  '<p class="muted" style="margin-top:12px">🛡️ Order protection · seller confirms your order · Cash on Delivery available</p>'+
+  '<div class="share"><b>Share:</b><a class="sh fb" id="shFb" target="_blank" rel="noopener">Facebook</a><a class="sh li" id="shLi" target="_blank" rel="noopener">LinkedIn</a><a class="sh wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a><button class="sh" id="shCopy" type="button">Copy link</button></div></div>'+
   '<aside class="supc"><h3>Supplier</h3><div><span class="vf">Verified</span> <b>'+esc(p.shop)+'</b></div>'+(p.shopCity?'<div class="muted">📍 '+esc(p.shopCity)+', Bangladesh</div>':'')+'<div class="muted">Orders are confirmed by the seller and delivered with live status updates.</div><a class="btn wa" id="waSup" target="_blank" rel="noopener">Chat with us</a><a class="btn out" href="track.html">Track an order</a></aside></section>'+
   '<div class="tabs"><button class="on" data-tab="ov">Description</button>'+(specs.length?'<button data-tab="sp">Specifications</button>':'')+'</div>'+
   '<section class="panel" id="tab-ov"><p style="white-space:pre-wrap;margin:0">'+esc(p.description||'Quality product from a verified SUHAS E-COM seller.')+'</p></section>'+
   (specs.length?'<section class="panel hidden" id="tab-sp"><table class="spec"><tbody>'+specs.map(s=>'<tr><th>'+esc(s.k)+'</th><td>'+esc(s.v||'')+'</td></tr>').join('')+'</tbody></table></section>':'')+
   (related.length?'<div class="sec" style="margin-top:24px"><h2>More from this category</h2></div><div class="grid" id="rel">'+related.map(cardHtml).join('')+'</div>':'');
+  const shareUrl=location.origin+'/s/'+encodeURIComponent(p.id),shareText=p.title+' — '+money(p.price_bdt)+' on SUHAS E-COM';
+  $('shFb').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl);
+  $('shLi').href='https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(shareUrl);
+  $('shWa').href=waLink(shareText+'\n'+shareUrl).replace('wa.me/8801862144113','wa.me/');
+  $('shCopy').onclick=async()=>{try{await navigator.clipboard.writeText(shareUrl);$('shCopy').textContent='Link copied ✔'}catch(_){prompt('Copy this link',shareUrl)}};
   let qty=p.min;
   const msg=()=>waLink('Hello SUHAS E-COM, I want to order:\n'+p.title+'\nQuantity: '+qty+' '+p.unit+'\nPrice: '+money(p.price_bdt)+' each\n'+url);
   const sync=()=>{if($('qv')){$('qv').textContent=qty;$('qsub').textContent='Total '+money(qty*p.price_bdt)}$('waBtn').href=msg();$('waSup').href=msg()};sync();

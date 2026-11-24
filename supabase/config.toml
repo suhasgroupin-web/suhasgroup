@@ -1,2 +1,5 @@
 [functions.ai-assistant]
 verify_jwt = true
+
+[functions.ecom-assistant]
+verify_jwt = false

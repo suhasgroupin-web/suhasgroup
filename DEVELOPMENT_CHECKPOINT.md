@@ -1315,3 +1315,6 @@ Date: 2026-11-10
 - Root cause of "product upload fails": product was saved, but `e.currentTarget.reset()` ran after an await (currentTarget is null) and threw; fixed by capturing the form. Mobile bell panel now fixed-positioned inside the screen.
 - Added Edit product (price, stock, MOQ, details, replace photos) in manage.html.
 - Mocked-Supabase Playwright test on Pixel 7 viewport: seller (publish, edit, hide, delete, orders confirm/cancel, bell, sign out) and admin (approve seller, create store) all pass. NOT verified against live signed-in session.
+
+## 2026-11-24 — E-COM share previews + SUHAS AI
+- Added functions/s/[id].js (OG tags), share buttons, ecom-assistant edge function + workflow deploy step, ecom-ai.js widget. Mock-tested (Node mock for both functions, Playwright for UI). NOT verified live: Facebook/LinkedIn crawlers, real AI answers, edge function deployment (check Deploy Supabase Edge Functions run).

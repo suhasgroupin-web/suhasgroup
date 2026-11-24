@@ -51,8 +51,9 @@ export function mountShell(active=''){
   '<div class="hact"><a class="hbtn" href="track.html"><b>📦</b><span>Orders</span></a><button class="hbtn" id="cartBtn"><b>🛒</b><span>Cart</span><em class="cnt" id="cartCount" style="font-style:normal">0</em></button><a class="hbtn" href="manage.html"><b>👤</b><span>Sign in</span></a></div></div></header>'+
   '<nav class="cats"><div class="wrap"><a href="index.html" class="'+(active==='home'?'on':'')+'">Home</a><a href="index.html#catalog">All products</a><a href="index.html?sort=deal#catalog">Top deals</a><a href="track.html" class="'+(active==='track'?'on':'')+'">Track order</a><a href="manage.html#seller">Become a seller</a><a href="'+waLink('Hello SUHAS E-COM, I need support.')+'" target="_blank" rel="noopener">Help &amp; WhatsApp</a></div></nav>';
   $('shellBottom').innerHTML=
-  '<a class="wafab" href="'+waLink('Hello SUHAS E-COM, I need product support.')+'" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬 <span>WhatsApp</span></a>'+
+  '<div class="fabs" id="fabs"><a class="wafab" href="'+waLink('Hello SUHAS E-COM, I need product support.')+'" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬 <span>WhatsApp</span></a></div>'+
   '<footer class="ft">© '+new Date().getFullYear()+' SUHAS E-COM · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · WhatsApp +880 1862-144113 · <a href="../../privacy-policy.html">Privacy Policy</a></footer>';
+  import('./ecom-ai.js').then(m=>m.mountAI()).catch(()=>{});
 }
 
 /* ---------- cart ---------- */

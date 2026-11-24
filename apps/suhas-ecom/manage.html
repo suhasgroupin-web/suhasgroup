@@ -151,9 +151,13 @@ async function loadOrders(){
  const [o,it]=await Promise.all([db.from('ecom_orders').select('*').order('created_at',{ascending:false}),db.from('ecom_order_items').select('id,order_id,name,qty,price_bdt,vendor_id,status')]);
  if(o.error){$('ordersList').innerHTML='<div class="alert error">'+esc(o.error.message)+'</div>';return}
  const items=it.data||[];ordersCache=o.data||[];
+ const keep={},ae=document.activeElement,focus=ae&&ae.closest&&ae.closest('#ordersList .oc')&&(ae.hasAttribute('data-person')||ae.hasAttribute('data-pphone'))?[ae.closest('.oc').dataset.oid,ae.hasAttribute('data-person')?'[data-person]':'[data-pphone]']:null;
+ document.querySelectorAll('#ordersList .oc').forEach(c=>{const a=c.querySelector('[data-person]'),b=c.querySelector('[data-pphone]');if(a||b)keep[c.dataset.oid]=[a?a.value:'',b?b.value:'']});
  const c=s=>ordersCache.filter(x=>x.status===s).length;
  $('ostats').innerHTML='<div class="stat"><b>'+c('new')+'</b><span>New · need confirmation</span></div><div class="stat"><b>'+(c('confirmed')+c('processing'))+'</b><span>To pack / ship</span></div><div class="stat"><b>'+c('shipped')+'</b><span>Out for delivery</span></div><div class="stat"><b>'+c('delivered')+'</b><span>Delivered</span></div>';
  $('ordersList').innerHTML=ordersCache.map(x=>orderCard(x,items.filter(i=>i.order_id===x.id))).join('')||'<div class="alert">No orders received yet. When a customer orders, you will be notified here.</div>';
+ for(const c of document.querySelectorAll('#ordersList .oc')){const k=keep[c.dataset.oid];if(!k)continue;const a=c.querySelector('[data-person]'),b=c.querySelector('[data-pphone]');if(a&&k[0])a.value=k[0];if(b&&k[1])b.value=k[1]}
+ if(focus){const c=document.querySelector('#ordersList .oc[data-oid="'+focus[0]+'"]');const el=c&&c.querySelector(focus[1]);if(el)el.focus()}
 }
 const phoneWa=p=>{let d=String(p||'').replace(/\D/g,'');if(d.startsWith('0'))d='880'+d.slice(1);return d};
 const base=()=>location.origin+location.pathname.replace(/[^/]*$/,'');
@@ -169,7 +173,7 @@ function orderCard(o,items){
  }else if(st==='shipped'){
   acts='<div class="box" style="flex:1 1 100%">Delivery person: <b>'+esc(o.delivery_person||'—')+'</b> '+esc(o.delivery_phone||'')+'<br><span class="small muted">Send this link to the delivery person. They tap “Delivered” after the customer receives the products.</span><br><input readonly value="'+esc(link)+'" onclick="this.select()" style="margin:6px 0"><button class="secondary" data-copy="'+esc(link)+'">Copy link</button> '+(o.delivery_phone?'<a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/'+phoneWa(o.delivery_phone)+'?text='+encodeURIComponent('Delivery for order '+o.order_code+': '+link)+'">Send on WhatsApp</a> ':'')+(isAdmin?'<button class="okb" data-act="delivered" data-id="'+o.id+'">Mark delivered</button>':'')+'</div>';
  }else if(st==='delivered')acts='<span class="pill delivered">Delivery done'+(o.delivered_at?' · '+new Date(o.delivered_at).toLocaleString():'')+'</span>';
- return '<div class="oc '+(st==='new'?'isnew':'')+'"><div class="top"><div><b style="font-size:17px">'+esc(o.order_code)+'</b> <span class="muted small">'+new Date(o.created_at).toLocaleString()+'</span></div><span class="pill '+esc(st)+'">'+esc(st.toUpperCase())+'</span></div>'+
+ return '<div class="oc '+(st==='new'?'isnew':'')+'" data-oid="'+o.id+'"><div class="top"><div><b style="font-size:17px">'+esc(o.order_code)+'</b> <span class="muted small">'+new Date(o.created_at).toLocaleString()+'</span></div><span class="pill '+esc(st)+'">'+esc(st.toUpperCase())+'</span></div>'+
  '<div class="cols"><div class="box"><b>Customer</b><br>'+esc(o.customer_name)+'<br><a href="tel:'+esc(o.phone)+'">'+esc(o.phone)+'</a> · <a target="_blank" rel="noopener" href="https://wa.me/'+phoneWa(o.phone)+'">WhatsApp</a><br>'+esc(o.customer_email||'')+'<br><span class="muted">'+esc(o.address)+'</span></div>'+
  '<div class="box"><b>Items</b><br>'+own.map(i=>esc(i.name)+' × '+i.qty+' — '+money(i.price_bdt*i.qty)).join('<br>')+'<br><br><b>'+(isAdmin?'Order total: '+money(o.total_bdt):'Your total: '+money(sum))+'</b><br><span class="muted small">'+esc(o.payment_method.toUpperCase())+(o.payment_ref?' · Txn '+esc(o.payment_ref):'')+'</span></div></div>'+
  '<div class="acts">'+acts+'</div></div>';
@@ -273,4 +277,5 @@ $('storeForm').addEventListener('submit',async e=>{e.preventDefault();const form
 $('refreshBtn').onclick=async()=>{await refreshAll();message('dashboardMsg','Data refreshed.','success')};
 $('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}if(notifChannel){await db.removeChannel(notifChannel);notifChannel=null}$('bellWrap').classList.add('hidden');clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
 const {data:{session}}=await db.auth.getSession();if(session?.user){try{await startDashboard(session.user)}catch(e){message('authMsg',e.message,'error')}}else applyAccessRoute();
+import('./ecom-ai.js').then(x=>x.mountAI({staff:true,getToken:async()=>(await db.auth.getSession()).data.session?.access_token||''})).catch(()=>{});
 </script></body></html>

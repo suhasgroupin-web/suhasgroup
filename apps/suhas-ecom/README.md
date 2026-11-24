@@ -50,3 +50,8 @@ The repository's Cloudflare Pages workflow deploys the root site. The E-Com app 
 - Backend migration `supabase/migrations/20261121_ecom_order_flow_notifications.sql` applied to project `pokxiylebwzoxunccuwm`; owner Max.com seller accounts approved.
 - Fixed a JavaScript syntax error (stray `\n`) in the old `manage.html` that could stop the dashboard from loading.
 - Limits: customer/seller alerts work while the page is open (no server push). Confirmation email still needs the Cloudflare email setup above.
+
+## 2026-11-24 — Sharing + SUHAS AI
+- Share link `https://suhasgroup.pages.dev/s/<product-id>` (Pages Function `functions/s/[id].js`) returns Open Graph tags (photo, name, price) so Facebook, LinkedIn and WhatsApp show a rich preview, then redirects to `product.html`. Product page has Facebook / LinkedIn / WhatsApp / Copy link buttons. After a photo or price changes, refresh the cached preview with the Facebook Sharing Debugger and LinkedIn Post Inspector.
+- SUHAS AI: widget `ecom-ai.js` beside the WhatsApp button; backend `supabase/functions/ecom-assistant` (deployed to project `ehvgxbifqtyajeersnvq` with the same `AI_API_KEY` secrets as `ai-assistant`, `verify_jwt=false`, rate limited). Customers get answers about products and only their own orders (order code + phone verified on server); sellers/admin get their orders via their signed-in token.
+- Seller Centre: typed delivery person name is no longer wiped by live refresh.
