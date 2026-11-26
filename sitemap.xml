@@ -12,4 +12,6 @@
   <url><loc>https://suhasgroup.pages.dev/messenger</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://suhasgroup.pages.dev/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://suhasgroup.pages.dev/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://suhasgroup.pages.dev/social</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://suhasgroup.pages.dev/ai</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
