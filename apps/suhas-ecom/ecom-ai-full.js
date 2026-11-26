@@ -23,7 +23,7 @@
   function bubble(text,role,files){
     const d=document.createElement('div');d.className='ai-bubble '+(role==='user'?'user':'bot');
     d.innerHTML=format(text||'');
-    (files||[]).forEach(f=>{if(f.kind==='image'){const im=document.createElement('img');im.src=f.dataUrl;im.alt=f.name||'Attached image';d.appendChild(im);}else{const p=document.createElement('div');p.textContent='🎧 '+(f.name||'Voice attachment');d.appendChild(p);}});
+    (files||[]).forEach(f=>{if(f.kind==='image'&&f.dataUrl){const im=document.createElement('img');im.src=f.dataUrl;im.alt=f.name||'Attached image';d.appendChild(im);}else{const p=document.createElement('div');p.textContent=(f.kind==='audio'?'🎧 ':'📎 ')+(f.name||'Attachment');d.appendChild(p);}});
     log.appendChild(d);log.scrollTop=log.scrollHeight;return d;
   }
   function renderMessages(){
@@ -81,7 +81,7 @@
     if(!finalPrompt.trim()&&!attachments.length)return;
     busy=true;send.disabled=true;send.textContent='…';
     if(!activeId)activeId='chat-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
-    messages.push({role:'user',content:finalPrompt||'Please inspect the attached image or voice message and reply in the same language.',files:attachments.map(f=>({name:f.name,kind:f.kind,dataUrl:f.kind==='image'?f.dataUrl:undefined}))});
+    messages.push({role:'user',content:finalPrompt||'Please inspect the attached image or voice message and reply in the same language.',files:attachments.map(f=>({name:f.name,kind:f.kind}))});
     bubble(finalPrompt||'Please review the attachment.', 'user',attachments);saveChats();
     const wait=bubble('Thinking…','bot');setStatus('SUHAS AI is preparing a reply…');
     try{
