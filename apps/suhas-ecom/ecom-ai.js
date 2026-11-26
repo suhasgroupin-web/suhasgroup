@@ -76,9 +76,19 @@ export function mountAI({getToken,staff=false,getProducts,track}={}){
     try{
       const token=getToken?await getToken():'';
       const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,history:hist.slice(-6),orders:myOrders(),token:token||''}),signal:AbortSignal.timeout(40000)});
-      const d=await r.json().catch(()=>({}));
-      if(!r.ok||!d.output)throw new Error(d.error||'SUHAS AI is unavailable right now.');
-      w.innerHTML=fmt(d.output);hist.push({role:'user',content:q},{role:'assistant',content:d.output});hist=hist.slice(-12);
+      let out='';
+      if(r.ok&&(r.headers.get('content-type')||'').includes('text/event-stream')&&r.body){
+        const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
+        while(true){const part=await rd.read();if(part.done)break;buf+=dec.decode(part.value,{stream:true});const lines=buf.split(/\r?\n/);buf=lines.pop()||'';
+          for(const line of lines){if(!line.startsWith('data:'))continue;const pl=line.slice(5).trim();if(!pl||pl==='[DONE]')continue;
+            try{const ev=JSON.parse(pl);const dl=(ev?.candidates?.[0]?.content?.parts||[]).map(x=>x?.text||'').join('');if(dl){out+=dl;w.innerHTML=fmt(out);log.scrollTop=log.scrollHeight}}catch(_){}}}
+        out=out.trim();if(!out)throw new Error('SUHAS AI returned an empty reply.');
+      }else{
+        const d=await r.json().catch(()=>({}));
+        if(!r.ok||!d.output)throw new Error(d.error||'SUHAS AI is unavailable right now.');
+        out=d.output;
+      }
+      w.innerHTML=fmt(out);hist.push({role:'user',content:q},{role:'assistant',content:out});hist=hist.slice(-12);
       try{sessionStorage.setItem('suhas-ecom-ai',JSON.stringify(hist))}catch(e){}
     }catch(e){w.innerHTML=esc((e.message||'Error')+' Please try again, or use WhatsApp for help.')}
     send.disabled=false;log.scrollTop=log.scrollHeight;
