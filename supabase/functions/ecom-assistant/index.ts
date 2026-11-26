@@ -142,7 +142,7 @@ Deno.serve(async (req) => {
   let body: any; try { body = await req.json(); } catch { return json({ error: "Invalid request." }, 400); }
   const rawAttachments = Array.isArray(body?.attachments) ? body.attachments.slice(0, 4) : [];
   let prompt = clean(body?.prompt, 1500);
-  if (!prompt && rawAttachments.some((item: any) => /^data:image\\//i.test(clean(item?.dataUrl, 100)))) {
+  if (!prompt && rawAttachments.some((item: any) => /^data:image\//i.test(clean(item?.dataUrl, 100)))) {
     prompt = "Please inspect the attached image carefully, describe what is visible, read any text, and answer the user's question.";
   }
   if (!prompt && !rawAttachments.length) return json({ error: "Please type a message or attach a photo." }, 400);
@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
   let totalAttachmentBytes = 0;
   for (const item of rawAttachments) {
     const dataUrl = clean(item?.dataUrl, 9_000_000);
-    const match = dataUrl.match(/^data:(image\\/(?:jpeg|png|webp)|audio\\/(?:webm|ogg|mp4|wav|mpeg));base64,([A-Za-z0-9+/=]+)$/i);
+    const match = dataUrl.match(/^data:(image\/(?:jpeg|png|webp)|audio\/(?:webm|ogg|mp4|wav|mpeg));base64,([A-Za-z0-9+/=]+)$/i);
     if (!match) return json({ error: "Unsupported attachment. Use JPG, PNG, WEBP images or a supported voice recording." }, 415);
     const mimeType = match[1].toLowerCase(), encoded = match[2];
     const byteLength = Math.floor(encoded.length * 0.75);
