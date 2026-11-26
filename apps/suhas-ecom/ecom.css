@@ -178,3 +178,51 @@ footer.ft{text-align:left;padding:36px 16px 24px}.ftg{max-width:1440px;margin:0 
   .slide .cta{padding:10px 16px;font-size:13px}
   .hero{margin:10px auto}
 }
+
+
+/* Final mobile hero override: remove the desktop text-column cap on phones. */
+@media screen and (max-width: 860px) {
+  .wrap > .hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .wrap > .hero > .banner {
+    display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 340px !important;
+    box-sizing: border-box !important;
+    grid-column: 1 / -1 !important;
+  }
+  .wrap > .hero > .banner > .slide {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 24px clamp(18px, 5vw, 32px) !important;
+  }
+  .wrap > .hero > .banner > .slide h1,
+  .wrap > .hero > .banner > .slide p {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere;
+  }
+  .wrap > .hero > .banner > .bcollage {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 620px) {
+  .wrap > .hero > .banner { min-height: 320px !important; }
+  .wrap > .hero > .banner > .slide { padding: 22px 20px !important; }
+  .wrap > .hero > .banner > .slide h1 { font-size: clamp(23px, 6vw, 29px) !important; line-height: 1.16 !important; }
+  .wrap > .hero > .banner > .slide p { font-size: 15px !important; line-height: 1.5 !important; }
+}
