@@ -41,7 +41,7 @@ jobs:
             "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/suhasmax")
           echo "production_branch=$(printf '%s' "$response" | jq -er '.result.production_branch')" >> "$GITHUB_OUTPUT"
       - name: Generate 512px install icon
-        run: convert apps/suhas-ecom/logo.png -filter Lanczos -resize 512x512\! PNG32:apps/suhas-ecom/logo-512.png
+        run: if command -v convert >/dev/null 2>&1; then convert apps/suhas-ecom/logo.png -filter Lanczos -resize 512x512\! PNG32:apps/suhas-ecom/logo-512.png; else cp apps/suhas-ecom/logo.png apps/suhas-ecom/logo-512.png; fi
       - name: Build SUHAS E-COM publish folder
         run: bash scripts/build-ecom.sh /tmp/suhasmax-site
       - name: Deploy SUHAS E-COM to suhasmax
