@@ -8,9 +8,9 @@ const normGemini = (v: string, fb: string) => {
   return /^gemini-[A-Za-z0-9][A-Za-z0-9._-]{1,90}$/i.test(m) ? m : fb;
 };
 // Gemini 3.8 Flash is the current fast general-purpose model; keep Flash-Lite as fallback.
-const DEFAULT_GEMINI = "gemini-3.5-flash-lite", FALLBACK_GEMINI = "gemini-3.8-flash";
+const FREE_GEMINI_MODEL = "gemini-3.8-flash";
 const cfg = Deno.env.get("AI_MODEL") || "";
-const AI_MODEL = AI_PROVIDER === "gemini" ? normGemini(cfg, DEFAULT_GEMINI) : (cfg.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5"));
+const AI_MODEL = AI_PROVIDER === "gemini" ? FREE_GEMINI_MODEL : (cfg.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5"));
 
 const ECOM_URL = "https://pokxiylebwzoxunccuwm.supabase.co";
 const ECOM_KEY = "sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850";
@@ -92,7 +92,7 @@ ${ctx}`;
 
 async function callModel(system: string, history: any[], prompt: string, attachmentParts: Array<{ inlineData: { mimeType: string; data: string } }> = []): Promise<string | Response> {
   if (AI_PROVIDER === "gemini") {
-    const models = [...new Set([AI_MODEL, FALLBACK_GEMINI, DEFAULT_GEMINI])];
+    const models = [FREE_GEMINI_MODEL]; // Free-tier-only model; never fall back to paid models.
     let lastStatus = 0;
     const contents = [
       ...history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
