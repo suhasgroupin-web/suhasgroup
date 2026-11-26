@@ -95,36 +95,7 @@ SG.loginThenReturn = function () {
   location.href = 'login.html';
 };
 
-/* install card (Android/desktop prompt, iOS instructions) */
-(function () {
-  var deferred = null, card = null;
-  function dismissed() { var t = +SG.store.get('sg_install_dismissed') || 0; return Date.now() - t < 7 * 864e5; }
-  function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
-  function hide(remember) { if (card) { card.remove(); card = null; } if (remember) SG.store.set('sg_install_dismissed', String(Date.now())); }
-  function show(kind) {
-    if (card || dismissed() || standalone() || !document.body || !document.documentElement.classList.contains('suhas-authenticated')) return;
-    card = document.createElement('div'); card.className = 'install-card';
-    card.innerHTML = '<img src="assets/icon-192.png" alt=""><div class="t"><b>Install SUHAS GROUP app</b><small>' +
-      (kind === 'ios' ? 'Tap Share, then &ldquo;Add to Home Screen&rdquo;' : 'Apply faster. Works like an app.') + '</small></div>' +
-      (kind === 'ios' ? '' : '<button class="btn btn-gold btn-sm" type="button" data-i>Install</button>') +
-      '<button class="x" type="button" aria-label="Dismiss" data-x>&times;</button>';
-    document.body.appendChild(card);
-    card.querySelector('[data-x]').addEventListener('click', function () { hide(true); });
-    var ib = card.querySelector('[data-i]');
-    if (ib) ib.addEventListener('click', async function () {
-      if (!deferred) return;
-      deferred.prompt();
-      try { await deferred.userChoice; } catch (e) { /* ignore */ }
-      deferred = null; hide(false);
-    });
-  }
-  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; show('prompt'); });
-  document.addEventListener('suhas-auth-ready', function(){ if(deferred) show('prompt'); });
-  window.addEventListener('appinstalled', function () { deferred = null; hide(false); SG.toast('App installed', 'ok'); });
-  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent)) {
-    setTimeout(function () { show('ios'); }, 2500);
-  }
-})();
+/* SUHAS GROUP is browser-only; install is available only on SUHAS MAX. */
 
 /* mobile bottom tab bar (shown on phones only) */
 document.addEventListener('DOMContentLoaded', function () {
