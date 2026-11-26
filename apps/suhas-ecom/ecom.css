@@ -156,3 +156,73 @@ footer.ft{text-align:left;padding:36px 16px 24px}.ftg{max-width:1440px;margin:0 
 @media(max-width:1180px){.hero{grid-template-columns:220px 1fr}.ctiles{grid-template-columns:repeat(4,1fr)}.slide{max-width:100%}.bcollage{display:none}.rfq{grid-template-columns:1fr}.ftg{grid-template-columns:1fr 1fr}}
 @media(max-width:860px){.banner{min-height:320px}.slide h1{font-size:28px}.scgrid{grid-template-columns:1fr}.dl{flex-basis:150px}}
 @media(max-width:620px){.ctiles{grid-template-columns:repeat(3,1fr)}.sct{grid-template-columns:repeat(2,1fr)}.rfq form{grid-template-columns:1fr}.ftg{grid-template-columns:1fr}}
+
+/* Mobile layout correction: keep the hero/banner full-width and prevent narrow text columns. */
+@media(max-width:860px){
+  .wrap{width:100%;min-width:0}
+  .hero{width:100%;min-width:0;grid-template-columns:minmax(0,1fr);gap:10px}
+  .banner{width:100%;min-width:0;min-height:340px}
+  .slide{width:100%;max-width:none;min-width:0;padding:clamp(20px,5vw,36px)}
+  .slide h1{max-width:100%;font-size:clamp(24px,4.5vw,32px);overflow-wrap:anywhere}
+  .slide p{max-width:100%}
+  .bcollage{display:none}
+  nav.cats .wrap{width:100%;min-width:0;overflow-x:auto}
+  nav.cats a,nav.cats button{flex:0 0 auto}
+}
+@media(max-width:620px){
+  .banner{min-height:320px}
+  .slide{padding:22px 20px}
+  .slide h1{font-size:clamp(22px,6vw,27px);line-height:1.18}
+  .slide p{font-size:14px;line-height:1.5}
+  .slide .tag{font-size:10px;letter-spacing:.1em}
+  .slide .cta{padding:10px 16px;font-size:13px}
+  .hero{margin:10px auto}
+}
+
+
+/* Final mobile hero override: remove the desktop text-column cap on phones. */
+@media screen and (max-width: 860px) {
+  .wrap > .hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .wrap > .hero > .banner {
+    display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 340px !important;
+    box-sizing: border-box !important;
+    grid-column: 1 / -1 !important;
+  }
+  .wrap > .hero > .banner > .slide {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 24px clamp(18px, 5vw, 32px) !important;
+  }
+  .wrap > .hero > .banner > .slide h1,
+  .wrap > .hero > .banner > .slide p {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere;
+  }
+  .wrap > .hero > .banner > .bcollage {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 620px) {
+  .wrap > .hero > .banner { min-height: 320px !important; }
+  .wrap > .hero > .banner > .slide { padding: 22px 20px !important; }
+  .wrap > .hero > .banner > .slide h1 { font-size: clamp(23px, 6vw, 29px) !important; line-height: 1.16 !important; }
+  .wrap > .hero > .banner > .slide p { font-size: 15px !important; line-height: 1.5 !important; }
+}

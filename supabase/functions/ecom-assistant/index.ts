@@ -7,6 +7,7 @@ const normGemini = (v: string, fb: string) => {
   let m = (v || fb).trim().replace(/^https?:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\//i, "").replace(/^models\//i, "").replace(/:generateContent$/i, "").trim();
   return /^gemini-[A-Za-z0-9][A-Za-z0-9._-]{1,90}$/i.test(m) ? m : fb;
 };
+// Gemini 3.8 Flash is the current fast general-purpose model; keep Flash-Lite as fallback.
 const DEFAULT_GEMINI = "gemini-3.5-flash-lite", FALLBACK_GEMINI = "gemini-3.8-flash";
 const cfg = Deno.env.get("AI_MODEL") || "";
 const AI_MODEL = AI_PROVIDER === "gemini" ? normGemini(cfg, DEFAULT_GEMINI) : (cfg.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5"));
@@ -91,23 +92,34 @@ ${ctx}`;
 
 async function callModel(system: string, history: any[], prompt: string) {
   if (AI_PROVIDER === "gemini") {
-    const models = [...new Set([DEFAULT_GEMINI, AI_MODEL, FALLBACK_GEMINI])];
+    // Try the configured/current Flash model once each. The previous nested retry
+    // loop could leave the customer waiting through several 20-second timeouts.
+    const models = [...new Set([AI_MODEL, FALLBACK_GEMINI, DEFAULT_GEMINI])];
+    let lastStatus = 0;
     for (const model of models) {
-      for (let a = 0; a < 2; a++) {
-        try {
-          const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
-            method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": AI_API_KEY },
-            body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [...history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })), { role: "user", parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 700, temperature: 0.3 } }),
-            signal: AbortSignal.timeout(20000),
-          });
-          const d = await r.json().catch(() => ({}));
-          if (r.ok) { const t = (d?.candidates?.[0]?.content?.parts ?? []).map((x: any) => x?.text ?? "").join("").trim(); if (t) return t; }
-          if (![429, 500, 502, 503, 504, 400, 404].includes(r.status)) throw new Error("provider " + r.status);
-        } catch (_) { /* retry */ }
-        await new Promise((res) => setTimeout(res, 400));
+      try {
+        const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": AI_API_KEY },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: system }] },
+            contents: [...history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })), { role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { maxOutputTokens: 600 },
+          }),
+          signal: AbortSignal.timeout(9000),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) {
+          const t = (d?.candidates?.[0]?.content?.parts ?? []).map((x: any) => x?.text ?? "").join("").trim();
+          if (t) return t;
+        }
+        lastStatus = r.status;
+        console.warn("SUHAS AI Gemini model request failed", { model, status: r.status });
+      } catch (e) {
+        console.warn("SUHAS AI Gemini request timed out or failed", { model, error: String(e).slice(0, 120) });
       }
     }
-    throw new Error("busy");
+    throw new Error(lastStatus ? "Gemini request failed (" + lastStatus + ")" : "Gemini request timed out");
   }
   if (AI_PROVIDER === "anthropic") {
     const r = await fetch((Deno.env.get("AI_BASE_URL") || "https://api.anthropic.com").replace(/\/$/, "") + "/v1/messages", { method: "POST", headers: { "Content-Type": "application/json", "x-api-key": AI_API_KEY, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ model: AI_MODEL, max_tokens: 700, system, messages: [...history, { role: "user", content: prompt }] }), signal: AbortSignal.timeout(25000) });
