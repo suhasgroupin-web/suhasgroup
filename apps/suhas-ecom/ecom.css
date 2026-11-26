@@ -278,3 +278,7 @@ footer.ft{text-align:left;padding:36px 16px 24px}.ftg{max-width:1440px;margin:0 
   .wrap > .hero > .banner > .slide h1 { font-size: clamp(23px, 6vw, 29px) !important; line-height: 1.16 !important; }
   .wrap > .hero > .banner > .slide p { font-size: 15px !important; line-height: 1.5 !important; }
 }
+
+/* Full-page SUHAS AI link inside the compact help widget. */
+.aih .aifull{display:inline-block;margin-top:4px;color:#ffb36b;font-size:11px;font-weight:700;text-decoration:none}
+.aih .aifull:focus-visible{outline:2px solid #fff;outline-offset:2px}
