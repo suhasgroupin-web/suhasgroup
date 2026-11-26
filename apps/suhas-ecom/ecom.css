@@ -226,3 +226,55 @@ footer.ft{text-align:left;padding:36px 16px 24px}.ftg{max-width:1440px;margin:0 
   .wrap > .hero > .banner > .slide h1 { font-size: clamp(23px, 6vw, 29px) !important; line-height: 1.16 !important; }
   .wrap > .hero > .banner > .slide p { font-size: 15px !important; line-height: 1.5 !important; }
 }
+
+
+/* Production hotfix: use the entire phone viewport for the marketplace hero. */
+@media screen and (max-width: 860px) {
+  .wrap > .hero {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 12px 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .wrap > .hero > .side,
+  .wrap > .hero > .quick {
+    display: none !important;
+  }
+  .wrap > .hero > .banner {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 320px !important;
+    margin: 0 !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  .wrap > .hero > .banner > .slide {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding: 24px clamp(20px, 5vw, 32px) !important;
+    box-sizing: border-box !important;
+  }
+  .wrap > .hero > .banner > .slide h1,
+  .wrap > .hero > .banner > .slide p {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+  .wrap > .hero > .banner > .bcollage { display: none !important; }
+}
+@media screen and (max-width: 620px) {
+  .wrap > .hero > .banner { min-height: 320px !important; }
+  .wrap > .hero > .banner > .slide { padding: 22px 20px !important; }
+  .wrap > .hero > .banner > .slide h1 { font-size: clamp(23px, 6vw, 29px) !important; line-height: 1.16 !important; }
+  .wrap > .hero > .banner > .slide p { font-size: 15px !important; line-height: 1.5 !important; }
+}
