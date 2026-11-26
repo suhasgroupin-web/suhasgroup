@@ -1,6 +1,6 @@
 # SUHAS GROUP
 
-The main SUHAS GROUP platform is published at https://suhasgroup.pages.dev.
+The main SUHAS GROUP browser platform is published at https://suhasgroup.pages.dev. SUHAS GROUP is not a separate installable PWA; SUHAS MAX is the single installable app.
 
 ## Services on SUHAS GROUP
 - SUHAS GROUP main app and workspace
