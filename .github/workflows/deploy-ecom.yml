@@ -1,0 +1,79 @@
+name: Deploy SUHAS E-COM to suhasmax.pages.dev
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["apps/suhas-ecom/**", "functions/**", "scripts/build-ecom.sh", "privacy-policy.html", ".github/workflows/deploy-ecom.yml"]
+  pull_request:
+    branches: ["main"]
+    paths: ["apps/suhas-ecom/**", "functions/**", "scripts/build-ecom.sh"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-pages-suhasmax
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and validate SUHAS E-COM (no SUHAS GROUP links)
+        run: bash scripts/build-ecom.sh /tmp/suhasmax-site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read suhasmax Cloudflare Pages production branch
+        id: pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          response=$(curl --fail --silent --show-error -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/suhasmax")
+          echo "production_branch=$(printf '%s' "$response" | jq -er '.result.production_branch')" >> "$GITHUB_OUTPUT"
+      - name: Generate 512px install icon
+        run: convert apps/suhas-ecom/logo.png -filter Lanczos -resize 512x512\! PNG32:apps/suhas-ecom/logo-512.png
+      - name: Build SUHAS E-COM publish folder
+        run: bash scripts/build-ecom.sh /tmp/suhasmax-site
+      - name: Deploy SUHAS E-COM to suhasmax
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: /tmp/suhasmax-site
+          command: pages deploy . --project-name=suhasmax --branch=${{ steps.pages.outputs.production_branch }}
+      - name: Verify the live site is SUHAS E-COM (not SUHAS GROUP)
+        run: |
+          set -euo pipefail
+          for attempt in {1..12}; do
+            if curl --fail --silent --show-error https://suhasmax.pages.dev/ -o /tmp/live.html; then
+              grep -qi 'SUHAS E-COM' /tmp/live.html
+              ! grep -qi 'suhasgroup.pages.dev' /tmp/live.html
+              echo "SUHAS E-COM live homepage verified."; exit 0
+            fi
+            sleep 5
+          done
+          echo "Could not verify suhasmax.pages.dev"; exit 1
+      - name: Configure SUHAS E-COM confirmation email secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          EMAIL_API_TOKEN: ${{ secrets.CLOUDFLARE_EMAIL_API_TOKEN }}
+          EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+        run: |
+          set -euo pipefail
+          if [ -z "$EMAIL_API_TOKEN" ] || [ -z "$EMAIL_FROM" ]; then
+            echo "Email sending secrets are not configured; skipping optional email setup."; exit 0
+          fi
+          printf '%s' "$EMAIL_API_TOKEN" | npx --yes wrangler@4 pages secret put CLOUDFLARE_EMAIL_API_TOKEN --project-name=suhasmax
+          printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | npx --yes wrangler@4 pages secret put CLOUDFLARE_ACCOUNT_ID --project-name=suhasmax
+          printf '%s' "$EMAIL_FROM" | npx --yes wrangler@4 pages secret put EMAIL_FROM --project-name=suhasmax

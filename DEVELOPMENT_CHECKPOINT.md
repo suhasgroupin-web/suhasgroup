@@ -1325,3 +1325,8 @@ Date: 2026-11-10
 - Seller WhatsApp (ecom_vendors.whatsapp, ecom_shops view, My shop tab); demo products can be claimed/edited/published (RPC ecom_claim_demo_product); admin can reassign a store when editing.
 - SUHAS AI: instant local answers (FAQ, product search, order status) + richer ecom-assistant (v2 deployed via MCP).
 - Tests: mocked Playwright run/run2/run3/run4 pass. NOT verified: real Facebook/LinkedIn crawlers, real AI replies, live Cloudflare deploy of both domains (see workflow run), Supabase Auth Site URL for the new domain.
+
+## 2026-11-26 — E-COM deploy restored (suhasmax.pages.dev)
+- Added `scripts/build-ecom.sh` and `.github/workflows/deploy-ecom.yml`: E-COM (apps/suhas-ecom + functions/) deploys to Cloudflare Pages project `suhasmax` only; group site workflow untouched.
+- Build fails if any `suhasgroup.pages.dev` link remains in the E-COM output (prevents E-COM opening SUHAS GROUP).
+- SUHAS AI left unchanged. Streaming rewrite kept on branch `claude/wip-streaming-ai` (not merged).
