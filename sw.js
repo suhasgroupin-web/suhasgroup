@@ -1,13 +1,13 @@
 const RELEASE_VERSION = new URL(self.location.href).searchParams.get('v') || 'v127';
-const CACHE = 'suhas-max-secure-entry-' + RELEASE_VERSION;
+const CACHE = 'suhas-group-app-' + RELEASE_VERSION;
 const CORE = [
-  'index.html','home.html','social.html','max-profile.html','suhas-max-ai.html','messenger.html','messenger.js','messenger.css','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
+  'index.html','home.html','social.html','ai.html','messenger.html','messenger.js','messenger.css','jobs.html','job.html','group.html','about.html','employers.html','contact.html',
   'login.html','signup.html','main-menu.html','profile.html','member-tools.html','member-page.html','reset.html','app.html','edit-suhas.html','hrm.html','admin.html','ai.html','technical.html','quality.html','departments.html','measurement-studio.html','apply-for-job.html','o5-desk.html','related-apk.html','suhas-calculator.html','o5-calculator.html','o5-all-in-one.html','o5-barcode.html','factories.html','factory-profile.html','job-portals.html','resume-builder.html','privacy-policy.html','religion.html','suhas-group-logo.webp','assets/suhas-group-logo.webp','assets/suhas-group-3d.svg',
   'assets/styles.css','assets/welcome-onboarding.js','assets/ambient-scenes/manifest.json','assets/suhas-max-composer-v1.css','assets/suhas-max-fb-mobile-v1.css','assets/suhas-max-bottom-nav-locked-v1.css','assets/script.js','assets/auth.js','assets/display-mode.js','assets/config.js','assets/hrm.js','assets/update-manager.js','release.json','assets/icons/o5-international-logo.svg',
   'barcode/index.html','assets/suhas-max-app-icon.svg','assets/suhas-max-icon-192.png','assets/suhas-max-icon-512.png','manifest.json','download.html'
 ];
 
-var OFFLINE_HTML = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A2A66"><title>SUHAS MAX</title></head><body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a2a66;font-family:Arial,sans-serif;padding:20px;box-sizing:border-box"><div style="max-width:360px;width:100%;background:#fff;color:#152b4b;border-radius:18px;padding:26px 22px;text-align:center"><h2 style="margin:0 0 8px;color:#0a2a66">SUHAS MAX</h2><p style="margin:0 0 16px;font-size:14px;line-height:1.5;color:#52627b">No connection right now. Please check your internet and try again.</p><button onclick="location.reload()" style="width:100%;padding:13px;border:0;border-radius:10px;background:#1877f2;color:#fff;font-size:15px;font-weight:700">Try again</button></div></body></html>';
+var OFFLINE_HTML = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A2A66"><title>SUHAS GROUP</title></head><body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a2a66;font-family:Arial,sans-serif;padding:20px;box-sizing:border-box"><div style="max-width:360px;width:100%;background:#fff;color:#152b4b;border-radius:18px;padding:26px 22px;text-align:center"><h2 style="margin:0 0 8px;color:#0a2a66">SUHAS GROUP</h2><p style="margin:0 0 16px;font-size:14px;line-height:1.5;color:#52627b">No connection right now. Please check your internet and try again.</p><button onclick="location.reload()" style="width:100%;padding:13px;border:0;border-radius:10px;background:#1877f2;color:#fff;font-size:15px;font-weight:700">Try again</button></div></body></html>';
 
 function offlineResponse(request){
   if (request && request.mode === 'navigate') {
@@ -34,7 +34,7 @@ self.addEventListener('install', function(e){
   // Releases flagged "mandatory" in release.json activate immediately so a broken version never stays installed.
   // Other releases wait until the member explicitly chooses Install.
   e.waitUntil(fetch('release.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(info){ if (info && info.mandatory === true) return self.skipWaiting(); }).catch(function(){}));
-  e.waitUntil(caches.open(CACHE).then(function(c){ return Promise.all(CORE.map(function(path){ return c.add(path).catch(function(err){ console.warn('SUHAS MAX optional cache skipped:', path, err); return null; }); })); }));
+  e.waitUntil(caches.open(CACHE).then(function(c){ return Promise.all(CORE.map(function(path){ return c.add(path).catch(function(err){ console.warn('SUHAS GROUP optional cache skipped:', path, err); return null; }); })); }));
 });
 
 self.addEventListener('message', function(e){
@@ -145,16 +145,16 @@ self.addEventListener('fetch', function(e){
 });
 
 
-// SUHAS-MAX Web Push: display notifications even when the app tab is not open.
+// SUHAS GROUP Web Push: display notifications even when the app tab is not open.
 self.addEventListener('push', function(event){
   let data = {};
   try { data = event.data ? event.data.json() : {}; }
-  catch (_) { data = { body: event.data ? event.data.text() : 'You have a new SUHAS-MAX notification.' }; }
-  const title = data.title || 'SUHAS-MAX';
+  catch (_) { data = { body: event.data ? event.data.text() : 'You have a new SUHAS GROUP notification.' }; }
+  const title = data.title || 'SUHAS GROUP';
   const options = {
     body: data.body || 'You have a new notification.',
-    icon: data.icon || '/assets/suhas-max-app-icon.svg',
-    badge: data.badge || '/assets/suhas-max-app-icon.svg',
+    icon: data.icon || '/assets/logo.png',
+    badge: data.badge || '/assets/logo.png',
     tag: data.tag || ('suhas-' + (data.kind || 'activity')),
     renotify: true,
     data: { url: data.url || '/social.html', notificationId: data.notificationId || null },
