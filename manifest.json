@@ -1,17 +1,13 @@
 {
   "id": "/",
-  "name": "SUHAS GROUP",
+  "name": "SUHAS GROUP Website",
   "short_name": "SUHAS GROUP",
-  "description": "SUHAS GROUP — Careers, Social, Messenger and SUHAS AI.",
+  "description": "SUHAS GROUP browser platform for Careers, Social, Messenger and SUHAS AI.",
   "lang": "en",
   "dir": "ltr",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
-  "display_override": [
-    "standalone",
-    "minimal-ui"
-  ],
+  "display": "browser",
   "background_color": "#050F22",
   "theme_color": "#0A2A66",
   "orientation": "portrait-primary",
@@ -21,13 +17,6 @@
     "productivity"
   ],
   "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "/assets/logo.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
+  "icons": [],
   "shortcuts": []
 }
