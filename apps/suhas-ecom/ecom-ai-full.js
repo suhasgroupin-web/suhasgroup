@@ -115,8 +115,8 @@
   function startLiveRecognition(){if(!liveMode||speaking||busy||recognitionActive)return;if(!recognition)recognition=makeRecognition(true);try{recognition.start();}catch(_){setTimeout(()=>{if(liveMode&&!recognitionActive&&!speaking&&!busy)try{recognition.start();}catch(__){}},250);}}
   function splitSpeech(text){return String(text||'').replace(/https?:\/\/\S+/g,'link').split(/(?<=[.!?।])\s+/).flatMap(s=>{const a=[];while(s.length>170){let n=s.lastIndexOf(' ',170);if(n<60)n=150;a.push(s.slice(0,n));s=s.slice(n).trim();}if(s)a.push(s);return a;});}
   let speechQueue=[];
-  function speakNext(){if(!speechQueue.length){speaking=false;if(liveMode)setTimeout(startLiveRecognition,250);return;}const part=speechQueue.shift();const u=new SpeechSynthesisUtterance(part);u.lang=detectSpeechLang(part);u.rate=1.03;u.onstart=()=>{speaking=true;if(liveMode)setVoiceStage('speaking','SUHAS AI is speaking…','You can speak again after the reply.');};u.onend=speakNext;u.onerror=()=>{speaking=false;speechQueue=[];if(liveMode)setTimeout(startLiveRecognition,250);};speechSynthesis.speak(u);}
-  function speakReply(text){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();speechQueue=splitSpeech(text);speaking=true;speakNext();}
+  function speakNext(){if(!speechQueue.length){speaking=false;if(liveMode)setTimeout(startLiveRecognition,250);return;}const part=speechQueue.shift();const u=new SpeechSynthesisUtterance(part);u.lang=detectSpeechLang(part);u.rate=1.03;u.onstart=()=>{speaking=true;if(liveMode)setVoiceStage('speaking','SUHAS AI is speaking…','You can speak again after the reply.');};u.onend=speakNext;u.onerror=()=>{speaking=false;speechQueue=[];if(liveMode)setTimeout(startLiveRecognition,250);};window.speechSynthesis.speak(u);}
+  function speakReply(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();speechQueue=splitSpeech(text);speaking=true;speakNext();}
   $('voice-input').addEventListener('click',startOneShot);
   async function startLiveVoice(){
     if(!navigator.mediaDevices?.getUserMedia){setStatus('Microphone is unavailable in this browser.');return;}
@@ -125,7 +125,7 @@
     if(!window.SpeechRecognition&&!window.webkitSpeechRecognition){setStatus('Live voice is not supported in this browser. Try Chrome.');return;}
     liveMode=true;voiceOverlay.classList.add('open');$('voice-mode').classList.add('live');setVoiceStage('listening','Listening…','Speak naturally. SUHAS AI will reply in your language.');recognition=makeRecognition(true);startLiveRecognition();
   }
-  function endLiveVoice(){liveMode=false;stopRecognition();recognition=null;speechSynthesis?.cancel();speechQueue=[];speaking=false;voiceOverlay.classList.remove('open');$('voice-mode').classList.remove('live');setStatus('Live voice conversation ended.');}
+  function endLiveVoice(){liveMode=false;stopRecognition();recognition=null;window.speechSynthesis?.cancel();speechQueue=[];speaking=false;voiceOverlay.classList.remove('open');$('voice-mode').classList.remove('live');setStatus('Live voice conversation ended.');}
   $('voice-mode').addEventListener('click',()=>{if(liveMode)endLiveVoice();else startLiveVoice();});
   $('voice-end').addEventListener('click',endLiveVoice);$('voice-close').addEventListener('click',endLiveVoice);
   window.addEventListener('pagehide',()=>{if(liveMode)endLiveVoice();});
