@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b2447">
-<meta name="description" content="SUHAS E-COM — Bangladesh's B2B/B2C online marketplace. Browse products from verified sellers, order online, pay on delivery, or chat on WhatsApp.">
+<meta name="description" content="SUHAS E-COM — B2B/B2C online marketplace. Browse products from verified sellers, order online, pay on delivery, or chat on WhatsApp.">
 <link rel="icon" type="image/png" href="favicon.png"><title>SUHAS E-COM — Online Marketplace</title>
-<meta property="og:type" content="website"><meta property="og:site_name" content="SUHAS E-COM"><meta property="og:title" content="SUHAS E-COM — Online Marketplace"><meta property="og:description" content="Browse products from verified sellers, order online, pay on delivery or chat on WhatsApp."><meta property="og:image" content="https://suhasgroup.pages.dev/apps/suhas-ecom/logo.png"><meta property="og:url" content="https://suhasgroup.pages.dev/apps/suhas-ecom/index.html"><meta name="twitter:card" content="summary">
+<meta property="og:type" content="website"><meta property="og:site_name" content="SUHAS E-COM"><meta property="og:title" content="SUHAS E-COM — Online Marketplace"><meta property="og:description" content="Browse products from verified sellers, order online, pay on delivery or chat on WhatsApp."><meta property="og:image" content="https://suhasmax.pages.dev/logo.png"><meta property="og:url" content="https://suhasmax.pages.dev/"><meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="ecom.css">
 </head>
 <body>
@@ -14,35 +14,60 @@
 <section class="hero">
  <aside class="side" id="side" aria-label="Categories"></aside>
  <div class="banner" id="banner">
-  <div class="slide s1 on"><div class="tag">VERIFIED SELLERS · FAST ORDERING</div><h1>Source quality products from trusted sellers</h1><p>Browse, compare and order in minutes. Pay on delivery or by bKash / Nagad.</p><div><a class="cta" href="#catalog">Shop now</a></div></div>
-  <div class="slide s2"><div class="tag">ORDER YOUR WAY</div><h1>Order online or chat on WhatsApp</h1><p>Every product has an Order button and a direct WhatsApp button to talk to us.</p><div><a class="cta" href="#catalog">Explore products</a></div></div>
+  <div class="slide s1 on"><div class="tag">VERIFIED SELLERS · FAST ORDERING</div><h1>Source quality products from trusted sellers</h1><p>Browse, compare and order in minutes. Pay on delivery or by bKash / Nagad.</p><div><a class="cta" href="#catalog">Shop now</a><a class="cta ghost" href="#rfq">Request a quote</a></div></div>
+  <div class="slide s2"><div class="tag">ORDER YOUR WAY</div><h1>Order online or chat with the seller on WhatsApp</h1><p>Every product has Order Now and a direct WhatsApp button. Share any product to Facebook, LinkedIn, WhatsApp, imo or Instagram.</p><div><a class="cta" href="#deals">See top deals</a></div></div>
   <div class="slide s3"><div class="tag">SELL ON SUHAS E-COM</div><h1>Open your shop for free</h1><p>List unlimited products, receive orders and track every delivery from one dashboard.</p><div><a class="cta" href="manage.html#seller">Become a seller</a></div></div>
+  <div class="bcollage" id="bcollage" aria-hidden="true"></div>
   <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
  </div>
  <aside class="quick"><h3>Welcome to SUHAS E-COM</h3><p>Order as a guest in under a minute — no account needed.</p><a class="btn pri" href="#catalog">Browse products</a><a class="btn out" href="track.html">Track my order</a><a class="btn out" href="manage.html#seller">Start selling</a><a class="btn wa" id="heroWa" target="_blank" rel="noopener">💬 WhatsApp +880 1862-144113</a></aside>
 </section>
 <section class="assure"><div><i>🛡️</i><span><b>Order protection</b>Seller confirms every order</span></div><div><i>🏪</i><span><b>Verified sellers</b>Every shop is approved</span></div><div><i>💵</i><span><b>Cash on Delivery</b>Plus bKash &amp; Nagad</span></div><div><i>🚚</i><span><b>Live delivery status</b>Track from order to door</span></div></section>
+<section class="blk" id="deals"><div class="blkh"><h2>🔥 Super deals</h2><a href="?sort=deal#catalog">View more ›</a></div><div class="dealrow" id="dealRow"></div></section>
+<section class="blk" id="cattiles"><div class="blkh"><h2>Shop by category</h2></div><div class="ctiles" id="ctiles"></div></section>
+<div id="showcases"></div>
+<section class="rfq" id="rfq"><div><h2>Request for Quotation</h2><p>Tell us what you need and how many. The SUHAS E-COM team replies on WhatsApp with the best offer from verified sellers.</p></div>
+ <form id="rfqForm"><input class="in" name="item" required maxlength="120" placeholder="What are you looking for? (e.g. 500 cotton t-shirts)"><input class="in" name="qty" maxlength="40" placeholder="Quantity"><input class="in" name="phone" required inputmode="tel" maxlength="20" placeholder="Your mobile number"><button class="btn pri" type="submit">Get quotes on WhatsApp</button></form></section>
 <main id="catalog">
  <div class="sec"><h2 id="listTitle">Recommended for you</h2><div><span class="muted" id="count" style="margin-right:10px"></span><select class="sort" id="sort" aria-label="Sort products"><option value="new">Newest</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="deal">Biggest discount</option></select></div></div>
  <div class="grid" id="grid"><div class="empty">Loading products…</div></div>
- <section class="sellband"><div><h2>Start selling on SUHAS E-COM</h2><p>Open your shop for free, add products with photos, price and description, and manage orders, delivery and notifications in one place.</p></div><a class="btn pri" href="manage.html#seller">Open Seller Centre</a></section>
+ <div style="text-align:center;margin:18px 0"><button class="btn out" id="more" style="display:none">Load more products</button></div>
+ <section class="sellband"><div><h2>Start selling on SUHAS E-COM</h2><p>Open your shop for free, add products with photos, price and description, set your own WhatsApp number, and manage orders, delivery and notifications in one place.</p></div><a class="btn pri" href="manage.html#seller">Open Seller Centre</a></section>
 </main>
 </div>
 <div id="shellBottom"></div>
 <script type="module">
-import {$,esc,CATS,disc,loadCatalog,cardHtml,mountShell,mountCommerce,watchMyOrders,waLink} from './ecom-core.js';
+import {$,esc,money,CATS,catIcon,disc,loadCatalog,cardHtml,pimg,mountShell,mountCommerce,watchMyOrders,waLink} from './ecom-core.js';
 mountShell('home');
 const params=new URLSearchParams(location.search);
-let products=[],cat=params.get('cat')||'',query=(params.get('q')||'').toLowerCase(),sortBy=params.get('sort')||'new',err='';
+let products=[],cat=params.get('cat')||'',query=(params.get('q')||'').toLowerCase(),sortBy=params.get('sort')||'new',err='',shown=24;
 mountCommerce(()=>products);
 $('heroWa').href=waLink('Hello SUHAS E-COM, I need help.');
 $('sort').value=sortBy;
 const sel=document.querySelector('#shellSearch select');if(sel)sel.value=cat;
+const home=()=>!cat&&!query;
 function renderSide(){
   const used=new Set(products.map(p=>p.category));
   const custom=[...used].filter(c=>!CATS.some(x=>x[0]===c)&&c!=='General');
   const all=[['','🛍️','All categories'],...CATS.map(c=>[c[0],c[1],c[0]]),...custom.map(c=>[c,'🏷️',c])];
   $('side').innerHTML=all.map(c=>'<button data-cat="'+esc(c[0])+'" class="'+(c[0]===cat?'on':'')+'"><i>'+c[1]+'</i>'+esc(c[2])+'</button>').join('');
+}
+const tile=p=>'<a class="dl" href="product.html?id='+esc(p.id)+'"><div class="dli">'+pimg(p)+(disc(p)?'<span class="off">-'+disc(p)+'%</span>':'')+'</div><b>'+money(p.price_bdt)+'</b>'+(disc(p)?'<s>'+money(p.compare_at_bdt)+'</s>':'<small>Min. '+p.min+' '+esc(p.unit)+'</small>')+'<span class="dlt">'+esc(p.title)+'</span></a>';
+function renderBlocks(){
+  const show=home();
+  for(const id of ['deals','cattiles','rfq'])$(id).classList.toggle('hidden',!show);
+  $('showcases').classList.toggle('hidden',!show);
+  if(!show)return;
+  const withImg=products.filter(p=>p.images.length);
+  let deals=products.filter(p=>disc(p)>0).sort((a,b)=>disc(b)-disc(a));
+  if(deals.length<8)deals=[...deals,...products.filter(p=>!deals.includes(p))].slice(0,14);else deals=deals.slice(0,14);
+  $('dealRow').innerHTML=deals.map(tile).join('')||'<div class="empty">Deals will appear here soon.</div>';
+  const counts=new Map();products.forEach(p=>counts.set(p.category,(counts.get(p.category)||0)+1));
+  $('ctiles').innerHTML=[...counts.entries()].sort((a,b)=>b[1]-a[1]).map(([c,n])=>'<button data-cat="'+esc(c)+'"><i>'+catIcon(c)+'</i><b>'+esc(c)+'</b><small>'+n+' products</small></button>').join('');
+  const tops=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
+  const hues=['#0b2447','#b45309','#0f766e','#7c2d6b'];
+  $('showcases').innerHTML='<div class="scgrid">'+tops.map((c,i)=>{const list=products.filter(p=>p.category===c).slice(0,4);return '<section class="sc" style="--h:'+hues[i%4]+'"><div class="sch"><h3>'+catIcon(c)+' '+esc(c)+'</h3><button data-cat="'+esc(c)+'">See all ›</button></div><div class="sct">'+list.map(p=>'<a href="product.html?id='+esc(p.id)+'"><span class="sci">'+pimg(p)+'</span><b>'+money(p.price_bdt)+'</b><small>'+esc(p.title)+'</small></a>').join('')+'</div></section>'}).join('')+'</div>';
+  $('bcollage').innerHTML=withImg.slice(0,3).map(p=>'<a href="product.html?id='+esc(p.id)+'"><img src="'+esc(p.images[0])+'" alt="'+esc(p.title)+'"><span>'+money(p.price_bdt)+'</span></a>').join('');
 }
 function render(){
   let list=products.filter(p=>(!cat||p.category===cat)&&(!query||(p.title+' '+p.category+' '+p.shop+' '+(p.brand||'')).toLowerCase().includes(query)));
@@ -51,13 +76,15 @@ function render(){
   if(sortBy==='deal')list.sort((a,b)=>disc(b)-disc(a));
   $('listTitle').textContent=query?'Results for “'+query+'”':(cat||'Recommended for you');
   $('count').textContent=list.length+' products';
-  $('grid').innerHTML=list.length?list.map(cardHtml).join(''):'<div class="empty">'+(err?'Store unavailable: '+esc(err):'No products found in this category yet.')+'</div>';
-  renderSide();
+  $('grid').innerHTML=list.length?list.slice(0,shown).map(cardHtml).join(''):'<div class="empty">'+(err?'Store unavailable: '+esc(err):'No products found in this category yet.')+'</div>';
+  $('more').style.display=list.length>shown?'inline-flex':'none';
+  renderSide();renderBlocks();
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;cat=b.dataset.cat;query='';render();$('catalog').scrollIntoView({behavior:'smooth'})});
+$('more').onclick=()=>{shown+=24;render()};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;cat=b.dataset.cat;query='';shown=24;render();$('catalog').scrollIntoView({behavior:'smooth'})});
 $('sort').onchange=e=>{sortBy=e.target.value;render()};
-$('shellSearch').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget.elements;query=f.q.value.trim().toLowerCase();cat=f.cat.value;render();$('catalog').scrollIntoView({behavior:'smooth'})});
-// banner
+$('shellSearch').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget.elements;query=f.q.value.trim().toLowerCase();cat=f.cat.value;shown=24;render();$('catalog').scrollIntoView({behavior:'smooth'})});
+$('rfqForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget.elements;window.open(waLink('Request for Quotation\nItem: '+f.item.value.trim()+'\nQuantity: '+(f.qty.value.trim()||'—')+'\nMy mobile: '+f.phone.value.trim()),'_blank','noopener')});
 let si=0;const slides=[...document.querySelectorAll('.slide')],dots=[...document.querySelectorAll('#dots i')];
 const go=i=>{si=i%slides.length;slides.forEach((s,k)=>s.classList.toggle('on',k===si));dots.forEach((d,k)=>d.classList.toggle('on',k===si))};
 dots.forEach((d,k)=>d.onclick=()=>go(k));setInterval(()=>go(si+1),5500);

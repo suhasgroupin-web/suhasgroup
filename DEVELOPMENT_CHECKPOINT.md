@@ -1318,3 +1318,10 @@ Date: 2026-11-10
 
 ## 2026-11-24 — E-COM share previews + SUHAS AI
 - Added functions/s/[id].js (OG tags), share buttons, ecom-assistant edge function + workflow deploy step, ecom-ai.js widget. Mock-tested (Node mock for both functions, Playwright for UI). NOT verified live: Facebook/LinkedIn crawlers, real AI answers, edge function deployment (check Deploy Supabase Edge Functions run).
+
+## 2026-11-26 — Domain split + marketplace v2
+- suhasmax.pages.dev = SUHAS E-COM only (apps/suhas-ecom served at root, Pages Functions /s/<id> and /api/ecom-order-email). suhasgroup.pages.dev = SUHAS GROUP apps only (social, messenger, max-profile, suhas-max-ai removed from the deployed group site; redirects to /home.html). Built by scripts/build-sites.sh; workflow deploys both projects. Repo files are untouched, only the deploy output changes.
+- E-COM: 3-dot share menu (Facebook, LinkedIn, WhatsApp, imo, Instagram, Others) on each card and product page; sticky bottom Order Now bar (?buy=1 opens checkout); bigger Alibaba-style home (deals row, category tiles, showcases, RFQ, load more, footer columns).
+- Seller WhatsApp (ecom_vendors.whatsapp, ecom_shops view, My shop tab); demo products can be claimed/edited/published (RPC ecom_claim_demo_product); admin can reassign a store when editing.
+- SUHAS AI: instant local answers (FAQ, product search, order status) + richer ecom-assistant (v2 deployed via MCP).
+- Tests: mocked Playwright run/run2/run3/run4 pass. NOT verified: real Facebook/LinkedIn crawlers, real AI replies, live Cloudflare deploy of both domains (see workflow run), Supabase Auth Site URL for the new domain.

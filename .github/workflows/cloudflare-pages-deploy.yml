@@ -40,39 +40,26 @@ jobs:
           sudo apt-get install -y imagemagick
           convert assets/suhas-max-icon-192.png -filter Lanczos -resize 512x512\! PNG32:assets/suhas-max-icon-512.png
           identify -format '%wx%h %m\\n' assets/suhas-max-icon-512.png
-      - name: Prepare separate E-COM and SUHAS MAX site roots
+      - name: Generate 512px E-COM install icon
         run: |
           set -euo pipefail
-          mkdir -p /tmp/suhasgroup-site
-          rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' ./ /tmp/suhasgroup-site/
-          cat > /tmp/suhasgroup-site/index.html <<'EOF'
-          <!doctype html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta http-equiv="refresh" content="0; url=/apps/suhas-ecom/index.html">
-            <link rel="canonical" href="https://suhasgroup.pages.dev/apps/suhas-ecom/index.html">
-            <title>SUHAS E-COM</title>
-          </head>
-          <body>
-            <p>Opening <a href="/apps/suhas-ecom/index.html">SUHAS E-COM marketplace</a>…</p>
-            <script>location.replace('/apps/suhas-ecom/index.html')</script>
-          </body>
-          </html>
-          EOF
-      - name: Deploy SUHAS E-COM to suhasgroup.pages.dev
+          convert apps/suhas-ecom/logo.png -filter Lanczos -resize 512x512\! PNG32:apps/suhas-ecom/logo-512.png
+      - name: Build separate site roots (E-COM and SUHAS GROUP)
+        run: bash scripts/build-sites.sh /tmp/suhas-sites
+      - name: Deploy SUHAS E-COM to suhasmax.pages.dev
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy /tmp/suhasgroup-site --project-name=suhasgroup --branch=${{ steps.pages.outputs.suhasgroup_branch }}
-      - name: Deploy SUHAS MAX to suhasmax.pages.dev
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: /tmp/suhas-sites/ecom
           command: pages deploy . --project-name=suhasmax --branch=${{ steps.pages.outputs.suhasmax_branch }}
+      - name: Deploy SUHAS GROUP apps to suhasgroup.pages.dev
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: /tmp/suhas-sites/group
+          command: pages deploy . --project-name=suhasgroup --branch=${{ steps.pages.outputs.suhasgroup_branch }}
       - name: Configure SUHAS E-COM confirmation email secrets
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -85,6 +72,6 @@ jobs:
             echo "Email sending secrets are not configured; skipping optional email setup."
             exit 0
           fi
-          printf '%s' "$EMAIL_API_TOKEN" | npx --yes wrangler@4 pages secret put CLOUDFLARE_EMAIL_API_TOKEN --project-name=suhasgroup
-          printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | npx --yes wrangler@4 pages secret put CLOUDFLARE_ACCOUNT_ID --project-name=suhasgroup
-          printf '%s' "$EMAIL_FROM" | npx --yes wrangler@4 pages secret put EMAIL_FROM --project-name=suhasgroup
+          printf '%s' "$EMAIL_API_TOKEN" | npx --yes wrangler@4 pages secret put CLOUDFLARE_EMAIL_API_TOKEN --project-name=suhasmax
+          printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | npx --yes wrangler@4 pages secret put CLOUDFLARE_ACCOUNT_ID --project-name=suhasmax
+          printf '%s' "$EMAIL_FROM" | npx --yes wrangler@4 pages secret put EMAIL_FROM --project-name=suhasmax

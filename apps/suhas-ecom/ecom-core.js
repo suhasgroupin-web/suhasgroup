@@ -7,6 +7,8 @@ export const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 export const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
 export const WA='8801862144113';
 export const waLink=t=>'https://wa.me/'+WA+'?text='+encodeURIComponent(t);
+export const sellerWa=p=>(p&&p.shopWa)||WA;
+export const waLinkTo=(num,t)=>'https://wa.me/'+(num||WA)+'?text='+encodeURIComponent(t);
 export const FREE_SHIP=2000,SHIP_FEE=120;
 export const CATS=[['Fashion & Clothing','👕'],['Footwear','👟'],['Bags & Luggage','🎒'],['Jewellery & Accessories','💍'],['Electronics','🎧'],['Mobile & Accessories','📱'],['Home & Kitchen','🏠'],['Grocery & Food','🛒'],['Beauty & Personal Care','🧴'],['Health & Wellness','🌿'],['Baby & Kids','🧸'],['Books & Stationery','📚'],['Sports & Outdoors','⚽'],['Toys & Games','🧩'],['Automotive','🚗'],['Office Supplies','🖊️'],['Other','✨']];
 export const catIcon=c=>(CATS.find(x=>x[0]===c)||[0,'🛍️'])[1];
@@ -23,7 +25,7 @@ export async function loadCatalog(){
   const list=(pr.data||[]).map(p=>{
     const demo=String(p.name||'').startsWith('DEMO ·'),s=shops.get(p.vendor_id);
     const images=(Array.isArray(p.images)&&p.images.length?p.images:(p.image_url?[p.image_url]:[])).filter(Boolean);
-    return {...p,images,isDemo:demo,title:demo?p.name.replace(/^DEMO · /,''):p.name,shop:demo?'SUHAS MAX Demo Catalogue':(s?.shop_name||'Verified seller'),shopCity:s?.city||'',min:Math.max(1,p.min_order||1),unit:p.unit||'piece',icon:catIcon(p.category)};
+    return {...p,images,isDemo:demo,title:demo?p.name.replace(/^DEMO · /,''):p.name,shop:demo?'SUHAS MAX Demo Catalogue':(s?.shop_name||'Verified seller'),shopCity:s?.city||'',shopWa:(!demo&&s?.whatsapp)||'',min:Math.max(1,p.min_order||1),unit:p.unit||'piece',icon:catIcon(p.category)};
   });
   list.sort((a,b)=>(a.isDemo-b.isDemo)||(new Date(b.created_at)-new Date(a.created_at)));
   return list;
@@ -32,7 +34,7 @@ export const pimg=(p,cls='')=>p.images[0]?'<img src="'+esc(p.images[0])+'" alt="
 
 export function cardHtml(p){
   const d=disc(p);
-  return '<article class="pc"><a class="pimg" href="product.html?id='+esc(p.id)+'">'+(p.isDemo?'<span class="demo">DEMO PREVIEW</span>':(d?'<span class="off">-'+d+'%</span>':''))+pimg(p)+'</a>'+
+  return '<article class="pc"><button class="dots3" data-share="'+esc(p.id)+'" aria-label="Share this product" aria-haspopup="menu">⋮</button><a class="pimg" href="product.html?id='+esc(p.id)+'">'+(p.isDemo?'<span class="demo">DEMO PREVIEW</span>':(d?'<span class="off">-'+d+'%</span>':''))+pimg(p)+'</a>'+
   '<div class="pb"><a class="pt" href="product.html?id='+esc(p.id)+'">'+esc(p.title)+'</a>'+
   '<div class="pp">'+money(p.price_bdt)+(d?'<s>'+money(p.compare_at_bdt)+'</s>':'')+'</div>'+
   '<div class="moq">Min. order: '+p.min+' '+esc(p.unit)+(p.min>1?'s':'')+'</div>'+
@@ -40,8 +42,50 @@ export function cardHtml(p){
   '<div class="pbtn">'+(p.isDemo?'<a href="product.html?id='+esc(p.id)+'">View</a>':'<button data-add="'+esc(p.id)+'"'+(p.stock<p.min?' disabled':'')+'>'+(p.stock<p.min?'Sold out':'Add to cart')+'</button><button class="o" data-buy="'+esc(p.id)+'"'+(p.stock<p.min?' disabled':'')+'>Order</button>')+'</div></div></article>';
 }
 
+
+/* ---------- share menu (3-dot) ---------- */
+export const shareUrl=p=>location.origin+'/s/'+encodeURIComponent(p.id);
+const enc=encodeURIComponent;
+const SHARE=[
+  ['facebook','Facebook','f','#1877f2'],['linkedin','LinkedIn','in','#0a66c2'],['whatsapp','WhatsApp','✆','#1faa59'],
+  ['imo','imo','imo','#0aa5e8'],['instagram','Instagram','◎','#d6249f'],['other','Others','⋯','#475569']
+];
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(_){try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e){return false}}}
+export async function doShare(kind,p){
+  const u=shareUrl(p),t=p.title+' — '+money(p.price_bdt)+' on SUHAS E-COM';
+  if(kind==='facebook')window.open('https://www.facebook.com/sharer/sharer.php?u='+enc(u),'_blank','noopener');
+  else if(kind==='linkedin')window.open('https://www.linkedin.com/sharing/share-offsite/?url='+enc(u),'_blank','noopener');
+  else if(kind==='whatsapp')window.open('https://wa.me/?text='+enc(t+'\n'+u),'_blank','noopener');
+  else if(kind==='imo'||kind==='instagram'){
+    const ok=await copyText(u),name=kind==='imo'?'imo':'Instagram';
+    toast('🔗 Link copied','Paste it in your '+name+(kind==='imo'?' chat':' post, story or message')+'. The product photo and Order Now button appear for everyone who opens it.');
+    window.open(kind==='imo'?'https://imo.im/':'https://www.instagram.com/','_blank','noopener');
+    return ok;
+  }else if(kind==='copy'){const ok=await copyText(u);toast(ok?'🔗 Link copied':'Copy this link',ok?u:u);return ok}
+  else{
+    if(navigator.share){try{await navigator.share({title:p.title,text:t,url:u});return true}catch(e){if(e&&e.name==='AbortError')return false}}
+    const ok=await copyText(u);toast('🔗 Link copied',u);return ok;
+  }
+}
+let shareEl=null;
+export function closeShare(){if(shareEl){shareEl.remove();shareEl=null}}
+export function openShare(p,anchor){
+  closeShare();
+  const el=document.createElement('div');el.className='shm';el.setAttribute('role','menu');el.dataset.pid=p.id;
+  el.innerHTML='<div class="shh">Share this product</div>'+SHARE.map(x=>'<button role="menuitem" data-sh="'+x[0]+'"><i style="background:'+x[3]+'">'+x[2]+'</i>'+x[1]+'</button>').join('')+'<button role="menuitem" data-sh="copy"><i style="background:#334155">🔗</i>Copy link</button>';
+  document.body.appendChild(el);shareEl=el;shareY=scrollY;
+  const r=anchor.getBoundingClientRect(),w=el.offsetWidth,h=el.offsetHeight;
+  let left=Math.min(Math.max(8,r.right-w),innerWidth-w-8),top=r.bottom+6;if(top+h>innerHeight-8)top=Math.max(8,r.top-h-6);
+  el.style.left=left+'px';el.style.top=top+'px';
+  el.addEventListener('click',async e=>{const b=e.target.closest('[data-sh]');if(!b)return;await doShare(b.dataset.sh,p);closeShare()});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeShare()});
+document.addEventListener('click',e=>{if(shareEl&&!e.target.closest('.shm')&&!e.target.closest('[data-share]'))closeShare()},true);
+let shareY=0;window.addEventListener('scroll',()=>{if(shareEl&&Math.abs(scrollY-shareY)>60)closeShare()},{passive:true});
+
 /* ---------- shell (header / footer) ---------- */
 export function mountShell(active=''){
+  if(!document.querySelector('link[rel=manifest]')){const l=document.createElement('link');l.rel='manifest';l.href='manifest.webmanifest';document.head.appendChild(l)}
   const q=new URLSearchParams(location.search);
   $('shellTop').innerHTML=
   '<div class="strip"><div class="wrap"><span>🚚 Free delivery over ৳2,000 · Cash on Delivery · bKash · Nagad</span><span><a href="manage.html#seller">Sell on SUHAS E-COM</a><a href="manage.html">Seller / Admin login</a><a href="track.html">Track order</a></span></div></div>'+
@@ -52,8 +96,8 @@ export function mountShell(active=''){
   '<nav class="cats"><div class="wrap"><a href="index.html" class="'+(active==='home'?'on':'')+'">Home</a><a href="index.html#catalog">All products</a><a href="index.html?sort=deal#catalog">Top deals</a><a href="track.html" class="'+(active==='track'?'on':'')+'">Track order</a><a href="manage.html#seller">Become a seller</a><a href="'+waLink('Hello SUHAS E-COM, I need support.')+'" target="_blank" rel="noopener">Help &amp; WhatsApp</a></div></nav>';
   $('shellBottom').innerHTML=
   '<div class="fabs" id="fabs"><a class="wafab" href="'+waLink('Hello SUHAS E-COM, I need product support.')+'" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬 <span>WhatsApp</span></a></div>'+
-  '<footer class="ft">© '+new Date().getFullYear()+' SUHAS E-COM · A SUHAS Group company · Dhaka, Bangladesh<br>Guest checkout · Cash on Delivery · bKash &amp; Nagad · WhatsApp +880 1862-144113 · <a href="../../privacy-policy.html">Privacy Policy</a></footer>';
-  import('./ecom-ai.js').then(m=>m.mountAI()).catch(()=>{});
+  '<footer class="ft"><div class="ftg"><div><h4>SUHAS E-COM</h4><p>An online marketplace for verified sellers and buyers. Order online, pay on delivery, track every delivery.</p></div><div><h4>Customer service</h4><a href="track.html">Track my order</a><a href="'+waLink('Hello SUHAS E-COM, I need support.')+'" target="_blank" rel="noopener">WhatsApp support</a><a href="index.html#rfq">Request a quotation</a></div><div><h4>Sell with us</h4><a href="manage.html#seller">Become a seller</a><a href="manage.html">Seller / Admin login</a></div><div><h4>Payments &amp; delivery</h4><p>Cash on Delivery · bKash · Nagad<br>Free delivery over ৳2,000</p><a href="privacy-policy.html">Privacy Policy</a></div></div><div class="ftb">© '+new Date().getFullYear()+' SUHAS E-COM · A SUHAS Group company · WhatsApp +880 1862-144113</div></footer>';
+  import('./ecom-ai.js').then(m=>m.mountAI({getProducts:()=>getProducts(),track:(c,ph)=>trackOrder(c,ph)})).catch(()=>{});
 }
 
 /* ---------- cart ---------- */
@@ -151,8 +195,9 @@ export function mountCommerce(productsFn){
   '<div class="ov" id="doneModal"><section class="md"><div class="mh"><h2>Order placed</h2><button class="x" data-close="doneModal" aria-label="Close">×</button></div><div id="doneBody"></div></section></div>';
   document.body.appendChild(host);
   document.addEventListener('click',e=>{
-    const t=e.target.closest('[data-close],[data-add],[data-buy],[data-inc],[data-dec],#cartBtn,#toCheckout');if(!t)return;
-    if(t.dataset.close)close(t.dataset.close);
+    const t=e.target.closest('[data-close],[data-add],[data-buy],[data-inc],[data-dec],[data-share],#cartBtn,#toCheckout');if(!t)return;
+    if(t.dataset.share!==undefined){e.preventDefault();const p=find(t.dataset.share);if(p)openShare(p,t)}
+    else if(t.dataset.close)close(t.dataset.close);
     else if(t.dataset.add){if(addToCart(t.dataset.add)){const p=find(t.dataset.add);toast('🛒 Added to cart',p?p.title:'')}}
     else if(t.dataset.buy){const p=find(t.dataset.buy);if(p)openCheckout([{id:p.id,qty:p.min}])}
     else if(t.dataset.inc)changeQty(t.dataset.inc,1);

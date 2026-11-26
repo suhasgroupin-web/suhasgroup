@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SUHAS E-COM · Admin & Seller Centre</title>
 <style>
+.demogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;max-height:340px;overflow:auto;margin-bottom:22px;padding:2px}.demogrid .demo{border:1px solid #dfe5ee;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:4px;background:#fff;position:static}.demogrid .dimg{aspect-ratio:1/1;border-radius:8px;background:#f1f4f9;overflow:hidden;display:grid;place-items:center;font-size:34px}.demogrid .dimg img{width:100%;height:100%;object-fit:cover}.demogrid button{margin-top:4px}
 :root{--navy:#10294b;--blue:#1767d2;--gold:#e7b84b;--ink:#17243a;--muted:#68778c;--line:#e2e8f0;--bg:#f3f6fb;--white:#fff;--green:#147d4a;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
 header{background:linear-gradient(120deg,#0d2340,#173d6b);color:#fff;padding:20px max(18px,calc((100% - 1180px)/2));display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
@@ -52,7 +53,7 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 </div></section>
 <section id="dashboard" class="hidden">
 <div class="panel"><div class="sectionhead"><div><h1 id="welcomeTitle">Dashboard</h1><div class="statusline"><span id="roleLabel" class="pill">Account</span><span id="accountStatus" class="muted small"></span></div></div><button class="secondary" id="refreshBtn">Refresh data</button></div><div id="dashboardMsg" class="alert hidden"></div>
-<div class="tabs" id="dashTabs"><button class="tab active" data-tab="products">Products</button><button class="tab" data-tab="orders">Orders</button><button class="tab adminOnly hidden" data-tab="sellers">Seller approvals</button><button class="tab adminOnly hidden" data-tab="stores">Stores</button></div>
+<div class="tabs" id="dashTabs"><button class="tab active" data-tab="products">Products</button><button class="tab" data-tab="orders">Orders</button><button class="tab sellerOnly hidden" data-tab="shop">My shop &amp; WhatsApp</button><button class="tab adminOnly hidden" data-tab="sellers">Seller approvals</button><button class="tab adminOnly hidden" data-tab="stores">Stores</button></div>
 <section id="productsPane">
 <div class="panel" style="background:#f8faff;box-shadow:none">
 <div class="sectionhead"><div><h2>Add a new product</h2><p class="muted small" id="productHelp">Publish products to the SUHAS E-COM marketplace.</p></div><span class="pill approved">Live listing</span></div>
@@ -63,8 +64,10 @@ button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eaf1fb;col
 <label>Specifications <span class="muted small">(one per line, format: Name: Value)</span></label><textarea name="specs" maxlength="2000" placeholder="Material: Cotton&#10;Size: M, L, XL&#10;Colour: Navy Blue&#10;Warranty: 6 months"></textarea>
 <button type="submit" id="addProductBtn" style="margin-top:14px">Publish product live</button> <button type="button" id="cancelEdit" class="secondary hidden" style="margin-top:14px">Cancel edit</button> <span id="productMsg" class="muted small" aria-live="polite"></span></form>
 </div>
+<div class="sectionhead"><h2>Demo products</h2><span class="muted small">Sample listings you can take over: edit the details and publish them live under your shop.</span></div><div class="demogrid" id="demoList"></div>
 <div class="sectionhead"><h2>Product catalogue</h2><span class="muted small" id="productCount"></span></div><div class="tablewrap"><table><thead><tr><th>Product</th><th>Store</th><th>Price</th><th>Stock</th><th>Visibility</th><th>Action</th></tr></thead><tbody id="productsBody"></tbody></table></div>
 </section>
+<section id="shopPane" class="hidden"><div class="panel" style="background:#f8faff;box-shadow:none"><h2>My shop</h2><p class="muted small">These details appear on your products. Customers who tap the WhatsApp button on your products chat with <b>your</b> number.</p><form id="shopForm"><div class="grid"><div><label>Shop name *</label><input name="shop" required maxlength="80"></div><div><label>City / District</label><input name="city" maxlength="80"></div><div><label>Your WhatsApp number (with country code) *</label><input name="wa" inputmode="tel" maxlength="20" placeholder="+8801XXXXXXXXX"></div><div><label>Category</label><input name="category" maxlength="80"></div></div><label>About your shop</label><textarea name="description" maxlength="600"></textarea><button type="submit">Save shop details</button> <span id="shopMsg" class="muted small" aria-live="polite"></span></form></div></section>
 <section id="ordersPane" class="hidden"><div class="sectionhead"><h2>Customer orders</h2><span class="muted small">New orders appear here instantly with a notification.</span></div><div class="stats" id="ostats"></div><div id="ordersList"></div></section>
 <section id="sellersPane" class="hidden"><div class="sectionhead"><h2>Seller applications</h2><span class="muted small">Approve a shop before it can publish products.</span></div><div class="tablewrap"><table><thead><tr><th>Shop / Owner</th><th>Contact</th><th>Category</th><th>Status</th><th>Review</th></tr></thead><tbody id="sellersBody"></tbody></table></div></section>
 <section id="storesPane" class="hidden"><div class="panel" style="background:#f8faff;box-shadow:none"><h2>Create an official store</h2><p class="muted small">Use this for products added directly by SUHAS E-COM Admin.</p><form id="storeForm"><div class="grid"><div><label>Store name *</label><input name="shop" required value="SUHAS E-COM Official Store"></div><div><label>Owner / Contact name *</label><input name="owner" required value="SUHAS E-COM"></div><div><label>Contact phone *</label><input name="phone" required minlength="6"></div><div><label>Contact email</label><input name="email" type="email" value="suhasmax.in@gmail.com"></div><div><label>City / District</label><input name="city"></div><div><label>Category</label><input name="category" value="General"></div></div><button type="submit">Create approved store</button><span id="storeMsg" class="muted small"></span></form></div><h2>All stores</h2><div class="tablewrap"><table><thead><tr><th>Store</th><th>Owner</th><th>Contact</th><th>Status</th></tr></thead><tbody id="storesBody"></tbody></table></div></section>
@@ -75,7 +78,7 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.0';
 const db=createClient('https://pokxiylebwzoxunccuwm.supabase.co','sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
-let user=null,vendor=null,isAdmin=false,stores=[],orderChannel=null,orderRefreshTimer=null;
+let demoCache=[],user=null,vendor=null,isAdmin=false,stores=[],orderChannel=null,orderRefreshTimer=null;
 function message(id,text,type=''){const el=$(id);el.textContent=text;el.className='alert'+(type?' '+type:'');el.classList.remove('hidden')}
 function setAuthMode(mode){const login=mode==='login',seller=mode==='signup',admin=mode==='admin';$('loginForm').classList.toggle('hidden',!login);$('signupForm').classList.toggle('hidden',!seller);$('adminSetupForm').classList.toggle('hidden',!admin);$('loginTab').classList.toggle('active',login);$('signupTab').classList.toggle('active',seller);$('adminSetupTab').classList.toggle('active',admin);$('authMsg').classList.add('hidden');$('resendConfirmBtn').classList.add('hidden')}
 function applyAccessRoute(){if(location.hash==='#seller')setAuthMode('signup');else if(location.hash==='#admin')setAuthMode('admin');else setAuthMode('login')}
@@ -100,6 +103,8 @@ async function startDashboard(u){
  $('roleLabel').textContent=isAdmin?'ADMIN':'SELLER';$('roleLabel').className='pill '+(isAdmin?'approved':'');
  $('accountStatus').textContent=isAdmin?'Full marketplace control':('Seller status: '+String(vendor.status).toUpperCase());
  document.querySelectorAll('.adminOnly').forEach(x=>x.classList.toggle('hidden',!isAdmin));
+ document.querySelectorAll('.sellerOnly').forEach(x=>x.classList.toggle('hidden',isAdmin));
+ if(!isAdmin)fillShop();
  $('adminVendorField').classList.toggle('hidden',!isAdmin);
  $('productForm').classList.toggle('hidden',!isAdmin&&vendor.status!=='approved');
  $('productHelp').textContent=isAdmin?'Admin products are published immediately to the selected approved store.':'Approved sellers can publish products immediately; live listings appear in the public store.';
@@ -111,7 +116,7 @@ async function startDashboard(u){
 }
 const CATLIST=['Fashion & Clothing','Footwear','Bags & Luggage','Jewellery & Accessories','Electronics','Mobile & Accessories','Home & Kitchen','Grocery & Food','Beauty & Personal Care','Health & Wellness','Baby & Kids','Books & Stationery','Sports & Outdoors','Toys & Games','Automotive','Office Supplies','Other'];
 $('catList').innerHTML=CATLIST.map(c=>'<option value="'+c+'">').join('');
-async function refreshAll(){if(!user)return;await loadStores();await loadProducts();await loadOrders();if(isAdmin)await loadSellers()}
+async function refreshAll(){if(!user)return;await loadStores();await loadProducts();await loadDemos();await loadOrders();if(isAdmin)await loadSellers()}
 function watchOrderUpdates(){
  if(orderChannel){db.removeChannel(orderChannel);orderChannel=null}
  if(!user)return;
@@ -225,7 +230,7 @@ async function loadSellers(){
  const {data,error}=await db.from('ecom_vendors').select('*').order('created_at',{ascending:false});
  $('sellersBody').innerHTML=error?'<tr><td colspan="5">'+esc(error.message)+'</td></tr>':(data||[]).map(v=>'<tr><td><b>'+esc(v.shop_name)+'</b><br>'+esc(v.owner_name)+'</td><td>'+esc(v.email||'')+'<br>'+esc(v.phone)+'<br>'+esc(v.city||'')+'</td><td>'+esc(v.category||'—')+'</td><td><span class="pill '+esc(v.status)+'">'+esc(v.status)+'</span></td><td>'+(v.status==='pending'?'<button class="secondary" data-vendor-status="approved" data-vendor-id="'+v.id+'">Approve</button> <button class="danger" data-vendor-status="rejected" data-vendor-id="'+v.id+'">Reject</button>':v.status==='approved'?'<button class="danger" data-vendor-status="suspended" data-vendor-id="'+v.id+'">Suspend</button>':'<button class="secondary" data-vendor-status="approved" data-vendor-id="'+v.id+'">Approve</button>')+'</td></tr>').join('')||'<tr><td colspan="5">No seller applications.</td></tr>';
 }
-function switchTab(tab){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));['products','orders','sellers','stores'].forEach(x=>$(x+'Pane').classList.toggle('hidden',x!==tab))}
+function switchTab(tab){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));['products','orders','shop','sellers','stores'].forEach(x=>$(x+'Pane').classList.toggle('hidden',x!==tab))}
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
 $('loginTab').onclick=()=>setAuthMode('login');$('signupTab').onclick=()=>setAuthMode('signup');$('adminSetupTab').onclick=()=>setAuthMode('admin');
 $('adminSetupForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget),email=String(f.get('email')).trim().toLowerCase(),password=String(f.get('password'));if(email!=='suhasmax.in@gmail.com'){message('authMsg','This email is not authorized for Admin setup.','error');return}if(password!==String(f.get('confirm'))){message('authMsg','Passwords do not match.','error');return}if(password.length<8){message('authMsg','Use at least 8 characters for the password.','error');return}$('adminSetupBtn').disabled=true;message('authMsg','Creating Admin login…');const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});$('adminSetupBtn').disabled=false;if(error){const em=String(error.message||'');message('authMsg',em.toLowerCase().includes('rate limit')?'Supabase email rate limit reached. Please wait before requesting another verification email, or configure a custom SMTP provider in Supabase Auth. Do not keep retrying.':em,'error');return}if(data.session&&data.user){try{await startDashboard(data.user)}catch(err){message('authMsg',err.message,'error')}}else{message('authMsg','Admin account request created. Open the verification email sent to suhasmax.in@gmail.com, verify it, then return here and sign in with your new password.','success');setAuthMode('login')}});
@@ -250,7 +255,7 @@ $('productForm').addEventListener('submit',async e=>{
   const specs=f.specs.value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const k=l.indexOf(':');return k>0?{k:l.slice(0,k).trim(),v:l.slice(k+1).trim()}:{k:l,v:''}}).slice(0,30);
   const row={name:f.name.value.trim(),category:f.category.value.trim(),brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price_bdt:Number(f.price.value),compare_at_bdt:f.compare.value?Number(f.compare.value):null,stock:Number(f.stock.value),min_order:Math.min(99,Math.max(1,Number(f.minorder.value)||1)),unit:f.unit.value.trim()||'piece',lead_time:f.lead.value.trim()||null,specs};
   let error;
-  if(editing){if(images.length){row.images=images;row.image_url=images[0]}({error}=await db.from('ecom_products').update(row).eq('id',editing))}
+  if(editing){if(isAdmin)row.vendor_id=vendorId;row.is_active=true;if(images.length){row.images=images;row.image_url=images[0]}({error}=await db.from('ecom_products').update(row).eq('id',editing))}
   else{({error}=await db.from('ecom_products').insert({...row,vendor_id:vendorId,images,image_url:images[0]||null,is_active:true,featured:false}))}
   if(error)throw error;
   resetProductForm(form);
@@ -262,13 +267,42 @@ $('productForm').addEventListener('submit',async e=>{
 $('cancelEdit').onclick=()=>{resetProductForm($('productForm'));$('productMsg').textContent=''};
 function startEdit(id){
  const p=productsCache.find(x=>x.id===id);if(!p)return;const f=$('productForm').elements;
- editId=id;f.name.value=p.name||'';f.category.value=p.category||'';f.brand.value=p.brand||'';f.price.value=p.price_bdt;f.compare.value=p.compare_at_bdt||'';f.stock.value=p.stock;f.minorder.value=p.min_order||1;f.unit.value=p.unit||'piece';f.lead.value=p.lead_time||'';f.description.value=p.description||'';
+ const wasDemo=/^DEMO · /.test(p.name||'')&&p.stock===0;editId=id;f.name.value=(p.name||'').replace(/^DEMO · /,'');if(isAdmin&&p.vendor_id&&[...f.vendor.options].some(o=>o.value===p.vendor_id))f.vendor.value=p.vendor_id;f.category.value=p.category||'';f.brand.value=p.brand||'';f.price.value=p.price_bdt;f.compare.value=p.compare_at_bdt||'';f.stock.value=wasDemo?10:p.stock;f.minorder.value=p.min_order||1;f.unit.value=p.unit||'piece';f.lead.value=p.lead_time||'';f.description.value=p.description||'';
  f.specs.value=(Array.isArray(p.specs)?p.specs:[]).map(x=>x.k+(x.v?': '+x.v:'')).join('\n');f.image.value='';f.imageFiles.value='';
  const imgs=(p.images&&p.images.length?p.images:(p.image_url?[p.image_url]:[]));
  $('imgPrev').innerHTML=imgs.map(u=>'<img alt="" src="'+esc(u)+'">').join('')+(imgs.length?'<span class="muted small" style="align-self:center">Current photos are kept unless you choose new ones.</span>':'');
- $('addProductBtn').textContent='Save changes';$('cancelEdit').classList.remove('hidden');$('productMsg').textContent='Editing “'+p.name+'”';
+ $('addProductBtn').textContent='Save changes';$('cancelEdit').classList.remove('hidden');$('productMsg').textContent=wasDemo?'Demo product loaded. Check the details, set your price and stock, then press Save changes to make it live.':'Editing “'+p.name+'”';
  $('productForm').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+/* ---- demo products + seller shop settings ---- */
+async function loadDemos(){
+ const box=$('demoList');if(!box)return;
+ if(!isAdmin&&vendor?.status!=='approved'){box.innerHTML='<p class="muted small">Demo products unlock after your seller account is approved.</p>';return}
+ const {data,error}=await db.from('ecom_products').select('*').like('name','DEMO · %').eq('stock',0).order('name');
+ if(error){box.innerHTML='<p class="muted small">'+esc(error.message)+'</p>';return}
+ demoCache=data||[];
+ box.innerHTML=demoCache.map(p=>{const im=(p.images&&p.images[0])||p.image_url;return '<div class="demo"><div class="dimg">'+(im?'<img alt="" loading="lazy" src="'+esc(im)+'">':'🛍️')+'</div><b>'+esc(p.name.replace(/^DEMO · /,''))+'</b><span class="muted small">'+money(p.price_bdt)+'</span><button type="button" data-claim="'+p.id+'">Edit &amp; make live</button></div>'}).join('')||'<p class="muted small">No demo products left.</p>';
+}
+$('demoList').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-claim]');if(!b)return;const id=b.dataset.claim;b.disabled=true;
+ try{
+  if(!isAdmin){const {error}=await db.rpc('ecom_claim_demo_product',{p_id:id,p_stock:10});if(error)throw error}
+  await loadProducts();await loadDemos();
+  if(!productsCache.find(x=>x.id===id))throw new Error('Could not load the product for editing.');
+  switchTab('products');startEdit(id);
+ }catch(err){message('dashboardMsg','Could not open demo product: '+(err?.message||'try again'),'error');b.disabled=false}
+});
+function fillShop(){if(!vendor)return;const f=$('shopForm').elements;f.shop.value=vendor.shop_name||'';f.city.value=vendor.city||'';f.category.value=vendor.category||'';f.description.value=vendor.description||'';f.wa.value=vendor.whatsapp?'+'+vendor.whatsapp:''}
+$('shopForm').addEventListener('submit',async e=>{
+ e.preventDefault();const f=e.currentTarget.elements;let wa=f.wa.value.replace(/[^0-9]/g,'');
+ if(wa.startsWith('00'))wa=wa.slice(2);if(/^01[0-9]{9}$/.test(wa))wa='88'+wa;
+ if(wa&&!/^[0-9]{8,15}$/.test(wa)){$('shopMsg').textContent='Enter a valid WhatsApp number with country code, e.g. +8801XXXXXXXXX.';return}
+ $('shopMsg').textContent='Saving…';
+ const {data,error}=await db.from('ecom_vendors').update({shop_name:f.shop.value.trim(),city:f.city.value.trim()||null,category:f.category.value.trim()||null,description:f.description.value.trim()||null,whatsapp:wa||null,updated_at:new Date().toISOString()}).eq('id',vendor.id).select('*').single();
+ if(error){$('shopMsg').textContent='Could not save: '+error.message;return}
+ vendor=data;$('welcomeTitle').textContent=vendor.shop_name;fillShop();$('shopMsg').textContent='✔ Saved. The WhatsApp button on your products now opens '+(wa?'+'+wa:'the SUHAS E-COM support number')+'.';
+});
 $('productsBody').addEventListener('click',e=>{const b=e.target.closest('[data-product-edit]');if(b)startEdit(b.dataset.productEdit)});
 $('productForm').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});
 $('productsBody').addEventListener('click',async e=>{const b=e.target.closest('[data-product-toggle],[data-product-delete]');if(!b)return;if(b.dataset.productToggle){const {error}=await db.from('ecom_products').update({is_active:b.dataset.active==='true'}).eq('id',b.dataset.productToggle);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}else if(b.dataset.productDelete&&confirm('Delete this product?')){const {error}=await db.from('ecom_products').delete().eq('id',b.dataset.productDelete);if(error)message('dashboardMsg',error.message,'error');else await loadProducts()}});

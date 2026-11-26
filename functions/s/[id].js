@@ -1,5 +1,5 @@
 // Share link with Open Graph tags so Facebook / LinkedIn / WhatsApp show the product photo, name and price.
-// Share URL: https://suhasgroup.pages.dev/s/<product-id>  (humans are redirected to the product page).
+// Share URL: https://suhasmax.pages.dev/s/<product-id>  (humans are redirected to the product page).
 const SUPABASE_URL = "https://pokxiylebwzoxunccuwm.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_H9F5NLitq2cHMnZyOYm4NA_bdD6Z850";
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -8,7 +8,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export async function onRequestGet({ params, request }) {
   const origin = new URL(request.url).origin;
   const id = String(params.id || "");
-  const home = origin + "/apps/suhas-ecom/index.html";
+  const home = origin + "/";
   let p = null;
   if (UUID.test(id)) {
     try {
@@ -19,9 +19,9 @@ export async function onRequestGet({ params, request }) {
       p = rows && rows[0] ? rows[0] : null;
     } catch (_) { /* fall back to generic preview */ }
   }
-  const target = p ? origin + "/apps/suhas-ecom/product.html?id=" + id : home;
+  const target = p ? origin + "/product.html?id=" + id : home;
   const first = p ? ((Array.isArray(p.images) && p.images.find((u) => /^https:\/\//i.test(u))) || (/^https:\/\//i.test(p.image_url || "") ? p.image_url : "")) : "";
-  const image = first || origin + "/apps/suhas-ecom/logo.png";
+  const image = first || origin + "/logo.png";
   const price = p ? "৳" + Number(p.price_bdt).toLocaleString("en-BD", { maximumFractionDigits: 2 }) : "";
   const title = p ? p.name + " — " + price : "SUHAS E-COM — Online Marketplace";
   const desc = p

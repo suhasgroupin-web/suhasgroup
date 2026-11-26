@@ -1,8 +1,8 @@
 {
   "app": "SUHAS-MAX",
-  "version": "2026.11.24.2",
-  "published_at": "2026-11-24T03:00:00.000Z",
+  "version": "2026.11.26.1",
+  "published_at": "2026-11-26T05:00:00.000Z",
   "notify_after_days": 0,
-  "update_message": "SUHAS E-COM: Facebook/LinkedIn/WhatsApp product sharing with photo preview, SUHAS AI assistant for products, orders and delivery, and live-refresh fix for the seller delivery form.",
+  "update_message": "SUHAS E-COM now lives at suhasmax.pages.dev with a bigger marketplace design, 3-dot sharing and a bottom Order Now bar. suhasgroup.pages.dev is for SUHAS GROUP apps only.",
   "mandatory": true
 }
