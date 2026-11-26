@@ -160,7 +160,7 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
    if(r.error)throw r.error;
    if(r.data.user&&r.data.user.identities&&r.data.user.identities.length===0)throw new Error('This email is already registered. Please use Login.');
    if(r.data.session)await sb.auth.signOut({scope:'local'});
-   say('Account created successfully. Email confirmation is disabled. Please log in with this same email and the password you just created. After login, complete your SUHAS-MAX profile.',true);
+   say('Account created successfully. Email confirmation is disabled. Please log in with this same email and the password you just created. After login, complete your SUHAS GROUP profile.',true);
    form.reset();btn.textContent='Signup Completed';
   }catch(err){say(err.message||'Signup could not be completed. Please try again.',false);btn.disabled=false;btn.textContent='Create Account';}
  });
