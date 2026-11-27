@@ -76,7 +76,7 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 .auth-actions a:active{transform:translateY(2px)}
 .sign-in{background:linear-gradient(180deg,#2d64a9,#12376f);color:#fff;border:1px solid #86a9d8;box-shadow:0 4px 0 #071c3c,0 8px 16px #0004,inset 0 1px 0 #ffffff55}
 .sign-up{background:linear-gradient(180deg,#ffe59b,#e9b944 55%,#bd8120);color:#211600;border:1px solid #ffe6a1;box-shadow:0 4px 0 #805414,0 8px 16px #0004,inset 0 1px 0 #fff9}
-.welcome-foot{margin:22px 0 0;color:#c6d6ed;font-size:10px;letter-spacing:.12em;font-weight:700}
+.install-app{display:block;width:100%;margin:17px auto 0;padding:10px 12px;border:1px solid #ffffff65;border-radius:10px;background:transparent;color:#e3edff;font:700 13px/1.2 'DM Sans',Arial,sans-serif;cursor:pointer}.install-app:active{background:#ffffff18}
 @media(max-width:360px){body{padding:14px}.welcome{padding:28px 18px 24px}.welcome-logo{width:112px;height:112px}}
 </style>
 </head>
@@ -93,10 +93,23 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 <a class="sign-in" href="login.html?next=main-menu.html">Sign In</a>
 <a class="sign-up" href="signup.html">Sign Up</a>
 </nav>
-<p class="welcome-foot">SUHAS GROUP</p>
+<button class="install-app" id="install-app" type="button">Install App</button>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/config.js"></script>
 <script src="assets/auth.js?v=20261127-simple-welcome"></script>
+<script>
+(function(){
+ var promptEvent=null,button=document.getElementById('install-app');
+ window.addEventListener('beforeinstallprompt',function(event){event.preventDefault();promptEvent=event;});
+ button.addEventListener('click',async function(){
+  if(promptEvent){var event=promptEvent;promptEvent=null;await event.prompt();return;}
+  var ua=navigator.userAgent||'';
+  if(/android/i.test(ua)) alert('Chrome menu (⋮) থেকে Install app অথবা Add to Home screen নির্বাচন করুন।');
+  else if(/iphone|ipad|ipod/i.test(ua)) alert('Share menu থেকে Add to Home Screen নির্বাচন করুন।');
+  else alert('Browser menu থেকে Install App নির্বাচন করুন, যদি অপশনটি থাকে।');
+ });
+})();
+</script>
 </body>
 </html>
