@@ -3762,7 +3762,7 @@ html body #profile-viewer.profile-viewer.open .profile-viewer-posts{margin:10px 
 </nav>
 <!-- END LOCKED MOBILE BOTTOM NAV -->
 <section id="suhas-profile-editor" class="suhas-profile-editor" hidden aria-label="Edit SuhasNet profile"><div class="suhas-profile-editor-bar"><strong>Edit profile</strong><button type="button" id="suhas-profile-editor-close" aria-label="Close editor">×</button></div><iframe id="suhas-profile-editor-frame" title="Edit your SuhasNet profile" src="about:blank"></iframe></section>
-<section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"><div class="profile-cover-toolbar" id="profile-cover-toolbar" aria-label="Profile tools"><button type="button" id="profile-cover-main-menu" aria-label="Open menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><div class="profile-cover-toolbar-right"><button type="button" id="profile-cover-edit" aria-label="Edit profile" title="Edit profile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5 4 4M4 20l4.2-.8L19 8.4a2.8 2.8 0 0 0-4-4L4.8 15.2 4 20Z"/></svg></button><button type="button" id="profile-cover-search" aria-label="Search" title="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></svg></button><button type="button" id="profile-cover-more" aria-label="More profile options" title="More"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="7.5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg></button></div></div><button type="button" id="profile-cover-change" class="profile-owner-cover-edit" hidden aria-label="Change cover photo" title="Change cover photo"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="suhasCoverCam" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8be5ff"/><stop offset=".5" stop-color="#1879ed"/><stop offset="1" stop-color="#06377f"/></linearGradient></defs><path fill="url(#suhasCoverCam)" stroke="#fff" stroke-width="1.2" d="M5 10h5l2-3h8l2 3h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z"/><circle cx="16" cy="17.5" r="5.3" fill="#dff5ff" stroke="#073b91" stroke-width="1.5"/><circle cx="16" cy="17.5" r="3" fill="#174b91"/><path d="M7 12h3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></button></div><input id="profile-cover-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div class="profile-viewer-head"><div class="profile-viewer-avatar-wrap"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><button type="button" id="profile-avatar-change" class="profile-owner-avatar-edit" hidden aria-label="Change profile picture" title="Change profile picture"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="suhasAvatarCam3D" x1="8" y1="3" x2="39" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#fff27a"/><stop offset=".24" stop-color="#ff9d24"/><stop offset=".56" stop-color="#f0448b"/><stop offset=".82" stop-color="#8155ed"/><stop offset="1" stop-color="#16b8e8"/></linearGradient><linearGradient id="suhasAvatarLens3D" x1="17" y1="15" x2="32" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#fff"/><stop offset=".35" stop-color="#8ceaff"/><stop offset="1" stop-color="#1454b8"/></linearGradient></defs><path d="M7 15.5c0-2 1.6-3.5 3.6-3.5h7l3-5h9l3 5h5.8c2 0 3.6 1.5 3.6 3.5v19c0 2-1.6 3.5-3.6 3.5H10.6C8.6 38 7 36.5 7 34.5z" fill="url(#suhasAvatarCam3D)" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 17h28v-1.5c0-1.1-.9-2-2-2h-7l-3-5h-5l-3 5h-6c-1.1 0-2 .9-2 2z" fill="#fff" opacity=".36"/><circle cx="24" cy="25" r="9" fill="#fff" opacity=".9"/><circle cx="24" cy="25" r="7" fill="url(#suhasAvatarLens3D)" stroke="#173e91" stroke-width="1.5"/><circle cx="21.5" cy="22.5" r="2.2" fill="#fff" opacity=".95"/><circle cx="35" cy="17" r="1.7" fill="#fff"/></svg></button></div><input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div id="profile-image-edit-panel" class="profile-image-edit-panel" hidden role="dialog" aria-modal="true" aria-labelledby="profile-image-edit-title"><div class="profile-image-edit-card"><button type="button" id="profile-image-edit-close" class="profile-image-edit-close" aria-label="Close">×</button><h3 id="profile-image-edit-title">Preview photo</h3><img id="profile-image-edit-preview" alt="Selected photo preview"><div class="profile-image-edit-actions"><button type="button" id="profile-image-edit-cancel">Cancel</button><button type="button" id="profile-image-edit-save">Save</button></div></div></div><div><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-stats" id="profile-viewer-stats" aria-label="Profile connections"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="messenger">✉ Send in Messenger</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><nav class="profile-viewer-tabs" aria-label="Profile sections"><button type="button" class="active" data-profile-filter="all">All</button><button type="button" data-profile-filter="reels">Reels</button><button type="button" data-profile-filter="photos">Photos</button><button type="button" data-profile-filter="memories">Memories</button><button type="button" data-profile-filter="events">Events</button></nav><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><button type="button" id="profile-bio-see-all" class="profile-see-all">See more</button><div id="profile-dashboard-panel" class="profile-dashboard-panel" hidden></div><div id="profile-viewer-info"></div><section class="profile-viewer-posts" id="profile-viewer-posts" aria-label="Member posts"><h3>Posts &amp; Reposts</h3><div class="profile-viewer-post-list"></div></section><section id="profile-events-panel" class="profile-info-card" hidden><h3>Events</h3><p>No events have been created on this SuhasNet profile yet.</p></section></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-independent-max"></script>
+<section class="profile-viewer" id="profile-viewer" aria-hidden="true"><div class="profile-viewer-card" role="dialog" aria-modal="true" aria-labelledby="profile-viewer-name"><button class="profile-viewer-close" id="profile-viewer-close" type="button" aria-label="Close profile">×</button><div class="profile-viewer-cover" id="profile-viewer-cover"><div class="profile-cover-toolbar" id="profile-cover-toolbar" aria-label="Profile tools"><button type="button" id="profile-cover-main-menu" aria-label="Open menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><div class="profile-cover-toolbar-right"><button type="button" id="profile-cover-edit" aria-label="Edit profile" title="Edit profile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5 4 4M4 20l4.2-.8L19 8.4a2.8 2.8 0 0 0-4-4L4.8 15.2 4 20Z"/></svg></button><button type="button" id="profile-cover-search" aria-label="Search" title="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></svg></button><button type="button" id="profile-cover-more" aria-label="More profile options" title="More"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="7.5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg></button></div></div><button type="button" id="profile-cover-change" class="profile-owner-cover-edit" hidden aria-label="Change cover photo" title="Change cover photo"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="suhasCoverCam" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8be5ff"/><stop offset=".5" stop-color="#1879ed"/><stop offset="1" stop-color="#06377f"/></linearGradient></defs><path fill="url(#suhasCoverCam)" stroke="#fff" stroke-width="1.2" d="M5 10h5l2-3h8l2 3h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z"/><circle cx="16" cy="17.5" r="5.3" fill="#dff5ff" stroke="#073b91" stroke-width="1.5"/><circle cx="16" cy="17.5" r="3" fill="#174b91"/><path d="M7 12h3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></button></div><input id="profile-cover-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div class="profile-viewer-head"><div class="profile-viewer-avatar-wrap"><img class="profile-viewer-avatar" id="profile-viewer-avatar" alt=""><button type="button" id="profile-avatar-change" class="profile-owner-avatar-edit" hidden aria-label="Change profile picture" title="Change profile picture"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="suhasAvatarCam3D" x1="8" y1="3" x2="39" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#fff27a"/><stop offset=".24" stop-color="#ff9d24"/><stop offset=".56" stop-color="#f0448b"/><stop offset=".82" stop-color="#8155ed"/><stop offset="1" stop-color="#16b8e8"/></linearGradient><linearGradient id="suhasAvatarLens3D" x1="17" y1="15" x2="32" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#fff"/><stop offset=".35" stop-color="#8ceaff"/><stop offset="1" stop-color="#1454b8"/></linearGradient></defs><path d="M7 15.5c0-2 1.6-3.5 3.6-3.5h7l3-5h9l3 5h5.8c2 0 3.6 1.5 3.6 3.5v19c0 2-1.6 3.5-3.6 3.5H10.6C8.6 38 7 36.5 7 34.5z" fill="url(#suhasAvatarCam3D)" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 17h28v-1.5c0-1.1-.9-2-2-2h-7l-3-5h-5l-3 5h-6c-1.1 0-2 .9-2 2z" fill="#fff" opacity=".36"/><circle cx="24" cy="25" r="9" fill="#fff" opacity=".9"/><circle cx="24" cy="25" r="7" fill="url(#suhasAvatarLens3D)" stroke="#173e91" stroke-width="1.5"/><circle cx="21.5" cy="22.5" r="2.2" fill="#fff" opacity=".95"/><circle cx="35" cy="17" r="1.7" fill="#fff"/></svg></button></div><input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" hidden><div id="profile-image-edit-panel" class="profile-image-edit-panel" hidden role="dialog" aria-modal="true" aria-labelledby="profile-image-edit-title"><div class="profile-image-edit-card"><button type="button" id="profile-image-edit-close" class="profile-image-edit-close" aria-label="Close">×</button><h3 id="profile-image-edit-title">Preview photo</h3><img id="profile-image-edit-preview" alt="Selected photo preview"><div class="profile-image-edit-actions"><button type="button" id="profile-image-edit-cancel">Cancel</button><button type="button" id="profile-image-edit-save">Save</button></div></div></div><div class="profile-viewer-copy"><div class="profile-viewer-name" id="profile-viewer-name">Member Profile</div><div class="profile-viewer-sub" id="profile-viewer-sub"></div><div class="profile-viewer-stats" id="profile-viewer-stats" aria-label="Profile connections"></div><div class="profile-viewer-actions" id="profile-viewer-actions"></div></div><div class="profile-viewer-menu-wrap"><button class="profile-viewer-menu-trigger" id="profile-viewer-menu-trigger" type="button" aria-label="Profile options" aria-expanded="false">⋯</button><div class="profile-viewer-menu" id="profile-viewer-menu"><button type="button" id="profile-edit-menu-item" data-profile-action="edit" hidden>✎ Edit My Profile</button><button type="button" data-profile-action="copy">🔗 Copy profile link</button><button type="button" data-profile-action="share">↗ Share profile</button><button type="button" data-profile-action="messenger">✉ Send in Messenger</button><button type="button" data-profile-action="save">🔖 Save profile on this device</button><button type="button" data-profile-action="qr">▦ Show profile QR code</button><button type="button" data-profile-action="report">⚑ Report profile</button><button type="button" data-profile-action="block">🚫 Hide profile on this device</button></div></div></div><nav class="profile-viewer-tabs" aria-label="Profile sections"><button type="button" class="active" data-profile-filter="all">All</button><button type="button" data-profile-filter="reels">Reels</button><button type="button" data-profile-filter="photos">Photos</button><button type="button" data-profile-filter="memories">Memories</button><button type="button" data-profile-filter="events">Events</button></nav><div class="profile-viewer-body"><p class="profile-viewer-bio" id="profile-viewer-bio"></p><button type="button" id="profile-bio-see-all" class="profile-see-all">See more</button><div id="profile-dashboard-panel" class="profile-dashboard-panel" hidden></div><div id="profile-viewer-info"></div><section class="profile-viewer-posts" id="profile-viewer-posts" aria-label="Member posts"><h3>Posts &amp; Reposts</h3><div class="profile-viewer-post-list"></div></section><section id="profile-events-panel" class="profile-info-card" hidden><h3>Events</h3><p>No events have been created on this SuhasNet profile yet.</p></section></div></div></section><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261111-independent-max"></script>
 <script>
 (async()=>{
 const $=id=>document.getElementById(id), client=window.sb;
@@ -7115,6 +7115,111 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  #profile-viewer .profile-viewer-head{grid-template-columns:96px minmax(0,1fr) 30px!important;column-gap:8px!important;padding-left:10px!important;padding-right:10px!important}
  #profile-viewer .profile-viewer-head>.profile-viewer-avatar-wrap{width:96px!important;height:96px!important;min-width:96px!important;max-width:96px!important;margin-top:-40px!important}
  #profile-viewer #profile-viewer-name{font-size:18px!important}
+}
+</style>
+
+
+<style id="suhasnet-fb-mobile-profile-compact-20261127">
+/* Rebuild only the social profile viewer's mobile header to match Facebook's compact hierarchy. */
+#profile-viewer .profile-viewer-card{background:#f0f2f5!important}
+#profile-viewer .profile-viewer-cover{height:176px!important;min-height:176px!important;background-position:center!important;border-radius:0!important}
+#profile-viewer .profile-viewer-head{
+ display:grid!important;grid-template-columns:104px minmax(0,1fr) 34px!important;
+ grid-template-rows:auto auto auto!important;column-gap:10px!important;row-gap:0!important;
+ align-items:start!important;min-height:0!important;margin:0!important;padding:0 12px 10px!important;
+ background:#fff!important;border:0!important;box-sizing:border-box!important
+}
+#profile-viewer .profile-viewer-head>.profile-viewer-avatar-wrap{
+ grid-column:1!important;grid-row:1!important;position:relative!important;display:block!important;
+ width:104px!important;height:104px!important;min-width:104px!important;max-width:104px!important;
+ aspect-ratio:1/1!important;margin:-42px 0 0!important;padding:0!important;overflow:hidden!important;
+ border:4px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;
+ box-shadow:0 1px 4px #0002!important;box-sizing:border-box!important
+}
+#profile-viewer .profile-viewer-avatar-wrap .profile-viewer-avatar{
+ position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;
+ min-width:100%!important;max-width:100%!important;min-height:100%!important;max-height:100%!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;
+ object-fit:cover!important;object-position:center!important
+}
+#profile-viewer .profile-viewer-head>.profile-viewer-copy{display:contents!important}
+#profile-viewer #profile-viewer-name{
+ grid-column:2!important;grid-row:1!important;min-width:0!important;margin:5px 0 0!important;
+ font-size:clamp(19px,5vw,23px)!important;line-height:1.18!important;font-weight:800!important;
+ color:#1c1e21!important;overflow-wrap:anywhere!important
+}
+#profile-viewer #profile-viewer-sub{display:none!important}
+#profile-viewer .profile-viewer-head>.profile-viewer-menu-wrap{
+ grid-column:3!important;grid-row:1!important;justify-self:end!important;align-self:start!important;
+ position:relative!important;margin:3px 0 0!important;padding:0!important
+}
+#profile-viewer .profile-viewer-menu-trigger{
+ width:32px!important;height:32px!important;border:0!important;border-radius:50%!important;
+ background:#e4e6eb!important;color:#1c1e21!important;font-size:22px!important
+}
+#profile-viewer #profile-viewer-stats{
+ grid-column:1/-1!important;grid-row:2!important;display:flex!important;flex-wrap:nowrap!important;
+ justify-content:flex-start!important;gap:0!important;width:100%!important;margin:9px 0 0!important;
+ padding:8px 0 0!important;border-top:1px solid #e4e6eb!important
+}
+#profile-viewer #profile-viewer-stats>div{
+ flex:1 1 0!important;min-width:0!important;display:flex!important;flex-direction:row!important;
+ align-items:baseline!important;justify-content:center!important;gap:4px!important;padding:0 3px!important
+}
+#profile-viewer #profile-viewer-stats strong{font-size:15px!important;font-weight:800!important;color:#1c1e21!important}
+#profile-viewer #profile-viewer-stats span{font-size:12px!important;color:#65676b!important;font-weight:600!important}
+#profile-viewer #profile-viewer-actions{
+ grid-column:1/-1!important;grid-row:3!important;display:flex!important;flex-wrap:wrap!important;
+ gap:7px!important;width:100%!important;margin:9px 0 0!important;padding:0!important
+}
+#profile-viewer #profile-viewer-actions .action{
+ flex:1 1 0!important;min-width:0!important;min-height:38px!important;width:auto!important;
+ padding:7px 9px!important;border-radius:8px!important;font-size:13px!important;font-weight:700!important
+}
+#profile-viewer .profile-owner-avatar-edit{
+ position:absolute!important;left:auto!important;right:1px!important;top:auto!important;bottom:1px!important;
+ width:24px!important;height:24px!important;min-width:24px!important;padding:0!important;
+ display:grid!important;place-items:center!important;border:2px solid #fff!important;border-radius:50%!important;
+ background:#e4e6eb!important;box-shadow:0 1px 3px #0003!important;overflow:hidden!important
+}
+#profile-viewer .profile-owner-avatar-edit svg{width:13px!important;height:13px!important}
+#profile-viewer .profile-viewer-tabs{
+ position:sticky!important;top:0!important;z-index:5!important;display:flex!important;min-height:44px!important;
+ margin:0!important;padding:0 5px!important;gap:0!important;background:#fff!important;
+ border-top:1px solid #e4e6eb!important;border-bottom:1px solid #e4e6eb!important
+}
+#profile-viewer .profile-viewer-tabs button{
+ min-height:44px!important;padding:0 12px!important;font-size:13px!important;font-weight:700!important
+}
+#profile-viewer .profile-viewer-body{
+ display:block!important;margin:0!important;padding:9px 10px 16px!important;background:#f0f2f5!important
+}
+#profile-viewer #profile-viewer-bio{
+ margin:0 0 7px!important;padding:11px 12px!important;background:#fff!important;
+ border:1px solid #e4e6eb!important;border-radius:10px!important;font-size:14px!important;line-height:1.4!important
+}
+#profile-viewer #profile-bio-see-all{display:none!important}
+#profile-viewer #profile-dashboard-panel:not([hidden]){
+ margin:0 0 9px!important;padding:10px!important;background:#fff!important;border:1px solid #e4e6eb!important;border-radius:10px!important
+}
+#profile-viewer #profile-viewer-info{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:9px!important}
+#profile-viewer #profile-viewer-info>.profile-info-card{margin:0!important;padding:12px!important}
+#profile-viewer .profile-viewer-posts{margin:9px 0 0!important;padding:12px!important}
+#profile-viewer .profile-owner-cover-edit{right:10px!important;bottom:10px!important;width:32px!important;height:32px!important;padding:0!important}
+@media(min-width:701px){
+ #profile-viewer .profile-viewer-cover{height:260px!important;min-height:260px!important}
+ #profile-viewer .profile-viewer-head{grid-template-columns:144px minmax(0,1fr) 40px!important;padding:0 22px 14px!important;column-gap:14px!important}
+ #profile-viewer .profile-viewer-head>.profile-viewer-avatar-wrap{width:144px!important;height:144px!important;min-width:144px!important;max-width:144px!important;margin-top:-58px!important}
+ #profile-viewer #profile-viewer-name{font-size:28px!important;margin-top:8px!important}
+ #profile-viewer #profile-viewer-stats{grid-column:2!important;grid-row:2!important;width:auto!important;margin-top:8px!important}
+ #profile-viewer #profile-viewer-actions{grid-column:2/-1!important;grid-row:3!important;margin-top:8px!important}
+ #profile-viewer .profile-viewer-tabs{padding:0 18px!important}
+}
+@media(max-width:380px){
+ #profile-viewer .profile-viewer-head{grid-template-columns:92px minmax(0,1fr) 30px!important;column-gap:8px!important;padding-left:10px!important;padding-right:10px!important}
+ #profile-viewer .profile-viewer-head>.profile-viewer-avatar-wrap{width:92px!important;height:92px!important;min-width:92px!important;max-width:92px!important;margin-top:-38px!important}
+ #profile-viewer #profile-viewer-name{font-size:18px!important}
+ #profile-viewer #profile-viewer-stats span{font-size:11px!important}
 }
 </style>
 
