@@ -97,7 +97,7 @@ export function mountShell(active=''){
   $('shellBottom').innerHTML=
   '<div class="fabs" id="fabs"><a class="wafab" href="'+waLink('Hello SUHAS E-COM, I need product support.')+'" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬 <span>WhatsApp</span></a></div>'+
   '<footer class="ft"><div class="ftg"><div><h4>SUHAS E-COM</h4><p>An online marketplace for verified sellers and buyers. Order online, pay on delivery, track every delivery.</p></div><div><h4>Customer service</h4><a href="track.html">Track my order</a><a href="'+waLink('Hello SUHAS E-COM, I need support.')+'" target="_blank" rel="noopener">WhatsApp support</a><a href="index.html#rfq">Request a quotation</a></div><div><h4>Sell with us</h4><a href="manage.html#seller">Become a seller</a><a href="manage.html">Seller / Admin login</a></div><div><h4>Payments &amp; delivery</h4><p>Cash on Delivery · bKash · Nagad<br>Free delivery over ৳2,000</p><a href="privacy-policy.html">Privacy Policy</a></div></div><div class="ftb">© '+new Date().getFullYear()+' SUHAS E-COM · A SUHAS Group company · WhatsApp +880 1862-144113</div></footer>';
-  import('./ecom-ai.js').then(m=>m.mountAI({getProducts:()=>getProducts(),track:(c,ph)=>trackOrder(c,ph)})).catch(()=>{});
+  import('./ecom-ai.js?v=20261127').then(m=>m.mountAI({getProducts:()=>getProducts(),track:(c,ph)=>trackOrder(c,ph)})).catch(()=>{});
 }
 
 /* ---------- cart ---------- */

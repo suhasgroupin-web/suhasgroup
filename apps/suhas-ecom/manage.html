@@ -311,5 +311,5 @@ $('storeForm').addEventListener('submit',async e=>{e.preventDefault();const form
 $('refreshBtn').onclick=async()=>{await refreshAll();message('dashboardMsg','Data refreshed.','success')};
 $('logoutBtn').onclick=async()=>{if(orderChannel){await db.removeChannel(orderChannel);orderChannel=null}if(notifChannel){await db.removeChannel(notifChannel);notifChannel=null}$('bellWrap').classList.add('hidden');clearTimeout(orderRefreshTimer);await db.auth.signOut();user=null;vendor=null;$('dashboard').classList.add('hidden');$('authView').classList.remove('hidden');$('logoutBtn').classList.add('hidden');setAuthMode('login')};
 const {data:{session}}=await db.auth.getSession();if(session?.user){try{await startDashboard(session.user)}catch(e){message('authMsg',e.message,'error')}}else applyAccessRoute();
-import('./ecom-ai.js').then(x=>x.mountAI({staff:true,getToken:async()=>(await db.auth.getSession()).data.session?.access_token||''})).catch(()=>{});
+import('./ecom-ai.js?v=20261127').then(x=>x.mountAI({staff:true,getToken:async()=>(await db.auth.getSession()).data.session?.access_token||''})).catch(()=>{});
 </script></body></html>
