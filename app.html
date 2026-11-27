@@ -427,6 +427,40 @@ body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!impo
  .tabbar a,.tabbar button{font-size:10px!important;padding-left:1px!important;padding-right:1px!important}
  .tabbar .brand-icon{width:27px!important;height:27px!important;max-width:27px!important;max-height:27px!important}
 }
+
+/* Final compact, transparent bottom navigation with small 3D icons */
+body.has-tabbar{padding-bottom:54px!important}
+.tabbar{
+ position:fixed!important;left:0!important;right:0!important;bottom:0!important;
+ transform:none!important;width:100%!important;max-width:none!important;
+ min-height:48px!important;display:grid!important;
+ grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:column!important;
+ gap:1px!important;padding:3px 5px calc(3px + env(safe-area-inset-bottom,0px))!important;
+ box-sizing:border-box!important;background:transparent!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;z-index:2147482000!important;
+}
+.tabbar a,.tabbar button{
+ min-width:0!important;min-height:42px!important;width:100%!important;
+ padding:2px 1px!important;gap:2px!important;border:0!important;border-radius:7px!important;
+ background:transparent!important;box-shadow:none!important;color:#34445d!important;
+ font-size:9px!important;font-weight:750!important;line-height:1.05!important;
+ touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;
+ cursor:pointer!important;transition:transform .1s ease!important;
+}
+.tabbar a span{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.tabbar svg{width:18px!important;height:18px!important;flex:0 0 18px!important;overflow:visible!important;
+ filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 1px rgba(16,45,83,.38))!important}
+.tabbar svg *{stroke-width:2.1!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.tabbar .brand-icon,.tabbar .o5-international-icon{width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important;filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 2px rgba(16,45,83,.4))!important}
+.tabbar .o5-international{padding:0!important;gap:2px!important;background:transparent!important}
+.tabbar .on,.tabbar .o5-international.on{background:transparent!important;color:#0756c9!important;box-shadow:none!important;border:0!important}
+.tabbar a:active,.tabbar button:active{transform:scale(.94)!important;background:transparent!important;box-shadow:none!important}
+@media(min-width:821px){
+ body.has-tabbar{padding-bottom:54px!important}
+ .tabbar{width:100%!important;min-height:48px!important;padding:3px 5px calc(3px + env(safe-area-inset-bottom,0px))!important}
+ .tabbar a,.tabbar button{min-height:42px!important;font-size:9px!important;padding:2px 1px!important}
+ .tabbar svg,.tabbar .brand-icon,.tabbar .o5-international-icon{width:18px!important;height:18px!important;max-width:18px!important;max-height:18px!important;flex-basis:18px!important}
+}
 </style>
 </head><body class="entry-locked"><section class="entry-gate" id="entryGate" aria-label="SUHAS GROUP secure entry"><div class="entry-card"><img class="entry-logo" src="./assets/logo.png?v=34" alt="SUHAS GROUP logo"><div class="entry-kicker">Secure Business Workspace</div><h1 aria-label="Welcome to SUHAS GROUP"><span class="entry-title entry-title-welcome">Welcome</span><span class="entry-title-to">to</span><span class="entry-title entry-title-brand">SUHAS GROUP</span></h1><p>Your global workspace, company tools and services are protected. Create your account or log in to continue.</p><div class="entry-actions"><a class="entry-signup" href="signup.html?next=app.html">Create Account · Sign Up</a><a class="entry-login" href="login.html?next=app.html">Already registered? Login</a></div><div class="entry-secure"><span></span> SECURE ACCESS · SUPABASE AUTHENTICATION</div></div></section>
 <main class="workspace"><div class="w-shell">
