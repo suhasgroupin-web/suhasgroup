@@ -3405,6 +3405,128 @@ html body #profile-viewer #profile-avatar-change[hidden]{display:none!important}
 
 
 
+<style id="suhasnet-profile-mobile-rebuild-20261127">
+/* One clean profile layout. Only the profile viewer on social.html is affected. */
+html body #profile-viewer.profile-viewer.open{padding:0!important;align-items:stretch!important;background:rgba(0,0,0,.55)!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-card{
+ width:min(100%,980px)!important;max-width:980px!important;height:100dvh!important;max-height:100dvh!important;
+ margin:0 auto!important;border:0!important;border-radius:0!important;overflow-x:hidden!important;overflow-y:auto!important;
+ background:#f0f2f5!important;box-shadow:0 8px 40px #0003!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-cover{
+ display:block!important;position:relative!important;width:100%!important;height:180px!important;min-height:180px!important;
+ margin:0!important;border-radius:0!important;background-size:cover!important;background-position:center 42%!important;overflow:hidden!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head{
+ display:grid!important;grid-template-columns:104px minmax(0,1fr) 36px!important;
+ grid-template-rows:auto auto auto auto!important;align-items:start!important;column-gap:10px!important;row-gap:0!important;
+ width:100%!important;min-height:0!important;margin:0!important;padding:0 14px 10px!important;
+ overflow:visible!important;background:#fff!important;border:0!important;border-bottom:1px solid #e4e6eb!important;
+ box-sizing:border-box!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{
+ grid-column:1!important;grid-row:1!important;position:relative!important;display:block!important;
+ width:104px!important;height:104px!important;min-width:104px!important;max-width:104px!important;
+ aspect-ratio:1/1!important;margin:-42px 0 0!important;padding:0!important;flex:none!important;
+ border:4px solid #fff!important;border-radius:50%!important;overflow:hidden!important;
+ background:#e4e6eb!important;box-shadow:0 1px 5px #0002!important;box-sizing:border-box!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap>#profile-viewer-avatar{
+ display:block!important;position:static!important;inset:auto!important;width:100%!important;height:100%!important;
+ min-width:100%!important;max-width:100%!important;min-height:100%!important;max-height:100%!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;aspect-ratio:1/1!important;
+ object-fit:cover!important;object-position:center!important;transform:none!important
+}
+html body #profile-viewer.profile-viewer.open #profile-avatar-change.profile-owner-avatar-edit{
+ display:grid!important;position:absolute!important;left:auto!important;right:0!important;top:auto!important;bottom:0!important;
+ place-items:center!important;width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;
+ padding:0!important;border:2px solid #fff!important;border-radius:50%!important;background:#e4e6eb!important;
+ box-shadow:0 1px 3px #0003!important;z-index:10!important
+}
+html body #profile-viewer.profile-viewer.open #profile-avatar-change svg{width:17px!important;height:17px!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-copy{display:contents!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>div:not(.profile-viewer-avatar-wrap):not(.profile-viewer-menu-wrap):not(#profile-image-edit-panel){display:contents!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-name{
+ grid-column:2!important;grid-row:1!important;display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:5px!important;
+ min-width:0!important;margin:5px 0 0!important;padding:0!important;color:#1c1e21!important;
+ font-size:clamp(19px,5vw,25px)!important;line-height:1.2!important;font-weight:800!important;overflow-wrap:anywhere!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-sub{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-bio{
+ grid-column:1/-1!important;grid-row:2!important;display:block!important;width:100%!important;max-width:none!important;
+ margin:8px 0 0!important;padding:0!important;text-align:left!important;color:#343a40!important;
+ font-size:14px!important;line-height:1.35!important;white-space:pre-line!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-bio[hidden]{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-bio-see-all{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-stats{
+ grid-column:1/-1!important;grid-row:3!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ gap:0!important;width:100%!important;margin:9px 0 0!important;padding:8px 0 0!important;
+ border-top:1px solid #e4e6eb!important;flex-wrap:nowrap!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-stats>div{
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;
+ flex:0 0 auto!important;min-width:82px!important;gap:0!important;padding:0 15px 0 0!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-stats strong{font-size:15px!important;line-height:1.2!important;color:#1c1e21!important;font-weight:800!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-stats span{font-size:11px!important;line-height:1.25!important;color:#65676b!important;font-weight:600!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-actions{
+ grid-column:1/-1!important;grid-row:4!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ width:100%!important;max-width:none!important;gap:0!important;margin:8px 0 0!important;padding:0!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-actions [data-profile-edit-open],
+html body #profile-viewer.profile-viewer.open #profile-viewer-actions [data-profile-add-story]{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-actions [data-profile-dashboard]{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;width:auto!important;min-width:112px!important;
+ min-height:34px!important;margin:0!important;padding:6px 14px!important;border:0!important;border-radius:7px!important;
+ background:#e7f0ff!important;color:#0866ff!important;font-size:12px!important;line-height:1.2!important;font-weight:750!important;
+ box-shadow:none!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-menu-wrap{
+ grid-column:3!important;grid-row:1!important;display:block!important;position:relative!important;justify-self:end!important;
+ align-self:start!important;width:34px!important;min-width:34px!important;margin:4px 0 0!important;padding:0!important;z-index:20!important
+}
+html body #profile-viewer.profile-viewer.open #profile-viewer-menu-trigger{
+ display:grid!important;place-items:center!important;width:34px!important;height:34px!important;
+ border:0!important;border-radius:50%!important;background:#e4e6eb!important;color:#1c1e21!important;font-size:23px!important;line-height:1!important
+}
+html body #profile-viewer.profile-viewer.open #profile-edit-menu-item[hidden]{display:none!important}
+html body #profile-viewer.profile-viewer.open #profile-edit-menu-item:not([hidden]){display:flex!important}
+html body #profile-viewer.profile-viewer.open #profile-cover-change.profile-owner-cover-edit{
+ display:grid!important;place-items:center!important;position:absolute!important;left:auto!important;right:12px!important;top:auto!important;bottom:12px!important;
+ width:36px!important;height:36px!important;min-width:36px!important;padding:0!important;border:2px solid #fff!important;
+ border-radius:50%!important;background:#fff!important;box-shadow:0 1px 5px #0003!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-tabs{
+ display:flex!important;position:sticky!important;top:0!important;z-index:15!important;align-items:stretch!important;
+ width:100%!important;min-height:46px!important;margin:0!important;padding:0 7px!important;gap:0!important;
+ overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;background:#fff!important;
+ border-top:0!important;border-bottom:1px solid #e4e6eb!important;scrollbar-width:none!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-tabs::-webkit-scrollbar{display:none!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-tabs button{
+ flex:0 0 auto!important;min-height:46px!important;padding:0 13px!important;border:0!important;border-bottom:3px solid transparent!important;
+ border-radius:0!important;background:transparent!important;color:#65676b!important;font-size:13px!important;font-weight:700!important
+}
+html body #profile-viewer.profile-viewer.open .profile-viewer-tabs button.active{color:#0866ff!important;border-bottom-color:#0866ff!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-body{display:block!important;width:100%!important;min-width:0!important;margin:0!important;padding:10px!important;background:#f0f2f5!important;box-sizing:border-box!important}
+html body #profile-viewer.profile-viewer.open #profile-dashboard-panel{margin:0 0 10px!important;padding:12px!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-info{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
+html body #profile-viewer.profile-viewer.open #profile-viewer-info>.profile-info-card{margin:0!important}
+html body #profile-viewer.profile-viewer.open .profile-viewer-posts{margin:10px 0 0!important;padding:12px!important}
+@media(min-width:760px){
+ html body #profile-viewer.profile-viewer.open .profile-viewer-card{height:calc(100dvh - 32px)!important;max-height:calc(100dvh - 32px)!important;margin:16px auto!important;border-radius:12px!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-cover{height:250px!important;min-height:250px!important;border-radius:12px 12px 0 0!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head{grid-template-columns:132px minmax(0,1fr) 38px!important;padding:0 22px 14px!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{width:132px!important;height:132px!important;min-width:132px!important;max-width:132px!important;margin-top:-56px!important}
+}
+@media(max-width:380px){
+ html body #profile-viewer.profile-viewer.open .profile-viewer-cover{height:164px!important;min-height:164px!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head{grid-template-columns:92px minmax(0,1fr) 32px!important;column-gap:8px!important;padding-left:10px!important;padding-right:10px!important}
+ html body #profile-viewer.profile-viewer.open .profile-viewer-head>.profile-viewer-avatar-wrap{width:92px!important;height:92px!important;min-width:92px!important;max-width:92px!important;margin-top:-38px!important}
+ html body #profile-viewer.profile-viewer.open #profile-viewer-stats>div{min-width:75px!important;padding-right:10px!important}
+}
+</style>
 </head><body><header class="site-header"><div class="nav-wrap">
 <button class="facebook-left-menu-trigger" type="button" data-tab="maxmenu" onclick="activateMaxTab('maxmenu')" aria-label="Open main menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button><button type="button" class="brand suhas-max-home-brand" data-tab="feed" aria-label="SuhasNet Home"><img src="assets/logo.png" alt=""><div><div class="brand-name">SuhasNet</div><div class="brand-tag">SuhasNet COMMUNITY</div></div></button>
 <nav class="social-topnav" aria-label="Main navigation"><button class="active" data-tab="feed" type="button" aria-label="Home" aria-current="page"><span class="desktop-nav-icon">⌂</span><span>Home</span></button><button data-tab="friends" type="button" aria-label="Friends"><span class="desktop-nav-icon">♙</span><span>Friends</span></button><button data-tab="groups" type="button" aria-label="Groups"><span class="desktop-nav-icon">▦</span><span>Groups</span></button><button data-tab="reels" type="button" aria-label="Reels"><span class="desktop-nav-icon">▣</span><span>Reels</span></button><button data-tab="marketplace" type="button" aria-label="Marketplace"><span class="desktop-nav-icon">▱</span><span>Marketplace</span></button><button data-tab="notifications" type="button" aria-label="Notifications"><span class="desktop-nav-icon">♧</span><span>Notifications</span></button></nav>
