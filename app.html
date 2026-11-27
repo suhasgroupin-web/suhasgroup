@@ -478,12 +478,12 @@ body.has-tabbar{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))!impo
 <footer class="w-foot"><span>© SUHAS GROUP · Premium Business Super App</span><span><a href="profile.html">My Account</a> · <a href="contact.html">Support</a></span></footer>
 </div></main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261107e"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261127-desktop-nav-fix"></script>
 <script>
 (function(){
   var gate=document.getElementById('entryGate'), unlocked=false;
   function lock(){unlocked=false;document.body.classList.add('entry-locked');gate.hidden=false;}
-  function unlock(){if(unlocked)return;unlocked=true;document.body.classList.remove('entry-locked');gate.hidden=true;}
+  function unlock(){if(unlocked)return;unlocked=true;document.documentElement.classList.add('suhas-authenticated');document.body.classList.remove('entry-locked');gate.hidden=true;}
   sb.auth.getSession().then(function(r){
     if(r.error || !r.data || !r.data.session){lock();return;}
     unlock();
@@ -540,7 +540,7 @@ document.querySelectorAll('.folder-edit').forEach(btn=>btn.addEventListener('cli
 document.getElementById('appSearch').addEventListener('submit',e=>e.preventDefault());
 search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;document.querySelectorAll('.app-tile').forEach(a=>{const match=a.textContent.toLowerCase().includes(q);a.style.display=match?'flex':'none';if(match)count++;});document.querySelectorAll('[data-folder]').forEach(d=>{const has=[...d.querySelectorAll('.app-tile')].some(a=>a.style.display!=='none');d.style.display=has?'block':'none';if(q&&has)d.open=true;});empty.style.display=count?'none':'block';});
 })();
-</script><script src="assets/script.js?v=20261109-homefix"></script><script src="assets/display-mode.js?v=1"></script><script id="suhas-page-state-restore-20261110">
+</script><script src="assets/script.js?v=20261127-desktop-nav-fix"></script><script src="assets/display-mode.js?v=20261127-desktop-nav-fix"></script><script id="suhas-page-state-restore-20261110">
 (function(){
  const key='suhas-page-state:'+location.pathname+location.search;
  const save=()=>{
