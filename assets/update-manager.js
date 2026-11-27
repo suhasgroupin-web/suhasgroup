@@ -9,7 +9,7 @@
  function showNotice(release,registration){
   if(document.getElementById('suhas-software-updated'))return;
   var style=document.createElement('style');
-  style.textContent='.suhas-software-updated{position:fixed;z-index:100001;left:16px;right:16px;top:calc(14px + env(safe-area-inset-top));max-width:480px;margin:auto;padding:13px 16px;border:1px solid #cfe1ff;border-radius:14px;background:#fff;color:#152b4b;box-shadow:0 12px 36px #10294a2b;font:14px/1.45 Arial,sans-serif;display:flex;gap:12px;align-items:center}.suhas-software-updated strong{display:block;font-size:15px}.suhas-software-updated small{display:block;color:#52627b;margin-top:2px}.suhas-update-actions{margin-left:auto;display:flex;align-items:center;gap:8px}.suhas-update-install{border:0;border-radius:8px;background:#1877f2;color:#fff;font-weight:700;font-size:14px;padding:9px 13px;cursor:pointer}.suhas-update-close{border:0;background:transparent;color:#52627b;font-size:22px;line-height:1;cursor:pointer;padding:4px 7px}';
+  style.textContent='.suhas-software-updated{position:fixed;z-index:2147482500;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));max-width:430px;margin:auto;padding:10px 12px;border:1px solid #c8d7ee;border-radius:13px;background:linear-gradient(180deg,#fff 0%,#edf3fc 100%);color:#152b4b;box-shadow:0 2px 0 #c8d7ee,0 10px 28px rgba(10,34,73,.2),0 2px 4px #fff inset;font:13px/1.35 Arial,sans-serif;display:flex;gap:9px;align-items:center}.suhas-software-updated strong{display:block;font-size:14px}.suhas-software-updated small{display:block;color:#52627b;margin-top:2px}.suhas-update-actions{margin-left:auto;display:flex;align-items:center;gap:6px}.suhas-update-install{border:1px solid #0b4eae;border-radius:8px;background:linear-gradient(180deg,#398bff 0%,#1265d8 55%,#0849a9 100%);color:#fff;font-weight:800;font-size:12px;padding:8px 11px;white-space:nowrap;box-shadow:0 3px 0 #073b89,0 5px 10px rgba(13,73,150,.2),0 1px 0 rgba(255,255,255,.45) inset;cursor:pointer}.suhas-update-install:hover{filter:brightness(1.06);transform:translateY(-1px)}.suhas-update-install:active{transform:translateY(2px);box-shadow:0 1px 0 #073b89}.suhas-update-install:disabled{opacity:.7;cursor:wait}.suhas-update-close{border:0;background:transparent;color:#52627b;font-size:20px;line-height:1;cursor:pointer;padding:3px 5px}';
   document.head.appendChild(style);
   var toast=document.createElement('div');toast.id='suhas-software-updated';toast.className='suhas-software-updated';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');
   var copy=document.createElement('span');
@@ -35,8 +35,7 @@
   });
   actions.append(install,close);toast.append(copy,actions);
   (document.body||document.documentElement).appendChild(toast);
-  window.clearTimeout(window.__suhasUpdateNoticeTimer);
-  window.__suhasUpdateNoticeTimer=// Keep the update notice visible until the member installs or dismisses it.
+  // Keep the update notice visible until the member installs or dismisses it.
  }
  async function start(){
   var hadControllerAtStart=!!navigator.serviceWorker.controller;
