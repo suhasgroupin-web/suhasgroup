@@ -7,7 +7,7 @@
   const voiceOverlay=$('voice-overlay'),voiceOrb=$('voice-orb'),voiceCaption=$('voice-caption'),voiceSubtitle=$('voice-subtitle');
   const storeKey='suhas-ecom-ai-conversations-v1';
   const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const format=s=>escapeHtml(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  const format=s=>escapeHtml(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\[([^\]]+)\]\(((?:https:\/\/wa\.me\/|[a-z0-9.\-]+\.html)[^)\s]*)\)/g,'<a href="$2" target="_blank" rel="noopener" style="color:#1559c4;font-weight:700">$1</a>').replace(/\n/g,'<br>');
   let chats=[];try{const x=JSON.parse(localStorage.getItem(storeKey)||'[]');if(Array.isArray(x))chats=x;}catch(_){}
   let activeId=null,messages=[],pending=[],busy=false,liveMode=false,recognition=null,recognitionActive=false,speaking=false;
   function setStatus(t){status.textContent=t||'';}
@@ -74,6 +74,24 @@
     }
     const d=await response.json().catch(()=>({}));if(!response.ok)throw new Error(d.error||'SUHAS AI request failed ('+response.status+').');return String(d.output||'').trim();
   }
+
+  /* ---------- instant answers for common questions (no network wait) ---------- */
+  const WA='https://wa.me/8801862144113';
+  const has=(q,...w)=>w.some(x=>q.includes(x));
+  function instantAnswer(raw){
+    const q=String(raw||'').toLowerCase().replace(/\s+/g,' ').trim();
+    if(!q||q.length>90)return null;
+    if(/^(hi+|hello+|hey+|hlw|helo|salam|assalamu ?alaikum|assalam|সালাম|আসসালামু আলাইকুম|হ্যালো|হাই)[\s!.?]*$/i.test(q))return 'Hello! 👋 I am SUHAS AI. Ask me about products, prices, ordering, payment, delivery or your order status — or any general question.';
+    if(/^(thanks|thank you|thx|ok thanks|dhonnobad|ধন্যবাদ)[\s!.?]*$/i.test(q))return 'You are welcome! Anything else I can help with?';
+    if(has(q,'how to order','how do i order','how can i order','kivabe order','kibhabe order','kemne order','order korbo','order korte','কিভাবে অর্ডার','কীভাবে অর্ডার'))return '**How to order**\n1. Open a product and tap **Order Now** (or add to cart).\n2. Enter your name, mobile, address and email.\n3. Choose Cash on Delivery, bKash or Nagad and confirm.\nYou can follow the order live in [Track order](track.html).';
+    if(has(q,'payment','bkash','nagad','cash on delivery','kivabe pay','পেমেন্ট','বিকাশ','নগদ'))return '**Payment options**: Cash on Delivery, bKash and Nagad. For bKash / Nagad the seller sends payment instructions on WhatsApp, and you enter the transaction ID at checkout.';
+    if(has(q,'delivery charge','delivery fee','delivery cost','shipping','free delivery','delivery time','koto din','ডেলিভারি চার্জ'))return '**Delivery**: free on orders over ৳2,000, otherwise ৳120. Each product shows its lead time. Follow your order in [Track order](track.html).';
+    if(has(q,'cancel','refund','return policy','ferot','ক্যান্সেল','রিফান্ড'))return 'To cancel or return an order, message the seller on WhatsApp as early as possible (before it is shipped). Support: [WhatsApp +880 1862-144113]('+WA+').';
+    if(has(q,'become a seller','sell on','open shop','open a shop','seller account','how to sell','kivabe sell','dokan khulbo','বিক্রি করতে'))return '**Become a seller (free)**\n1. Open [Seller Centre](manage.html#seller) and sign up.\n2. Wait for admin approval.\n3. Add products with photos, price and description, then manage orders and delivery from one dashboard.';
+    if(has(q,'whatsapp number','contact number','helpline','support number','customer care','যোগাযোগ'))return 'Chat with us on [WhatsApp +880 1862-144113]('+WA+'). Every product also has a WhatsApp button for its seller.';
+    if(has(q,'track order','track my order','where is my order','order status','order kothay','অর্ডার কোথায়'))return 'To check an order, open [Track order](track.html) and enter your **order code and the mobile number** you used.';
+    return null;
+  }
   async function submitMessage(prompt,attachments,autoSpeak){
     if(busy)return;
     const docs=attachments.filter(x=>x.kind==='document').map(x=>'\n\n[Attached document: '+x.name+']\n'+x.text).join('');
@@ -83,6 +101,8 @@
     if(!activeId)activeId='chat-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
     messages.push({role:'user',content:finalPrompt||'Please inspect the attached image or voice message and reply in the same language.',files:attachments.map(f=>({name:f.name,kind:f.kind}))});
     bubble(finalPrompt||'Please review the attachment.', 'user',attachments);saveChats();
+    const quick=attachments.length?null:instantAnswer(finalPrompt);
+    if(quick){bubble(quick,'bot');messages.push({role:'assistant',content:quick});saveChats();setStatus('');busy=false;send.disabled=false;send.textContent='Send';input.focus();if(autoSpeak||liveMode)speakReply(quick);if(liveMode&&!speaking)setTimeout(startLiveRecognition,350);return;}
     const wait=bubble('Thinking…','bot');setStatus('SUHAS AI is preparing a reply…');
     try{
       const total=attachments.reduce((n,f)=>n+(f.dataUrl?Math.floor(f.dataUrl.length*.75):0),0);

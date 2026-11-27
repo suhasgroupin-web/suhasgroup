@@ -9,7 +9,7 @@ const normGemini = (v: string, fb: string) => {
 };
 // Gemini 3.8 Flash is the current fast general-purpose model; keep Flash-Lite as fallback.
 const FREE_GEMINI_MODEL = "gemini-3.8-flash";
-const FALLBACK_GEMINI_MODELS = ["gemini-3.5-flash", "gemini-flash-lite-latest"]; // used when the primary is overloaded, rate limited or slow
+const FALLBACK_GEMINI_MODELS = ["gemini-flash-lite-latest", "gemini-3.5-flash"]; // used when the primary is overloaded, rate limited or slow
 const cfg = Deno.env.get("AI_MODEL") || "";
 const AI_MODEL = AI_PROVIDER === "gemini" ? FREE_GEMINI_MODEL : (cfg.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5"));
 
@@ -91,38 +91,64 @@ Currency is Bangladeshi taka (use ৳ or BDT).
 LIVE DATA (${new Date().toISOString()}):
 ${ctx}`;
 
+// Hedged race: ask the first model, and if it has not started answering within HEDGE_MS (or it fails)
+// start the next one in parallel. The first model to start streaming wins; the others are cancelled.
+const HEDGE_MS = 2500, HEADER_TIMEOUT_MS = 15000;
+function raceModels(models: string[], makeReq: (model: string, signal: AbortSignal) => Promise<Response>): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const ctrls: AbortController[] = [];
+    let started = 0, failed = 0, done = false, timer: ReturnType<typeof setTimeout> | undefined, lastErr: unknown = new Error("no model");
+    const startNext = () => {
+      if (done || started >= models.length) return;
+      const i = started++;
+      const c = new AbortController(); ctrls[i] = c;
+      if (timer) clearTimeout(timer);
+      if (started < models.length) timer = setTimeout(startNext, HEDGE_MS);
+      makeReq(models[i], c.signal).then((r) => {
+        if (done) { r.body?.cancel().catch(() => {}); return; }
+        done = true; if (timer) clearTimeout(timer);
+        ctrls.forEach((x, j) => { if (j !== i) x.abort(); });
+        resolve(r);
+      }).catch((e) => {
+        lastErr = e; failed++;
+        if (done) return;
+        if (failed >= models.length) { done = true; if (timer) clearTimeout(timer); reject(lastErr); } else startNext();
+      });
+    };
+    startNext();
+  });
+}
+
 async function callModel(system: string, history: any[], prompt: string, attachmentParts: Array<{ inlineData: { mimeType: string; data: string } }> = []): Promise<string | Response> {
   if (AI_PROVIDER === "gemini") {
     const models = [FREE_GEMINI_MODEL, ...FALLBACK_GEMINI_MODELS];
-    let lastStatus = 0;
     const contents = [
       ...history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
       { role: "user", parts: [{ text: prompt }, ...attachmentParts] },
     ];
-    for (const model of models) {
+    const payload = JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents, generationConfig: { maxOutputTokens: 900 } });
+    const makeReq = async (model: string, signal: AbortSignal): Promise<Response> => {
+      const hc = new AbortController();
+      const t = setTimeout(() => hc.abort(), HEADER_TIMEOUT_MS); // limits time-to-first-byte only; cleared once headers arrive
       try {
         const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":streamGenerateContent?alt=sse", {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": AI_API_KEY },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: system }] },
-            contents,
-            generationConfig: { maxOutputTokens: 900 },
-          }),
-          signal: AbortSignal.timeout(models.indexOf(model) === models.length - 1 ? 20000 : 9000),
+          body: payload,
+          signal: AbortSignal.any([signal, hc.signal]),
         });
-        if (r.ok && r.body && (r.headers.get("content-type") || "").includes("text/event-stream")) {
-          return new Response(r.body, { status: 200, headers: { ...cors, "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no" } });
-        }
-        const d = await r.json().catch(() => ({}));
-        lastStatus = r.status;
+        if (r.ok && r.body && (r.headers.get("content-type") || "").includes("text/event-stream")) return r;
+        const d: any = await r.json().catch(() => ({}));
         console.warn("SUHAS E-COM AI Gemini stream failed", { model, status: r.status, reason: String(d?.error?.message || d?.error?.status || "").slice(0, 160) });
-        if (![400, 404, 429, 500, 502, 503, 504].includes(r.status)) break;
+        throw new Error("Gemini request failed (" + r.status + ")");
       } catch (e) {
-        console.warn("SUHAS E-COM AI Gemini request timed out or failed", { model, error: String(e).slice(0, 120) });
-      }
-    }
-    throw new Error(lastStatus ? "Gemini request failed (" + lastStatus + ")" : "Gemini request timed out");
+        if (!String(e).includes("Gemini request failed")) console.warn("SUHAS E-COM AI Gemini request timed out or failed", { model, error: String(e).slice(0, 120) });
+        throw e;
+      } finally { clearTimeout(t); }
+    };
+    let streamRes: Response;
+    try { streamRes = await raceModels(models, makeReq); } catch (e) { throw new Error(String(e instanceof Error ? e.message : e) || "Gemini request timed out"); }
+    return new Response(streamRes.body, { status: 200, headers: { ...cors, "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no" } });
   }
   if (attachmentParts.length) throw new Error("Image and voice attachments require the configured Gemini provider.");
   if (AI_PROVIDER === "anthropic") {
