@@ -9,6 +9,7 @@ const normGemini = (v: string, fb: string) => {
 };
 // Gemini 3.8 Flash is the current fast general-purpose model; keep Flash-Lite as fallback.
 const FREE_GEMINI_MODEL = "gemini-3.8-flash";
+const FALLBACK_GEMINI_MODELS = ["gemini-3.5-flash", "gemini-flash-lite-latest"]; // used when the primary is overloaded, rate limited or slow
 const cfg = Deno.env.get("AI_MODEL") || "";
 const AI_MODEL = AI_PROVIDER === "gemini" ? FREE_GEMINI_MODEL : (cfg.trim() || (AI_PROVIDER === "anthropic" ? "claude-sonnet-4-20250514" : "gpt-5"));
 
@@ -92,7 +93,7 @@ ${ctx}`;
 
 async function callModel(system: string, history: any[], prompt: string, attachmentParts: Array<{ inlineData: { mimeType: string; data: string } }> = []): Promise<string | Response> {
   if (AI_PROVIDER === "gemini") {
-    const models = [FREE_GEMINI_MODEL]; // Free-tier-only model; never fall back to paid models.
+    const models = [FREE_GEMINI_MODEL, ...FALLBACK_GEMINI_MODELS];
     let lastStatus = 0;
     const contents = [
       ...history.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
@@ -108,14 +109,14 @@ async function callModel(system: string, history: any[], prompt: string, attachm
             contents,
             generationConfig: { maxOutputTokens: 900 },
           }),
-          signal: AbortSignal.timeout(12000),
+          signal: AbortSignal.timeout(models.indexOf(model) === models.length - 1 ? 20000 : 9000),
         });
         if (r.ok && r.body && (r.headers.get("content-type") || "").includes("text/event-stream")) {
           return new Response(r.body, { status: 200, headers: { ...cors, "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no" } });
         }
         const d = await r.json().catch(() => ({}));
         lastStatus = r.status;
-        console.warn("SUHAS E-COM AI Gemini stream failed", { model, status: r.status });
+        console.warn("SUHAS E-COM AI Gemini stream failed", { model, status: r.status, reason: String(d?.error?.message || d?.error?.status || "").slice(0, 160) });
         if (![400, 404, 429, 500, 502, 503, 504].includes(r.status)) break;
       } catch (e) {
         console.warn("SUHAS E-COM AI Gemini request timed out or failed", { model, error: String(e).slice(0, 120) });
