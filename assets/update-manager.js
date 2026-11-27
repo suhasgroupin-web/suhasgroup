@@ -1,4 +1,4 @@
-/* SUHAS-MAX update prompt with an explicit Install action. */
+/* SUHAS GROUP automatic software update notice with an explicit Install Now action. */
 (function(){
  'use strict';
  if(!('serviceWorker' in navigator))return;
@@ -14,10 +14,10 @@
   var toast=document.createElement('div');toast.id='suhas-software-updated';toast.className='suhas-software-updated';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');
   var copy=document.createElement('span');
   var title=document.createElement('strong');title.textContent='Software Updated';
-  var detail=document.createElement('small');detail.textContent='Version '+release.version+' is ready. Tap Install to finish.';
+  var detail=document.createElement('small');detail.textContent='A new version is ready. Install now to update SUHAS GROUP.';
   copy.append(title,detail);
   var actions=document.createElement('span');actions.className='suhas-update-actions';
-  var install=document.createElement('button');install.type='button';install.className='suhas-update-install';install.textContent='Install';
+  var install=document.createElement('button');install.type='button';install.className='suhas-update-install';install.textContent='Install Now';
   var close=document.createElement('button');close.type='button';close.className='suhas-update-close';close.setAttribute('aria-label','Dismiss update notification');close.textContent='×';
   close.addEventListener('click',function(){toast.remove();});
   install.addEventListener('click',function(){
@@ -36,7 +36,7 @@
   actions.append(install,close);toast.append(copy,actions);
   (document.body||document.documentElement).appendChild(toast);
   window.clearTimeout(window.__suhasUpdateNoticeTimer);
-  window.__suhasUpdateNoticeTimer=window.setTimeout(function(){toast.remove();},30000);
+  window.__suhasUpdateNoticeTimer=// Keep the update notice visible until the member installs or dismisses it.
  }
  async function start(){
   var hadControllerAtStart=!!navigator.serviceWorker.controller;
