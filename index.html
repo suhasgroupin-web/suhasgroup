@@ -23,6 +23,7 @@
 <meta name="twitter:title" content="Welcome to SUHAS GROUP">
 <meta name="twitter:description" content="Always Trusted. One Group, One Vision.">
 <meta name="twitter:image" content="https://suhasgroup.pages.dev/assets/logo.png">
+<script>document.documentElement.classList.add("suhas-auth-pending");</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -65,9 +66,11 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:'DM Sans',Arial,sans-serif}
+html.suhas-auth-pending .welcome{visibility:hidden;opacity:0}
 body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 10%,#315b91 0,#0a2a66 48%,#050f22 100%)}
-.welcome{width:min(100%,420px);padding:34px 26px 30px;text-align:center;color:#fff;border:1px solid #ffffff35;border-radius:25px;background:linear-gradient(150deg,#ffffff1c,#ffffff0b);box-shadow:0 24px 70px #0007,inset 0 1px 0 #ffffff35;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.welcome-logo{display:block;width:126px;height:126px;object-fit:contain;margin:0 auto 22px;padding:7px;border-radius:25px;background:#fff;box-shadow:0 12px 26px #0005}
+.welcome{width:min(100%,420px);padding:34px 26px 30px;text-align:center;color:#fff;border:1px solid #ffffff35;border-radius:25px;background:linear-gradient(150deg,#ffffff1c,#ffffff0b);box-shadow:0 24px 70px #0007,inset 0 1px 0 #ffffff35;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:opacity .2s ease}
+.welcome-logo{display:block;width:126px;height:126px;object-fit:contain;margin:0 auto 22px;padding:7px;border-radius:25px;background:#fff;box-shadow:0 12px 26px #0005;transform-style:preserve-3d;animation:logo-float 4.8s ease-in-out infinite}
+@keyframes logo-float{0%,100%{transform:perspective(700px) translateY(0) rotateY(-8deg) rotateX(4deg)}25%{transform:perspective(700px) translateY(-7px) rotateY(7deg) rotateX(-3deg)}50%{transform:perspective(700px) translateY(-2px) rotateY(11deg) rotateX(4deg)}75%{transform:perspective(700px) translateY(-6px) rotateY(-5deg) rotateX(-2deg)}}
 .welcome h1{margin:0;color:#fff;font-size:clamp(25px,7vw,32px);font-weight:900;line-height:1.15;letter-spacing:-.035em}
 .welcome-copy{margin:14px auto 27px;color:#e3edff;font-size:13px;font-weight:600;line-height:1.9;letter-spacing:.025em}
 .welcome-copy span{display:block}
@@ -77,6 +80,7 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 .sign-in{background:linear-gradient(180deg,#2d64a9,#12376f);color:#fff;border:1px solid #86a9d8;box-shadow:0 4px 0 #071c3c,0 8px 16px #0004,inset 0 1px 0 #ffffff55}
 .sign-up{background:linear-gradient(180deg,#ffe59b,#e9b944 55%,#bd8120);color:#211600;border:1px solid #ffe6a1;box-shadow:0 4px 0 #805414,0 8px 16px #0004,inset 0 1px 0 #fff9}
 .install-app{display:block;width:100%;margin:17px auto 0;padding:10px 12px;border:1px solid #ffffff65;border-radius:10px;background:transparent;color:#e3edff;font:700 13px/1.2 'DM Sans',Arial,sans-serif;cursor:pointer}.install-app:active{background:#ffffff18}
+@media(prefers-reduced-motion:reduce){.welcome-logo{animation:none}}
 @media(max-width:360px){body{padding:14px}.welcome{padding:28px 18px 24px}.welcome-logo{width:112px;height:112px}}
 </style>
 </head>
@@ -85,13 +89,13 @@ body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-
 <img class="welcome-logo" src="assets/logo.png" alt="SUHAS GROUP logo">
 <h1>Welcome to SUHAS GROUP</h1>
 <p class="welcome-copy">
-<span>Always Trusted • Always Moving Forward</span>
-<span>Built on Trust • Driven by Excellence</span>
+<span>A Worldwide Trusted Group</span>
+<span>Connecting People • Creating Opportunities</span>
 <span>One Group, One Vision</span>
 </p>
 <nav class="auth-actions" aria-label="Account access">
-<a class="sign-in" href="login.html?next=main-menu.html">Sign In</a>
 <a class="sign-up" href="signup.html">Sign Up</a>
+<a class="sign-in" href="login.html?next=main-menu.html">Login</a>
 </nav>
 <button class="install-app" id="install-app" type="button">Install App</button>
 </main>
