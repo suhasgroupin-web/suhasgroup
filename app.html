@@ -326,39 +326,46 @@ html body.entry-locked #entryGate .entry-card{position:relative!important;z-inde
 @media(max-width:760px){.workspace{padding:20px 14px 96px}.w-top{align-items:center;margin-bottom:10px}.w-brand img{width:54px;height:54px}.w-hero{padding:22px 4px 28px}.w-panel{padding:14px;border-radius:24px}.w-section summary{padding:16px 13px}.app-grid{padding:0 11px 16px;gap:12px}.app-tile{min-height:104px;padding:13px;gap:10px}}
 @media(max-width:390px){.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app-tile{align-items:flex-start;flex-direction:column;min-height:126px}.app-copy strong{font-size:13px}}
 
-/* SUHAS GROUP navigation: compact, transparent, flush-bottom, tactile 3D icons */
-body.has-tabbar{padding-bottom:50px!important}
+
+/* SUHAS GROUP compact metallic 3D navigation; preserve original mobile bar background */
+body.has-tabbar{padding-bottom:54px!important}
 .tabbar{
  position:fixed!important;left:0!important;right:0!important;bottom:0!important;transform:none!important;
- width:100%!important;max-width:none!important;min-height:46px!important;display:grid!important;
- grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:0!important;
- padding:2px 3px calc(2px + env(safe-area-inset-bottom,0px))!important;box-sizing:border-box!important;
- background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
- z-index:2147482000!important
+ width:100%!important;max-width:1440px!important;min-height:50px!important;display:grid!important;
+ grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:2px!important;
+ padding:4px 5px calc(4px + env(safe-area-inset-bottom,0px))!important;box-sizing:border-box!important;
+ background:rgba(255,255,255,.98)!important;border-top:1px solid #dce5f2!important;
+ box-shadow:0 -5px 18px rgba(7,20,43,.13)!important;z-index:2147482000!important
 }
 .tabbar a,.tabbar button{
  display:flex!important;min-width:0!important;min-height:42px!important;width:100%!important;
- flex-direction:column!important;align-items:center!important;justify-content:center!important;
- gap:2px!important;padding:1px!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;color:#34445d!important;
- font-size:8px!important;font-weight:750!important;line-height:1!important;
- touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;
- cursor:pointer!important;text-decoration:none!important;transition:transform .1s ease!important
+ flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;
+ padding:2px 1px!important;border:1px solid #d7e1ef!important;border-radius:9px!important;
+ background:linear-gradient(180deg,#ffffff 0%,#edf2f9 55%,#dce5f1 100%)!important;
+ box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(99,123,157,.22),0 2px 0 #b7c6d9,0 3px 5px rgba(24,48,83,.16)!important;
+ color:#233e63!important;font-family:"Trebuchet MS",Arial,sans-serif!important;
+ font-size:8px!important;font-weight:900!important;letter-spacing:.12px!important;line-height:1!important;
+ text-decoration:none!important;white-space:nowrap!important;touch-action:manipulation!important;
+ -webkit-tap-highlight-color:transparent!important;cursor:pointer!important;transition:transform .1s ease,box-shadow .1s ease!important
 }
 .tabbar a span,.tabbar button span{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-.tabbar svg{width:16px!important;height:16px!important;flex:0 0 16px!important;overflow:visible!important;
- filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 0 #a8b7ca) drop-shadow(0 3px 2px rgba(12,35,67,.48))!important}
-.tabbar svg *{stroke-width:2.15!important;stroke-linecap:round!important;stroke-linejoin:round!important}
-.tabbar .brand-icon,.tabbar .o5-international-icon{width:17px!important;height:17px!important;max-width:17px!important;max-height:17px!important;filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 0 #a8b7ca) drop-shadow(0 3px 2px rgba(12,35,67,.48))!important}
-.tabbar .o5-international,.tabbar .on,.tabbar .o5-international.on{background:transparent!important;border:0!important;box-shadow:none!important}
-.tabbar a:hover,.tabbar button:hover{background:transparent!important;box-shadow:none!important;transform:translateY(-1px)!important}
-.tabbar a:active,.tabbar button:active{background:transparent!important;box-shadow:none!important;transform:translateY(1px) scale(.94)!important}
+.tabbar svg{width:17px!important;height:17px!important;flex:0 0 17px!important;overflow:visible!important;
+ filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 0 #aabbd1) drop-shadow(0 3px 2px rgba(13,36,69,.45))!important}
+.tabbar svg *{stroke-width:2.25!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.tabbar .brand-icon,.tabbar .o5-international-icon{width:17px!important;height:17px!important;max-width:17px!important;max-height:17px!important;object-fit:contain!important;
+ filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 0 #aabbd1) drop-shadow(0 3px 2px rgba(13,36,69,.45))!important}
+.tabbar .o5-international{padding:2px 1px!important;gap:2px!important}
+.tabbar a.on,.tabbar button.on{color:#0755a7!important;background:linear-gradient(180deg,#f4f9ff 0%,#dceaff 55%,#c8dcf8 100%)!important;border-color:#9dbce3!important;
+ box-shadow:inset 0 1px 0 #fff,0 2px 0 #91acd0,0 3px 6px rgba(20,67,125,.2)!important}
+.tabbar a:hover,.tabbar button:hover{transform:translateY(-1px)!important}
+.tabbar a:active,.tabbar button:active{transform:translateY(2px)!important;box-shadow:inset 0 2px 4px rgba(16,42,78,.2)!important}
 @media(min-width:821px){
- body.has-tabbar{padding-bottom:50px!important}
- .tabbar{min-height:46px!important;padding:2px 3px calc(2px + env(safe-area-inset-bottom,0px))!important}
+ body.has-tabbar{padding-bottom:54px!important}
+ .tabbar{left:0!important;right:0!important;width:100%!important;min-height:50px!important;padding:4px 5px calc(4px + env(safe-area-inset-bottom,0px))!important}
  .tabbar a,.tabbar button{min-height:42px!important;font-size:8px!important}
- .tabbar svg,.tabbar .brand-icon,.tabbar .o5-international-icon{width:16px!important;height:16px!important;max-width:16px!important;max-height:16px!important;flex-basis:16px!important}
+ .tabbar svg,.tabbar .brand-icon,.tabbar .o5-international-icon{width:17px!important;height:17px!important;max-width:17px!important;max-height:17px!important;flex-basis:17px!important}
 }
+
 </style><script>(function(){var p=location.pathname.split('/').pop().toLowerCase();if(['index.html','login.html','signup.html','reset.html'].indexOf(p)!==-1)return;document.documentElement.classList.add('suhas-auth-pending');document.write('<style id="suhas-early-auth-gate">html.suhas-auth-pending body{visibility:hidden!important;pointer-events:none!important}</style>');})();</script><style id="suhas-max-mobile-first-menu">
 /* Mobile-first main menu: readable single-column cards on phones and narrow tablets. */
 @media(max-width:760px){
@@ -549,7 +556,7 @@ body.has-tabbar{padding-bottom:54px!important}
 <footer class="w-foot"><span>© SUHAS GROUP · Premium Business Super App</span><span><a href="profile.html">My Account</a> · <a href="contact.html">Support</a></span></footer>
 </div></main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261127-nav-compact3d"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/config.js"></script><script src="assets/auth.js?v=20261127-nav-metal3d"></script>
 <script>
 (function(){
   var gate=document.getElementById('entryGate'), unlocked=false;
