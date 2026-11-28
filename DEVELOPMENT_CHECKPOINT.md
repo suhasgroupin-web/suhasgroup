@@ -1330,3 +1330,9 @@ Date: 2026-11-10
 - Added `scripts/build-ecom.sh` and `.github/workflows/deploy-ecom.yml`: E-COM (apps/suhas-ecom + functions/) deploys to Cloudflare Pages project `suhasmax` only; group site workflow untouched.
 - Build fails if any `suhasgroup.pages.dev` link remains in the E-COM output (prevents E-COM opening SUHAS GROUP).
 - SUHAS AI left unchanged. Streaming rewrite kept on branch `claude/wip-streaming-ai` (not merged).
+
+## 2026-11-28 — Suhas Net LinkedIn-style social.html
+- Old Facebook-style page preserved unchanged as `social-classic.html` (linked from the Me menu). New `social.html`: LinkedIn-style Home feed (post with photo/video, like, comment, repost, share, save, delete, audience), My Network (invitations accept/ignore, sent, connections, suggestions), Jobs (live `jobs` table, search, save, apply), Messaging (conversations, realtime + poll), Notifications, Profile view/edit (photo, cover, headline, about, skills, education), people search, mobile bottom nav.
+- Uses existing Supabase tables/RLS only (no migrations). Logo: uploaded SN artwork saved as assets/suhas-net-logo-original.jpg plus 512/192/96 PNG and webp.
+- Tests: JS syntax check; mocked-Supabase Playwright on desktop + mobile (no page errors). NOT verified: real signed-in session on live site, real uploads, realtime, live Cloudflare deploy.
+- Rollback: restore social-classic.html over social.html.
